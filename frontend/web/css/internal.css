@@ -1,0 +1,916 @@
+/*=== Подключим файлы стилей ===*/
+@import url("/css/widget.css");
+
+/*=== Шапка ===*/
+#header { height: 87px; background-image: url(/i/internal/bg_header.png); }
+#header_1 { display:table; width: 100%;}
+#header_1_1, #header_1_2 { display: table-cell; vertical-align: top}
+#header_l { height: 87px; width: 1px; vertical-align: top;background:#0085AB; border-right:1px solid #45ADCC; }
+
+/*=== Крошки хлебные ===*/
+.breadcrumbs { margin-bottom: 20px; font-size: 12px;}
+.breadcrumbs a { font-size: 12px; }
+.breadcrumbs i { color: #D3D3D3; margin: 0px 3px;}
+
+/*= Левая сторона (лого) =*/
+#header_1_1 { width: 20%;}
+#logo { float:left; margin: 18px 0px 0px 35px; width: 165px; height: 54px; background-image: url(/i/internal/logo.png); }
+#logo a { position: absolute; width: 165px;height: 54px; }
+#logo .service { position: relative; left: 170px; top: 10px; }
+#logo .service a { text-decoration: none; color: #ffffff; font-size: 11px; }
+
+
+
+/* Правый блок шапки */
+#header_1_2 { width: 80%;}
+#header_1_2 a { color: #fff;}
+#header_right { display: table; float: right; width: auto;}
+#header_right_1_1, #header_right_1_2, #header_right_1_3, #header_right_1_4, #header_right_1_5 { display: table-cell; padding:0 20px; vertical-align: middle; color: #fff }
+#header_right_1_1 i, #header_right_1_2 i, #header_right_1_4 i, #header_right_1_5 i { color: #006888; font-weight: normal; text-shadow: 1px 1px 1px #2EA3C6;}
+#header_right_1_1 i { font-size: 15px; }
+#header_right_1_2 i { font-size: 15px; }
+#header_right_1_4 i { font-size: 15px; }
+#header_right_1_5 i { font-size: 20px; color: #FFF }
+#header_right_1_5 a { font-size: 20px; color: #FFF; margin-left: 5px; }
+
+/*== Меню ==*/
+#content_menu { display: table-cell; width: auto;}
+#menu_left {display: table;height: 100%;}
+#menu_left_l, #menu_left_r, #menu_left_r_l {display: table-cell; vertical-align: top;}
+
+/*= Основное меню =*/
+#menu_left_l { background: #D4D4D4; height: 100%;}
+#menu_left_l ul { list-style: none; }
+#menu_left_l ul li { width: 108px; border-top: 1px solid #F0F0F0; border-bottom: 1px solid #B3B3B3; background: #D4D4D4}
+#menu_left_l ul li:hover { background: #DEDEDE }
+#menu_left_l ul li.active { background: #DEDEDE; cursor: default; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #CBCBCB), color-stop(1, #B6B6B6)); background-image: -ms-linear-gradient(top, #CBCBCB, #B6B6B6); background-image: -o-linear-gradient(top, #CBCBCB, #B6B6B6); background-image: -moz-linear-gradient(top, #CBCBCB, #B6B6B6); background-image: -webkit-linear-gradient(top, #CBCBCB, #B6B6B6); background-image: linear-gradient(to bottom, #CBCBCB, #B6B6B6)}
+#menu_left_l ul li.active:before { border-bottom: 7px solid transparent; border-left: 7px solid #C0C0C0; border-top: 7px solid transparent; content: ""; height: 0; margin: 40px 20px 20px 108px; position: absolute; width: 0;}
+
+#menu_left_l ul li a { text-decoration: none; }
+#menu_left_l .menu_icon { text-shadow:0 1px 1px #FFFFFF;text-align: center;display: block; color:#7E7E7E; font-size: 38px; padding-top: 10px; }
+#menu_left_l .menu_icon i { cursor: pointer; }
+#menu_left_l .menu_alt { font-size: 12px; text-shadow:0 1px 1px #FFFFFF;text-align: center;display: block; color: #4F4F4F; padding: 0px 3px 10px; word-wrap: break-word;}
+
+/*= Справа меню =*/
+#menu_left_r { width: 220px ;background-image: url(/i/internal/bg_menu_left_r.png); padding-bottom: 40px;}
+#menu_left_r .menu_title { display: block; font-size: 15px; font-weight: normal; color: #3b86ad;text-align: center;border-bottom:1px solid #EAEAEA; padding: 16px 0px; }
+#menu_left_r .menu_title_inset { display: block; }
+
+#menu_left_r ul { width: 220px; list-style: none;}
+#menu_left_r ul li { border-bottom:1px solid #EAEAEA; border-top:1px solid #FFFFFF; padding: 6px 6px 6px 18px; font-size: 14px;}
+/*#menu_left_r ul li i {display: none;}*/
+#menu_left_r ul li a{ text-decoration: none;color: #505050;}
+#menu_left_r ul li a:hover{ text-decoration: underline; color: #3b86ad;}
+
+#menu_left_r ul li ul {width: auto;}
+#menu_left_r ul ul li {padding: 4px 6px 4px 22px;font-size: 12px;background-repeat: no-repeat;background-position: 18px 8px;}
+#menu_left_r ul ul li i { display: inline-block; color: #C7C7C7; font-size: 10px; padding-right: 5px; vertical-align: middle;}
+#menu_left_r ul ul li a { text-decoration: none; color: #595959;}
+
+#menu_left_r ul ul ul {border-bottom: 1px solid #EAEAEA; border-top: 1px solid #FFFFFF;}
+#menu_left_r ul ul ul li i {display: none;}
+#menu_left_r ul ul ul li { padding: 4px 6px 4px 40px; border: none;font-size: 11px; background: none;}
+#menu_left_r ul ul ul li a { text-decoration: none;color: #737373;}
+
+#menu_left_r_w div.none { width: 220px; display:none;}
+#menu_left_r_w div.active { width: 220px; display:block; }
+
+.like_menu { float: right; margin-top: 2px; width: 12px; height: 12px; }
+.like_menu:hover{ cursor: pointer; }
+.like_menu.fav-icon { background-image: url(/i/elements/like_menu.png); }
+.like_menu.fav-icon:hover{ background-image: url(/i/elements/like_menu.png); background-position: 0 -30px; }
+
+.like_menu.fav-icon.active{ float: right; width: 12px; height: 12px; background-image: url(/i/elements/like_menu.png); background-position: 0 -60px;}
+.like_menu.fav-icon.active:hover{ cursor: pointer; background-image: url(/i/elements/like_menu.png); background-position: 0 -90px; }
+
+.start_menu_star { display: block !important;width: 190px !important; border-bottom: 1px solid #EAEAEA; border-top: 1px solid #fff; padding: 15px;}
+.start_menu_star .selectbox { width: 100% !important; margin-bottom: 10px;}
+.start_menu_star .button { display: block !important; width: 100%;}
+.start_menu_star p{ display: block ; font-size: 10px; color: #B8B8B8}
+
+/*== Контент Справа от меню ==*/
+#content_right { padding: 20px 20px; width: 100%; display: table-cell; vertical-align: top; }
+.content_right_v { display: table; width: 100%; }
+.content_right_l { display: table-cell; width: 50%; vertical-align: top;}
+.content_right_r { width: 50%; padding-left: 20px; display: table-cell; }
+
+
+/*==========+++++++++++++++ TWITTER +++++++++++++++==========*/
+#twitter { width: auto; display: block; }
+
+#block_1 .line_title_noopen { color: #595959;font-size: 11px; padding-top: 12px; padding-bottom: 12px; }
+#twitter #block_1_1_block { display: table; width: 100%; border-top: 1px solid #fff;  }
+#twitter #block_1_1 { display: table-cell; width: 475px; }
+#twitter #block_1_1 table { width: 455px; margin: 10px; }
+#twitter #block_1_1 .info_param { width: 187px; vertical-align: top; padding-top: 6px;}
+#twitter #block_1_1 .param {  padding: 2px; font-size: 11px}
+#twitter #block_1_1 .param.input {  color: #7E7E7E; font-size: 10px; vertical-align: top}
+#twitter #block_1_1 .posting_select_input { width: 56px; height: 15px;}
+
+#twitter #block_1_2_block { background: none repeat scroll 0 0 #F0F0F0; display: block; text-align: right; padding: 10px; }
+
+#twitter #block_1_2 { display: table-cell; background: #E1E1E1; border-right: 1px solid #fff; width: 1px;}
+
+#twitter #block_1_3 { display: table-cell; min-width: 411px;}
+#twitter #block_1_3 table { min-width: 390px; margin: 10px; }
+#twitter #block_1_3 .info_param { width: 180px; vertical-align: top; padding-top: 6px;}
+#twitter #block_1_3 .info_param.radios { padding: 5px 0px 0px;}
+#twitter #block_1_3 .param { padding: 2px;}
+#twitter #block_1_3 .param.radios { padding: 5px 2px; font-size: 11px}
+
+
+#block_2 .table_head .account { min-width: 200px !important; width: 100%; }
+#block_2 .table_head .followers { min-width: 73px; }
+#block_2 .table_head .level { min-width: 30px; }
+#block_2 .table_head .tape { min-width: 31px; }
+#block_2 .table_head .index { min-width: 47px; }
+#block_2 .table_head .white {  min-width: 64px; }
+#block_2 .table_head .black {  min-width: 64px; }
+#block_2 .table_head .price { min-width: 78px; }
+#block_2 .table_head .add_b_w { min-width: 60px; }
+#block_2 .table_head .view { min-width: 21px; width: 21px; }
+
+#block_2 .acconts_list .account { min-width: 200px !important; }
+#block_2 .acconts_list .index { width: 47px; text-align: center; padding-top: 12px;}
+#block_2 .acconts_list .index img { height: 20px; width: 20px; }
+#block_2 .acconts_list .followers { width: 73px; }
+#block_2 .acconts_list .level { width: 31px; }
+#block_2 .acconts_list .tape { width: 32px; font-size: 18px; text-align: center;}
+#block_2 .acconts_list .white {  width: 65px; padding-left: 10px; text-align: center}
+#block_2 .acconts_list .black {  width: 65px; padding-left: 10px; text-align: center}
+#block_2 .acconts_list .price { width: 76px; text-align: left; padding-left: 13px; }
+#block_2 .acconts_list .add_b_w { width: 60px; text-align: center }
+#block_2 .acconts_list .add_b_w .button.icon_small.selected {  opacity:0.6; box-shadow: inset 0 0 4px #1C6908; text-shadow: none; background-color: #12A900; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #07B217), color-stop(1, #169E00)); background-image: -ms-linear-gradient(top, #07B217, #169E00); background-image: -o-linear-gradient(top, #07B217, #169E00); background-image: -moz-linear-gradient(top, #07B217, #169E00); background-image: -webkit-linear-gradient(top, #07B217, #169E00); background-image: linear-gradient(to bottom, #07B217, #169E00); color: #fff; text-shadow: 0px -1px 0px #1C9C00; border-color: #007700;}
+#block_2 .acconts_list .add_b_w .button.black_button.icon_small.selected {  opacity:0.6; box-shadow: inset 0 0 4px #B02323; text-shadow: none; background-color: #FF3434; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #FF5455), color-stop(1, #FE0A0A)); background-image: -ms-linear-gradient(top, #FF5455, #FE0A0A); background-image: -o-linear-gradient(top, #FF5455, #FE0A0A); background-image: -moz-linear-gradient(top, #FF5455, #FE0A0A); background-image: -webkit-linear-gradient(top, #FF5455, #FE0A0A); background-image: linear-gradient(to bottom, #FF5455, #FE0A0A); color: #000000; text-shadow: 0px -1px 0px #EC0A0A; border-color: #D20203;}
+#block_2 .acconts_list .add_b_w .button.icon_small.selected:hover { opacity: 0.8; }
+#block_2 .acconts_list .view { padding-right: 9px; padding-left: 9px; width: 20px; width: 20px; }
+
+
+#dialog-message #block_1 { display: table; width: 100%;}
+#dialog-message #block_1_1 { display: table-cell ; vertical-align: top; width: 50%; padding: 0px; }
+#dialog-message #block_1_1 #block_1_1_1 { display: table-cell; position: relative; vertical-align: top; width: 80px; height: 80px; overflow: hidden;}
+#dialog-message #block_1_1 #block_1_1_1 img { width: 80px; }
+#dialog-message #block_1_1 #block_1_1_2 { display: table-cell; vertical-align: top; padding: 0px 5px 0px 15px; }
+#dialog-message #block_1_1 #block_1_1_2 .name { color:#505050; font-size: 18px; margin-bottom: 6px; }
+#dialog-message #block_1_1 #block_1_1_2 .login { color:#ADADAD; font-size:11px; padding: 2px 0px; }
+#dialog-message #block_1_1 #block_1_1_2 .langue { color:#ADADAD; font-size:11px; padding: 2px 0px;}
+#dialog-message #block_1_1 #block_1_1_2 .date { color:#ADADAD; font-size:11px; padding: 2px 0px 0px;}
+#dialog-message #block_1_1 #block_1_1_3 {display: table; width: 100%; padding-top: 10px;}
+#dialog-message #block_1_1 #block_1_1_3 #tweets, #dialog-message #block_1_1 #block_1_1_3 #following, #dialog-message #block_1_1 #block_1_1_3 #followers { display: table-cell; text-align: center; background: #F0F0F0; padding: 5px 5px;}
+#dialog-message #block_1_1 #block_1_1_3 #no { display: table-cell; width:10px; }
+#dialog-message #block_1_1 #block_1_1_3 #tweets h3, #dialog-message #block_1_1 #block_1_1_3 #following h3, #dialog-message #block_1_1 #block_1_1_3 #followers h3 { display: block; text-align: center; font-weight: normal; font-size: 15px; color: #3B85AD; text-shadow: 0 1px 1px #FFFFFF;}
+#dialog-message #block_1_1 #block_1_1_3 .following { color:#ADADAD; font-size:12px; }
+#dialog-message #block_1_1 #block_1_1_3 .followers { color:#ADADAD; font-size:12px; }
+
+#dialog-message #block_1_2_2 { width: 260px; display: table-cell; position: relative; vertical-align: top; padding-left: 5px;}
+#dialog-message #block_1_2_2 span.block { color: #ADADAD; font-size: 11px; padding: 2px 0 0; }
+
+#dialog-message #block_1_2 { border-left: 1px solid #E1E1E1; border-right: 1px solid #FFFFFF; display: table-cell; }
+
+
+
+/*========== Добавление новой твиттер площадки ==========*/
+.twitterAccountAdd { width:100%; }
+.twitterAccountAdd .block_content{ padding: 0px 10px 20px;}
+.twitterAccountAdd .block_content h3 { color: #008EB1; font-weight: normal; font-size: 16px; padding-top:20px; margin-bottom: 10px;}
+.twitterAccountAdd .block_content p a { color:#0287B2 }
+.twitterAccountAdd .block_content a { color:#505050 }
+.twitterAccountAdd .block_content input.button { height: 25px; width: 236px;}
+
+
+
+/*========== Настройки твиттер аккаунта ==========*/
+.twitterAccountSetting { width:100%; }
+
+.twitterAccountSetting #block_1 { display: table; width: 100%;}
+.twitterAccountSetting #block_1_1 { display: table-cell ; vertical-align: top; width: 50%; padding: 15px 10px; }
+.twitterAccountSetting #block_1_1 #block_1_1_1 { display: table-cell; position: relative; vertical-align: top; width: 80px; height: 80px; overflow: hidden;}
+.twitterAccountSetting #block_1_1 #block_1_1_1 img { width: 80px; }
+.twitterAccountSetting #block_1_1 #block_1_1_2 { display: table-cell; vertical-align: top; padding-left: 15px; }
+.twitterAccountSetting #block_1_1 #block_1_1_2 .name { color:#505050; font-size: 18px; margin-bottom: 6px; }
+.twitterAccountSetting #block_1_1 #block_1_1_2 .login { color:#ADADAD; font-size:11px; padding: 2px 0px; }
+.twitterAccountSetting #block_1_1 #block_1_1_2 .langue { color:#ADADAD; font-size:11px; padding: 2px 0px;}
+.twitterAccountSetting #block_1_1 #block_1_1_2 .date { color:#ADADAD; font-size:11px; padding: 2px 0px 0px;}
+.twitterAccountSetting #block_1_1 #block_1_1_3 {display: table; width: 100%; padding-top: 10px;}
+.twitterAccountSetting #block_1_1 #block_1_1_3 #tweets, .twitterAccountSetting #block_1_1 #block_1_1_3 #following, .twitterAccountSetting #block_1_1 #block_1_1_3 #followers { display: table-cell; text-align: center; background: #F0F0F0; padding: 5px 5px;}
+.twitterAccountSetting #block_1_1 #block_1_1_3 #no { display: table-cell; width:10px; }
+.twitterAccountSetting #block_1_1 #block_1_1_3 #tweets h3, .twitterAccountSetting #block_1_1 #block_1_1_3 #following h3, .twitterAccountSetting #block_1_1 #block_1_1_3 #followers h3 { display: block; text-align: center; font-weight: normal; font-size: 15px; color: #3B85AD; text-shadow: 0 1px 1px #FFFFFF;}
+.twitterAccountSetting #block_1_1 #block_1_1_3 .following { color:#ADADAD; font-size:12px; }
+.twitterAccountSetting #block_1_1 #block_1_1_3 .followers { color:#ADADAD; font-size:12px; }
+
+.twitterAccountSetting #block_1_2 { display: table-cell; border-left: 1px solid #E1E1E1; border-right:1px solid #fff;  }
+
+.twitterAccountSetting #block_1_3 { display: table-cell; vertical-align: top; width: 50%;padding: 15px 5px 15px 15px; }
+.twitterAccountSetting #block_1_3 #block_1_3_1 { display: table-cell; vertical-align: top; width: 100%; min-width: 300px;}
+.twitterAccountSetting #block_1_3 #block_1_3_1 table { font-size: 12px; width: 90%;}
+.twitterAccountSetting #block_1_3 #block_1_3_1 table td.recheck { text-align: right; font-size: 10px; color: #ACACAC;}
+.twitterAccountSetting #block_1_3 #block_1_3_1 table td.information { padding-right: 10px; padding: 2px 10px 2px 0px;}
+.twitterAccountSetting #block_1_3 #block_1_3_2 { display: table-cell; vertical-align: top; text-align: right; width:100px;}
+.twitterAccountSetting #block_1_3 #block_1_3_3 { display: block; margin-top: 25px; }
+.twitterAccountSetting #block_1_3 #block_1_3_3 .itr { margin-top: 10px; font-size: 15px; vertical-align: middle; height: 15px; line-height: 13px; color: #0184AE;}
+.updBtn span { color: #0086B0; border-bottom: 1px dotted #0086B0; text-decoration: none;}
+.updBtn span:hover { color: #0086B0; border: none; cursor: pointer; }
+
+.twitterAccountSetting #block_2 { font-size: 15px; background: #F0F0F0; display:block; color: #0086AE; padding: 5px 0px 5px 15px;}
+
+.twitterAccountSetting #block_3 #block_3_line { display: table; width: 100%; margin: 10px 0px 15px;}
+.twitterAccountSetting #block_3 #block_3_line_text { display: table-cell; width: 45%; text-align: right;padding-right: 20px;}
+.twitterAccountSetting #block_3 #block_3_line_form { display: table-cell; width: 55%; vertical-align: middle}
+.twitterAccountSetting #block_3 #block_3_line_text .text_price_fix { font-size: 10px; color:#ACACAC; display: block}
+.twitterAccountSetting #block_3 #block_3_line_form input,
+.twitterAccountSetting #block_3 #block_3_line_form textarea { width: 260px; }
+.twitterAccountSetting #block_3 #block_3_line_form .selectbox { width: 275px; }
+#_subjectsBox .h_list { font-weight: bold; }
+#_subjectsBox .list { padding-left: 25px }
+
+.twitterAccountSetting #block_4 { display: block; padding: 15px; text-align: right; background: #F0F0F0;-webkit-border-bottom-right-radius: 1px;-webkit-border-bottom-left-radius: 1px;-moz-border-radius-bottomright: 1px;-moz-border-radius-bottomleft: 1px;border-bottom-right-radius: 1px;border-bottom-left-radius: 1px; }
+
+
+/*========== Мои аккаунты Twitter ==========*/
+.twitterAccountList { width:100%; }
+
+.twitterAccountList #block_1 { display: table; width: 100%;}
+.twitterAccountList #block_1_1 { display: table-cell ; vertical-align: top; min-width: 350px; width: 50%; padding: 15px 10px; }
+.twitterAccountList #block_1_1 .block { margin-bottom: 10px; }
+.twitterAccountList #block_1_2 { display: table-cell ; vertical-align: top; width: 50%; padding: 15px 10px; text-align: right; }
+.twitterAccountList #block_1_2 .block.search input { width: 200px; }
+.twitterAccountList #block_1_2 .block.search { min-width: 240px; margin-top: 13px; }
+
+.twitterAccountList #block_2 {  }
+.twitterAccountList #block_2 .table_head .earned { border-bottom: 1px solid #F7F7F7; border-right: none }
+
+.twitterAccountList #block_2 .table_head table .account { min-width: 177px; width: 19.65%;  }
+.twitterAccountList #block_2 .table_head table .status { min-width: 89px; width: 10.16%; }
+.twitterAccountList #block_2 .table_head table .level { min-width: 30px; width: 3.43%; }
+.twitterAccountList #block_2 .table_head table .index { min-width: 50px; width: 5.71%; }
+.twitterAccountList #block_2 .table_head table .application { min-width: 55px; width: 6.28%;}
+.twitterAccountList #block_2 .table_head table .posted { min-width: 80px; width: 9.14%;}
+.twitterAccountList #block_2 .table_head table .earneds {  min-width: 230px; width: 26.4%; }
+.twitterAccountList #block_2 .table_head table .today { min-width: 62px; width: 36%; }
+.twitterAccountList #block_2 .table_head table .last { min-width: 53px; width: 32%; }
+.twitterAccountList #block_2 .table_head table .only { min-width: 54px; width: 32%; }
+.twitterAccountList #block_2 .table_head table .icons { width: 27px; padding-left:6px; padding-right:6px;}
+
+.twitterAccountList #block_2 .acconts_list .account { min-width: 179px; width: 19.65%;}
+.twitterAccountList #block_2 .acconts_list .status { min-width: 90px; width: 10.16%; text-align: center; font-size: 11px;}
+span.ok { color: #1D9D00; }
+span.off { color: #F71113; }
+span.all { color: #890ECA; }
+.twitterAccountList #block_2 .acconts_list .level { min-width: 31px;  width: 3.43%; text-align: center; color: #4F4F4F; font-size: 11px;}
+.twitterAccountList #block_2 .acconts_list .index { min-width: 51px; width: 5.71%; text-align: center; }
+.twitterAccountList #block_2 .acconts_list .index img{ width: 20px;height: 20px; }
+.twitterAccountList #block_2 .acconts_list .application { min-width: 56px; width: 6.28%; text-align: center; font-size: 11px;}
+.twitterAccountList #block_2 .acconts_list .posted { min-width: 81px; width: 9.14%; text-align: center; font-size: 11px;}
+.twitterAccountList #block_2 .acconts_list .today { min-width: 63px; width: 9.50%; text-align: center; font-size: 11px;}
+.twitterAccountList #block_2 .acconts_list .last { min-width: 54px; width: 8.44%; text-align: center; font-size: 11px;}
+.twitterAccountList #block_2 .acconts_list .only { min-width: 53px; width: 8.44%; text-align: center; font-size: 11px;}
+.twitterAccountList #block_2 .acconts_list .icons { padding-left:6px; padding-right:6px; width: 27px; max-width: 27px; text-align: center;}
+
+a.active {font-size: 13px; text-decoration: none; color: #4F4F4F; cursor: default}
+.hidden {display: none;}
+
+
+/*========== Заявки на рекламу ==========*/
+#request {}
+#request .table_head table .account { width: 220px; }
+#request .table_head table .details { width: ; }
+#request .table_head table .date { width: 105px; }
+#request .table_head table .price { width: 85px; }
+#request .table_head table .icons { width: 42px; }
+
+#request .acconts_list table .account { width: 220px }
+#request .acconts_list table .details { font-size: 11px; word-break: break-all }
+#request .acconts_list table .price { width: 85px; font-size: 11px; }
+#request .acconts_list table .date { width: 105px; font-size: 11px; }
+#request .acconts_list table .icons { width: 42px; font-size: 16px; }
+#request .acconts_list table .icons a.yes { color: #9DD242 }
+#request .acconts_list table .icons a.yes:hover { color: #7FB522 }
+#request .acconts_list table .icons a.no { color: #FF0101; padding-left: 7px; }
+#request .acconts_list table .icons a.no:hover { color: #D10000; }
+
+/*========== Выполненые заказы ==========*/
+#fulfilled {}
+#fulfilled .table_head table .account { width: 220px; }
+#fulfilled .table_head table .details { width: ; }
+#fulfilled .table_head table .date { width: 125px; }
+#fulfilled .table_head table .price { width: 85px; }
+#fulfilled .table_head table .icons { width: 18px; }
+
+#fulfilled .acconts_list table .account { width: 220px; }
+#fulfilled .acconts_list table .details { font-size: 11px; }
+#fulfilled .acconts_list table .price { width: 85px; font-size: 11px; }
+#fulfilled .acconts_list table .date { width: 125px; font-size: 11px; }
+#fulfilled .acconts_list table .icons { width: 18px;  }
+#fulfilled .acconts_list table .icons a.details { color: #0285AF; font-size: 16px; }
+#fulfilled .acconts_list table .icons a.details:hover { color: #016D91 }
+
+
+
+
+
+/*========== Быстрое размещение постов ==========*/
+.postingQuick { width: auto; display: block}
+
+.postingQuick .delete_post { text-decoration: none; font-size: 12px; color: #FBACAC}
+#_urlsList { height: 400px; overflow-y: scroll; }
+#_urlsList ul { list-style: none; }
+#_urlsList ul li { display: block; padding-right: 10px; padding-top: 3px; height: 20px; }
+#_urlsList ul li:hover { background: #E8E8E8; }
+#_urlsList ul li .delete { float: right; margin-left: 20px; color: #FE6464}
+#_urlsList ul li .delete:hover { color: #FE1414}
+
+.postingQuick #block_1 { padding: 20px 20px 30px; border-bottom: 1px solid #E1E1E1;}
+.postingQuick #block_1 textarea { width: 533px; height: 150px; resize: vertical}
+.postingQuick #block_1_1 { display: table-cell; width: 550px; }
+.postingQuick #block_1_1_2 { font-size: 11px; color:#209D01; margin-top: 5px;}
+.postingQuick #block_1_2 { display: table-cell; vertical-align: top; padding-left: 30px; min-width: 260px }
+.postingQuick #block_1_2 h5 { color: #0086AE; font-weight: normal; font-size: 12px; margin-bottom: 10px; }
+.postingQuick #block_1_2 li { list-style: none; font-size: 11px; color: #595959;padding-bottom: 5px; }
+
+.postingQuick #block_2 { padding: 20px 20px 30px; border-bottom: 1px solid #E1E1E1;}
+.postingQuick #block_2_1 { display: table-cell; width: 550px; }
+.postingQuick #block_2_1_1 { width: 550px; }
+.postingQuick #block_2_1_1 .selectbox { width: 120px; }
+.postingQuick #file_load_list ol { margin-left: 20px; margin-top: 10px; }
+.postingQuick #file_load_list ol li{ padding:0; margin:0; color: #209D01; font-size: 11px; }
+.postingQuick #block_2_2 { display: table-cell; padding-left: 30px; vertical-align: top;}
+.postingQuick #block_2_2 h5 { color: #0086AE; font-weight: normal; font-size: 12px; margin-bottom: 10px; }
+.postingQuick #block_2_2 li { list-style: none; font-size: 11px; color: #595959;padding-bottom: 5px; }
+
+.postingQuick #block_3 { padding: 20px 20px 30px; border-bottom: 1px solid #E1E1E1;}
+.postingQuick #block_3_1 { display: table-cell; width: 550px;}
+.postingQuick #block_3_1 #sitemap_progress .progress_bar{ display: inline-block; width: 448px; }
+.postingQuick #block_3_1 #sitemap_progress .button { float: right; margin-top: -1px;}
+.postingQuick #block_3_1_1 { margin-bottom: 20px; }
+.postingQuick #block_3_1_2 { margin-bottom: 20px; margin-top: 5px;}
+.postingQuick #block_3_1_2 ol { margin-left: 20px;}
+.postingQuick #block_3_1_2 ol li{ padding:0; margin:0; color: #209D01; font-size: 11px; }
+.postingQuick #block_3_1_4 { margin-top: 10px; }
+.postingQuick #block_3_1_4 ol { margin-left: 20px; margin-top: 10px; }
+.postingQuick #block_3_1_4 ol li{ padding:0; margin:0; color: #209D01; font-size: 11px; }
+.postingQuick #block_3_2 { display: table-cell; padding-left: 30px; }
+.postingQuick #block_3_2 h5 { color: #0086AE; font-weight: normal; font-size: 12px; margin-bottom: 10px; }
+.postingQuick #block_3_2 li { list-style: none; font-size: 11px; color: #595959;padding-bottom: 5px; }
+
+.postingQuick #block_4 { padding: 20px 20px 30px; }
+.postingQuick #block_4_1 { display: table-cell; vertical-align: top; width: 550px; }
+.postingQuick #block_4_1_1 { margin-bottom: 20px; }
+.postingQuick #block_4_1_2 { vertical-align: top; }
+.postingQuick #block_4_1_2 textarea { width: 441px; height: 100px; max-height: 700px; resize: vertical }
+
+.postingQuick #block_4_2 { display: table-cell; padding-left: 30px; }
+.postingQuick #block_4_2 h5 { color: #0086AE; font-weight: normal; font-size: 12px; margin-bottom: 10px; }
+.postingQuick #block_4_2 li { list-style: none; font-size: 11px; color: #595959;padding-bottom: 5px; }
+
+.postingQuick #block_bottom { display: table; background: none repeat scroll 0 0 #F0F0F0; border-bottom-left-radius: 1px; border-bottom-right-radius: 1px; display: block; padding: 15px; text-align: right; border-top:1px solid #FDFDFD}
+
+#modal_setting_parser { width: 420px }
+#modal_setting_parser #info_page { margin: 0px -10px 10px; background: none repeat scroll 0 0 #F2F2F2; }
+
+#modal_setting_parser .formula_post, .delete_url  { margin-bottom: 10px; }
+#modal_setting_parser .formula_post textarea { width: 405px; resize: none; }
+#modal_setting_parser .delete_url textarea { width: 405px; resize: none; }
+#modal_setting_parser .delete_title textarea { width: 405px; resize: none; }
+
+/*========== Быстрое размещение постов РЕДАКТИРОВАНИЕ ==========*/
+.editingPosts { width: auto; min-width: 750px;}
+._symbolsLimit {color: red;}
+
+.editingPosts #block_1 { display: table; width:100%; padding-bottom: 10px; padding-top: 5px;}
+.editingPosts #block_1_1 {  display: table-cell;  padding-left: 15px; }
+
+.editingPosts #block_all { padding: 10px 0px 5px 5px; }
+.editingPosts #block_all .fa-camera { font-size: 11px; }
+.editingPosts #block_exceededLinks { padding: 0px 0px 5px 5px; }
+.editingPosts #block_exceededLinks .fa-square { color: #C43419; }
+.editingPosts #block_character { padding: 0px 0px 5px 5px; }
+.editingPosts #block_character .fa-square { color:  #F2A700}
+.editingPosts #block_censor { padding: 0px 0px 5px 5px; }
+.editingPosts #block_censor .fa-square { color: #BA52A2 }
+.editingPosts #block_adult { padding: 0px 0px 5px 5px; }
+.editingPosts #block_adult .fa-square { color: #4571C2 }
+.editingPosts #block_dublicate { padding: 0px 0px 5px 5px; }
+.editingPosts #block_dublicate .fa-square { color: #993300; }
+.editingPosts #block_blockDomain { padding: 0px 0px 5px 5px; }
+.editingPosts #block_blockDomain .fa-square { color: #FF5300; } 
+.editingPosts #block_notUniqueUrl { padding: 0px 0px 5px 5px; }
+.editingPosts #block_notUniqueUrl .fa-square { color: #8BEA00; } 
+
+.editingPosts #block_wordsFilter { padding: 0px 0px 5px 5px; }
+.editingPosts #block_wordsFilter .fa-square { color: #00CCA7; }
+
+.editingPosts #block_exceededHash { padding: 0px 0px 5px 0px; }
+.editingPosts #block_exceededHash .fa-square { color: #009999; }
+
+.editingPosts #block_references { padding: 0px 0px 5px 0px; }
+.editingPosts #block_references .fa-square { color: #08715C; }
+
+.editingPosts #block_1_2 { display: table-cell; padding-left: 20px; }
+.editingPosts #block_1_3 { display: table-cell; padding-left: 20px; }
+
+.editingPosts .delete_post { text-decoration: none; font-size: 12px; color: #FBACAC}
+.editingPosts #block_2_top { background: none repeat scroll 0 0 #FAFAFA; border: 1px solid #EAECEB; display: block; width: auto;text-align: right}
+.editingPosts #block_2_top_inset { background-image: linear-gradient(to bottom, #F2F2F2, #EAEAEA); margin: 1px; height: 30px; padding: 2px }
+.editingPosts #block_2_bottom { background: none repeat scroll 0 0 #FAFAFA; border: 1px solid #EAECEB; display: block; width: auto;text-align: right}
+.editingPosts #block_2_bottom_inset { background-image: linear-gradient(to bottom, #F2F2F2, #EAEAEA); margin: 1px; height: 30px; padding: 2px ;}
+.editingPosts #block_2_bottom_inset .selectbox { width: 200px; text-align: left}
+
+.editingPosts #block_2_list { }
+.editingPosts #block_2_list .post { display: table; width: 100%; border-bottom: 1px solid #EAEAEA; border-top: 1px solid #FFFFFF; }
+.editingPosts #block_2_list .post .number { width: 40px; display:table-cell;  vertical-align: middle; text-align: center; padding-left: 5px; padding-right: 5px; color: #505050; border-right: 1px solid #F2F2F2; position: relative;}
+.editingPosts #block_2_list .post .all { color: #A5DC7F;}
+.editingPosts #block_2_list .post .character { color:  #F2A700;}
+.editingPosts #block_2_list .post .censor { color: #BA52A2;}
+.editingPosts #block_2_list .post .porn { color: #4571C2;}
+.editingPosts #block_2_list .post .exceededLinks { color: #C43419;}
+.editingPosts #block_2_list .post .dublicate { color: #993300; }
+.editingPosts #block_2_list .post .blockDomain { color: #FF5300; } 
+.editingPosts #block_2_list .post .notUniqueUrl { color: #8BEA00; } 
+
+.editingPosts #block_2_list .post .text { color:  #F2A700;}
+.editingPosts #block_2_list .post .text_edit { display:table-cell; }
+.editingPosts #block_2_list .post .text_edit .text { color: #505050; text-shadow: 0 1px 1px #FFFFFF; font-size: 11px; padding: 10px; word-break: break-all }
+.editingPosts #block_2_list .post .text_edit .edit { }
+
+.editingPosts #block_2_list .post .check { padding-right: 6px; width: 100px; display:table-cell; vertical-align: middle; text-align: right; font-size: 13px; color: #7E7E7E}
+.editingPosts #block_2_list .post .check .icon-camera { cursor: pointer;}
+.editingPosts #block_2_list .post .check a { text-decoration: none;}
+.editingPosts #block_2_list .post .check a i { cursor: pointer }
+.editingPosts #block_2_list .post .check .edit { color:#7E7E7E }
+.editingPosts #block_2_list .post .check .edit:hover { cursor: pointer; color: #0086B0 }
+.editingPosts #block_2_list .post .check .delete { color:#7E7E7E }
+.editingPosts #block_2_list .post .check .delete:hover { cursor: pointer; color: #FBACAC }
+
+.editingPosts #block_2_list .post .check .alert { color:#F8A759; margin-right: 5px; }
+.editingPosts #block_2_list .post .check .alert:hover { cursor: pointer; color: #A2A713 }
+
+.editingPosts #block_bottom { display: table; margin-top: 20px; background: none repeat scroll 0 0 #F0F0F0; border-bottom-left-radius: 1px; border-bottom-right-radius: 1px; display: block; padding: 15px; text-align: right; border-top:1px solid #FDFDFD}
+
+
+/*========== Размещение постов РАЗМЕЩЕНИЕ ==========*/
+
+.postingPosts { width: auto; display: block !important}
+.postingPosts .line_title { background: none repeat scroll 0 0 #F0F0F0; color: #0086AE; display: block; font-size: 15px; padding: 8px 0 8px 15px; border-top:1px solid #FDFDFD; border-bottom:solid 1px #fff; cursor: pointer;}
+.postingPosts .line_title .open_icon { display: inline; float: right; margin-right: 10px; font-size: 22px; color: #B6B6B6; line-height: 15px;}
+.postingPosts .line_title .open_icon:hover {cursor: pointer; color:#9E9E9E}
+
+.postingPosts .end_posting { background: none repeat scroll 0 0 #F0F0F0; border-bottom-left-radius: 1px;border-top: 1px solid #FDFDFD; border-bottom-right-radius: 1px;  display: block; padding: 15px; text-align: right; width:auto; }
+.postingPosts .end_posting.fixed { position:fixed; bottom: 0; left:350px; right: 20px; z-index: 1005; }
+
+
+.postingPosts #block_filter { width: 100%; display: block; border-bottom: 1px solid #E1E1E1;}
+.postingPosts #block_filter #block_filter_list {  display: block; margin: 15px 0px 15px; border-top: 1px solid #F0F0F0;}
+.postingPosts #block_filter #block_filter_list .filter { width: 100%; padding: 8px 0px; display: table; background-color: #FCFCFC; border-bottom: 1px solid #F0F0F0}
+.postingPosts #block_filter #block_filter_list .filter:hover{ background-color: #F7F7F7;}
+.postingPosts #block_filter #block_filter_list .filter .selects { display: table-cell; vertical-align: middle; width: 40px; padding-left: 15px; color: }
+.postingPosts #block_filter #block_filter_list .filter .text { display: table-cell; color: #707070; font-size: 13px}
+.postingPosts #block_filter #block_filter_list .filter .delete { display: table-cell; vertical-align: middle; width: 20px; text-align: center; padding-right: 10px;}
+.postingPosts #block_filter #block_filter_list .filter .delete i:hover { cursor: help;}
+.postingPosts #block_filter #block_filter_list .filter .delete a i {text-decoration: none; color: #707070}
+.postingPosts #block_filter #block_filter_list .filter .delete a:hover i { cursor: pointer; color: #FBACAC}
+.postingPosts #block_filter #filter_select { display: block; text-align: right; padding-right: 10px; }
+
+.postingPosts #block_1 { display: block; width: 100%; }
+.postingPosts #block_1 .top_title { border-top: 1px solid #FFFFFF; }
+
+.postingPosts #block_1 #select_activity { display: block; padding: 15px;}
+.postingPosts #block_1 #select_activity .activity { font-size: 11px;}
+.postingPosts #block_1 #select_activity .activity .select { display: table-cell; width: 25px; vertical-align: middle}
+.postingPosts #block_1 #select_activity .activity .text { display: table-cell; }
+
+.postingPosts #block_manual { border-top: 1px solid #E1E1E1; }
+.postingPosts #block_fast { border-top: 1px solid #E1E1E1; }
+
+.postingPosts #block_1_1_block { display: table; width: 100% }
+.postingPosts #block_1_1 { display: table-cell; vertical-align: top; width: 475px; }
+.postingPosts #block_1_1 table { width: 455px; margin: 10px; }
+.postingPosts #block_1_1 .info_param { width: 187px; vertical-align: top; padding-top: 6px;}
+.postingPosts #block_1_1 .param {  padding: 2px; font-size: 11px}
+.postingPosts #block_1_1 .param.input {  color: #7E7E7E; font-size: 10px; vertical-align: top}
+.postingPosts #block_1_1 .posting_select_input { width: 56px; height: 15px;}
+
+.postingPosts #block_1_2 { display: table-cell; background: #E1E1E1; border-right: 1px solid #fff; width: 1px;}
+
+.postingPosts #block_1_3 { display: table-cell; min-width: 411px;}
+.postingPosts #block_1_3 table { min-width: 390px; margin: 10px; }
+.postingPosts #block_1_3 .info_param { width: 180px; vertical-align: top; padding-top: 6px;}
+.postingPosts #block_1_3 .info_param.radios { padding: 5px 0px 0px;}
+.postingPosts #block_1_3 .param { padding: 2px;}
+.postingPosts #block_1_3 .param.radios { padding: 5px 2px; font-size: 11px}
+
+.postingPosts #block_1_4 { display: table; width: 100%;}
+.postingPosts #block_1_4 #time_targeting { display: table-cell; padding: 10px 0 10px 10px; vertical-align: top}
+.postingPosts #block_1_4 #time_targeting #quick_selection { font-size: 11px; background: #FDFDFD; width: 550px; border-top:1px solid #F7F7F7; border-left:1px solid #F7F7F7; border-right:1px solid #F7F7F7; border-collapse: collapse}
+.postingPosts #block_1_4 #time_targeting #quick_selection tr td { padding-left: 4px; padding-right: 4px; padding-bottom: 6px; padding-top: 4px; text-align: center;}
+.postingPosts #block_1_4 #time_targeting #quick_selection a { text-decoration: none; font-size: 11px}
+.postingPosts #block_1_4 #time_targeting #quick_selection a.here { border-bottom: 0; }
+.postingPosts #block_1_4 #time_targeting #quick_selection a.selection { border-bottom: 1px dotted #1a1a1a; color: #1a1a1a; }
+.postingPosts #block_1_4 #time_targeting table.time_targeting  { font-size: 11px; font-weight: normal; background: #fff; width: 550px; border-collapse: collapse}
+.postingPosts #block_1_4 #time_targeting table.time_targeting  tr td { background:#FDFDFD; border: 1px solid #F7F7F7 }
+.postingPosts #block_1_4 #time_targeting table.time_targeting tr.count td { height: 17px; text-align: center; }
+.postingPosts #block_1_4 #time_targeting table.time_targeting  tr td.select { min-width: 18px; height: 18px; background-color: #0086AE; cursor: pointer;}
+.postingPosts #block_1_4 #time_targeting table.time_targeting  tr td.no_select { min-width: 18px; height: 18px; background-color: #FDFDFD; cursor: pointer;}
+.postingPosts #block_1_4 #time_targeting table.time_targeting  tr td.day { padding-right: 7px; padding-left: 6px;}
+.postingPosts #block_1_4 #day { display: table-cell; padding-left: 15px;}
+.postingPosts #block_1_4 #day table { margin: 10px; min-width: 280px;}
+.postingPosts #block_1_4 #day table .info_param { width: 100px; vertical-align: top; padding-top: 8px;}
+.postingPosts #block_1_4 #day table .param { padding: 2px;}
+.postingPosts #block_1_4 #day #calculate { font-size: 12px; margin-left: 12px; }
+.postingPosts #block_1_4 #day #calculate h3 { font-weight: normal; color: #0086AE; font-size: 12px; }
+.postingPosts #block_1_4 #day #calculate ul li { list-style: none; font-size: 10px;  padding-top: 1px;}
+.postingPosts #block_1_4 #day #calculate ul li:before { content: '-'; padding-right: 5px; }
+
+.postingPosts  #more_options {  }
+.postingPosts  #more_options .options { padding: 10px 10px 0px; font-size: 11px; }
+
+.postingPosts #block_1_6 { background: none repeat scroll 0 0 #F0F0F0; display: block; padding: 15px; text-align: right;}
+
+.postingPosts #block_accounts .line_title:hover { cursor: default; }
+
+.postingPosts #block_accounts .table_head table .level { min-width: 30px; width: ;}
+.postingPosts #block_accounts .table_head table .followers { min-width: 73px; }
+.postingPosts #block_accounts .table_head table .rang { min-width: 63px; width: ;}
+.postingPosts #block_accounts .table_head table .pr { min-width: 25px; width: ;}
+.postingPosts #block_accounts .table_head table .tape { min-width: 31px; }
+.postingPosts #block_accounts .table_head table .index { min-width: 50px; width: ;}
+.postingPosts #block_accounts .table_head table .select { min-width: 20px; width: ;}
+.postingPosts #block_accounts .table_head table .price { min-width: 73px; width: ;}
+.postingPosts #block_accounts .table_head table .text { min-width: 120px; width: 100%;  vertical-align: bottom !important;}
+.postingPosts #block_accounts .table_head table .check { }
+
+.postingPosts #block_accounts .acconts_list {  }
+.postingPosts #block_accounts .acconts_list table { border-collapse: collapse; width: 100%; }
+.postingPosts #block_accounts .acconts_list table tbody > tr:nth-child(2n+1) { background: none repeat scroll 0 0 #FCFCFC; }
+.postingPosts #block_accounts .acconts_list table tr td { padding: 7px 10px; }
+.postingPosts #block_accounts .acconts_list table .account { min-width: 222px; }
+.postingPosts #block_accounts .acconts_list table .followers { min-width: 73px; }
+.postingPosts #block_accounts .acconts_list table .level { color: #4F4F4F; font-size: 11px; min-width: 31px; text-align: center; width: ; }
+.postingPosts #block_accounts .acconts_list table .rang { color: #4F4F4F; font-size: 11px; min-width: 64px; text-align: center; width: ; }
+.postingPosts #block_accounts .acconts_list table .pr { color: #4F4F4F; font-size: 11px; min-width: 26px; text-align: center; width: ; }
+.postingPosts #block_accounts .acconts_list table .tape { font-size: 18px; text-align: center; min-width: 32px; }
+.postingPosts #block_accounts .acconts_list table .index { min-width: 51px; text-align: center; width: 5.71%; }
+.postingPosts #block_accounts .acconts_list table .index img { height: 20px; width: 20px; }
+.postingPosts #block_accounts .acconts_list table .select { min-width: 20px; text-align: center; font-size: 14px; width: ; }
+.postingPosts #block_accounts .acconts_list table .price { min-width: 74px; text-align: left; width: ; }
+.postingPosts #block_accounts .acconts_list table .text { color: #4F4F4F; font-size: 11px; min-width: 120px; text-align: left; width: 100%; }
+.postingPosts #block_accounts .acconts_list table .check { min-width: 18px; text-align: center; }
+
+.select_posts { box-shadow: 0 0 4px #666666; width: 450px; margin-top: 5px; z-index: 997; position: absolute; background:#F7F7F7; border: 1px solid #E8E8E6; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }
+.select_posts .panel_posts { background: #EEEEEE; border-bottom: 1px solid #E6E6E6; }
+.select_posts .panel_posts input { height: 15px; margin: 2px; width: 350px; }
+.select_posts .panel_posts .closer { float: right; font-size: 18px;  margin-top: 2px; }
+.select_posts .panel_posts .closer a { text-decoration: none;  margin-right: 5px; }
+.select_posts .panel_posts .closer a.no_save { color: #FD6262; }
+.select_posts .panel_posts .closer a:hover { cursor: pointer;  }
+.select_posts .panel_posts .select_view_tweet { padding: 2px 3px 4px; text-align: right; font-size: 11px;  }
+
+.select_posts .view_posts { background:#ffffff; width: 450px; max-height: 300px; overflow: auto; }
+.select_posts .view_posts a.select { background: #E8E8E8; font-size: 12px; text-align: left; }
+.select_posts .view_posts a.select:hover { background:#F2F2F2 }
+.select_posts .view_posts ul { list-style: none; font-size: 12px }
+.select_posts .view_posts ul li:first-child { margin: 0px; }
+.select_posts .view_posts ul li:last-child { margin: 0px; }
+.select_posts .view_posts ul li { border-left: 3px solid #CFCFCF; margin: 5px 0px; }
+.select_posts .view_posts ul li span.lisNum { color: #767676; margin-left: -5px; padding-right: 5px; min-width: 40px;}
+.select_posts .view_posts ul li span.lisNum::after { content: ")" }
+.select_posts .view_posts ul li a { background: #FAFAFA; display: block; padding: 4px 10px; text-decoration: none; color: #505050; }
+.select_posts .view_posts ul li a:hover { background: #E8E8E8 }
+
+
+/*========== Список сохранёных твитов ==========*/
+#prepared {  }
+#prepared .block_content {  }
+#prepared .table_head table .id { width: 50px; text-align: left }
+#prepared .table_head table .date { width: 105px; }
+#prepared .table_head table .name { }
+#prepared .table_head table .tweet { width: 45px;}
+#prepared .table_head table .edit { width: 106px; }
+
+#prepared .acconts_list table .date, #prepared .acconts_list table .id { color: #999999;font-size: 11px; }
+#prepared .acconts_list table .id { width: 50px;}
+#prepared .acconts_list table .date { width: 105px;}
+#prepared .acconts_list table .name{ }
+#prepared .acconts_list table .tweet { width: 45px;}
+#prepared .acconts_list table .edit { width: 106px;}
+#prepared .acconts_list table .edit a { }
+#prepared .acconts_list table tr td { padding: 12px 10px; }
+
+
+/*========== Статусы заказов рекламодателя ==========*/
+#status_orders { min-width: 890px; }
+#status_orders .table_head table .id { width: 48px; text-align: left; padding-left: 7px; }
+#status_orders .table_head table .date { width: 105px; }
+#status_orders .table_head table .view_orders {  text-align: left }
+#status_orders .table_head table .status { width: 80px; }
+#status_orders .table_head table .progress_order { width: 200px;  }
+#status_orders .table_head table .rate_balance { width: 160px; padding-right: 5px;}
+#status_orders .table_head table .icons { width: 80px; }
+#status_orders .acconts_list table .id { width: 48px; color: #999999; padding-left: 5px;}
+#status_orders .acconts_list table .date { width: 105px; color: #999999; font-size: 11px;}
+#status_orders .acconts_list table .view_orders {  text-align: left }
+#status_orders .acconts_list table .status { width: 80px; font-size: 11px; }
+#status_orders .acconts_list table .status span.ok {  color: #FFA701; }
+#status_orders .acconts_list table .status span.no_money {  color: #FE0101; }
+#status_orders .acconts_list table .status span.completed {  color: #1D9D00; }
+#status_orders .acconts_list table .progress_order { width: 180px; font-size: 11px; text-align: left; padding: 10px 20px; }
+#status_orders .acconts_list table .rate_balance { font-size: 11px; padding-right: 5px; width: 160px; }
+#status_orders .acconts_list table .rate_balance span.text_balance{ color: #999999; }
+#status_orders .acconts_list table .icons { width: 80px; text-align: right; }
+#status_orders .acconts_list table .icons a.delete:hover { color: #FF0000 }
+
+/* Детали заказа */
+#details_orders {}
+#details_orders .table_head table .account { width: 200px !important;}
+#details_orders .table_head table .tweet { }
+#details_orders .table_head table .status { width: 152px;}
+#details_orders .table_head table .price { width: 68px; }
+#details_orders .table_head table .icon { width: 20px; }
+
+#details_orders .acconts_list table .account { width: 200px !important; }
+#details_orders .acconts_list table .tweet {  font-size: 11px; }
+#details_orders .acconts_list table .status { width: 152px; font-size: 11px; }
+#details_orders .acconts_list table .status span.ok {   color: #1D9D00;}
+#details_orders .acconts_list table .status span.wait {   color: #FFB62C;}
+#details_orders .acconts_list table .status span.poorly {  color: #FE5050; }
+#details_orders .acconts_list table .price { width: 71px; font-size: 11px; }
+#details_orders .acconts_list table .icon { width: 25px; padding: 7px 10px 7px 5px; }
+#details_orders .acconts_list table .icon a.delete { width: 13px; }
+#details_orders .acconts_list table .icon a.delete:hover { width: 13px; color: #FF0000 }
+
+
+
+/*========== ФИНАНСЫ ==========*/
+#finance { display: table; width: 100%; margin-top: 20px; }
+#finance_left { display: table-cell; min-width: 310px; vertical-align: top;}
+#finance_right { display: table-cell; width: 545px; padding-left: 20px; vertical-align: top;}
+#finance_bottom { min-width: 280px; padding-top: 20px; }
+
+#finance_left .balance_block { display: block;}
+#finance_left .balance_block .table_style_1 td { font-size: 11px;}
+#finance_left .balance_block .table_style_1 tr.title td { font-size: 12px;}
+
+#finance_right .stats { }
+#finance_right .stats #block_1 { display: table; width: 100% }
+#finance_right .stats #block_1_1 { width: 125px; display: table-cell; vertical-align: top; }
+#finance_right .stats #block_1_2 { width: 155px; display: table-cell; vertical-align: middle; padding-left: 14px; }
+#finance_right .stats #block_1_2 ul { list-style: none; }
+#finance_right .stats #block_1_2 ul li span { width: 11px; height: 11px; margin-left: -14px; margin-top: 4px; position: absolute; background: #7E7E7E; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px;}
+#finance_right .stats #block_1_3 { display: table-cell; vertical-align: top; }
+
+#finance_bottom .report { display: block }
+#finance_bottom .table_style_1 { width: 100%; }
+#finance_bottom .table_style_1 td.date { width: 105px; }
+#finance_bottom .table_style_1 td.time { width: 40px; }
+#finance_bottom .table_style_1 td.note { padding: 2px 20px; }
+#finance_bottom .table_style_1 td.consumption { width: 80px; }
+#finance_bottom .table_style_1 td.parish { width: 80px; }
+#finance_bottom .table_style_1 td.balance { width: 80px; padding: 0;}
+#finance_bottom .table_style_1 td { font-size: 11px; }
+#finance_bottom .table_style_1 tr.title td { font-size: 12px; }
+
+
+td.balance table#t1 tr td.bonus_money_unlock { min-width: 89px; width: 89px; padding: 0px 5px;}
+td.balance table#t1 tr td.bonus_money_lock { min-width: 89px; width: 85px; padding: 0px 5px;}
+td.balance table#t1 tr td.personal_money_unlock { min-width: 77px; width: 77px; padding: 0px 5px;}
+td.balance table#t1 tr td.personal_money_lock { min-width: 77px; width: 77px; padding: 0px 5px;}
+
+#finance_bottom .table_style_1 td.bonus_money_unlock { width: 92px; padding: 0px 5px;}
+#finance_bottom .table_style_1 td.bonus_money_lock { width: 92px; padding: 0px 5px;}
+#finance_bottom .table_style_1 td.personal_money_unlock { width: 80px; padding: 0px 5px;}
+#finance_bottom .table_style_1 td.personal_money_lock { width: 80px; padding: 0px 5px;}
+
+/*========== Пополнение ==========*/
+#replenishment .replenishment { width: auto; display: block; min-width: 500px;}
+.replenishment #block_1 { display: block; padding: 20px;}
+.replenishment #block_1 ul { list-style: none;}
+.replenishment #block_1 ul li { display: inline-block; font-size:20px; padding-right: 40px;}
+.replenishment #block_1 ul li.webmoney { }
+.replenishment #block_1 ul li.robokassa { }
+.replenishment #block_1 ul li label:hover { cursor: pointer;}
+.replenishment #block_2 { padding: 0px 20px 20px; }
+.replenishment #block_2 table { padding-bottom: 10px; }
+.replenishment #block_2 input { height: 15px; width: 80px;}
+.replenishment .block_bottom button:disabled { opacity: 0.3; cursor: default; }
+
+#replenishment .promo { margin-left: 20px;}
+#replenishment .promo #block_1 { padding: 20px;}
+#replenishment .promo #block_1 input { width: 220px; }
+
+#replenishment .replenishment_stats { margin-top: 20px; width: auto; display: block; }
+#replenishment .table_style_1 td { font-size: 11px; }
+#replenishment .table_style_1 tr.title td { font-size: 12px; }
+
+/*========== Вывод ==========*/
+#output .output { width: auto; display: block; min-width: 500px; }
+.output #block_1 { padding: 20px; }
+.output #block_1 input { height: 15px; width: 80px;}
+.output #block_2 { padding: 0px 20px 20px; text-align: center}
+
+#output .auto_output { margin-left: 20px; display: block }
+.auto_output #block_1 input { height: 15px; width: 80px;}
+.auto_output #block_1 { padding: 20px; }
+
+#output .output_stats { margin-top: 20px; width: auto; display: block; }
+
+/*========== Сообщения ==========*/
+#message { height: calc(100% - 36px); width: 100%; }
+#message .actived { width: calc(100% - 2px); }
+#message .actived .box_inset { min-height: 500px; width: calc(100% - 2px); }
+
+/* Системные */
+#system #system_massage_list { height: 284px }
+#system #system_massage_list .table_head { border-top: none; font-size: 13px}
+#system #system_massage_list .table_head td { font-size: 13px}
+#system #system_massage_list .table_head .input { width: 15px; }
+#system #system_massage_list .table_head .status { width: 27px; }
+#system #system_massage_list .table_head .date { width: 105px; }
+#system #system_massage_list .table_head .text { text-align: left; }
+#system #system_massage_list .table_head .delete { width: 20px; }
+
+#system #system_massage_list_inset { min-height: 180px; height: 198px; width: 100%; overflow-y: auto;}
+#system #system_massage_list_inset .messag { border-bottom: 1px solid #F7F7F7;}
+#system #system_massage_list_inset .messag tr td { background-color: #FCFCFC }
+#system #system_massage_list_inset .messag tr:hover td { cursor: pointer; background: #DFDFDF; }
+#system #system_massage_list_inset .messag table { width: 100%; border-collapse: collapse; }
+#system #system_massage_list_inset .messag table td { padding: 7px 10px; }
+#system #system_massage_list_inset .messag.new tr td { background:#EDEDED; }
+#system #system_massage_list_inset .messag.new:hover tr td { background:#DFDFDF; }
+#system #system_massage_list_inset .messag.read tr td { background: #2B9BBD; color: #FFF !important }
+#system #system_massage_list_inset .messag.read tr:hover td { cursor: default }
+#system #system_massage_list_inset .messag table td.input { padding-left: 12px; width: 15px;}
+#system #system_massage_list_inset .messag table td.status { text-align: center; padding-left: 12px; font-size: 13px; width: 27px; color: #7E7E7E;}
+#system #system_massage_list_inset .messag table td.date { width: 105px; font-size: 11px; color: #999999}
+#system #system_massage_list_inset .messag table td.text { padding-left: 12px; font-size: 12px; }
+#system #system_massage_list_inset .messag table td.text .title {  color: 	#666666 }
+#system #system_massage_list_inset .messag.read table td.text .title {  color: 	#FFFFFF }
+#system #system_massage_list_inset .messag table td.text .more { padding-left: 2px; color: #9F9F9F; font-size: 11px;  }
+#system #system_massage_list_inset .messag.read table td.text .more { color: #FFFFFF  }
+#system #system_massage_list_inset .messag table td.delete { width: 15px; }
+#system #system_massage_list_inset .messag table td.delete a { color: #7E7E7E; font-size: 13px;}
+#system #system_massage_list_inset .messag.read table td.delete a { color: #FFFFFF; }
+#system #system_massage_list_inset .messag table td.delete a:hover { color: #FBACAC }
+
+
+#system #system_massage_list_inset .message_no { display: table; width: 100%; height: 100%; font-size: 22px; }
+#system #system_massage_list_inset .message_no .td { text-align: center; vertical-align: middle; color: #BDBDBD; }
+
+#system #system_massage_list .table_bottom_inside { text-align: right; padding: 2px 2px 0px 0px; }
+#system #system_massage_list .table_bottom_inside .selectbox { width: 230px; text-align: left; }
+
+
+#system #system_massage_read { min-height: 176px;  }
+#system #system_massage_read_inset { position: relative; min-height: 180px; height: 202px; overflow-y: auto; width: 100%; border-top: 1px solid #A3A3A3; box-shadow: inset 0px 2px 3px 0px #B5B5B5; background: #FCFCFC; }
+#system #system_massage_read .message_no { display: table; width: 100%; height: 100%; font-size: 22px; }
+#system #system_massage_read .message_no .td { text-align: center; vertical-align: middle; color: #BDBDBD; background: #F7F7F7; box-shadow: inset 0px 2px 3px 0px #B5B5B5; }
+#system #system_massage_read .message_system { min-height: 179px; overflow-y: auto; width: 100%; }
+#system #system_massage_read .message_system .message_system_title { border-bottom: 1px solid #EAEAEA; color: #999999; font-size: 13px; padding: 15px 10px; }
+#system #system_massage_read .message_system .message_system_title a { color: #7E7E7E; font-size: 15px; margin-top: -3px; float: right;}
+#system #system_massage_read .message_system .message_system_title a:hover { color: #FBACAC }
+#system #system_massage_read .message_system .message_system_more { padding: 10px; font-size: 11px; }
+#system #system_massage_read .message_system .message_system_more .message_system_more_what { color: #999999; margin-bottom: 5px; }
+#system #system_massage_read .message_system .message_system_more p { padding-left: 5px; }
+
+
+
+
+/* Поддержка */
+#support { }
+
+#support #support_button { padding: 20px; text-align: right;}
+
+#support #support_massage_list .table_head td { font-size: 13px; text-align: left }
+#support #support_massage_list .table_head .id { width: 40px; }
+#support #support_massage_list .table_head .date_ot { width: 120px; }
+#support #support_massage_list .table_head .date_do { width: 120px; }
+#support #support_massage_list .table_head .status { width: 20px }
+
+#support #support_massage_list #support_massage_list_inset { min-height: 180px; height: 180px; width: 100%; overflow-y: auto;}
+
+#support #support_massage_list #support_massage_list_inset .messag { border-bottom: 1px solid #F5F5F5;background-color: #FCFCFC;}
+#support #support_massage_list #support_massage_list_inset .messag tr:hover td { cursor: pointer; background:  #DFDFDF; }
+#support #support_massage_list #support_massage_list_inset .messag.new tr td { background:#EDEDED; }
+#support #support_massage_list #support_massage_list_inset .messag.new:hover tr td { background:#DFDFDF; }
+#support #support_massage_list #support_massage_list_inset .messag.read tr td { background: #2B9BBD; color: #FFF !important }
+#support #support_massage_list #support_massage_list_inset .messag.read tr:hover td { cursor: default }
+#support #support_massage_list #support_massage_list_inset .messag table { width: 100%; border-collapse: collapse;}
+#support #support_massage_list #support_massage_list_inset .messag table td { padding: 7px 10px; color: #999999; }
+#support #support_massage_list #support_massage_list_inset .messag table td.id { width: 40px; color: #999999;  }
+#support #support_massage_list #support_massage_list_inset .messag table td.status { width: 20px; font-size: 16px; color: #454545; padding-left: 13px; text-align: center }
+#support #support_massage_list #support_massage_list_inset .messag table td.date_ot { width: 120px; font-size: 11px; color: #999999; padding-left: 11px; }
+#support #support_massage_list #support_massage_list_inset .messag table td.date_do { width: 120px; font-size: 11px; color: #999999; padding-left: 11px; }
+#support #support_massage_list #support_massage_list_inset .messag table td.text { font-size: 11px; color: #5C5C5C }
+
+#support #support_massage_list #support_massage_list_inset .message_no { display: table; width: 100%; height: 100%; font-size: 22px; }
+#support #support_massage_list #support_massage_list_inset .message_no .td { text-align: center; vertical-align: middle; color: #BDBDBD; }
+
+
+#support #support_massage_read { position: relative; border-top: 1px solid #A3A3A3; }
+#support #support_massage_read .support_massage_read_inset  { border-top: 1px solid #A3A3A3; box-shadow: inset 0px 2px 3px 0px #B5B5B5; background: #FCFCFC; height: 215px; overflow-y: auto;  margin-bottom: 142px;}
+#support #support_massage_read .support_massage_read_inset .message_read_list {  }
+#support #support_massage_read .support_massage_read_inset .message_read_list .message_read_title { border-bottom: 1px solid #EAEAEA; color: #999999; font-size: 13px; padding: 15px 10px; }
+#support #support_massage_read .support_massage_read_inset .message_read_list .message_read_title span.theme { color: #4C4C4C; font-size: 14px; }
+
+#support #support_massage_read .support_massage_read_inset .message_read_list .message_read_correspondence { border-top: 1px solid #FFFFFF; }
+#support #support_massage_read .support_massage_read_inset .message_read_list .message_read_correspondence .message_here { padding: 10px; font-size: 11px; }
+#support #support_massage_read .support_massage_read_inset .message_read_list .message_read_correspondence .message_here p { padding-left: 5px; }
+#support #support_massage_read .support_massage_read_inset .message_read_list .message_read_correspondence .message_here .who_date { color: #999999; margin-bottom: 5px; }
+#support #support_massage_read .support_massage_read_inset .message_read_list .message_read_correspondence .message_here.admin .who_date { color: #389FFF;}
+
+#support #support_massage_read .message_read_reply { padding: 10px; background: #EAEAEA; position: absolute; bottom: 14px; width: calc(100% - 21px); min-height: 121px;}
+#support #support_massage_read .message_read_reply .new_area textarea { padding: 10px; display: block; min-height: 60px; resize: vertical; max-height: 275px; width: calc(100% - 23px);}
+#support #support_massage_read .message_read_reply .buttons_reply { margin-top: 10px; text-align: right}
+
+#support #support_massage_read .message_no { display: table; font-size: 22px; height: calc(100% - 13px); width: 100%; box-shadow: inset 0px 2px 3px 0px #B5B5B5;}
+#support #support_massage_read .message_no .td { color: #BDBDBD; text-align: center; vertical-align: middle;}
+
+
+/*========== Настройки ==========*/
+#settings { display: block; }
+#settings #block_1_1_block { display: table; width: 100% }
+#settings #block_1_1 table { width: 100%; margin: 10px 0; }
+#settings #block_1_1 table tr td { padding: 3px 10px; }
+#settings #block_1_1 table tr td input{ width: calc(100% - 30px); }
+#settings #block_1_3 table { width: 100%; margin: 10px 0; }
+#settings #block_1_3 table tr td { padding: 3px 10px; }
+#settings #block_1_1_block { display: table; width: 100%;}
+#settings #block_1_2 { background: none repeat scroll 0 0 #E1E1E1; border-right: 1px solid #FFFFFF; display: table-cell; width: 1px; }
+#settings #block_1_3 { display: table-cell; min-width: 411px; }
+
+/*========== Партнёрская прогамма ==========*/
+
+#affiliate_program .table_head table .date { width:120px; }
+#affiliate_program .table_head table .name { width:; }
+#affiliate_program .table_head table .balance { width:105px; }
+#affiliate_program .table_head table .income { width:80px; }
+
+#affiliate_program .acconts_list table td { font-size: 11px;}
+#affiliate_program .acconts_list table .date { width:117px; padding-left: 15px; color: #999999; font-size: 11px;}
+#affiliate_program .acconts_list table .name { width:; }
+#affiliate_program .acconts_list table .balance { width:105px; }
+#affiliate_program .acconts_list table .income { width:80px; }
+
+#affiliate_program .block_1 { color: #BDBDBD; font-size: 20px; padding: 40px 40px; }
+
+#affiliate_program #loyalty_Program .table_style_1 tr.title td { font-size: 12px; padding: 0 10px; color: #7A7A7A; }
+#affiliate_program #loyalty_Program .table_style_1 td { font-size: 16px;  padding: 5px 30px; color: #A8A8A8;}
+#affiliate_program #loyalty_Program .table_style_1 td.select_affiliate { color:  #1AA500}
+#affiliate_program #loyalty_Program .table_style_1 td.add_affiliate { color:#0086AE; font-size: 12px; }
+#affiliate_program #loyalty_Program .center_td { background: none repeat scroll 0 0 #E1E1E1; border-right: 1px solid #FFFFFF; display: table-cell; width: 1px; }
+
+#banners { padding-top: 10px; }
+#banners a.here_banner.select img { box-shadow: 0 0 8px #8F8F8F;  }
+#banners a.here_banner:hover img { box-shadow: 0 0 8px #8F8F8F;  }
+#banners .b_88x31 {}
+#banners .b_88x31 img { margin-left: 15px; }
+#banners .b_125x125 {  }
+
+#banners .code_banners { width: calc(100% - 31px); height: 295px;font-size: 18px; line-height: 25px;}
+#banners .code_banners_text { color: #7E7E7E; }
+#banners .code_banners_click { color: #7E7E7E; margin-left: 8px; margin-top: 35px; }
+
+/*==========+++++++++++++++ Магазин +++++++++++++++==========*/
+#shop_referrals {  }
+#shop_referrals .table_head table .date { width:85px; }
+#shop_referrals .table_head table .date_last { width:112px; }
+#shop_referrals .table_head table .balance_added { width:70px; }
+#shop_referrals .table_head table .balance_output { width:70px; }
+#shop_referrals .table_head table .balance_my { width:70px; }
+#shop_referrals .table_head table .balance_bonus { width:93px; }
+#shop_referrals .table_head table .add_accounts { width:95px; }
+#shop_referrals .table_head table .price { width: ; }
+#shop_referrals .table_head table .icon { width: 24px; padding-right: 5px; padding-left: 5px; }
+
+#shop_referrals .acconts_list table td { font-size: 11px;}
+#shop_referrals .acconts_list table .date { width:85px; padding-left: 15px; color: #999999; }
+#shop_referrals .acconts_list table .date_last { width:112px; color: #999999; }
+#shop_referrals .acconts_list table .balance_added { width:70px; }
+#shop_referrals .acconts_list table .balance_output { width:70px; }
+#shop_referrals .acconts_list table .balance_my { width:70px; }
+#shop_referrals .acconts_list table .balance_bonus { width:93px; }
+#shop_referrals .acconts_list table .add_accounts { width:95px; }
+#shop_referrals .acconts_list table .price { width: ; text-align: center;}
+#shop_referrals .acconts_list table .icon { width: 24px; padding-right: 8px; padding-left: 5px; }
+
+
+
+/* ====== ХЗ ======= */
+.tweet-form div.i-editor { display: block; overflow-y: auto; word-wrap: break-word; }
+.tweet-form .tweet-box { height: 155px; overflow: hidden; padding: 8px; text-shadow: none; vertical-align: top; width: 585px; }
+.tweet-form .tweet-box { background-color: #FFFFFF; border: 1px solid #CCCCCC; border-radius: 3px 3px 3px 3px; display: inline-block; margin: 0; outline: 0 none; padding: 4px; font-size: 13px; line-height: 20px; margin: 0; }
+div[contenteditable="true"] { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) inset, 0 1px 0 rgba(255, 255, 255, 0.075); transition: background 0.2s linear 0s; }
+div[contenteditable="true"] { background-color: #FFFFFF; border: 1px solid #CCCCCC; border-radius: 3px 3px 3px 3px; display: inline-block; margin: 0; outline: 0 none; padding: 4px; }
+div[contenteditable="true"] { font-size: 13px; line-height: 20px; margin: 0; }
+
+.errorSummary ul {
+	list-style: none;
+	padding-left: 15px;
+}
+.filterFormInput {
+	width: 402px;
+}
+.filterFormArea {
+	width: 402px;
+}
+.filterRow {
+	margin-bottom: 7px;
+}

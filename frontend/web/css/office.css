@@ -1,0 +1,127 @@
+/*************************** Сообщения *************************************/
+/*-------------------- Поддержка ------------------------*/
+#messages_support { min-width: 700px; }
+
+#messages_support .table_head td { font-size: 13px; }
+#messages_support .table_head td.status { width: 20px; }
+#messages_support .table_head td.id { width: 40px; text-align: left;}
+#messages_support .table_head td.date_ot { width: 120px; }
+#messages_support .table_head td.date_do { width: 120px; }
+#messages_support .table_head td.text { width: ; text-align: left;}
+#messages_support .table_head td.answered { width: 100px; text-align: center; padding-right: 25px;}
+
+#messages_support .message_list .message_list_fix_height { height: 250px; overflow-y: auto; }
+#messages_support .message_list .message_list_fix_height .messag { border-bottom: 1px solid #F5F5F5;background-color: #FCFCFC;}
+#messages_support .message_list .message_list_fix_height .messag tr:hover td { cursor: pointer; background:  #DFDFDF; }
+#messages_support .message_list .message_list_fix_height .messag.new tr td { background:#EDEDED; }
+#messages_support .message_list .message_list_fix_height .messag.new:hover tr td { background:#DFDFDF; }
+#messages_support .message_list .message_list_fix_height .messag.read tr td { background: #2B9BBD; color: #FFF !important }
+#messages_support .message_list .message_list_fix_height .messag.read tr:hover td { cursor: default }
+#messages_support .message_list .message_list_fix_height .messag table { width: 100%; border-collapse: collapse;}
+
+#messages_support .message_list .message_list_fix_height .messag table td { padding: 7px 10px; color: #999999; }
+
+#messages_support .message_list .message_list_fix_height .messag td.status { width: 20px; font-size: 16px; padding-left: 13px; color: #454545}
+#messages_support .message_list .message_list_fix_height .messag td.id { width: 41px; }
+#messages_support .message_list .message_list_fix_height .messag td.date_ot { width: 121px; font-size: 11px;}
+#messages_support .message_list .message_list_fix_height .messag td.date_do { width: 121px; font-size: 11px;}
+#messages_support .message_list .message_list_fix_height .messag td.text { font-size: 11px; color: #454545 }
+#messages_support .message_list .message_list_fix_height .messag td.answered { width: 100px; font-size: 11px;}
+
+#messages_support .message_read  { position: relative; border-top: 1px solid #A3A3A3;}
+#messages_support .message_read_inset  { box-shadow: inset 0px 2px 3px 0px #B5B5B5; background: #FCFCFC; height: 215px; overflow-y: auto;  margin-bottom: 142px;}
+#messages_support .message_read_inset .message_read_list {  }
+#messages_support .message_read_inset .message_read_list .message_read_title { border-bottom: 1px solid #EAEAEA; color: #999999; font-size: 13px; padding: 15px 10px; }
+#messages_support .message_read_inset .message_read_list .message_read_title span.theme { color: #4C4C4C; font-size: 14px; }
+
+#messages_support .message_read_inset .message_read_list .message_read_correspondence { border-top: 1px solid #FFFFFF; }
+#messages_support .message_read_inset .message_read_list .message_read_correspondence .message_here { padding: 10px; font-size: 11px; }
+#messages_support .message_read_inset .message_read_list .message_read_correspondence .message_here p { padding-left: 5px; }
+#messages_support .message_read_inset .message_read_list .message_read_correspondence .message_here .who_date { color: #999999; margin-bottom: 5px; }
+#messages_support .message_read_inset .message_read_list .message_read_correspondence .message_here.admin .who_date { color: #389FFF;}
+#messages_support .message_read_reply { padding: 10px; background: #EAEAEA; position: absolute; bottom: 14px; width: calc(100% - 21px); min-height: 121px; }
+#messages_support .message_read_reply .new_area textarea { padding: 10px; display: block; min-height: 60px; resize: vertical; max-height: 275px; width: calc(100% - 23px);}
+#messages_support .message_read_reply .buttons_reply { margin-top: 10px; text-align: right}
+
+#messages_support .message_no { display: table; font-size: 22px; height: calc(100% - 13px); width: 100%; box-shadow: inset 0px 2px 3px 0px #B5B5B5; }
+#messages_support .message_no .td { color: #BDBDBD; text-align: center; vertical-align: middle;}
+
+
+
+/*************************** Твиттер *************************************/
+/*-------------------- twitter-аккаунты ------------------------*/
+#twitter_accounts_office {  }
+
+#twitter_accounts_office .accounts_sort {  }
+
+#twitter_accounts_office .accouns_list_view {  }
+
+#twitter_accounts_office .accouns_list_view .table_head {  }
+#twitter_accounts_office .accouns_list_view .table_head td.account { width:  }
+#twitter_accounts_office .accouns_list_view .table_head td.date { width: 105px }
+#twitter_accounts_office .accouns_list_view .table_head td.status { width: 140px }
+#twitter_accounts_office .accouns_list_view .table_head td.itr { width: 40px }
+#twitter_accounts_office .accouns_list_view .table_head td.kf { width: 110px }
+#twitter_accounts_office .accouns_list_view .table_head td.icons { width: 30px }
+
+#twitter_accounts_office .accouns_list_view .acconts_list {  }
+#twitter_accounts_office .accouns_list_view .acconts_list td.account { width:  }
+#twitter_accounts_office .accouns_list_view .acconts_list td.date { width: 105px }
+#twitter_accounts_office .accouns_list_view .acconts_list td.status { width: 140px }
+#twitter_accounts_office .accouns_list_view .acconts_list td.itr { width: 40px }
+#twitter_accounts_office .accouns_list_view .acconts_list td.kf { width: 110px }
+#twitter_accounts_office .accouns_list_view .acconts_list td.kf .selectbox { width: 50px }
+#twitter_accounts_office .accouns_list_view .acconts_list td.icons { width: 30px }
+
+#modal_moderation_status { width: 500px; }
+#modal_moderation_status .selects { width: 485px; padding-bottom: 10px; }
+#modal_moderation_status .selects .selectbox  { width: 500px; }
+#modal_moderation_status .description {  }
+#modal_moderation_status .description textarea { width: 485px; height: 70px; resize: resize-no; }
+
+/*-------------------- twitter-аккаунты ------------------------*/
+#accountsModerationInfo { margin-bottom: 20px; }
+#accountsModerationInfo .table .td { padding: 0px 10px 10px; }
+#accountsModerationInfo .table .td ul { list-style: none; }
+#accountsModerationInfo .table .td ul li { font-size: 11px; }
+
+
+#accountsModeration {  }
+
+#accountsModeration .table_head td.account { width:  }
+#accountsModeration .table_head td.status { width: 90px; }
+#accountsModeration .table_head td.details { width: 330px; }
+#accountsModeration .table_head td.date { width: 90px; }
+#accountsModeration .table_head td.level { width: 40px; }
+#accountsModeration .table_head td.kf { width: 40px; }
+#accountsModeration .table_head td.edit { width: 24px; }
+
+#accountsModeration .acconts_list td.account { width:  }
+#accountsModeration .acconts_list td.status { width: 90px; font-size: 10px; }
+#accountsModeration .acconts_list td.details { width: 330px; font-size: 12px;color: #999999; }
+#accountsModeration .acconts_list td.date { width: 90px; font-size: 11px;color: #999999; text-align: center;  }
+#accountsModeration .acconts_list td.level { width: 40px; }
+#accountsModeration .acconts_list td.kf { width: 40px; }
+#accountsModeration .acconts_list td.tape { font-size: 16px; width: 31px; }
+#accountsModeration .acconts_list td.edit { width: 24px; padding-left: 12px;  }
+
+#accountsModerationModal textarea { width: 347px; height: 70px; resize: none; margin-top: 15px; }
+
+/*************************** Финансы *************************************/
+/*-------------------- Пополнения ------------------------*/
+#replenishment {}
+
+
+
+/*************************** Виджеты *************************************/
+/*-------------------- to-do ------------------------*/
+#to-do {  }
+#to-do .block_bottom {  }
+#to-do .block_bottom .group_input input { width: calc( 100% - 50px)  }
+
+#to-do .todo-list li .checkbox { margin: 0 2px 0 10px; }
+#to-do .todo-list li { background: none repeat scroll 0 0 #F5F5F5; border-bottom: 1px dotted #CCCCCC; border-left: 3px solid #ED6D49; line-height: 34px; margin: 2px 0px 2px 10px; }
+#to-do ul.todo-list { list-style: none outside none; margin: 0; padding: 0; }
+#to-do .todo-list li label .date { color: #B3B3B3; font-size: 10px; padding-left: 5px; }
+#to-do .todo-list li label .delete { float: right; padding-right: 10px; }
+#to-do .todo-list li.finished { color: #999999; text-decoration: line-through; }

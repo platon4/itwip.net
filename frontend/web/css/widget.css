@@ -1,0 +1,36 @@
+/*========== Статистика баланса ==========*/
+.stat_balans_block { width: 100%;min-width: 350px; margin: 0px 20px 20px 0px; }
+.stat_balans_block .block_1 {}
+.stat_balans_block .block_2 {font-size: 15px; margin-top: 20px; margin-bottom: 20px; color: rgb(59, 134, 173); text-shadow: 0px 1px 1px rgb(255, 255, 255); padding-left: 30px; padding-right: 50px;}
+.stat_balans_block .block_3 {}
+.stat_balans_block .block_4 {padding: 15px 0px;}
+
+/*========== Сообщения ==========*/
+.messages_block { min-width: 340px;}
+.messages_block .block_1 { height: 21px; padding: 7px 0px 0px 10px; background: #F0F0F0; color: rgb(59, 134, 173); text-shadow: 0px 1px 1px rgb(255, 255, 255); font-size: 12px; text-align: }
+.messages_block .block_1 .block_1_check { float: right;margin-right: 5px; margin-bottom: 0px; margin-top: -1px; }
+
+.messages_block .block_2 { }
+.messages_block .block_2 .block_2_list .block_2_list_views { min-height: 28px; border-bottom: 1px solid #F0F0F0; background: #FCFCFC }
+.messages_block .block_2 .block_2_list .block_2_list_views:hover { background: #F7F7F7 }
+.messages_block .block_2 .block_2_list .block_2_list_views .block_2_list_views_date { display:table-cell; height: 28px; padding-left: 10px; padding-right: 15px; vertical-align: middle; font-size: 10px; color: #CDCDCD;  }
+.messages_block .block_2 .block_2_list .block_2_list_views .block_2_list_views_text { display:table-cell; width: 100%; vertical-align: middle; font-size: 13px; color: #707070;}
+.messages_block .block_2 .block_2_list .block_2_list_views .block_2_list_views_text.new a {color: #4F4F4F;}
+.messages_block .block_2 .block_2_list .block_2_list_views .block_2_list_views_text a { color: #9E9E9E; text-shadow: 0px 1px 1px rgb(255, 255, 255); text-decoration: none }
+.messages_block .block_2 .block_2_list .block_2_list_views .block_2_list_views_text a:hover { color: #4F4F4F; color: #0086B0; }
+.messages_block .block_2 .block_2_list .block_2_list_views .block_2_list_views_check { display:table-cell; width: 20px; vertical-align: middle; padding-right: 5px;}
+.messages_block .block_2 .block_2_list .block_2_list_views .block_2_list_views_check input{ width: 20px !important;}
+.messages_block .block_3 { padding: 15px; }
+.messages_block .block_3 .right .button{margin-left: 20px;}
+
+/*========== Онлайн-поддержка ==========*/
+.online_support_block { min-width: 340px; }
+.online_support_block .block_1 { display:table-cell; vertical-align: top; width:100%; padding: 15px;}
+.online_support_block .block_2 { display:table-cell; vertical-align: bottom;padding: 10px 20px 0px 0px;}
+.online_support_block .block_2 .online_support_img { position:relative; bottom: -3px; background-image: url(/i/widgets/online_support.png);background-repeat: no-repeat; width: 60px; height:81px;  }
+
+/*========== Последние новости сервиса ==========*/
+.news_block {  }
+.news_block ul.list_news { list-style: none; }
+.news_block ul.list_news li { padding: 3px 0px 3px 15px; }
+.news_block ul.list_news li .date { position: relative; font-size: 11px; display: inline-block; color:  #ADADAD; width: 60px; padding-right: 10px; text-shadow: 0 1px 1px #FFFFFF; text-align: right;}

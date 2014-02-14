@@ -1,0 +1,1 @@
+ <span class="langue"><span><?php echo Yii::t('main', '_footer_langue'); ?>: </span><?php $this->widget('application.widgets._language'); ?></span>

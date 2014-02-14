@@ -1,0 +1,98 @@
+/*=== Шапик сайта ===*/
+#header {height: 103px;}
+
+/* Лого */
+#logo { float:left; margin-top:25px; width: 165px; height: 53px; background-image: url(/i/index/logo.png); }
+#logo a { position: absolute; width: 165px;height: 53px; }
+
+/* Меню */
+#menu_top { float: right; vertical-align: top;}
+#menu_top ul { list-style: none; }
+
+#menu_top ul li { min-width: 83px; display: inline-block; border-top:  6px solid #EBEBEB; padding: 40px 0px 0px 0px; text-align: center }
+#menu_top .menu_active, #menu_top .menu_active:hover{ border-top:  6px solid #009DC8; color: #3b86ad}
+#menu_top ul li:hover { border-top:  6px solid #D2D2D2; color: #494949}
+
+#menu_top ul li a { text-decoration: none; color: #959595; font-family: Verdana; font-size: 15px;}
+#menu_top .menu_active a, #menu_top .menu_active a:hover{ color: #3b86ad }
+#menu_top ul a:hover { color: #494949}
+
+/*== Центральный слайд ==*/
+#slide { width: 100%; min-width: 1020px; height: 358px; background-image: url(/i/index/bg_slide.jpg); background-position: 50% 100%; background-repeat: no-repeat;}
+
+/*= Персона =*/
+#persona { background-image: url(/i/index/persona.png); width: 284px; height: 358px; display: inline-block;}
+
+/*= Статистика =*/
+#stats { vertical-align: top; display: inline-block; color: #fff; text-shadow: 0px 0px 35px #4A4943; }
+#stats .count { font-size: 99px; display: block; font-family: Myriad Pro; line-height: 85px; }
+#stats .text_count{ font-family: Verdana; font-size: 30px; display: block; padding-left: 60px; }
+
+/*= Вход =*/
+#form_logged { width: 256px; height: 358px; display: inline-block; background-image: url(/i/index/bg_form_logged.png); float: right;}
+.form_logged_h { position: reliative; margin-left: -5px; margin-top: 30px; padding-top: 20px; padding-left: 40px; width:228px; height:30px; background-image: url(/i/index/bg_form_logged_h.png); background-repeat: no-repeat; }
+#form_logged div.tabs { display:none; padding-top: 20px; padding-left: 30px;}
+#form_logged a.active, #form_logged a.active:hover{ color: #fff; cursor: default; text-decoration: none; border: none;}
+#form_logged a { color: #cfe2ed; cursor: pointer; text-decoration: none; border-bottom: 1px dashed  #cfe2ed; font-size: 15px;}
+#form_logged a:hover { color: #A1CCDE; border-bottom: 1px dashed #A1CCDE}
+#form_logged div.active { display:block; width:226px; }
+/* Элементы */
+#form_logged input { height: 32px; width: 167px; display:block;  padding: 0px 18px; margin-top: 10px; font-size: 14px; background: url(/i/index/bg_input_index.png); -webkit-border-radius: 18px; -moz-border-radius: 18px; border-radius: 18px; border: none; }
+#form_logged input:focus { -moz-box-shadow: inset 0 0 10px rgba(0,0,0,0.5); -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.5); box-shadow: inset 0 0 2px rgba(220, 220, 220, 0), 0 0 4px rgba(0,0,0,0.5); }
+#form_logged input.error { box-shadow: 0 0 4px rgba(255, 102, 102, 1); color: #ad1f03; z-index:2;   position: relative; }
+#form_logged .errorMessage { font-size: 11px; color: #8f1800; padding-left: 15px; padding-top: 3px;}
+
+#form_logged u.load { position: absolute;height:27px; width: 180px;  background: url(/i/index/load_index_button.gif); margin-left: -90px; margin-top: -13px; }
+
+#form_logged .button { width: 202px; height: 39px; cursor: pointer; background: url(/i/index/button_index.png); color: #fff; border:none; font-size: 13px;}
+#form_logged .button:hover { background-position: 0px 78px; }
+#form_logged .button:active { background-position: 0px 39px; }
+#form_logged div.checkbox_p { width: 200px;margin: 15px 0px 15px 5px; }
+#form_logged div.checkbox_p a{ font-size: 13px; border: none; color: black; border-bottom: 1px dashed black;}
+
+#form_logged div.checkbox_p label{ vertical-align: middle;}
+#form_logged .checkbox { position: relative; width: 18px; height: 18px; margin-right: 10px; background: #fff; border-radius: 2px;  vertical-align: middle; cursor: pointer; opacity: 0.6; filter: alpha(opacity=6);}
+#form_logged .checkbox.checked span { display: block; width: 18px; height: 16px; background-image: url(/i/index/checkbox_checked_index.png); }
+#form_logged .checkbox.focused { border: 1px solid #08C; }
+#form_logged .checkbox.disabled { opacity: 0.55;filter: alpha(opacity=55);}
+#form_logged .line_info.alert { font-size: 11px; color: #8f1800; padding-left: 15px; padding-top: 4px;}
+
+/*== Инфо сайта ==*/
+#info_index_1 { margin: 10px 0px; }
+#info_index_1_1 { vertical-align: middle; display: table-cell; }
+#info_index_1_1 p { color: #8c8c8c; text-align: justify; padding-right: 80px; line-height: 18px; }
+#info_index_1_2 { width: 243px; height: 208px; display: table-cell; background-image: url(/i/index/soc.png); background-repeat: no-repeat }
+
+#info_index_2 { width: 100%; height: 126px; background-image: url(/i/index/bg_info_user.png); }
+#info_index_2_1 h4 { font-size: 25px; font-weight: normal; color: #0086B0; padding-top: 50px; padding-left: 90px; text-shadow: 0px 0px 1px #fff; }
+#info_index_2_1_1 { text-align: center; width: 480px; display: table-cell; background-image: url(/i/index/user_p.png); background-position: 0% 50%; background-repeat: no-repeat;}
+#info_index_2_1_2 { text-align: center; width: 480px; height: 126px; display: table-cell; background-image: url(/i/index/user_r.png); background-position:0% 50% ; background-repeat: no-repeat; }
+#info_index_2_1_3 { display: table-cell; width: 40px; }
+
+#info_index_3 { margin-bottom: 60px;}
+#info_index_3_1, #info_index_3_2 { display: table-cell; width: 480px;}
+#info_index_3_3 { display: table-cell; width: 40px;}
+
+.info_index_3_n { width: 365px; margin-left: 115px; margin-top: 25px; line-height: 18px;}
+.info_index_3_n_title { width: 365px; height: 39px; background-image: url(/i/index/bg_info_index_3_n_title.png);}
+.info_index_3_n_icon { font-size: 15px; margin:0 auto; width: 39px; height: 29px; background-image: url(/i/index/bg_info_index_3_n_icon.png);color:#fff;text-align:center;padding-top: 10px;}
+.info_index_3_n h5 { margin: 0 0 10px 0px; font-size: 15px; font-weight: normal; color: #1a1a1a }
+.info_index_3_n p { font-size: 13px; color: #8d8c8c; }
+
+
+/*========== С Левое меню ==========*/
+#menu_left_r {display: table-cell; border: 1px solid #F2F2F2; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;}
+#menu_left_r { width: 220px; background: #FDFDFD; }
+#menu_left_r .menu_title_inset { position:relative; top: -1px; margin: -1px; background:#F7F7F7; border:1px solid #E6E6E6; -webkit-border-top-left-radius: 3px;-webkit-border-top-right-radius: 3px;border-top-left-radius: 3px;border-top-right-radius: 3px; }
+#menu_left_r .menu_title_inset .menu_title { margin: 1px;padding: 8px 10px 8px 15px;font-size: 15px; font-weight: normal; color: #3b86ad;background:#EEEEEE; text-shadow: 0px 1px 1px #fff;-webkit-border-top-left-radius: 2px;-webkit-border-top-right-radius: 2px;border-top-left-radius: 2px;border-top-right-radius: 2px; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #F2F2F2), color-stop(1, #EBEBEB));background-image: -ms-linear-gradient(top, #F2F2F2, #EBEBEB);background-image: -o-linear-gradient(top, #F2F2F2, #EBEBEB);background-image: -moz-linear-gradient(top, #F2F2F2, #EBEBEB);background-image: -webkit-linear-gradient(top, #F2F2F2, #EBEBEB);background-image: linear-gradient(to bottom, #F2F2F2, #EBEBEB) }
+#menu_left_r ul { width: 250px; list-style: none;}
+#menu_left_r ul li {border:1px solid #EAEAEA;border-color: #FFFFFF #FDFDFD #EAEAEA #FDFDFD; background: #F7F7F7;padding: 6px 6px 6px 18px;font-size: 13px;}
+#menu_left_r ul li a{ text-decoration: none;color: #505050;}
+#menu_left_r ul li a:hover{ text-decoration: underline; color: #3b86ad;}
+#menu_left_r ul li ul {width: auto;}
+#menu_left_r ul ul li {padding: 4px 6px 4px 30px;font-size: 12px;background-image: url(/i/elements/arow_menu.png);background-repeat: no-repeat;background-position: 18px 8px;}
+#menu_left_r ul ul li a { text-decoration: none; color: #595959;}
+#menu_left_r ul ul li ul li {padding: 3px 0px 3px 10px;border: none;font-size: 11px; background: none;}
+#menu_left_r ul ul li ul li a { text-decoration: none;color: #737373;}
+
+#content_right { display: table-cell; padding-left: 30px; font-size: 12px; color: #505050; }

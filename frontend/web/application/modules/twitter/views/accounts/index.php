@@ -1,0 +1,98 @@
+<?php
+$this->pageTitle      =Yii::app()->name.' - '.Yii::t('main','_twitterList_Title');
+$this->metaDescription=Yii::t('main','_twitterList_Description');
+
+$this->breadcrumbs[]=array(
+    0=>array(Yii::t('breadcrumbs','_twitter'),'/twitter'),
+    1=>array(Yii::t('breadcrumbs','_tw_accounts'),'/twitter/accounts')
+);
+
+$_count=count($list);
+?>
+<div class="block twitterAccountList">
+    <div class="block_title"><div class="block_title_inset"><i class="fa fa-twitter"></i> <h5><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_title'); ?></h5></div></div>
+    <div class="block_content">
+        <div id="block_1">
+            <div id="block_1_1">
+                <span class="block"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_totalAccount'); ?> <?php echo $all_accounts_count; ?></span>
+                <span class="block"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_in_work'); ?> <?php echo $all_accounts_in_work; ?></span>
+                <span class="block"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_moderation'); ?> <?php echo $all_accounts_moderation; ?></span>
+            </div>
+            <div id="block_1_2">
+                <span class="block"><a href="/twitter/accounts/add" class="button btn_blue"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_accountAdd'); ?></a></span>
+                <span class="block group_input search"><input id="setQuery" type="text" placeholder="<?php echo Yii::t('twitterModule.accounts','_twitterAccountList_accountSearch'); ?>" onkeyup="Accounts._getFromQuery('setQuery', '_searchButton');" /><button class="button icon" onclick="Accounts._getFromQuery('setQuery', '_searchButton');"><i id="_searchButton" class="fa fa-search"></i></button></span>
+            </div>
+        </div>
+        <div id="block_2">
+            <div class="table_head">
+                <div class="table_head_inside">
+                    <table>
+                        <tr>
+                            <td class="account"><a href="javascript:;" data-order="last" onclick="Accounts._setOrder(this);
+                                                          return false;"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_tableAccount'); ?> <i class="fa fa-caret-down"></i></a></td>
+                            <td class="status"><a href="javascript:;" data-order="status" onclick="Accounts._setOrder(this);
+                                                          return false;"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_tableStatus'); ?> <i class="fa fa-caret-down"></i></a>                                                           </td>
+                            <td class="level"><a href="javascript:;" data-order="itr" onclick="Accounts._setOrder(this);
+                                                          return false;"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_tableLevel'); ?> <i class="fa fa-caret-down"></i></a></td>
+                            <td class="index"> <span title="<?php echo Yii::t('twitterModule.accounts','_twitterAccountList_tableIndex_title'); ?>"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_tableIndex'); ?></span>                                                          </td>
+                            <td class="application"><a href="javascript:;" data-order="order" onclick="Accounts._setOrder(this);
+                                                          return false;"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_tableApplication'); ?> <i class="fa fa-caret-down"></i></a></td>
+                            <td class="posted"><a href="javascript:;" data-order="posted" onclick="Accounts._setOrder(this);
+                                                          return false;"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_tablePosted'); ?> <i class="fa fa-caret-down"></i></a></td>
+                            <td class="no_padding earneds">
+                                <table>
+                                    <tr>
+                                        <td colspan="3" class="earned"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_tableEarneds'); ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="today">         <a href="javascript:;" data-order="today" onclick="Accounts._setOrder(this);
+                                                                                  return false;"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_tableToday'); ?> <i class="fa fa-caret-down"></i></a>  </td>
+                                        <td class="last">          <a href="javascript:;" data-order="yesterday" onclick="Accounts._setOrder(this);
+                                                                                  return false;"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_tableLast'); ?> <i class="fa fa-caret-down"></i></a>    </td>
+                                        <td class="no_border only"><a href="javascript:;" data-order="all" onclick="Accounts._setOrder(this);
+                                                                                  return false;"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_tableOnly'); ?> <i class="fa fa-caret-down"></i></a>      </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="no_border icons"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div id="_listTwAccounts" class="acconts_list _cHide"><?php $this->renderPartial('_indexList',['list'=>$list,'_count'=>$_count]); ?></div>
+            <div class="_loading" style="display: none; text-align: center; padding-top: 10px;"><img src="/i/loads.gif"></div>
+            <div class="table_bottom">
+                <div class="table_bottom_inside">
+                    <div class="page_nav_page">
+                        <div id="pagesList" class="_cHide">
+<?php $this->renderPartial("_pages",array('pages'=>$pages)); ?>
+                        </div>
+                        <div class="_loading" style="display: none;"><img src="/i/loads.gif"></div>
+                    </div>
+                        <?php if($_count)
+                        { ?>
+                        <div class="page_nav_how">
+                                <?php echo Yii::t('twitterModule.accounts','_pageNavHow'); ?>
+                            <select name="shoOnPage" class="styler" onchange="Accounts._setLimit(this); return false;">
+                                <?php foreach($limitList as $option)
+                                { ?>
+                                    <?php
+                                    if(isset(Yii::app()->session['_accountsLimit']) AND Yii::app()->session['_accountsLimit'] == $option['value'])
+                                    {
+                                        $htmlOption=array('value'=>$option['value'],
+                                            'selected'=>'selected');
+                                    } else
+                                    {
+                                        $htmlOption=array('value'=>$option['value']);
+                                    }
+                                    echo Html::tag('option',$htmlOption,($option['title'] == "_all")?Yii::t('twitterModule.accounts','_pageNavHowAll'):$option['title']);
+                                    ?>
+                        <?php } ?>
+                            </select>
+                        </div>
+<?php } ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

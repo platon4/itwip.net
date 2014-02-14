@@ -1,0 +1,554 @@
+/*############################## БЛОКИ #############################*/
+/*================= Стандартный блок для страниц ===================*/
+div.block { border: 1px solid #F1F1F1;vertical-align: top; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background-color: #FDFDFD; color: #505050; display: block; }
+div.block .block_title { border: 1px solid #E6E8E8; background: #F6F6F6; margin: -1px -1px 0px; -webkit-border-top-left-radius: 3px; -webkit-border-top-right-radius: 3px; -moz-border-radius-topleft: 3px; -moz-border-radius-topright: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; }
+div.block .block_title .block_title_inset { background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #F2F2F2), color-stop(1, #EBEBEB)); background-image: -ms-linear-gradient(top, #F2F2F2, #EBEBEB); background-image: -o-linear-gradient(top, #F2F2F2, #EBEBEB); background-image: -moz-linear-gradient(top, #F2F2F2, #EBEBEB); background-image: -webkit-linear-gradient(top, #F2F2F2, #EBEBEB); background-image: linear-gradient(to bottom, #F2F2F2, #EBEBEB); -webkit-border-top-left-radius: 2px; -webkit-border-top-right-radius: 2px; -moz-border-radius-topleft: 2px;-moz-border-radius-topright: 2px; border-top-left-radius: 2px; border-top-right-radius: 2px; margin: 1px; padding: 5px 7px; }
+div.block .block_title .block_title_inset h5{ color: #3b85ad; font-size: 16px; font-weight: normal; text-shadow: 0 1px 1px #FFFFFF; display: inline-block; }
+div.block .block_title .block_title_inset .move{ text-shadow: 0 1px 1px #FFFFFF; color: #C4C4C4; float: right; font-size: 15px; cursor: move; margin-left: 30px; }
+div.block .block_title .block_title_inset i { text-shadow: 0 1px 1px #FFFFFF; color: #C4C4C4; font-size: 15px; }
+
+.block .block_content { background: #F7F7F7; margin: 0px 1px 1px;-webkit-border-bottom-right-radius: 1px; -webkit-border-bottom-left-radius: 1px; -moz-border-radius-bottomright: 1px; -moz-border-radius-bottomleft: 1px; border-bottom-right-radius: 1px; border-bottom-left-radius: 1px;}
+.block .block_content .block_content_title { background: #F0F0F0; color: #3b86ad; font-size: 14px; font-weight: normal; text-shadow: 0 1px 1px #FFFFFF; padding: 4px 0px 4px 7px; }
+
+#info_page { background: none repeat scroll 0 0 #F0F0F0; border-bottom: 1px solid #FFFFFF; padding: 5px 0 5px 15px; }
+#info_page .icon { color: #A6A6A6; display: table-cell; font-size: 2em; vertical-align: top; }
+#info_page .text { color: #919191; display: table-cell; font-size: 10px; padding: 0 10px; vertical-align: middle; }
+
+.line_title { background: none repeat scroll 0 0 #F0F0F0; color: #0086AE; display: block; font-size: 15px; padding: 8px 0 8px 15px; border-top:1px solid #FDFDFD; border-bottom:1px solid #FDFDFD; cursor: pointer;}
+.line_title .open_icon { display: inline; float: right; margin-right: 10px; font-size: 22px; color: #B6B6B6; line-height: 15px;}
+.line_title .open_icon:hover {cursor: pointer; color:#9E9E9E}
+
+.line_title_noopen { background: none repeat scroll 0 0 #F0F0F0; border-bottom: 1px solid #FFFFFF; border-top: 1px solid #FDFDFD; color: #0086AE; display: block; font-size: 14px; padding: 8px 0 8px 15px; }
+
+.block_bottom { background: none repeat scroll 0 0 #F0F0F0; border-bottom-left-radius: 1px; border-bottom-right-radius: 1px; border-top: 1px solid #FDFDFD; display: block; padding: 15px; text-align: right; }
+
+
+/*================= Блок с вкладками ===============================*/
+.section { margin:0; padding: 0; }
+ul.tabs { display: block; list-style: none; border-bottom: 1px solid #E6E8E8; }
+.tabs li { display: inline-block; background: #F6F6F6; border: 1px solid #E6E8E8; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; vertical-align: top; cursor: pointer; }
+.tabs li span.inset { background-image: linear-gradient(to bottom, #F2F2F2, #EBEBEB); -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; margin: 1px; color: #C4C4C4; padding: 5px 7px 2px; font-size: 15px; font-weight: normal; display: block; text-shadow: 0 1px 1px #FFFFFF; }
+.tabs li:hover { border: 1px solid #DDDFDF;}
+.tabs li span.inset:hover { color: #B8B8B8}
+.tabs li.current { background: #F6F6F6; border: 1px solid #E6E8E8; border-bottom: none; -webkit-border-radius: 3px; -webkit-border-bottom-right-radius: 0px; -webkit-border-bottom-left-radius: 0px; -moz-border-radius: 3px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px; border-radius: 3px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px }
+.tabs li.current span.inset { background-image: linear-gradient(to bottom, #F2F2F2, #EBEBEB); -webkit-border-radius: 2px; -webkit-border-bottom-right-radius: 0px; -webkit-border-bottom-left-radius: 0px; -moz-border-radius: 2px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px; border-radius: 2px; border-bottom-right-radius: 0px;border-bottom-left-radius: 0px; margin: 1px; color: #3B85AD; padding: 5px 7px; font-size: 15px; font-weight: normal; display: block; text-shadow: 0 1px 1px #FFFFFF; }
+.box { border: 1px solid #F1F1F1; -webkit-border-bottom-right-radius: 3px; -webkit-border-bottom-left-radius: 3px; -moz-border-radius-bottomright: 3px; -moz-border-radius-bottomleft: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; background-color: #FDFDFD; border-top: none; }
+.box .box_inset { background: none repeat scroll 0 0 #F7F7F7; border-bottom-left-radius: 1px; border-bottom-right-radius: 1px; margin: 0 1px 1px; }
+.box { display: none; }
+.box.actived { display: block; }
+
+
+/*############################## ТАБЛИЦЫ ##########################*/
+/*================= Таблица с заголовком и футером ================*/
+.table_head { background: none repeat scroll 0 0 #FAFAFA; border: 1px solid #EAECEB; display: table; width: 100%; box-sizing: border-box ; -moz-box-sizing: border-box ; -webkit-box-sizing: border-box ; }
+.table_head_inside { background-image: linear-gradient(to bottom, #F2F2F2, #EAEAEA); margin: 1px; }
+.table_head table { border-collapse: collapse; width: 100%;}
+.table_head td { border-right: 1px solid #F7F7F7; color: #0285AF; font-size: 11px; padding: 7px 10px; text-align: center; text-shadow: 0 1px 1px #FFFFFF;}
+.table_head td a { text-decoration: none;}
+.table_head td a:hover { border-bottom: 1px dotted #0086B0; text-decoration: none; cursor: poinet;}
+.table_head table .account { min-width: 220px; }
+
+.acconts_list table { border-collapse: collapse; width: 100%; }
+.acconts_list table tbody > tr:nth-child(2n+1) { background: none repeat scroll 0 0 #FCFCFC; }
+.acconts_list table tr td { padding: 7px 10px; }
+.acconts_list table .account { min-width: 222px; }
+.acconts_list table .account .account_img { width: 51px; height: 51px; display: table-cell; padding-right: 10px; vertical-align: top; }
+.acconts_list table .account .account_img img { max-width: 48px;}
+.acconts_list table .account .account_NameLogin { display: table-cell; vertical-align: top;}
+.acconts_list table .account .account_Name { font-size: 12px; margin-bottom: 5px; }
+.acconts_list table .account .account_Login { font-size: 11px; }
+.acconts_list table .level { color: #4F4F4F; font-size: 11px; text-align: left; }
+.acconts_list table .date { width: 105px; color: #999999; font-size: 11px; }
+
+._noAccount { text-align: center; padding: 10px 0px; }
+
+.table_bottom { -moz-box-sizing: border-box; background: none repeat scroll 0 0 #FAFAFA; border: 1px solid #EAECEB; display: table; width: 100%; }
+.table_bottom_inside { background-image: linear-gradient(to bottom, #F2F2F2, #EAEAEA); margin: 1px; font-size: 12px; height: 32px; display: table; width: calc(100% - 2px)}
+.table_bottom_inside .page_nav_page { display: table-cell; padding-left: 10px; width: auto; vertical-align: middle; }
+.table_bottom_inside .page_nav_page .page_nav_pageList { margin: 0 10px; }
+.table_bottom_inside .page_nav_page .page_nav_pageList a { margin: 0 2px; }
+.table_bottom_inside .page_nav_page .page_nav_next a { text-decoration: none; }
+.table_bottom_inside .page_nav_page .page_nav_prev a { text-decoration: none; }
+.table_bottom_inside .page_nav_how { display: table-cell; padding-right: 10px; width: 231px; vertical-align: middle; }
+.table_bottom_inside .page_nav_how .selectbox { width: 55px; }
+
+
+/*================= Таблица серая с полями ========================*/
+table.table_style_1  { border-collapse: collapse;}
+.table_style_1 tr {}
+.table_style_1 td { background-color:#FCFCFC; height: 28px; border: 1px solid #F0F0F0; font-size: 11px; color: #505050; padding: 0px 10px; }
+table tr.title td { background-color:#F0F0F0; color: #3b86ad; height: 28px; text-align: center; border-right:  1px solid #FCFCFC; border-top: none; border-bottom: none; text-shadow: 0 1px 1px #FFFFFF; font-size: 12px; }
+table tr.title td span { color: #505050; }
+.table_style_1 tr.title td a { text-decoration: none; }
+.table_style_1 tr.title td a:hover { border-bottom: 1px dotted #0086B0; text-decoration: none;}
+
+
+
+/*############################## ИНФОРМАЦИОННЫЕ ЛИНИИ ##############*/
+.line_info { position: relative; border-radius: 3px; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #009EC9), color-stop(1, #0086B0));background-image: -ms-linear-gradient(top, #009EC9, #0086B0);background-image: -o-linear-gradient(top, #009EC9, #0086B0);background-image: -moz-linear-gradient(top, #009EC9, #0086B0);background-image: -webkit-linear-gradient(top, #009EC9, #0086B0);background-image: linear-gradient(to bottom, #009EC9, #0086B0);color: #fff;font-style: italic;font-size: 12px;text-shadow: 0px -1px 0px #0087B0;padding: 6px 10px 6px 12px;}
+.line_info a { color: #fff; }
+
+.line_info.ok {background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #07B217), color-stop(1, #169E00));background-image: -ms-linear-gradient(top, #07B217, #169E00);background-image: -o-linear-gradient(top, #07B217, #169E00);background-image: -moz-linear-gradient(top, #07B217, #169E00);background-image: -webkit-linear-gradient(top, #07B217, #169E00);background-image: linear-gradient(to bottom, #07B217, #169E00);text-shadow: 0px -1px 0px  #079100 ;}
+.line_info.alert {background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #FFA940), color-stop(1, #FF7F00));background-image: -ms-linear-gradient(top, #FFA940, #FF7F00);background-image: -o-linear-gradient(top, #FFA940, #FF7F00);background-image: -moz-linear-gradient(top, #FFA940, #FF7F00);background-image: -webkit-linear-gradient(top, #FFA940, #FF7F00);background-image: linear-gradient(to bottom, #FFA940, #FF7F00);text-shadow: 0px -1px 0px  #FF7C00 ;}
+.line_info.warn {background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #FF5455), color-stop(1, #FF0B0B));background-image: -ms-linear-gradient(top, #FF5455, #FF0B0B);background-image: -o-linear-gradient(top, #FF5455, #FF0B0B);background-image: -moz-linear-gradient(top, #FF5455, #FF0B0B);background-image: -webkit-linear-gradient(top, #FF5455, #FF0B0B);background-image: linear-gradient(to bottom, #FF5455, #FF0B0B);text-shadow: 0px -1px 0px  #F10404;}
+.line_info.grey { background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #F2F2F2), color-stop(1, #EBEBEB));background-image: -ms-linear-gradient(top, #F2F2F2, #EBEBEB);background-image: -o-linear-gradient(top, #F2F2F2, #EBEBEB);background-image: -moz-linear-gradient(top, #F2F2F2, #EBEBEB);background-image: -webkit-linear-gradient(top, #F2F2F2, #EBEBEB);background-image: linear-gradient(to bottom, #F2F2F2, #EBEBEB);text-shadow: 0px -1px 0px  #FFFFFF; color: #7E7E7E}
+.line_info.ferrors { margin-top: 10px; }
+
+
+/*############################## КНОПКИ ############################*/
+.button[disabled=disabled], .button:disabled, .button.disabl { opacity: 0.6; cursor: default }
+.button[disabled=disabled], .button:disabled, .button.disabl:hover { opacity: 0.6 !important; cursor: default !important}
+.button_border { position: relative; display: inline-block; padding: 4px 4px 4px 5px; -webkit-border-radius:5px; -moz-border-radius: 5px; border-radius: 5px; box-shadow: inset 0 0 12px #616161, 0 1px #41A8C8; }
+
+/*================= Кнопки button ==================================*/
+.button { -moz-border-bottom-colors: none; -moz-border-left-colors: none; -moz-border-right-colors: none; -moz-border-top-colors: none; background-color: #ece9e2; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #EFEFEF), color-stop(1, #E5E5E5)); background-image: -ms-linear-gradient(top, #EFEFEF, #E5E5E5); background-image: -o-linear-gradient(top, #EFEFEF, #E5E5E5); background-image: -moz-linear-gradient(top, #EFEFEF, #E5E5E5); background-image: -webkit-linear-gradient(top, #EFEFEF, #E5E5E5); background-image: linear-gradient(to bottom, #EFEFEF, #E5E5E5); background-repeat: repeat-x; font-size: 12px; color: #767676; line-height: 18px; text-decoration: none !important; text-shadow: 0 1px 1px #fff; border-color: #E8E8E8 #E2E2E2 #DADADA #E1E1E1; -webkit-border-image: none; -moz-border-image: none; -o-border-image: none; border-image: none; border-radius: 3px 3px 3px 3px; border-style: solid; border-width: 1px; box-shadow: 1px 1px 0 #fafafa inset; cursor: pointer; display: inline-block; margin-bottom: 0; padding: 2px 14px 5px; text-align: center; vertical-align: middle; }
+.button:hover { color:#0086B0; background-color: #EFEFEF; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #F2F2F2), color-stop(1, #EBEBEB)); background-image: -ms-linear-gradient(top, #F2F2F2, #EBEBEB); background-image: -o-linear-gradient(top, #F2F2F2, #EBEBEB); background-image: -moz-linear-gradient(top, #F2F2F2, #EBEBEB); background-image: -webkit-linear-gradient(top, #F2F2F2, #EBEBEB); background-image: linear-gradient(to bottom, #F2F2F2, #EBEBEB);}
+
+/*================= Кнопки a =======================================*/
+a.button { line-height: 20px; color: #767676}
+a.button:hover { line-height: 20px; color: #0086B0}
+
+/*================= Цвета ==========================================*/
+/* Оранжевые */
+.btn_orange, .btn_orange.disabl:hover { background-color: #FF9514; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #FFA940), color-stop(1, #FF7E00)); background-image: -ms-linear-gradient(top, #FFA940, #FF7E00); background-image: -o-linear-gradient(top, #FFA940, #FF7E00); background-image: -moz-linear-gradient(top, #FFA940, #FF7E00); background-image: -webkit-linear-gradient(top, #FFA940, #FF7E00); background-image: linear-gradient(to bottom, #FFA940, #FF7E00); box-shadow: 1px 1px 0 #FFC585 inset; color: #fff; text-shadow: 0px -1px 0px #FC7500; border-color: #FFA337 #FF9223 #ED7D02 #FF9223; }
+.btn_orange:hover { color:#fff; background: #FF9C2B; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #FFB155), color-stop(1, #FF8B00)); background-image: -ms-linear-gradient(top, #FFB155, #FF8B00); background-image: -o-linear-gradient(top, #FFB155, #FF8B00); background-image: -moz-linear-gradient(top, #FFB155, #FF8B00); background-image: -webkit-linear-gradient(top, #FFB155, #FF8B00); background-image: linear-gradient(to bottom, #FFB155, #FF8B00) }
+.btn_orange:active { background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #FF8B00), color-stop(1, #FFB155)); background-image: -ms-linear-gradient(top, #FF8B00, #FFB155);background-image: -o-linear-gradient(top, #FF8B00, #FFB155); background-image: -moz-linear-gradient(top, #FF8B00, #FFB155); background-image: -webkit-linear-gradient(top, #FF8B00, #FFB155); background-image: linear-gradient(to bottom, #FF8B00, #FFB155)}
+a.btn_orange { color:#fff; text-decoration: none; }
+a.btn_orange:hover { color:#fff !important; text-decoration: none; }
+/* Красные */
+.btn_red, .btn_red.disabl:hover { background-color: #FF3434; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #FF5455), color-stop(1, #FE0A0A)); background-image: -ms-linear-gradient(top, #FF5455, #FE0A0A); background-image: -o-linear-gradient(top, #FF5455, #FE0A0A); background-image: -moz-linear-gradient(top, #FF5455, #FE0A0A); background-image: -webkit-linear-gradient(top, #FF5455, #FE0A0A); background-image: linear-gradient(to bottom, #FF5455, #FE0A0A); box-shadow: 1px 1px 0 #FF9B9B inset; color: #fff; text-shadow: 0px -1px 0px #EC0A0A; border-color: #FF4A4A #F32020 #D20203 #F62323; }
+a.btn_red { color:#fff; text-decoration: none; }
+a.btn_red:hover { color:#fff !important; text-decoration: none; }
+.btn_red:hover { color:#fff; background: #FF4A4A; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #FF6667), color-stop(1, #FF2626)); background-image: -ms-linear-gradient(top, #FF6667, #FF2626); background-image: -o-linear-gradient(top, #FF6667, #FF2626); background-image: -moz-linear-gradient(top, #FF6667, #FF2626); background-image: -webkit-linear-gradient(top, #FF6667, #FF2626); background-image: linear-gradient(to bottom, #FF6667, #FF2626) }
+.btn_red:active { background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #FF2626), color-stop(1, #FF6667)); background-image: -ms-linear-gradient(top, #FF2626, #FF6667);background-image: -o-linear-gradient(top, #FF2626, #FF6667); background-image: -moz-linear-gradient(top, #FF2626, #FF6667); background-image: -webkit-linear-gradient(top, #FF2626, #FF6667); background-image: linear-gradient(to bottom, #FF2626, #FF6667)}
+/* Зелёные */
+.btn_green, .btn_green.disabl:hover { background-color: #12A900; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #07B217), color-stop(1, #169E00)); background-image: -ms-linear-gradient(top, #07B217, #169E00); background-image: -o-linear-gradient(top, #07B217, #169E00); background-image: -moz-linear-gradient(top, #07B217, #169E00); background-image: -webkit-linear-gradient(top, #07B217, #169E00); background-image: linear-gradient(to bottom, #07B217, #169E00); box-shadow: 1px 1px 0 #62C357 inset; color: #fff; text-shadow: 0px -1px 0px #1C9C00; border-color: #00B219 #009400 #007700 #009400; }
+.btn_green:hover { color:#fff; background: #41B225; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #41B938), color-stop(1, #42A900)); background-image: -ms-linear-gradient(top, #41B938, #42A900); background-image: -o-linear-gradient(top, #41B938, #42A900); background-image: -moz-linear-gradient(top, #41B938, #42A900); background-image: -webkit-linear-gradient(top, #41B938, #42A900); background-image: linear-gradient(to bottom, #41B938, #42A900) }
+.btn_green:active { background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #42A900), color-stop(1, #41B938)); background-image: -ms-linear-gradient(top, #42A900, #41B938);background-image: -o-linear-gradient(top, #42A900, #41B938); background-image: -moz-linear-gradient(top, #42A900, #41B938); background-image: -webkit-linear-gradient(top, #42A900, #41B938); background-image: linear-gradient(to bottom, #42A900, #41B938)}
+a.btn_green { color:#fff; text-decoration: none; }
+a.btn_green:hover { color:#fff !important; text-decoration: none; }
+/* Синие */
+.btn_blue, .btn_blue.disabl:hover { background-color: #009EC4; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #009DC7), color-stop(1, #0087B0)); background-image: -ms-linear-gradient(top, #009DC7, #0087B0); background-image: -o-linear-gradient(top, #009DC7, #0087B0); background-image: -moz-linear-gradient(top, #009DC7, #0087B0); background-image: -webkit-linear-gradient(top, #009DC7, #0087B0); background-image: linear-gradient(to bottom, #009DC7, #0087B0); box-shadow: 1px 1px 0 #65BBD8 inset; color: #fff !important; text-shadow: 0px -1px 0px #0087B0 !important; border-color: #009DC7 #007FA7 #006189 #007FA7; }
+.btn_blue:hover { color:#fff; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #16A8CD), color-stop(1, #0093B8)); background-image: -ms-linear-gradient(top, #16A8CD, #0093B8); background-image: -o-linear-gradient(top, #16A8CD, #0093B8); background-image: -moz-linear-gradient(top, #16A8CD, #0093B8); background-image: -webkit-linear-gradient(top, #16A8CD, #0093B8); background-image: linear-gradient(to bottom, #16A8CD, #0093B8) }
+.btn_blue:active { background: #FF4A4A; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #0093B8), color-stop(1, #16A8CD)); background-image: -ms-linear-gradient(top, #0093B8, #16A8CD); background-image: -o-linear-gradient(top, #0093B8, #16A8CD); background-image: -moz-linear-gradient(top, #0093B8, #16A8CD); background-image: -webkit-linear-gradient(top, #0093B8, #16A8CD); background-image: linear-gradient(to bottom, #0093B8, #16A8CD) }
+
+/*================= Размеры ========================================*/
+.button.icon { padding: 3px 6px 4px; font-size: 14px; }
+.button.icon_small { padding: 0px 2px 1px 3px; font-size: 13px; }
+a.button.icon { padding: 3px 8px 4px; font-size: 14px; }
+a.button.icon_small { padding: 0px 5px 0px; font-size: 13px; }
+
+
+/*############################## ЭЛЕМЕНТЫ ФОРМ #####################*/
+/*================= INPUT, Textarea ================================*/
+input, textarea, select { font-family: Verdana !important; vertical-align: middle;width: 160px; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; border: 1px solid; border-color: #ECECEC #F5F5F5 #F5F5F5 #ECECEC; padding: 3px 5px 4px 10px;color: #808080; font-size: 13px;line-height: 20px;}
+input{height:20px;}
+option { border: none; }
+input:focus, textarea:focus { border-color: #D4D4D4; color: #505050 }
+input:disabled, textarea:disabled { background: #FAFAFA; border-color: #ECECEC #FFFFFF #FFFFFF #ECECEC; color: #A1A1A1; }
+.no_resize { resize: none }
+input.error_input { border-color: #FFA940 ; color: #FF7F00 }
+
+/*================= Сheckbox =======================================*/
+.checkbox { position: relative; width: 13px; height: 13px; background: #fff; border-radius: 2px; vertical-align: middle; cursor: pointer; border: 1px solid #DCDCDC;}
+.checkbox.checked span { display: block; width: 9px; height: 9px; margin: 2px 2px 2px 2px; background-image: url(/i/elements/checkbox_checked.png); }
+.checkbox.focused { border: 1px solid #08C; }
+.checkbox.disabled { opacity: 0.55; filter: alpha(opacity=55);}
+
+/*================= Radio ==========================================*/
+.radio { width: 13px;height: 13px;border: 1px solid #DCDCDC; border-radius: 50%;background: #fff; box-shadow: inset 1px 1px 0px #ECECEC;vertical-align: middle;cursor: pointer;}
+.radio.checked span {display: block;width: 5px;height: 5px;overflow: hidden; background-image: url(/i/elements/radio_checked.png);margin: 4px;}
+.radio.focused {border: 1px solid #08C;}
+.radio.disabled {opacity: 0.55;filter: alpha(opacity=55);}
+
+/*================= Select =========================================*/
+.selectbox { vertical-align: middle; cursor: pointer; width: 180px; height: 27px;}
+.selectbox .select { height: 27px ;border-color: #ECECEC #F5F5F5 #F5F5F5 #ECECEC; border-image: none; border-radius: 3px 3px 3px 3px; border-style: solid; margin-top: -1px; border-width: 1px; color: #AFAFAF; font-size: 13px; line-height: 20px; vertical-align: middle; width: 100%; background: #fff; }
+.selectbox.opened .select {-webkit-border-radius: 3px;-webkit-border-bottom-right-radius: 0px;-webkit-border-bottom-left-radius: 0px;-moz-border-radius: 3px;-moz-border-radius-bottomright: 0px;-moz-border-radius-bottomleft: 0px;border-radius: 3px;border-bottom-right-radius: 0px;border-bottom-left-radius: 0px;}
+.selectbox .select:hover {}
+.selectbox .select:active { background: #F5F5F5; box-shadow: inset 1px 1px 3px #DDD; }
+.selectbox.focused .select { border: 1px solid #5794BF; }
+.selectbox.disabled .select { border-color: #CCC; background: #F5F5F5; box-shadow: none; color: #888; }
+.selectbox .select .text { display: block; width: 85%; padding: 2px 5px 6px 10px; overflow: hidden; text-align: left; text-overflow: ellipsis;white-space: nowrap; }
+.selectbox .trigger { position: absolute; top: 0; right: 0; width: 34px;height: 100%; }
+.selectbox .trigger .arrow { position: absolute; top: 13px; right: 8px; width: 0; height: 0; overflow: hidden; border-top: 4px solid #C7C7C7; border-right: 4px solid transparent; border-left: 4px solid transparent; }
+.selectbox:hover .arrow { opacity: 1; filter: alpha(opacity=100); }
+.selectbox.disabled .arrow { opacity: 0.3; filter: alpha(opacity=30);}
+.selectbox .dropdown { max-height: 350px; border-color: #FFFFFF #F5F5F5 #F5F5F5 #ECECEC; border-style: solid; border-width: 1px; border-top: 1px solid #F1F1F1; top: 27px; margin: 0; padding: 0; width: 100%;-webkit-border-radius: 0px;-webkit-border-bottom-right-radius: 3px;-webkit-border-bottom-left-radius: 3px;-moz-border-radius: 0px;-moz-border-radius-bottomright: 3px;-moz-border-radius-bottomleft: 3px;border-radius: 0px;border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; background: #FFF; font-size: 12px; text-align: left;}
+.selectbox ul { margin: 0; padding: 0; }
+.selectbox li { border-top: 1px solid #F1F1F1; padding: 5px 10px 6px; color: #4F4F4F;}
+.selectbox li.selected { background: #A3ABB1; }
+.selectbox li:hover { background: #FBFBFB; }
+.selectbox li.disabled { color: #AAA; }
+.selectbox li.disabled:hover { background: none; }
+.selectbox li.optgroup { font-weight: bold;}
+.selectbox li.optgroup:hover { background: none; color: #231F20; cursor: default; }
+.selectbox li.option { padding-left: 25px; }
+
+/*================= Выключатель ====================================*/
+.onoffswitch { position: relative; width: 55px; height: 22px; font-size: 10px; -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; }
+.onoffswitch-checkbox { display: none; }
+.onoffswitch-label { display: block; overflow: hidden; cursor: pointer;height: 22px; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }
+.onoffswitch-inner { width: 200%; margin-left: -100%; -moz-transition: margin 0.3s ease-in 0s; -webkit-transition: margin 0.3s ease-in 0s; -o-transition: margin 0.3s ease-in 0s; transition: margin 0.3s ease-in 0s; }
+.onoffswitch-inner:before, .onoffswitch-inner:after { float: left; width: 50%; height: 22px; padding: 0; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+.onoffswitch-inner:before { content: "вкл"; background-color: #A4DC7E; color: #518137; text-shadow: 0 1px 1px #FFFFFF; text-align: left;box-shadow: inset 2px 2px 2px #93C772; padding-top: 4px; padding-left: 5px; }
+.onoffswitch-inner:after { content: "выкл"; background-color: #FCACAD; color: #B33D3D; text-shadow: 0 1px 1px #FFFFFF; text-align: right;box-shadow: inset 2px 2px 2px #E29A9B; padding-top: 4px; padding-right: 2px; }
+.onoffswitch-switch { width: 32px; height: 32px; margin: 0px; background: #FFFFFF; position: absolute; top: -4px; bottom: 0; right: 30px; background: url(/i/elements/switch.png);}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner { margin-left: 0; }
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch { right: -5px; }
+
+/*================= Групировка элементов ===========================*/
+.group_input input { -webkit-border-top-right-radius: 0px;-webkit-border-bottom-right-radius: 0px;-moz-border-radius-topright: 0px;-moz-border-radius-bottomright: 0px;border-top-right-radius: 0px;border-bottom-right-radius: 0px; }
+.group_input .button {  margin-left: -2px; -webkit-border-top-left-radius: 0px;-webkit-border-bottom-left-radius: 0px;-moz-border-radius-topleft:0px;-moz-border-radius-bottomleft: 0px;border-top-left-radius: 0px;border-bottom-left-radius: 0px; }
+
+
+/*############################## Анимация #####################*/
+/*================= INPUT, Textarea ================================*/
+.bell {
+	-webkit-animation: ring 8s 1s ease-in-out infinite;
+	-webkit-transform-origin: 50% 4px;
+	-moz-animation: ring 8s 1s ease-in-out infinite;
+	-moz-transform-origin: 50% 4px;
+	animation: ring 4s 2s ease-in-out infinite;
+	transform-origin: 50% 4px;
+}
+
+@-webkit-keyframes ring {
+	0% { -webkit-transform: rotateZ(0); }
+	1% { -webkit-transform: rotateZ(30deg); }
+	3% { -webkit-transform: rotateZ(-28deg); }
+	5% { -webkit-transform: rotateZ(34deg); }
+	7% { -webkit-transform: rotateZ(-32deg); }
+	9% { -webkit-transform: rotateZ(30deg); }
+	11% { -webkit-transform: rotateZ(-28deg); }
+	13% { -webkit-transform: rotateZ(26deg); }
+	15% { -webkit-transform: rotateZ(-24deg); }
+	17% { -webkit-transform: rotateZ(22deg); }
+	19% { -webkit-transform: rotateZ(-20deg); }
+	21% { -webkit-transform: rotateZ(18deg); }
+	23% { -webkit-transform: rotateZ(-16deg); }
+	25% { -webkit-transform: rotateZ(14deg); }
+	27% { -webkit-transform: rotateZ(-12deg); }
+	29% { -webkit-transform: rotateZ(10deg); }
+	31% { -webkit-transform: rotateZ(-8deg); }
+	33% { -webkit-transform: rotateZ(6deg); }
+	35% { -webkit-transform: rotateZ(-4deg); }
+	37% { -webkit-transform: rotateZ(2deg); }
+	39% { -webkit-transform: rotateZ(-1deg); }
+	41% { -webkit-transform: rotateZ(1deg); }
+
+	43% { -webkit-transform: rotateZ(0); }
+	100% { -webkit-transform: rotateZ(0); }
+}
+
+@-moz-keyframes ring {
+	0% { -moz-transform: rotate(0); }
+	1% { -moz-transform: rotate(30deg); }
+	3% { -moz-transform: rotate(-28deg); }
+	5% { -moz-transform: rotate(34deg); }
+	7% { -moz-transform: rotate(-32deg); }
+	9% { -moz-transform: rotate(30deg); }
+	11% { -moz-transform: rotate(-28deg); }
+	13% { -moz-transform: rotate(26deg); }
+	15% { -moz-transform: rotate(-24deg); }
+	17% { -moz-transform: rotate(22deg); }
+	19% { -moz-transform: rotate(-20deg); }
+	21% { -moz-transform: rotate(18deg); }
+	23% { -moz-transform: rotate(-16deg); }
+	25% { -moz-transform: rotate(14deg); }
+	27% { -moz-transform: rotate(-12deg); }
+	29% { -moz-transform: rotate(10deg); }
+	31% { -moz-transform: rotate(-8deg); }
+	33% { -moz-transform: rotate(6deg); }
+	35% { -moz-transform: rotate(-4deg); }
+	37% { -moz-transform: rotate(2deg); }
+	39% { -moz-transform: rotate(-1deg); }
+	41% { -moz-transform: rotate(1deg); }
+
+	43% { -moz-transform: rotate(0); }
+	100% { -moz-transform: rotate(0); }
+}
+
+@keyframes ring {
+	0% { transform: rotate(0); }
+	1% { transform: rotate(30deg); }
+	3% { transform: rotate(-28deg); }
+	5% { transform: rotate(34deg); }
+	7% { transform: rotate(-32deg); }
+	9% { transform: rotate(30deg); }
+	11% { transform: rotate(-28deg); }
+	13% { transform: rotate(26deg); }
+	15% { transform: rotate(-24deg); }
+	17% { transform: rotate(22deg); }
+	19% { transform: rotate(-20deg); }
+	21% { transform: rotate(18deg); }
+	23% { transform: rotate(-16deg); }
+	25% { transform: rotate(14deg); }
+	27% { transform: rotate(-12deg); }
+	29% { transform: rotate(10deg); }
+	31% { transform: rotate(-8deg); }
+	33% { transform: rotate(6deg); }
+	35% { transform: rotate(-4deg); }
+	37% { transform: rotate(2deg); }
+	39% { transform: rotate(-1deg); }
+	41% { transform: rotate(1deg); }
+
+	43% { transform: rotate(0); }
+	100% { transform: rotate(0); }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.period { padding: 20px 10px; }
+.period ul { list-style: none; }
+.period li { display: inline-block; padding: 0px 3px; }
+.period li a { font-size: 11px; }
+.period input.period_date { height: 14px; width: 66px; border: none; background: none; cursor: pointer; display: inline-block; padding: 0; border-bottom: 1px dotted #0086B0; border-radius: 0; color: #0086B0; font-size :11px; font-family: Verdana}
+
+
+
+
+
+
+
+/*========== Заголовки ==========*/
+h3.top_title { background: none repeat scroll 0 0 #F0F0F0; color: #0086AE; display: block; font-size: 13px; font-weight: normal; padding: 5px 0 5px 15px;}
+
+
+
+
+
+
+
+/*========== Линии подзагрузки ==========*/
+.progress_bar { width: 100%; height: 26px; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #CACACA), color-stop(1, #E5E5E5)); background-image: -ms-linear-gradient(top, #CACACA, #E5E5E5); background-image: -o-linear-gradient(top, #CACACA, #E5E5E5); background-image: -moz-linear-gradient(top, #CACACA, #E5E5E5); background-image: -webkit-linear-gradient(top, #CACACA, #E5E5E5); background-image: linear-gradient(to bottom, #CACACA, #E5E5E5); border-radius: 4px; border: 1px solid #D0D0D0; text-align: center; }
+.progress_bar .bar {  background-image: url("/i/elements/bar.png"); float: left; height: 28px; margin-top: -1px; margin-left: -1px; border-radius: 4px; border-right: 1px solid #007CA4; border-left: 1px solid #007CA4; }
+.progress_bar .text { position: absolute; margin: 3px 0px 3px 100px; color: #fff; display: block; width: auto; text-align: center}
+.progress_bar .text .rcount { color: red;}
+
+/* Новая линия */
+.progress:before { bottom: 0;content: "";display: inline-block;left: 0;position: absolute;right: 0;top: 0; }
+.progress[data-percent]:after {bottom: 0;
+    color: #FFFFFF;
+    content: attr(data-percent);
+    display: inline-block;
+    font-family: Verdana;
+    font-size: 11px;
+    left: 0;
+    line-height: 16px;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+}
+.progress[data-percent] {
+    position: relative;
+}
+.progress, .progress .bar {
+}
+.progress {
+    position: relative;
+}
+.progress {
+    background: none repeat scroll 0 0 #DADADA;
+    border-radius: 0;
+    box-shadow: none;
+    height: 18px;
+}
+.progress {
+
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+    height: 18px;
+    overflow: hidden;
+}
+.progress-success.progress-striped .bar, .progress-striped .bar-success {
+    background-color: #55B83B;
+}
+.progress-success.progress-striped .bar, .progress-striped .bar-success {
+    background-color: #62C462;
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+}
+.progress, .progress .bar {
+}
+.progress-success .bar, .progress .bar-success {
+    background-color: #59A84B;
+    background-image: none;
+}
+.progress .bar {
+    background-color: #2A91D8;
+    background-image: none;
+}
+.progress .bar {
+    box-shadow: none;
+    line-height: 18px;
+}
+.progress-success .bar, .progress .bar-success {
+    background-color: #5EB95E;
+    background-image: linear-gradient(to bottom, #62C462, #57A957);
+    background-repeat: repeat-x;
+}
+.progress-striped .bar {
+    background-color: #149BDF;
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+    background-size: 40px 40px;
+}
+.progress .bar {
+    -moz-box-sizing: border-box;
+    background-color: #0E90D2;
+    background-image: linear-gradient(to bottom, #149BDF, #0480BE);
+    background-repeat: repeat-x;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15) inset;
+    color: #FFFFFF;
+    float: left;
+    font-size: 12px;
+    height: 100%;
+    text-align: center;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    transition: width 0.6s ease 0s;
+    width: 0;
+}
+
+
+/*------------ Блок цветной без тайтла -------------*/
+div.block_no_title {
+    display: block;
+    background: #CBCBCB;
+    color: #FFFFFF;
+    margin-top: 40px; margin-bottom: 40px; padding: 20px;
+    border-radius: 3px;
+    }
+
+div.block_no_title.green { background: #ABC755 }
+div.block_no_title.blue { background: #00A2CD }
+div.block_no_title.red { background: #F7580F }
+div.block_no_title.orange { background: #F89406}
+
+
+
+/*========== Тултип ==========*/
+.ui-tooltip { background: #fff; max-width: 300px; position: absolute; z-index: 1000;border-radius: 5px;padding: 10px; font-size: 11px; color: #4F4F4F;background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #FFFFFF), color-stop(1, #F2F2F2));background-image: -ms-linear-gradient(top, #FFFFFF, #F2F2F2);background-image: -o-linear-gradient(top, #FFFFFF, #F2F2F2);background-image: -moz-linear-gradient(top, #FFFFFF, #F2F2F2);background-image: -webkit-linear-gradient(top, #FFFFFF, #F2F2F2);background-image: linear-gradient(to bottom, #FFFFFF, #F2F2F2);box-shadow: 0 1px 3px 0px #CCCCCC}
+.ui-tooltip .arrow  { width: 0; height: 0; }
+.tooltip { -moz-border-bottom-colors: none; -moz-border-left-colors: none; -moz-border-right-colors: none; -moz-border-top-colors: none; background-color: #ece9e2; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #EFEFEF), color-stop(1, #E5E5E5)); background-image: -ms-linear-gradient(top, #EFEFEF, #E5E5E5); background-image: -o-linear-gradient(top, #EFEFEF, #E5E5E5); background-image: -moz-linear-gradient(top, #EFEFEF, #E5E5E5); background-image: -webkit-linear-gradient(top, #EFEFEF, #E5E5E5); background-image: linear-gradient(to bottom, #EFEFEF, #E5E5E5); background-repeat: repeat-x; font-size: 12px; color: #767676; line-height: 10px; text-decoration: none; text-shadow: 0 1px 1px #fff; border-color: #E8E8E8 #E2E2E2 #DADADA #E1E1E1; -webkit-border-image: none; -moz-border-image: none; -o-border-image: none; border-image: none; border-radius: 3px 3px 3px 3px; border-style: solid; border-width: 1px; box-shadow: 1px 1px 0 #fafafa inset; cursor: help; display: inline-block; margin-bottom: 0;text-align: center; vertical-align: middle; font-style: normal; font-size: 10px; padding: 1px 3px; margin-bottom: 3px;}
+.tooltip_lite { font-size: 12px; color: #767676; line-height: 8px; text-decoration: none; text-shadow: 0 1px 1px #fff; cursor: help; display: inline-block; margin-bottom: 0; font-style: normal; font-size: 8px; padding: 1px 3px; border: 1px solid; border-radius: 3px 3px 3px 3px;}
+span[title] { cursor: help; padding-right: 2px;}
+span[title]:after { content: "?"; font-size: 8px; margin-left: 1px; position: absolute; vertical-align: super;}
+
+/*========== Модальное окно ==========*/
+.ui-dialog { background: #F7F7F7;border: 1px solid #E8E8E6; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; position: fixed; box-shadow: 0 0 5px #4C4C4C ; max-width: 650px !important; min-width: 350px; width: auto !important; z-index: 2000; }
+.ui-widget-overlay { height: 100%; left: 0; position: fixed; top: 0; width: 100%; background: #000000; opacity: 0.4; z-index: 998;}
+.ui-dialog-titlebar { position: reletive;  background: #F6F6F6;  border: 1px solid #E6E6E6;margin: -1px;-webkit-border-top-left-radius: 3px;-webkit-border-top-right-radius: 3px;-moz-border-radius-topleft: 3px;-moz-border-radius-topright: 3px;border-top-left-radius: 3px;border-top-right-radius: 3px;}
+.ui-dialog-title { display:block; background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #F2F2F2), color-stop(1, #EBEBEB));background-image: -ms-linear-gradient(top, #F2F2F2, #EBEBEB);background-image: -o-linear-gradient(top, #F2F2F2, #EBEBEB);background-image: -moz-linear-gradient(top, #F2F2F2, #EBEBEB);background-image: -webkit-linear-gradient(top, #F2F2F2, #EBEBEB);background-image: linear-gradient(to bottom, #F2F2F2, #EBEBEB) ;margin: 1px;-webkit-border-top-left-radius: 2px;-webkit-border-top-right-radius: 2px;-moz-border-radius-topleft: 2px;-moz-border-radius-topright: 2px;border-top-left-radius: 2px;border-top-right-radius: 2px;padding: 5px 0px 5px 10px;color: #0086B0;text-shadow: 0 1px 1px #FFFFFF;font-size: 16px; cursor:move }
+.ui-dialog-titlebar-close { position: absolute; right: 8px;margin-top: -24px;text-decoration: none; color:#D6D6D6; font-size: 14px; font-weight: bold; cursor: pointer}
+.ui-dialog-content { min-height: auto !important; padding: 10px;}
+.ui-dialog-content .symbols { margin: 5px 2px 0px 0px; text-align: right; font-size: 11px;}
+.ui-dialog-content #_twMedia { margin: 5px 2px 0px 2px; float: left; font-size: 12px;}
+.ui-dialog-content-text { color: #4F4F4F; font-size: 12px; padding: 5px 0px 5px; }
+.ui-dialog-buttonpane { height: 25px; border-top: 1px solid #EBEBEB; padding: 7px 10px 11px 5px;}
+.ui-dialog-buttonpane .button { margin: 0 4px;}
+.ui-dialog-buttonset { text-align: right; }
+.modalMedia a {text-decoration: none;}
+.modalMedia a:hover {text-decoration: underline;}
+.modalMedia .icon-camera {cursor: pointer;}
+.ui-button-disabled { cursor: default !important; opacity: 0.6 !important; }
+
+
+/*========== Календарь ==========*/
+.ui-datepicker { display: none; background: #fff; max-width: 300px; position: absolute; z-index: 9999;border-radius: 5px;padding: 10px; font-size: 14px; color: #4F4F4F;background-image: -webkit-gradient(linear, top, bottom, color-stop(0, #FFFFFF), color-stop(1, #F2F2F2));background-image: -ms-linear-gradient(top, #FFFFFF, #F2F2F2);background-image: -o-linear-gradient(top, #FFFFFF, #F2F2F2);background-image: -moz-linear-gradient(top, #FFFFFF, #F2F2F2);background-image: -webkit-linear-gradient(top, #FFFFFF, #F2F2F2);background-image: linear-gradient(to bottom, #FFFFFF, #F2F2F2);box-shadow: 0 1px 3px 0px #CCCCCC}
+.ui-datepicker-header {  }
+.ui-datepicker-prev { position: absolute; top: 12px; left: 10px; cursor: pointer; text-decoration: none; font-weight: bold; color: #C4C4C4; font-size: 17px; text-shadow: 0 1px 1px #FFFFFF; }
+.ui-datepicker-prev:hover { color:#B2B2B2 }
+.ui-datepicker-next{ position: absolute; top: 12px; right: 10px; cursor: pointer; text-decoration: none; font-weight: bold; color: #C4C4C4; font-size: 17px; text-shadow: 0 1px 1px #FFFFFF; }
+.ui-datepicker-next:hover { color:#B2B2B2 }
+.ui-datepicker-title { line-height: 1.8em; margin: 0 2.3em; text-align: center; color:#7E7E7E; }
+.ui-datepicker-title .ui-datepicker-month { width: 100px; }
+.ui-datepicker-calendar { margin-left: 12px; margin-top: 5px;}
+.ui-datepicker-calendar thead tr th { font-weight: normal; padding: 2px; }
+.ui-datepicker-calendar tbody tr td { text-align: right; }
+.ui-datepicker-calendar tbody tr td a { text-decoration: none; width: 17px; height: 17px; text-align: right; padding: 2px; display: block }
+.ui-datepicker-calendar tbody tr td a:hover { font-weight: bold; }
+.ui-datepicker-current-day a { font-weight: bold; }
+.ui-datepicker-week-end a { color: #CF90A1 }
+.ui-state-highlight { font-weight: bold; color: #B4B4B4 !important; }
+.ui-datepicker-week-end { color: #CF90A1 }
+
+/*========== Ресайз ==========*/
+.ui-resizable {
+ position: relative;
+}
+.ui-resizable-handle {
+
+ font-size: 0.1px;
+ display: block; background-color: linear-gradient(to bottom, #F2F2F2, #EAEAEA);
+
+
+}
+.ui-resizable-disabled .ui-resizable-handle,
+.ui-resizable-autohide .ui-resizable-handle {
+ display: none;
+}
+
+.ui-resizable-s {
+	 cursor: s-resize;
+	 height: 13px;
+	 width: 100%;
+	 left: 0;
+    background: #EAEAEA;
+}
+
+.ui-resizable-handle-inset {
+    display: block;width: 100%;height: 100%;
+    background-image: url("/i/elements/resize_s.png");
+    background-repeat: no-repeat;
+    background-position: center
+}
+
+.close {
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 20px;
+  color: #000000;
+  text-shadow: 0 1px 0 #ffffff;
+  opacity: 0.2;
+  filter: alpha(opacity=20);
+}
+
+.close:hover,
+.close:focus {
+  color: #000000;
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+}
+
+button.close {
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  -webkit-appearance: none;
+}
+.alert .close {
+  position: relative;
+  top: -2px;
+  right: -5px;
+  line-height: 20px;
+}
