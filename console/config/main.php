@@ -11,7 +11,6 @@ $params = array_merge(
 return [
 	'id' => 'console',
 	'basePath' => dirname(__DIR__),
-	'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
 	'modules' => [
 		'twitter' => 'console\modules\twitter\Twitter'
 	],

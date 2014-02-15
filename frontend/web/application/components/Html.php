@@ -113,7 +113,7 @@ class Html extends CHtml
 		else
 			$htmlOptions['style'] = 'position: absolute; left: -9999px;';
 
-		if($htmlOptions['checked'] == 'checked')
+		if(isset($htmlOptions['checked']) && $htmlOptions['checked'] == 'checked')
 			$class = "radio styler checked";
 		else
 			$class = "radio styler";

@@ -3,7 +3,7 @@
 namespace console\modules\twitter;
 
 use Yii;
-use common\base\Module;
+use yii\base\Module;
 
 class Twitter extends Module
 {

@@ -1,14 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: eolitich
- * Date: 15.02.14
- * Time: 20:08
- */
 
 namespace console\modules\twitter\controllers;
 
+use Yii;
 
-class OrdersController {
+class OrdersController extends \console\components\Controller
+{
+	public function actionCreateOrders(array $id)
+	{
 
-} 
+	}
+}

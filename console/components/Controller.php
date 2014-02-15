@@ -4,7 +4,7 @@ namespace console\components;
 
 use Yii;
 
-class Controller extends \common\base\Controller
+class Controller extends \yii\console\Controller
 {
 
 } 

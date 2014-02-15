@@ -4,10 +4,10 @@ namespace console\modules\twitter\controllers;
 
 use Yii;
 
-class DefaultController extends \console\components\Controller
+class TweetingController extends \console\components\Controller
 {
-	public function actionIndex()
+	public function actionIndex($test = '')
 	{
-		echo 51;
+		print_r($test);
 	}
 } 
