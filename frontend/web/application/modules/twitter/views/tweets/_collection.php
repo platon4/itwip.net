@@ -24,7 +24,6 @@ $this->breadcrumbs[] = array(
             <div class="icon"><i class="fa fa-info"></i></div>
             <div class="text"><?php echo Yii::t('twitterModule.tweets', '_twitterPostingQuick_infoPage'); ?></div>
         </div>
-
         <div class="line_title">
             <?php echo Yii::t('twitterModule.tweets', '_twitterPostingQuick_manualInput'); ?>
             <div class="open_icon"><i class="fa fa-caret-up"></i></div>
