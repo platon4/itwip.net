@@ -95,7 +95,7 @@ class Menu extends CWidget
 			else
 				$link = (trim($element['url']) != "") ? Yii::app()->createUrl($element['url']) : 'javascript:;';
 
-			echo '<li' . $imp_elm . '><a href="' . $link . '" id="m_' . $i . '">' . Html::openTag('div', array('class' => 'gradient')) . '<span class="menu_icon"><i class="' . $element['icon'] . '"></i></span><span class="menu_alt"> ' . Yii::t('menu', $element['_key']) . '</span>' .. Html::closeTag('div') . '</a></li>';
+			echo '<li' . $imp_elm . '><a href="' . $link . '" id="m_' . $i . '">' . Html::openTag('div', array('class' => 'gradient')) . '<span class="menu_icon"><i class="' . $element['icon'] . '"></i></span><span class="menu_alt"> ' . Yii::t('menu', $element['_key']) . '</span>' .Html::closeTag('div') . '</a></li>';
 		}
 
 		return;
