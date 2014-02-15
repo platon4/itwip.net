@@ -16,6 +16,7 @@ $this->breadcrumbs[] = array(
         $('#_messageBox').fadeOut();
     },3000);
 </script>
+<div class="block">Саня</div>
 <?php } ?>
 <div class="block postingQuick">
     <div class="block_title"><div class="block_title_inset"><i class="fa fa-keyboard-o"></i> <h5><?php echo Yii::t('twitterModule.tweets', '_twitterPostingQuick_title'); ?></h5></div></div>
