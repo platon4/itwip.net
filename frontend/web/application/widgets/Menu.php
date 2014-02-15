@@ -46,8 +46,7 @@ class Menu extends CWidget
 		else {
 			if(!$this->isActive && isset($this->menu['main']) && isset($this->menu['active']) && count($inActive)) {
 				foreach($this->menu['main'] as $_k) {
-					if(isset($this->menu['active'][$_k]))
-					{
+					if(isset($this->menu['active'][$_k])) {
 						foreach($this->menu['active'][$_k] as $chk) {
 							if($chk == $inActive[0]) {
 								$this->isActive    = true;
@@ -117,9 +116,9 @@ class Menu extends CWidget
 				else
 					$angel = '';
 
-				echo $angel . Html::link(Yii::t('menu', $element['_key']), $element['url']) . Html::openTag('span', array(
+				echo Html::link($angel . Yii::t('menu', $element['_key']) . Html::openTag('span', array(
 						'id' => 'fav_' . $element['id'], 'class' => 'like_menu fav-icon' . $favActive,
-						'onclick' => '_addFav(\'' . $element['id'] . '\', this); return false;')) . Html::closeTag('span');
+						'onclick' => '_addFav(\'' . $element['id'] . '\', this); return false;')) . Html::closeTag('span'), $element['url']);
 			}
 			else {
 				echo Yii::t('menu', $element['_key']);
