@@ -16,6 +16,7 @@ $this->breadcrumbs[] = array(
         $('#_messageBox').fadeOut();
     },3000);
 </script>
+<div class="block">Саня</div>
 <?php } ?>
 <div>
 	Виталя
