@@ -95,7 +95,7 @@ class Menu extends CWidget
 			else
 				$link = (trim($element['url']) != "") ? Yii::app()->createUrl($element['url']) : 'javascript:;';
 
-			echo '<li' . $imp_elm . '><a href="' . $link . '" id="m_' . $i . '"><span class="menu_icon"><i class="' . $element['icon'] . '"></i></span><span class="menu_alt"> ' . Yii::t('menu', $element['_key']) . '</span></a></li>';
+			echo '<li' . $imp_elm . '><a href="' . $link . '" id="m_' . $i . '">' . Html::openTag('div', array('class' => 'gradient')) . '<span class="menu_icon"><i class="' . $element['icon'] . '"></i></span><span class="menu_alt"> ' . Yii::t('menu', $element['_key']) . '</span>' .. Html::closeTag('div') . '</a></li>';
 		}
 
 		return;
@@ -116,9 +116,9 @@ class Menu extends CWidget
 				else
 					$angel = '';
 
-				echo Html::link(Html::openTag('div', array('class' => 'gradient')) . $angel . Yii::t('menu', $element['_key']) . Html::openTag('span', array(
+				echo Html::link($angel . Yii::t('menu', $element['_key']) . Html::openTag('span', array(
 						'id' => 'fav_' . $element['id'], 'class' => 'like_menu fav-icon' . $favActive,
-						'onclick' => '_addFav(\'' . $element['id'] . '\', this); return false;')) . Html::closeTag('span') . Html::closeTag('div'), $element['url']);
+						'onclick' => '_addFav(\'' . $element['id'] . '\', this); return false;')) . Html::closeTag('span'), $element['url']);
 			}
 			else {
 				echo Yii::t('menu', $element['_key']);
