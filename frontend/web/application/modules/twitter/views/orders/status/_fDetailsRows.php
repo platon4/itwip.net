@@ -28,26 +28,26 @@
 		</tr>
     <?php } ?>
 </table>
-		<div id="pagesNavigation" style="float: left; padding: 7px 7px;">
-			 <?php $this->renderPartial('application.views.main._pages', array('ajax_query' => 'Twitter.o.f.getPage', 'pages' => $model->m->getPages())); ?>
-		</div>
-		<div style="float: right; margin-right: 6px;">
-			 <?php echo Yii::t('twitterModule.accounts', '_pageNavHow'); ?>
-			<select name="shoOnPage" onchange="Twitter.o.f.setLimit(this.value); return false;">
-					<?php foreach($model->m->getLimits() as $option) {
-						?>
-						<?php
-						if($model->m->getLimit() == $option['value']) {
-							$htmlOption = array('value' => $option['value'],
-								'selected' => 'selected');
-						}
-						else {
-							$htmlOption = array('value' => $option['value']);
-						}
+<div id="pagesNavigation" style="float: left; padding: 7px 7px;">
+	 <?php $this->renderPartial('application.views.main._pages', array('ajax_query' => 'Twitter.o.g.getPage', 'pages' => $model->m->getPages())); ?>
+</div>
+<div style="float: right; margin-right: 6px;">
+	 <?php echo Yii::t('twitterModule.accounts', '_pageNavHow'); ?>
+	<select name="shoOnPage" onchange="Twitter.o.g.setLimit(this.value); return false;">
+			<?php foreach($model->m->getLimits() as $option) {
+				?>
+				<?php
+				if($model->m->getLimit() == $option['value']) {
+					$htmlOption = array('value' => $option['value'],
+						'selected' => 'selected');
+				}
+				else {
+					$htmlOption = array('value' => $option['value']);
+				}
 
-						echo Html::tag('option', $htmlOption, $option['title']);
-						?>
-					<?php } ?>
-				</select>
-		</div>
-	<div style="clear: both;"></div>
+				echo Html::tag('option', $htmlOption, $option['title']);
+				?>
+			<?php } ?>
+		</select>
+</div>
+<div style="clear: both;"></div>

@@ -2,14 +2,8 @@
 $this->pageTitle      =Yii::app()->name.' - '.Yii::t('main','_indexUser_Title');
 $this->metaDescription=Yii::t('main','_indexUser_Description');
 ?>
-<!--
-<div class="line_info alert" style="margin-bottom: 20px;">
-    <b>Внимание.</b> Проходят работы на стороне сервера, размещение твитов временно приостановлено. Созданные заказы будут размещены позже. Возможны кратковременные отключения сайта. Стараемся стать лучше и быстрее для Вас. 
-</div>
--->
-
 <div class="content_right_v">
-    <div class="content_right_l"> 
+    <div class="content_right_l">
     <?php $this->widget('application.widgets.Messages'); ?>    
     </div>
     <div class="content_right_r">

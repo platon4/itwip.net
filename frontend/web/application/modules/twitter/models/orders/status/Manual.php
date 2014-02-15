@@ -3,11 +3,12 @@
 namespace twitter\models\orders\status;
 
 use Yii;
+use twitter\components\Twitter;
 
 class Manual extends \FormModel
 {
 	public $h;
-	public $limit;
+	public $limit = 10;
 	protected $_pages;
 	protected $_rows;
 	protected $_order;
@@ -24,7 +25,7 @@ class Manual extends \FormModel
 	{
 		return [
 			['h', 'ext.validators.hashValidator', 'min' => 10, 'max' => 15],
-			['limit', 'in', 'range' => array_keys($this->limits), 'message' => 'Неправильное количество заказов на странице.'],
+			['limit', 'in', 'range' => array_keys($this->limits), 'message' => 'Неправильное количество элементов на странице.'],
 			['_count', 'getCount']
 		];
 	}
@@ -50,16 +51,38 @@ class Manual extends \FormModel
 	public function getRows()
 	{
 		if($this->_rows === NULL) {
-			$orders = Yii::app()->db->createCommand("SELECT id,cost,return_amount,status,_params,message FROM {{twitter_orders_perform}} WHERE id=:id")->queryAll(true, [':hash' => $this->h]);
+
+			$orders = Yii::app()->db->createCommand("SELECT id,cost,return_amount,status,posted_date,_params,message FROM {{twitter_orders_perform}} WHERE order_hash=:hash LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())->queryAll(true, [':hash' => $this->h]);
 			$rows   = [];
 			$ids    = [];
+			$params = [];
+
+			foreach($orders as $v) {
+				$params[$v['id']] = json_decode($v['_params'], true);
+				$ids[]            = $params[$v['id']]['account'];
+			}
+
+			$accounts = Twitter::accounts($ids)->getAll(); //Загружаем данные выбраных аккаунтов
 
 			foreach($orders as $order) {
-				$order['params'] = json_decode($orser['_params'], true);
-				unset($order['_params']);
 
-				$ids[]  = $order['params']['account'];
-				$rows[] = $order;
+				$account = $accounts[$params[$order['id']]['account']];
+
+				$rows[] = [
+					'avatar' => $account['avatar'],
+					'name' => $account['name'],
+					'screen_name' => $account['screen_name'],
+					'tweet' => $params[$order['id']]['tweet'],
+					'tweet_id' => 0,
+					'id' => $order['id'],
+					'status' => $order['status'],
+					'amount' => $order['return_amount'],
+					'payment_type' => '',
+					'placed_date' => date('d.m.Y H:i', strtotime($order['posted_date'])),
+					'params' => $params[$order['id']],
+					'message' => $order['message'],
+					'approved' => 0
+				];
 			}
 
 			$this->_rows = $rows;
@@ -70,23 +93,31 @@ class Manual extends \FormModel
 
 	public function getOrder()
 	{
-		if($this->id) {
-			if($this->_order === NULL) {
-				$this->_order = Yii::app()->db->createCommand("SELECT * FROM {{twitter_orders}} WHERE id=:id AND owner_id=:owner AND type_order='manual'")->queryRow(true, [':owner' => Yii::app()->user->id, ':id' => $this->id]);
-			}
-
-			return $this->_order;
+		if($this->_order === NULL) {
+			$this->_order = Yii::app()->db->createCommand("SELECT * FROM {{twitter_orders}} WHERE order_hash=:hash AND owner_id=:owner AND type_order='manual'")->queryRow(true, [':owner' => Yii::app()->user->id, ':hash' => $this->h]);
 		}
-		else
-			throw new \CHttpException('502', Yii::t('yii', 'Error get order, because Order ID not set.'));
+
+		return $this->_order;
 	}
 
 	public function getPages()
 	{
 		if($this->_pages === NULL) {
-			$this->_pages           = new \CPagination(0);
-			$this->_pages->pageSize = 10;
+			$this->_pages           = new \CPagination($this->getCount());
+			$this->_pages->pageSize = $this->getLimit();
 		}
+
+		return $this->_pages;
+	}
+
+	public function getLimits()
+	{
+		return $this->limits;
+	}
+
+	public function getLimit()
+	{
+		return $this->limit;
 	}
 
 	public function getView()

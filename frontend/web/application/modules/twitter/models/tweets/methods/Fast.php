@@ -144,7 +144,7 @@ class Fast extends \FormModel
 		if($rows !== false) {
 			foreach($rows as $row) {
 				$this->count++;
-				$this->taksRows[] = [$this->_tid, $row['tweet_hash'], $row['_url'], $row['_url_Hash'], $this->getPrice(), $this->pay, json_encode(['tweet' => $row['tweet'], 'time' => $this->_time])];
+				$this->taksRows[] = [$this->_tid, $row['tweet_hash'], $row['_url'], $row['_url_Hash'], $this->getPrice(), 0, json_encode(['tweet' => $row['tweet'], 'time' => $this->_time])];
 			}
 		}
 		else

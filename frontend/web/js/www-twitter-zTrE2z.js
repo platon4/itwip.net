@@ -146,27 +146,6 @@ Order = {
         _oType: 'DESC',
         page: 1
     },
-    pay: function (id, e) {
-        var b = $(e), btxt = b.html();
-        _ajax({
-            url: "/twitter/ajaxTweets/order?act=confirm&id=" + id,
-            success: function (obj) {
-                Dialog.open('Подтверждение заказа', {content: obj.content});
-
-                if (obj.code === 200) {
-                    $('.ui-dialog-buttonset').append('<button  class="button btn_blue ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button" onclick="Order.paid(' + id + ',this)">Оплатить</button>');
-                }
-            },
-            beforeSend: function () {
-                b.find('i').removeClass('fa-rub').addClass('fa-spin fa-spinner');
-                _w = true;
-            },
-            complete: function () {
-                b.find('i').removeClass('fa-spin fa-spinner').addClass('fa-rub');
-                _w = false;
-            }
-        });
-    },
     removeTweet: function (id, e) {
         Dialog.open('Подтверждение удаления', {
             content: '<div style="padding: 7px 15px 0px;">Вы действительно хотите удалить заказ ?</div>',
@@ -246,62 +225,6 @@ Order = {
                     class: "button btn_orange"
                 }
             ],
-        });
-    },
-    paid: function (id, e) {
-        var b = $(e), btxt = b.html();
-        _ajax({
-            url: "/twitter/ajaxTweets/order?act=pay&id=" + id,
-            success: function (obj) {
-                Dialog.open(_info, {content: obj.content});
-                if (obj.code == 200)
-                    window.location.reload("true");
-            },
-            beforeSend: function () {
-                b.html('<i class="fa fa-spin fa-spinner"></i>');
-                _w = true;
-            },
-            complete: function () {
-                b.html(btxt);
-                _w = false;
-            }
-        });
-    },
-    getPage: function (page) {
-        this.s.page = page;
-        this.getTweets();
-    },
-    setOrder: function (prm, element) {
-        $(".table_head_inside").find('i').removeClass('fa-caret-up').addClass('fa-caret-down');
-        if (this.s._order == prm && cCount == 0) {
-            this.s._oType = "DESC";
-            cCount = 1;
-            $(element).find('i').removeClass('fa-caret-up').addClass('fa-caret-down');
-        }
-        else {
-            this.s._oType = "ASC";
-            this.s._order = prm;
-            cCount = 0;
-            $(element).find('i').removeClass('fa-caret-down').addClass('fa-caret-up');
-        }
-
-        this.s.page = 0;
-        this.getTweets();
-    },
-    getTweets: function () {
-        _ajax({
-            data: Tweets.s.sendData,
-            url: "/twitter/tweets/status?id=" + _oid + "&page=" + this.s.page + '&_o=' + this.s._order + '&_a=' + this.s._oType,
-            success: function (obj) {
-                $('#statusBox').html(obj.html);
-                $('#statusBox').css('opacity', 1);
-            },
-            beforeSend: function () {
-                $('#statusBox').css('opacity', 0.5);
-            },
-            complete: function () {
-                $('#statusBox').css('opacity', 1);
-            }
         });
     }
 }
@@ -1098,7 +1021,7 @@ var Twitter = {
                 _tweets: 0,
                 _accounts: 0,
                 _amount: 0,
-                to_pay: 0,
+                to_pay: 0
             },
             t: {
                 params: {
@@ -1419,7 +1342,7 @@ var Twitter = {
                         },
                         beforeSend: function () {
                             $('#block_accounts').html('<div style="text-align: center; padding: 5px;">' + loading_img + '</div>');
-                        },
+                        }
                     });
                 },
                 toggleAll: function (e) {
@@ -1566,7 +1489,49 @@ var Twitter = {
                             },
                             class: "button btn_orange"
                         }
-                    ],
+                    ]
+                });
+            },
+            remove: function (id, e) {
+                Dialog.open('Подтверждение удаления', {
+                    content: '<div style="padding: 7px 15px 0px;">Вы действительно хотите удалить заказанный твит ?</div>',
+                    buttons: [
+                        {text: _cancel, click: function () {
+                            $(this).dialog("close");
+                        }, class: "button"},
+                        {
+                            text: 'Удалить',
+                            id: 'as523se5',
+                            click: function () {
+                                if (_w === true)
+                                    return false;
+
+                                var b = $('#as523se5'), btxt = b.html();
+
+                                _ajax({
+                                    url: "/twitter/orders/status?h=" + Twitter.o.g.d.h + "&t=manual&act=remove&id=" + id,
+                                    success: function (obj) {
+                                        Dialog.open(_info, {content: obj.content});
+
+                                        if (obj.code == 199)
+                                            window.location.href = '/twitter/orders/status';
+
+                                        if (obj.code == 200)
+                                            Order.getTweets();
+                                    },
+                                    beforeSend: function () {
+                                        b.html('<i class="fa fa-spin fa-spinner"></i>');
+                                        _w = true;
+                                    },
+                                    complete: function () {
+                                        b.html(btxt);
+                                        _w = false;
+                                    }
+                                });
+                            },
+                            class: "button btn_orange"
+                        }
+                    ]
                 });
             }
         },
@@ -1618,7 +1583,7 @@ var Twitter = {
                             $('#_urlsList').html('<div style="padding: 4px; text-align:center;">' + loading_img + '</div>');
                         }
                     });
-                },
+                }
             },
             update: function () {
                 var count = parseInt($('#urlsCount').html()), amount = $('#dropdownPrices').val();
@@ -1628,7 +1593,7 @@ var Twitter = {
             },
             confirm: function () {
                 Dialog.open('Подтверждение заказа', {
-                    content: '<div style="padding: 7px 15px 0px;" id="_orderProcessing"><strong>Подтвердение заказа на сумму:</strong> ' + parseInt($('#urlsPricesAll').html()) + ' руб.</div>',
+                    content: '<div style="padding: 7px 15px 0;" id="_orderProcessing"><strong>Подтвердение заказа на сумму:</strong> ' + parseInt($('#urlsPricesAll').html()) + ' руб.</div>',
                     buttons: [
                         {
                             text: _cancel, click: function () {
@@ -1654,35 +1619,7 @@ var Twitter = {
                         }
                     ]
                 });
-            },
-            getPage: function (page) {
-                this.d.page = page;
-                this.get();
-            },
-            setLimit: function (n) {
-                this.d.page = 0;
-                this.d.limit = n;
-                this.get();
-            },
-            get: function () {
-                _ajax({
-                    url: "/twitter/orders/status?h=" + this.d.hash + "&t=indexes&page=" + this.d.page + "&limit=" + this.d.limit,
-                    success: function (obj) {
-                        if (obj.code === 200)
-                            $("#_orderList").html(obj['html']);
-                        else
-                            Dialog.open(_error, {content: obj.message});
-                    },
-                    beforeSend: function () {
-                        $("#_orderList").css('opacity', 0.5);
-                        _w = true;
-                    },
-                    complete: function () {
-                        $("#_orderList").css('opacity', 1);
-                        _w = false;
-                    }
-                });
-            },
+            }
         },
         make: function (e, w) {
             var btn = $('#' + e), btxt = btn.html(), additional = '', q = new Array(), c = 0;
@@ -1784,7 +1721,7 @@ var Twitter = {
                         },
                         class: "button btn_orange"
                     }
-                ],
+                ]
             });
         },
         confirmPay: function (id, e) {
@@ -1830,6 +1767,44 @@ var Twitter = {
                     ]
                 }
             );
+        },
+        g: {
+            d: {
+                page: 1,
+                limit: 10,
+                hash: ''
+            },
+            set: function (options) {
+                this.d = $.extend(this.d, options);
+            },
+            getPage: function (page) {
+                this.d.page = page;
+                this.get();
+            },
+            setLimit: function (n) {
+                this.d.page = 0;
+                this.d.limit = n;
+                this.get();
+            },
+            get: function () {
+                _ajax({
+                    url: "/twitter/orders/status?h=" + this.d.hash + "&t=" + this.d.t + "&page=" + this.d.page + "&limit=" + this.d.limit,
+                    success: function (obj) {
+                        if (obj.code === 200)
+                            $("#_orderList").html(obj['html']);
+                        else
+                            Dialog.open(_error, {content: obj.message});
+                    },
+                    beforeSend: function () {
+                        $("#_orderList").css('opacity', 0.5);
+                        _w = true;
+                    },
+                    complete: function () {
+                        $("#_orderList").css('opacity', 1);
+                        _w = false;
+                    }
+                });
+            }
         }
     }
 }

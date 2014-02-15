@@ -9,7 +9,7 @@ $this->breadcrumbs[] = array(
 );
 ?>
 <script>
-	Twitter.o.m.d.hash = '<?php echo Html::encode($model->m->h); ?>';
+	Twitter.o.g.set({"hash": "<?php echo Html::encode($model->m->h); ?>","t":"manual"});
 </script>
 <div id="details_orders" class="block">
     <div class="block_title"><div class="block_title_inset"><i class=""></i> <h5>Детали заказа (ID <?php echo $model->m->getOrder()['id']; ?>)</h5></div></div>
@@ -27,7 +27,7 @@ $this->breadcrumbs[] = array(
                 </table>
             </div>
         </div>
-        <div id="statusBox" class="acconts_list">
+        <div class="acconts_list" id="_orderList">
             <?php $this->renderPartial('status/_mDetailsRows', ['model' => $model]); ?>
         </div>
     </div>

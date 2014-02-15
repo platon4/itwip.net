@@ -9,7 +9,7 @@ $this->breadcrumbs[] = array(
 );
 ?>
 <script>
-	Twitter.o.f.d.hash = '<?php echo Html::encode($model->m->h); ?>';
+	Twitter.o.g.set({"hash": "<?php echo Html::encode($model->m->h); ?>","t":"indexes"});
 </script>
 <div id="status_orders" class="block">
 	<div class="block_title"><div class="block_title_inset"><h5>Детали заказа быстрой индексации (ID <?php echo $model->m->getOrder()['id']; ?>)</h5></div></div>
