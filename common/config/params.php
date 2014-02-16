@@ -16,9 +16,17 @@ return [
 	],
 	'components.db' => [
 		'class' => 'yii\db\Connection',
-		'dsn' => 'mysql:host=localhost;dbname= ',
-		'username' => 'root',
-		'password' => '',
+		'dsn' => 'mysql:host=itwip.net;dbname=itwip_prodaction',
+		'username' => 'eolitich',
+		'password' => '60dZUoEg',
 		'charset' => 'utf8',
+		'tablePrefix' => 'it_',
 	],
+	'components.redis' => [
+		'class' => 'common\components\Redis',
+		'server' => [
+			'host' => '127.0.0.1',
+			'port' => 6379,
+		],
+	]
 ];

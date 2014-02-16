@@ -6,8 +6,8 @@ use Yii;
 
 class TweetingController extends \console\components\Controller
 {
-	public function actionIndex($test = '')
+	public function actionIndex()
 	{
-		print_r($test);
+
 	}
 } 
