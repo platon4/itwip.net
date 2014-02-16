@@ -18,8 +18,8 @@ class OrdersController extends \console\components\Controller
 
 		/* Запускаем валидатор */
 		if($model->validate()) {
-			/* Генерируем заказы, если заказы есть,то посылаем их роботу */
-			if($model->generateOrders()) {
+			/* Обрабатаваем заказы, и создаем заказы для робота */
+			if($model->processOrders()) {
 				/* Отпровляем сгенерированные заказы роботу */
 				$model->putOrders();
 			}

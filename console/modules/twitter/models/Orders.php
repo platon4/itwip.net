@@ -10,7 +10,10 @@ class Orders extends Model
 {
 	protected $_data;
 	protected $_orders = [];
-	protected $_order_types = [];
+	protected $_order_types = [
+		'manual' => 'console\modules\twitter\models\orders\Indexes',
+		'indexes' => 'console\modules\twitter\models\orders\Manual'
+	];
 
 	public function rules()
 	{
@@ -36,7 +39,12 @@ class Orders extends Model
 	public function getOrders()
 	{
 		if($this->_data === NULL)
-			$this->_data = (new Query)->select('*')->from('it_twitter_orders')->where(['or', 'start_date>:date', 'start_date=0000-00-00'])->limit(100)->all();
+			$this->_data = (new Query)
+				->select('*')
+				->from('it_twitter_orders')
+				->where(['or', 'start_date>:date', 'start_date=0000-00-00'], [':date' => date('Y-m-d')])
+				->limit(500)
+				->all();
 
 		return $this->_data;
 	}
@@ -46,17 +54,14 @@ class Orders extends Model
 	 *
 	 * @return boolean
 	 */
-	public function generateOrders()
+	public function processOrders()
 	{
 		$orders = $this->getOrders();
 
 		if(is_array($orders) && $orders !== array()) {
 			foreach($orders as $order) {
-				if(in_array($order['type_order'], $this->_order_types)) {
-					$order['params'] = json_decode($order['_params']);
-					$method          = new $order['type_order'];
-
-					$this->_orders[] = $method->createOrder($order);
+				if(array_key_exists($order['type_order'], $this->_order_types)) {
+					$this->_orders[] = (new $this->_order_types[$order['type_order']])->processOrder(array_merge($order, ['params' => json_decode($order['_params'])]));
 				}
 			}
 
