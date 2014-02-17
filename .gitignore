@@ -12,9 +12,6 @@ nbproject
 # windows thumbnail cache
 Thumbs.db
 
-# composer vendor dir
-/vendor
-
 # composer itself is not needed
 composer.phar
 # composer.lock should not be committed as we always want the latest versions
