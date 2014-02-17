@@ -15,8 +15,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.4.0",
-        "yiisoft/yii2": "*",
-        "yiisoft/yii": "*"
+        "yiisoft/yii2": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*"
