@@ -19,7 +19,7 @@ class Notifications
 			foreach($admins as $admin) {
 				$settings = unserialize($admin['_settings']);
 
-				if($settings['icq_new_snotification'] AND trim($settings['_icq']) != '') {
+				if(isset($settings['icq_new_snotification']) && $settings['icq_new_snotification'] && trim($settings['_icq']) != '') {
 					$message = trim($settings['_icq']) . "||" . $messages;
 					$fp      = fopen(Yii::app()->getBasePath() . '/cron/icq/messages/' . md5(time() . $admin['email'] . rand(0, 50)) . '.txt', 'wb+');
 					fwrite($fp, $message);
