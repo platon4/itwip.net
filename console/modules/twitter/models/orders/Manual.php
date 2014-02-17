@@ -8,6 +8,9 @@ class Manual implements OrdersInterface
 {
 	use OrdersTrait;
 
+	/*
+	 * Обработка заказа
+	 */
 	protected function process($data)
 	{
 		$redis = Yii::$app->redis;
