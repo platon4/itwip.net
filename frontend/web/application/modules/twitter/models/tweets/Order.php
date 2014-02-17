@@ -52,6 +52,7 @@ class Order extends \FormModel
 				if($model->create()) {
 					$this->redirectUrl = $model->getRedirectUrl();
 					$model->clear();
+					$this->clear($model);
 				}
 				else
 					$this->addError('error', $model->getError());;
@@ -65,4 +66,9 @@ class Order extends \FormModel
 	 * Возвращаем ссылку для перенаправление пользователя после создание заказа
 	 */
 	public function getRedirectUrl() { return $this->redirectUrl; }
+
+	public function clear($obj)
+	{
+		Yii::app()->redis->delete(['UniqueTweet:' . Yii::app()->user->id, 'twitter:o:m:' . $obj->_tid . ':tweets', 'Roster:1:' . $obj->_tid, $obj->_tid . ':counts']);
+	}
 }

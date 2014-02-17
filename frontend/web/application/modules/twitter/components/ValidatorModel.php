@@ -34,7 +34,7 @@ abstract class ValidatorModel
 		if(Yii::app()->redis->hExists('UniqueTweet:' . Yii::app()->user->id, $this->getTweetHash()))
 			$this->addError($attribute, array('text' => '_errors_uniq_tweet'));
 		else
-			Yii::app()->redis->hSet('UniqueTweet:' . Yii::app()->user->id, $this->getTweetHash(), $this->getTweetHash());
+			Yii::app()->redis->hSet('UniqueTweet:' . Yii::app()->user->id, $this->getTweetHash(), $this->tweet);
 	}
 
 	public function UniqueUrl($attribute)
@@ -43,7 +43,7 @@ abstract class ValidatorModel
 			if(Yii::app()->redis->hExists('UniqueUrl:' . Yii::app()->user->id, $this->getUrlHash()))
 				$this->addError($attribute, array('text' => '_errors_uniq_url', 'replace' => array('key' => '{url}', 'value' => $this->urls)));
 			else
-				Yii::app()->redis->hSet('UniqueUrl:' . Yii::app()->user->id, $this->getUrlHash(), $this->getUrlHash());
+				Yii::app()->redis->hSet('UniqueUrl:' . Yii::app()->user->id, $this->getUrlHash(), $this->getUrl());
 		}
 	}
 

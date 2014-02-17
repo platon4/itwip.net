@@ -11,8 +11,8 @@ class Orders extends Model
 	protected $_data;
 	protected $_orders = [];
 	protected $_order_types = [
-		'manual' => 'console\modules\twitter\models\orders\Indexes',
-		'indexes' => 'console\modules\twitter\models\orders\Manual'
+		'manual' => 'console\modules\twitter\models\orders\Manual',
+		'indexes' => 'console\modules\twitter\models\orders\Indexes'
 	];
 
 	public function rules()
@@ -38,13 +38,15 @@ class Orders extends Model
 	 */
 	public function getOrders()
 	{
-		if($this->_data === NULL)
+		if($this->_data === NULL) {
 			$this->_data = (new Query)
 				->select('*')
 				->from('it_twitter_orders')
-				->where(['or', 'start_date>:date', 'start_date=0000-00-00'], [':date' => date('Y-m-d')])
+				->where(['and', 'status=:status', ['or', 'start_date<=:date', 'start_date=0000-00-00']], [':date' => date('Y-m-d'), ':status' => 0])
+				->orderBy(['id' => SORT_DESC])
 				->limit(500)
 				->all();
+		}
 
 		return $this->_data;
 	}
@@ -60,9 +62,7 @@ class Orders extends Model
 
 		if(is_array($orders) && $orders !== array()) {
 			foreach($orders as $order) {
-				if(array_key_exists($order['type_order'], $this->_order_types)) {
-					$this->_orders[] = (new $this->_order_types[$order['type_order']])->processOrder(array_merge($order, ['params' => json_decode($order['_params'])]));
-				}
+				$this->appendOrder($order);
 			}
 
 			if(count($this->_orders))
@@ -72,8 +72,81 @@ class Orders extends Model
 		return false;
 	}
 
+	/*
+	 * Отпровляем задания роботу на обработку
+	 */
 	public function putOrders()
 	{
+		$rows    = [];
+		$indexes = [];
+		$update  = [];
 
+		foreach($this->_orders as $key => $values) {
+			if(isset($values['rows']) && is_array($values['rows']) && $values['rows'] !== array()) {
+				$rows['twitter:order:' . $values['rows']['id']] = json_encode($values['rows']);
+			}
+			else if(isset($values['indexes']) && is_array($values['indexes']) && $values['indexes'] !== array()) {
+				$indexes[] = $values['indexes'];
+			}
+			else if(isset($values['update']) && is_array($values['update']) && $values['update'] !== array()) {
+				$update[] = $values['update'];
+			}
+		}
+
+		if($rows !== array()) {
+			$db          = Yii::$app->db;
+			$transaction = $db->beginTransaction();
+			$commit      = true;
+
+			try {
+				$inserts = Yii::$app->redis
+					->multi()
+					->hMset('cron:twitter:orders:process', $rows);
+
+				foreach($indexes as $index)
+					$inserts->lPush($index['key'], $index['value']);
+
+				$inserts->exec();
+
+				foreach($inserts as $insert) {
+					if($insert !== true) {
+						$commit = false;
+						break;
+					}
+				}
+
+				if($commit === true) {
+					$this->updateOrders($update);
+					$transaction->commit();
+				}
+				else
+					$transaction->rollback();
+
+			} catch(Exception $e) {
+				$transaction->rollback();
+			}
+		}
 	}
-} 
+
+	/*
+	 * Обновляем заказы
+	 */
+	public function updateOrders(array $data)
+	{
+		if($data !== array()) {
+			foreach($data as $values) {
+				//Yii::$app->db->createCommand("UPDATE {{twitter_orders}} SET " . implode(", ", $values['fields']))->execute($values['params']);
+			}
+		}
+	}
+
+	/*
+	 * Проверяем заказ, и добавляем его в список заказов для отправки роботу
+	 */
+	protected function appendOrder($data)
+	{
+		if(array_key_exists($data['type_order'], $this->_order_types)) {
+			$this->_orders[] = (new $this->_order_types[$data['type_order']])->processOrder($data);
+		}
+	}
+}

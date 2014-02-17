@@ -46,8 +46,9 @@ class Accounts
 						$cache[$row['id']]       = serialize($row);
 					}
 
-					if($cache !== array())
+					if($cache !== array()) {
 						Yii::app()->redis->hmSet('twitterAccounts', $cache);
+					}
 				}
 			}
 			else {
@@ -61,7 +62,7 @@ class Accounts
 					$this->_load[$this->accounts] = $row;
 
 					if($row !== false)
-						Yii::app()->redis->hSet('twitterAccounts', $this->accounts, $cache);
+						Yii::app()->redis->hSet('twitterAccounts', $this->accounts, serialize($row));
 				}
 			}
 		}
@@ -164,6 +165,9 @@ class Accounts
 		$this->_errors[$aid][] = $error;
 	}
 
+	/*
+	 * Очищаем память
+	 */
 	public function __destruct()
 	{
 		$this->_load    = NULL;

@@ -153,6 +153,11 @@ class Redis extends \yii\base\Component
 		return $this->redis->hDel($key, $hash);
 	}
 
+	public function multi()
+	{
+		return $this->redis->multi();
+	}
+
 	/*
 	 * Удаление по шаблону (временное решение)
 	 */
