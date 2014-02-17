@@ -11,18 +11,16 @@ class officeModule extends CWebModule
 		$this->setImport(array(
 			'office.models.*',
 			'office.components.*',
-		));	
+		));
 	}
 
 	public function beforeControllerAction($controller, $action)
 	{
-		if(parent::beforeControllerAction($controller, $action))
-		{
-		
-			$_f=Yii::app()->clientScript;
+		if(parent::beforeControllerAction($controller, $action)) {
 
-			$_f->registerCssFile($_url . '/css/office.css');
-		
+			$_f = Yii::app()->clientScript;
+			$_f->registerCssFile(Yii::app()->homeUrl . 'css/office.css');
+
 			return true;
 		}
 		else

@@ -59,7 +59,7 @@ class AffiliateProgramController extends Controller {
         $orderArr =array('date'=>'a._date_create','last'=>'a._date_last_visit','income'=>'t.brought_user');
         $orderType=($_a == "ASC")?' ASC':' DESC';
 
-        if(array_key_exists($orderArr[$_o]))
+        if(isset($orderArr[$_o]))
             $order=$orderArr[$_o];
         else
             $order=$orderArr['date'];
