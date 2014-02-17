@@ -125,7 +125,7 @@ return [
 				'ajax/<action:\w+>' => 'ajax/<action>',
 				'test/<action:\w+>' => 'test/<action>',
 				'<module:\w+>' => '<module>',
-				'<module:\w+>/<controller:\w+>' => '<module>									/<controller>',
+				'<module:\w+>/<controller:\w+>' => '<module>/<controller>',
 				'<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
 				'<controller:\w+>/<action:\w+>' => '<controller>/<action>',
 				'<action:\w+>' => 'main/<action>',
