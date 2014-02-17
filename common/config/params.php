@@ -16,9 +16,9 @@ return [
 	],
 	'components.db' => [
 		'class' => 'yii\db\Connection',
-		'dsn' => 'mysql:host=itwip.net;dbname=itwip_prodaction',
-		'username' => 'eolitich',
-		'password' => '60dZUoEg',
+		'dsn' => 'mysql:host=localhost;dbname=itwip_prod',
+		'username' => 'root',
+		'password' => '',
 		'charset' => 'utf8',
 		'tablePrefix' => 'it_',
 	],

@@ -24,7 +24,6 @@ class Manual implements OrdersInterface
 			];
 
 			$this->_update = [''];
-
 		}
 	}
 }
