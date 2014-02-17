@@ -30,11 +30,9 @@
         </div>
     </div>
 </div>
-    <?php if(!$_add)
-    { ?> 
+    <?php if(!isset($_add) || !$_add) { ?>
     <div class="message_read_reply">
-    <?php if($_m->_status != 3)
-    { ?> 
+    <?php if($_m->_status != 3) { ?>
             <div class="new_area">
                 <textarea placeholder="Напишите здесь своё сообщение" id="_newMessage"></textarea>
             </div>
