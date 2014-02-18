@@ -11,27 +11,25 @@
             <tr>
                 <td class="info_param"><?php echo Yii::t('twitterModule.tweets','_themes_blog'); ?></td>
                 <td class="param" id="_subjectsBox">
-                    <?php echo Html::GroupDropDownList('Params[_subject]',0,$subjects,array('classes'=>array('h_list','list'),'empty'=>array(0=>Yii::t('twitterModule.accounts','_topicAny')),'class'=>'styler')); ?>
+                    <?php echo Html::GroupDropDownList('Params[_subject]', 0, $model->getSubjects(), ['classes' => ['h_list', 'list'], 'empty' => [0 => Yii::t('twitterModule.accounts', '_topicAny')], 'class' => 'styler']); ?>
                 </td>
             </tr>
             <tr>
                 <td class="info_param"><?php echo Yii::t('twitterModule.tweets','_age_blogger'); ?> </td>
                 <td class="param">
-					<?php echo Html::DropDownList('Params[_age]','0',$ageData,array('class'=>'styler')); ?>
+					<?php echo Html::DropDownList('Params[_age]', '0', $model->getAges()); ?>
                 </td>
             </tr>
             <tr>
                 <td class="info_param"><?php echo Yii::t('twitterModule.tweets','_blogs_tape'); ?> </td>
                 <td class="param">
-                    <?php echo Html::dropDownList('Params[tape]', '', array(0 => 'Не указано', 1 => 'Человек и Бот', 2 => 'Человек',3=>'Бот')); ?>
+                    <?php echo Html::dropDownList('Params[tape]', '', [0 => 'Не указано', 1 => 'Человек и Бот', 2 => 'Человек',3=>'Бот']); ?>
                 </td>
             </tr>
             <tr>
                 <td class="info_param  radios"><?php echo Yii::t('twitterModule.tweets','_floor_blogger'); ?></td>
                 <td class="param  radios">
-<?php echo Html::radioButton('Params[_gender]',false,array('value'=>2)); ?> <label for="Accounts__gender_0">Мужской</label>&nbsp;<?php echo Html::radioButton('Params[_gender]',false,array(
-    'value'=>1)); ?> <label for="Accounts__gender_1">Женский</label>&nbsp;<?php echo Html::radioButton('Params[_gender]',false,array(
-    'value'=>0)); ?> <label for="Accounts__gender_2">Не важно</label></span>
+					<?php echo Html::radioButton('Params[_gender]', false, ['value' => 2]); ?> <label for="Accounts__gender_0">Мужской</label>&nbsp;<?php echo Html::radioButton('Params[_gender]',false, ['value' => 1]); ?> <label for="Accounts__gender_1">Женский</label>&nbsp;<?php echo Html::radioButton('Params[_gender]', false, ['value' => 0]); ?> <label for="Accounts__gender_2">Не важно</label></span>
                 </td>
             </tr>
         </table>
@@ -73,12 +71,9 @@
             </tr>
             <tr>
                 <td class="info_param radios"><?php echo Yii::t('twitterModule.tweets','_confirmation_applications'); ?> <i class="tooltip" title="<?php echo Yii::t('twitterModule.tweets','_confirmation_applications_info'); ?>">?</i></td>
-                <td class="param radios"><?php echo Html::radioButton('Params[pType]',false,array(
-    'value'=>0)); ?> <?php echo Yii::t('main','_manual'); ?> <?php echo Html::radioButton('Params[pType]',false,array(
-    'value'=>1)); ?> <?php echo Yii::t('main','_auto'); ?></td>
+                <td class="param radios"><?php echo Html::radioButton('Params[pType]', false, ['value' => 0]); ?> <?php echo Yii::t('main','_manual'); ?> <?php echo Html::radioButton('Params[pType]', false, ['value' => 1]); ?> <?php echo Yii::t('main','_auto'); ?></td>
             </tr>
         </table>
-
         <h3 class="top_title"><?php echo Yii::t('twitterModule.tweets','_title_personal_accounts_filtering'); ?></h3>
         <table>
             <tr><td><?php echo Html::checkBox('Params[show_only_white_list]','',array('value'=>'yes')); ?> <?php echo Yii::t('twitterModule.tweets','_accounts_filtering_4'); ?></td></tr>

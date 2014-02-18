@@ -2,11 +2,8 @@
 $this->pageTitle = Yii::app()->name . ' - ' . Yii::t('main', '_twitter_Title');
 $this->metaDescription = Yii::t('main', '_twitter_Description');
 
-$this->breadcrumbs[] = array(
-	0 => array(Yii::t('breadcrumbs', '_twitter'), '/twitter'),
-);
+$this->breadcrumbs[] = [0 => [Yii::t('breadcrumbs', '_twitter'), '/twitter']];
 ?>
-
 <div id="twitter" class="block">
     <div class="block_title"><div class="block_title_inset"><i class="fa fa-twitter"></i> <h5><?php echo Yii::t('twitterModule.index', '_twitter_title'); ?></h5></div></div>
     <div class="block_content">
@@ -21,7 +18,7 @@ $this->breadcrumbs[] = array(
             </div>
             <div id="sort" style="display:none;">
                 <form id="fParams" action="" method="GET" onsubmit="return false;">
-					<?php $this->renderPartial('_params', array('ageData' => $ageData, 'subjects' => $subjects)); ?>
+					<?php $this->renderPartial('_params', ['model' => $model]); ?>
                 </form>
                 <div id="block_1_2_block">
                     <button class="button" onclick="Tweets.resetParams(this);">Сбросить параметры</button>
@@ -29,8 +26,7 @@ $this->breadcrumbs[] = array(
                 </div>
             </div>
             <div class="line_title_noopen no_border_bottom">
-                <span id="_stats"><?php $this->renderPartial('_stats', array('accounts_count_in_blacklist' => $accounts_count_in_blacklist,
-						'_count' => $_count, 'accounts_count_in_whitelist' => $accounts_count_in_whitelist)); ?></span>
+                <span id="_stats"><?php $this->renderPartial('_stats', ['model' => $model]); ?></span>
                 <span class="block group_input search" style="float: right; margin-top: -8px; margin-right: 5px;"><input type="text" onkeyup="Tweets._getFromQuery('setQuery', '_searchButton');" placeholder="Найти аккаунт" id="setQuery"><button onclick="Tweets._getFromQuery('setQuery', '_searchButton');" class="button icon"><i class="fa fa-search" id="_searchButton"></i></button></span>
             </div>
         </div>
@@ -54,38 +50,7 @@ $this->breadcrumbs[] = array(
                 </div>
             </div>
             <div id="lContent" class="acconts_list">
-<?php $this->renderPartial('_list', array('wids' => $wids, 'bids' => $bids, 'list' => $model)); ?>
-            </div>
-            <div class="table_bottom">
-                <div class="table_bottom_inside">
-                    <div class="page_nav_page">
-                        <div id="pagesList" class="_cHide">
-                    <?php $this->renderPartial("_pages", array('pages' => $pages)); ?>
-                        </div>
-                    </div>
-					<?php if($_count) {
-						?>
-						<div class="page_nav_how">
-                                <?php echo Yii::t('twitterModule.accounts', '_pageNavHow'); ?>
-							<select class="styler" onchange="Tweets._setLimit(this);
-                                    return false;">
-                                <?php foreach($limitList as $option) {
-									?>
-									<?php
-									if(isset(Yii::app()->session['_accountsTLimit']) AND Yii::app()->session['_accountsTLimit'] == $option['value']) {
-										$htmlOption = array('value' => $option['value'],
-											'selected' => 'selected');
-									}
-									else {
-										$htmlOption = array('value' => $option['value']);
-									}
-									echo Html::tag('option', $htmlOption, ($option['title'] == "_all") ? Yii::t('twitterModule.accounts', '_pageNavHowAll') : $option['title']);
-									?>
-								<?php } ?>
-                            </select>
-                        </div>
-					<?php } ?>
-                </div>
+				<?php $this->renderPartial('_list', array('model' => $model)); ?>
             </div>
         </div>
     </div>
