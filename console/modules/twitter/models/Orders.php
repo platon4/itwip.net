@@ -147,6 +147,9 @@ class Orders extends Model
 	{
 		if(array_key_exists($data['type_order'], $this->_order_types)) {
 			$this->_orders[] = (new $this->_order_types[$data['type_order']])->processOrder($data);
+
+			print_r($this->_orders);
+			die();
 		}
 	}
 }

@@ -17,13 +17,26 @@ class Manual implements OrdersInterface
 
 		if(is_array($data) && $data !== array()) {
 
-			$this->_row = ['account_id' => $this->getParams('account')];
+			$this->_row = [
+				'order_id' => $data['id'],
+				'order_owner' => $data['owner_id'],
+				'order_type' => $data['type_order'],
+				'account_id' => $this->getAccount()
+			];
 
 			$this->_indexes = [
 				['key' => 'account', 'value' => $this->getParams('account')]
 			];
 
-			$this->_update = [''];
+			$this->_update = [
+				'fields' => ['process_date=:process_date'],
+				'values' => [':process_date' => date('Y-m-d H:i:s')]
+			];
 		}
+	}
+
+	public function getAccount()
+	{
+		return $this->getParams('account');
 	}
 }

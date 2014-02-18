@@ -15,7 +15,6 @@ trait OrdersTrait
 		if(is_array($data) && $data !== []) {
 			$this->process($data);
 
-			print_r($this->getIndexes());
 			return ['row' => $this->getRow(), 'indexes' => $this->getIndexes(), 'update' => $this->getUpdate()];
 		}
 		else

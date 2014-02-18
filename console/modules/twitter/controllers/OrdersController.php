@@ -10,7 +10,7 @@ class OrdersController extends \console\components\Controller
 	/*
 	 * Создаем заказы для робота
 	 */
-	public function actionCreateOrders()
+	public function actionCreate()
 	{
 		$model = new Orders;
 		/* Устанавливаем сценарий валидаций */

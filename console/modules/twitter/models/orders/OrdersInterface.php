@@ -8,5 +8,7 @@ interface OrdersInterface
 
 	public function getParams($key = NULL);
 
+	public function getAccount();
+
 	public function __destruct();
 } 
