@@ -249,8 +249,8 @@ Tweets = {
         timer: false,
         sendData: {},
         queryString: '',
-        limit: '',
-        _order: '',
+        limit: 10,
+        _order: 'date',
         _oType: 'ASC',
         parseTemplate: '',
         _tid: null,
@@ -406,7 +406,7 @@ Tweets = {
         this.s.sendData = {};
         _ajax({
             data: this.s.sendData,
-            url: "/twitter/default/getParams",
+            url: "/twitter/resetParams",
             success: function (result) {
                 $('#fParams').html(result.html);
             },
@@ -468,18 +468,29 @@ Tweets = {
         this._getPrepared();
     },
     getAccountList: function (b) {
+        var data;
+
+        if (typeof this.s.sendData === 'string')
+            data = this.s.sendData + '&Twitter[_q]=' + this.s.queryString + '&Twitter[limit]=' + this.s.limit + '&Twitter[_o]=' + this.s._order + '&Twitter[_a]=' + this.s._oType;
+        else
+            data = 'Twitter[_q]=' + this.s.queryString + '&Twitter[limit]=' + this.s.limit + '&Twitter[_o]=' + this.s._order + '&Twitter[_a]=' + this.s._oType;
+
         _ajax({
-            data: this.s.sendData,
-            url: "/twitter?page=" + this.s.page + '&_q=' + this.s.queryString + '&limit=' + this.s.limit + '&_o=' + this.s._order + '&_a=' + this.s._oType,
+            data: data,
+            url: "/twitter?page=" + this.s.page,
             success: function (result) {
-                $('#pagesList').html(result.pages);
-                $('#lContent').html(result.html);
-                $('#_stats').html(result.stats);
+                if (result['code'] === 200) {
+                    $('#_stats').html(result['stats']);
+                    $('#lContent').html(result['html']);
+                }
+                else
+                    Dialog.open(_error, {content: result['message']});
             },
             beforeSend: function () {
-                $('#pagesList').html('<div style="text-align: left;">' + loading_img + '</div>');
-                $('#lContent').html('<div style="text-align: center;">' + loading_img + '</div>');
-                $('#_stats').html(loading_img);
+                $('#lContent').css('opacity', '0.5');
+            },
+            complete: function () {
+                $('#lContent').css('opacity', '1');
             }
         });
     },
@@ -498,33 +509,38 @@ Tweets = {
             });
         }
     },
-    _list: function (tid, t) {
+    _bwlist: function (e) {
+        if (_w === true) return false;
+
+        var $e = $(e), $td = $e.parent(), $id = $td.attr('data-id'), classes = $e.children().attr('class');
+
         _ajax({
-            data: {"tid": tid, "t": t},
-            url: "/twitter/ajax/_list",
-            success: function (r) {
-                if (r.code) {
-                    if (t == 'white') {
-                        if (r.code == 1) {
-                            $('#white_' + tid).addClass('selected');
-                            $('#black_' + tid).removeClass('selected');
-                        }
-                        else {
-                            $('#white_' + tid).removeClass('selected');
-                            $('#black_' + tid).removeClass('selected');
-                        }
+            data: {"id": $id, 'bw': $e.attr('data-type')},
+            url: "/twitter/bwlist",
+            success: function (obj) {
+                if (obj['code'] === 200) {
+                    if ($e.hasClass('selected')) {
+                        $e.removeClass('selected');
                     }
                     else {
-                        if (r.code == 1) {
-                            $('#black_' + tid).addClass('selected');
-                            $('#white_' + tid).removeClass('selected');
-                        }
-                        else {
-                            $('#black_' + tid).removeClass('selected');
-                            $('#white_' + tid).removeClass('selected');
-                        }
+                        $td.find('.selected').removeClass('selected');
+                        $e.addClass('selected');
                     }
+
+                    $('#blackStat_' + $id).html(obj['black_count']);
+                    $('#whiteStat_' + $id).html(obj['white_count']);
+                    $('#_stats').html(obj['stats']);
                 }
+                else
+                    Dialog.open(_error, {"content": obj['message']});
+            },
+            beforeSend: function () {
+                $e.children().removeClass(classes).addClass('fa fa-spin fa-spinner');
+                _w = true;
+            },
+            complete: function () {
+                $e.children().removeClass('fa fa-spin fa-spinner').addClass(classes);
+                _w = false;
             }
         });
     },

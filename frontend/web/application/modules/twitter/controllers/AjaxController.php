@@ -2,389 +2,311 @@
 
 class ajaxController extends Controller
 {
-    public function filters()
-    {
-        return [
-            'accessControl',
-            'ajaxOnly'
-        ];
-    }
+	public function filters()
+	{
+		return [
+			'accessControl',
+			'ajaxOnly'
+		];
+	}
 
-    public function accessRules()
-    {
-        return array(
-            array('allow',
-                'actions' => array('placementmethod', 'ordercreate', '_getsubjects', '_credentials', '_settings', '_list', 'getinfo'),
-                'roles' => array('user'),
-            ),
-            array('deny', // deny all users
-                'users' => array('*'),
-            ),
-        );
-    }
+	public function accessRules()
+	{
+		return array(
+			array('allow',
+				'actions' => array('placementmethod', 'ordercreate', '_getsubjects', '_credentials', '_settings', 'getinfo'),
+				'roles' => array('user'),
+			),
+			array('deny', // deny all users
+				'users' => array('*'),
+			),
+		);
+	}
 
-    public function action_list()
-    {
-        $t = array('white' => 1, 'black' => 0);
-        $tid = (CHelper::int($_POST['tid'])) ? CHelper::int($_POST['tid']) : 0;
-        $tt = (isset($t[$_POST['t']])) ? $t[$_POST['t']] : false;
+	public function action_getsubjects()
+	{
+		$bid  = (isset($_POST['t']) AND CHelper::int($_POST['t'])) ? CHelper::int($_POST['t']) : 1;
+		$sbj  = (isset($_POST['subject']) AND is_array($_POST['subject'])) ? $_POST['subject'] : array();
+		$cmax = 5;
 
-        $query = Yii::app()->db->createCommand("SELECT * FROM {{tw_black_white_list}} WHERE owner_id=:id AND tw_id=:tid");
-        $query->bindParam(':id', Yii::app()->user->id, PDO::PARAM_INT);
-        $query->bindParam(':tid', $tid, PDO::PARAM_INT);
-        $data = $query->query();
-        $row = $data->read();
+		if($bid AND count($sbj)) {
+			if(count($sbj) >= $cmax) {
+				$code    = 203;
+				$message = Yii::t('twitterModule.accounts', '_subject_add_countmax', array(
+					'{count}' => $cmax));
+			}
+			else {
+				$code = 200;
 
-        if ($row['id']) {
-            if ($row['_type'] == $tt) {
-                $command = Yii::app()->db->createCommand("DELETE FROM {{tw_black_white_list}} WHERE id=:id");
-                $command->bindParam(':id', $row['id'], PDO::PARAM_INT);
+				$subjects = Html::groupByKey(Subjects::model()->findALl(array('order' => 'sort')), 'id', '_key', 'parrent');
+				$ids      = array();
 
-                $command->execute();
+				foreach($sbj as $k) {
+					if(CHelper::int($k) == 0) {
+						$message = Yii::t('twitterModule.accounts', '_subject_add_need_select');
+						$code    = 203;
+						break;
+					}
+					else {
+						if(in_array($k, $ids)) {
+							$message = Yii::t('twitterModule.accounts', '_subject_add_dublicat');
+							$code    = 203;
+							break;
+						}
+					}
 
-                if ($tt == 1) {
-                    Accounts::model()->updateCounters(array('white_list' => -1), 'id=:id', array(
-                        ':id' => $tid));
-                }
-                else {
-                    Accounts::model()->updateCounters(array('black_list' => -1), 'id=:id', array(
-                        ':id' => $tid));
-                }
+					$ids[] = $k;
+				}
 
-                echo json_encode(array('code' => 2));
-            }
-            else {
-                $command = Yii::app()->db->createCommand("UPDATE {{tw_black_white_list}} SET _type=:type WHERE id=:id");
+				foreach($subjects as $key => $value) {
+					if(in_array($key, $ids)) {
+						unset($subjects[$key]);
+					}
+					else {
+						if(is_array($value)) {
+							foreach($value as $_k => $_v) {
+								foreach($_v as $ak => $av) {
+									if(in_array($ak, $ids)) {
+										unset($subjects[$key][$_k][$ak]);
+									}
+								}
+							}
+						}
+					}
+				}
 
-                $command->bindParam(':id', $row['id'], PDO::PARAM_INT);
-                $command->bindParam(':type', $tt, PDO::PARAM_INT);
+				$html = $this->renderPartial('application.modules.twitter.views.default._subjectsDropDownList', array(
+					'options' => array('0' => array('disabled' => 'disabled')), 'remove' => 1,
+					'bid' => '_subjects_' . $bid, 'subjects' => $subjects), true);
+			}
+			if($code == 200) {
+				echo CJSON::encode(array('code' => $code, 'html' => $html, 'bid' => $bid));
+			}
+			else {
+				echo CJSON::encode(array('code' => $code, 'message' => $message));
+			}
+		}
+		else {
+			//throw new CHttpException(403, 'Bad query.');
+		}
+	}
 
-                $command->execute();
+	/**
+	 * Сохранение настройках аккаунта
+	 */
+	public function action_settings()
+	{
+		if(isset($_POST['ajax']) AND $_POST['ajax'] == "yes") {
+			$tid = (isset($_POST['tid']) AND CHelper::int($_POST['tid'])) ? CHelper::int($_POST['tid']) : 0;
 
-                if ($tt == 1) {
-                    Accounts::model()->updateCounters(array('white_list' => 1), 'id=:id', array(
-                        ':id' => $tid));
-                    Accounts::model()->updateCounters(array('black_list' => -1), 'id=:id', array(
-                        ':id' => $tid));
-                }
-                else {
-                    Accounts::model()->updateCounters(array('black_list' => 1), 'id=:id', array(
-                        ':id' => $tid));
-                    Accounts::model()->updateCounters(array('white_list' => -1), 'id=:id', array(
-                        ':id' => $tid));
-                }
+			if($tid) {
+				$model = Accounts::model()->findByPk($tid);
 
-                echo json_encode(array('code' => 1));
-            }
-        }
-        else {
-            $command = Yii::app()->db->createCommand("INSERT INTO {{tw_black_white_list}} (owner_id, tw_id, _type, _date) VALUES (:owner_id, :tw_id, :_type, :_date)");
+				$params = array();
+				$rslt   = array();
 
-            $command->bindParam(':owner_id', Yii::app()->user->id, PDO::PARAM_INT);
-            $command->bindParam(':tw_id', $tid, PDO::PARAM_INT);
-            $command->bindParam(':_type', $tt, PDO::PARAM_INT);
-            $command->bindParam(':_date', date("Y-m-d H:i:s"), PDO::PARAM_STR);
+				switch($_POST['action']) {
+				case "s":
+					if($model->_status == 7 OR $model->_status == 1) {
+						$params['_status'] = ($_POST['s'] == "yes") ? 1 : 7;
+						$rslt['_status']   = Html::twStatus($params['_status']);
+					}
+					break;
+				}
 
-            $command->execute();
+				if(count($params)) {
+					$model->attributes = $params;
 
-            if ($tt == 1) {
-                Accounts::model()->updateCounters(array('white_list' => 1), 'id=:id', array(
-                    ':id' => $tid));
-            }
-            else {
-                Accounts::model()->updateCounters(array('black_list' => 1), 'id=:id', array(
-                    ':id' => $tid));
-            }
+					if($model->validate()) {
+						$model->save();
+						echo CJSON::encode(array_merge(array('code' => 200), $rslt));
+					}
+					else {
+						echo Html::errorSummary($model);
+					}
+				}
+				else {
+					throw new CHttpException(403, 'Bad query.');
+				}
+			}
+			else {
+				throw new CHttpException(404, 'Account not found.');
+			}
+		}
 
-            echo json_encode(array('code' => 1));
-        }
+		Yii::app()->end();
+	}
 
-        Yii::app()->end();
-    }
+	public function actionGetinfo()
+	{
+		$tid = (isset($_POST['tid']) AND CHelper::int($_POST['tid'])) ? CHelper::int($_POST['tid']) : 0;
 
-    public function action_getsubjects()
-    {
-        $bid = (isset($_POST['t']) AND CHelper::int($_POST['t'])) ? CHelper::int($_POST['t']) : 1;
-        $sbj = (isset($_POST['subject']) AND is_array($_POST['subject'])) ? $_POST['subject'] : array();
-        $cmax = 5;
+		if($tid) {
+			$sth = Yii::app()->db->createCommand("SELECT `a`.`id`, `a`.`screen_name`, `a`.`name`, `a`.`avatar`, `a`.`created_at`, `a`.`_lang`, `a`.`date_add`, `a`.`itr`, `a`.`in_google`, `a`.`google_pr`, `a`.`in_yandex`, `a`.`yandex_rank`, `a`.`tweets`, `a`.`following`, `a`.`followers`, `a`.`white_list`, `a`.`black_list`, `a`.`_posts_count`, `s`.`_price`, `s`.`_age`, `s`.`_gender`, `s`.`_subjects`,`s`.`working_in` FROM {{tw_accounts}} `a` LEFT JOIN {{tw_accounts_settings}} `s` ON `a`.`id`=`s`.`tid` WHERE `a`.`id`=:id");
 
-        if ($bid AND count($sbj)) {
-            if (count($sbj) >= $cmax) {
-                $code = 203;
-                $message = Yii::t('twitterModule.accounts', '_subject_add_countmax', array(
-                            '{count}' => $cmax));
-            }
-            else {
-                $code = 200;
+			$sth->bindParam(':id', $tid, PDO::PARAM_INT);
+			$dataRead = $sth->query();
+			$row      = $dataRead->read();
 
-                $subjects = Html::groupByKey(Subjects::model()->findALl(array('order' => 'sort')), 'id', '_key', 'parrent');
-                $ids = array();
+			if($row['id']) {
+				$ageData = require Yii::app()->getModulePath() . '/twitter/data/_age.php';
+				$_s      = '';
 
-                foreach ($sbj as $k) {
-                    if (CHelper::int($k) == 0) {
-                        $message = Yii::t('twitterModule.accounts', '_subject_add_need_select');
-                        $code = 203;
-                        break;
-                    }
-                    else {
-                        if (in_array($k, $ids)) {
-                            $message = Yii::t('twitterModule.accounts', '_subject_add_dublicat');
-                            $code = 203;
-                            break;
-                        }
-                    }
+				if($row['_subjects'] != 0) {
+					$_subjects = explode(",", $row['_subjects']);
+					$_sb       = Subjects::model()->findAll(array('order' => 'sort'));
+					$_b        = array();
 
-                    $ids[] = $k;
-                }
+					foreach($_sb as $_v) {
+						if(in_array($_v['id'], $_subjects)) {
+							$_b[] = Yii::t('twitterModule.accounts', $_v['_key']);
+						}
+					}
 
-                foreach ($subjects as $key => $value) {
-                    if (in_array($key, $ids)) {
-                        unset($subjects[$key]);
-                    }
-                    else {
-                        if (is_array($value)) {
-                            foreach ($value as $_k => $_v) {
-                                foreach ($_v as $ak => $av) {
-                                    if (in_array($ak, $ids)) {
-                                        unset($subjects[$key][$_k][$ak]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+					$_s = implode(", ", $_b);
+				}
+				else
+					$_s = Yii::t('twitterModule.accounts', '_no_subject_align');
 
-                $html = $this->renderPartial('application.modules.twitter.views.default._subjectsDropDownList', array(
-                    'options' => array('0' => array('disabled' => 'disabled')), 'remove' => 1,
-                    'bid' => '_subjects_' . $bid, 'subjects' => $subjects), true);
-            }
-            if ($code == 200) {
-                echo CJSON::encode(array('code' => $code, 'html' => $html, 'bid' => $bid));
-            }
-            else {
-                echo CJSON::encode(array('code' => $code, 'message' => $message));
-            }
-        }
-        else {
-            //throw new CHttpException(403, 'Bad query.');
-        }
-    }
+				$this->renderPartial('getinfo', array('row' => $row, '_age' => $ageData,
+					'subjects' => $_s));
+			}
+			else
+				echo json_encode(array('code' => 404, 'message' => 'Account not found.'));
+		}
+		else
+			echo json_encode(array('code' => 403, 'message' => Yii::t('yii', 'Your request is invalid.')));
 
-    /**
-     * Сохранение настройках аккаунта
-     */
-    public function action_settings()
-    {
-        if (isset($_POST['ajax']) AND $_POST['ajax'] == "yes") {
-            $tid = (isset($_POST['tid']) AND CHelper::int($_POST['tid'])) ? CHelper::int($_POST['tid']) : 0;
+		Yii::app()->end();
+	}
 
-            if ($tid) {
-                $model = Accounts::model()->findByPk($tid);
+	/**
+	 * Обновление данных аккаунта ajax
+	 */
+	public function action_credentials($_return = false)
+	{
+		$_default     = '<span onclick="Settings._credentials(this); return false;">' . Yii::t('twitterModule.accounts', '_twitterAccountSetting_check') . '</span>';
+		$allow_action = array('yandex_rank', 'in_yandex', 'google_pr', 'all'); // 'in_google',
 
-                $params = array();
-                $rslt = array();
+		if(isset($_POST['tid']) AND CHelper::int($_POST['tid']) AND isset($_POST['_check']) AND in_array($_POST['_check'], $allow_action)) {
+			$account = Yii::app()->db->createCommand("SELECT a.id,a.itr,a.in_yandex,a.yandex_rank,a.google_pr,a.tweets,a.followers,a.created_at,a.listed_count,a.app,a._mdr,s._price FROM {{tw_accounts}} a INNER JOIN {{tw_accounts_settings}} s ON a.id=s.tid   WHERE a.id=:id")->queryRow(true, array(
+				':id' => $_POST['tid']));
 
-                switch ($_POST['action']) {
-                    case "s":
-                        if ($model->_status == 7 OR $model->_status == 1) {
-                            $params['_status'] = ($_POST['s'] == "yes") ? 1 : 7;
-                            $rslt['_status'] = Html::twStatus($params['_status']);
-                        }
-                        break;
-                }
+			if($account !== false) {
+				$data = array('_s[_key]' => md5(Yii::app()->params['twitter']['secret_key'] . $account['app'] . $account['id']),
+					'_s[_tid]' => $account['id']);
 
-                if (count($params)) {
-                    $model->attributes = $params;
+				if(isset($_POST['_check']) AND !empty($_POST['_check']))
+					$data['_s[_check]'] = $_POST['_check'];
 
-                    if ($model->validate()) {
-                        $model->save();
-                        echo CJSON::encode(array_merge(array('code' => 200), $rslt));
-                    }
-                    else {
-                        echo Html::errorSummary($model);
-                    }
-                }
-                else {
-                    throw new CHttpException(403, 'Bad query.');
-                }
-            }
-            else {
-                throw new CHttpException(404, 'Account not found.');
-            }
-        }
+				$app = Yii::app()->db->createCommand("SELECT _url FROM {{tw_application}} WHERE id=:id")->queryRow(true, array(
+					':id' => $account['app']));
 
-        Yii::app()->end();
-    }
+				$request  = CHelper::_getURL($app['_url'] . '/twitter/stats/_get', "POST", $data);
+				$response = CJSON::decode($request['response']);
 
-    public function actionGetinfo()
-    {
-        $tid = (isset($_POST['tid']) AND CHelper::int($_POST['tid'])) ? CHelper::int($_POST['tid']) : 0;
+				if($request['code'] == 200 AND isset($response['code'])) {
+					if($response['code'] == 200) {
+						$code = 200;
+						$_y   = array('in_yandex', 'in_google');
+						$html = Yii::t('twitterModule.accounts', '_twitterAccountSetting_recentlyTested');
 
-        if ($tid) {
-            $sth = Yii::app()->db->createCommand("SELECT `a`.`id`, `a`.`screen_name`, `a`.`name`, `a`.`avatar`, `a`.`created_at`, `a`.`_lang`, `a`.`date_add`, `a`.`itr`, `a`.`in_google`, `a`.`google_pr`, `a`.`in_yandex`, `a`.`yandex_rank`, `a`.`tweets`, `a`.`following`, `a`.`followers`, `a`.`white_list`, `a`.`black_list`, `a`.`_posts_count`, `s`.`_price`, `s`.`_age`, `s`.`_gender`, `s`.`_subjects`,`s`.`working_in` FROM {{tw_accounts}} `a` LEFT JOIN {{tw_accounts_settings}} `s` ON `a`.`id`=`s`.`tid` WHERE `a`.`id`=:id");
+						$fields = array('yandex_rank' => 'yandex_rank', 'in_yandex' => 'in_yandex',
+							'google_pr' => 'google_pr');
 
-            $sth->bindParam(':id', $tid, PDO::PARAM_INT);
-            $dataRead = $sth->query();
-            $row = $dataRead->read();
+						$updates = array();
+						$values  = array(':id' => $account['id']);
 
-            if ($row['id']) {
-                $ageData = require Yii::app()->getModulePath() . '/twitter/data/_age.php';
-                $_s = '';
+						foreach($response['stats'] as $k => $stats) {
+							if(array_key_exists($k, $fields)) {
+								if($stats['code'] == 200) {
+									$updates[]                 = $fields[$k] . '=:' . $fields[$k];
+									$values[':' . $fields[$k]] = $stats['value'];
+									$account[$fields[$k]]      = $stats['value'];
 
-                if ($row['_subjects'] != 0) {
-                    $_subjects = explode(",", $row['_subjects']);
-                    $_sb = Subjects::model()->findAll(array('order' => 'sort'));
-                    $_b = array();
+									if(in_array($k, $_y)) {
+										$result = ($stats['value'] == 1) ? Yii::t('main', '_yes') : Yii::t('main', '_no');
+									}
+									else {
+										$result = $stats['value'];
+									}
+								}
+								else if($response['_check'] != "all") {
+									$code = 99;
+								}
+							}
+						}
 
-                    foreach ($_sb as $_v) {
-                        if (in_array($_v['id'], $_subjects)) {
-                            $_b[] = Yii::t('twitterModule.accounts', $_v['_key']);
-                        }
-                    }
+						$itr    = THelper::itr($account['tweets'], $account['followers'], date("d.m.Y H:i:s", $account['created_at']), $account['listed_count'], $account['yandex_rank'], $$account['google_pr'], $account['_mdr']);
+						$_price = THelper::itrCost($itr);
 
-                    $_s = implode(", ", $_b);
-                }
-                else
-                    $_s = Yii::t('twitterModule.accounts', '_no_subject_align');
+						$updates[]      = 'itr=:itr';
+						$values[':itr'] = $itr;
 
-                $this->renderPartial('getinfo', array('row' => $row, '_age' => $ageData,
-                    'subjects' => $_s));
-            }
-            else
-                echo json_encode(array('code' => 404, 'message' => 'Account not found.'));
-        }
-        else
-            echo json_encode(array('code' => 403, 'message' => Yii::t('yii', 'Your request is invalid.')));
+						if(round($account['_price']) < 1)
+							Yii::app()->db->createCommand("UPDATE {{tw_accounts_settings}} SET _price=:price WHERE tid=:id")->execute(array(
+								':id' => $account['id'], ':price' => $_price));
 
-        Yii::app()->end();
-    }
+						Yii::app()->db->createCommand("UPDATE {{tw_accounts}} SET " . implode(", ", $updates) . " WHERE id=:id")->execute($values);
 
-    /**
-     * Обновление данных аккаунта ajax
-     */
-    public function action_credentials($_return = false)
-    {
-        $_default = '<span onclick="Settings._credentials(this); return false;">' . Yii::t('twitterModule.accounts', '_twitterAccountSetting_check') . '</span>';
-        $allow_action = array('yandex_rank', 'in_yandex', 'google_pr', 'all'); // 'in_google',
+						if($response['_check'] == "all")
+							echo CJSON::encode(array('code' => $code));
+						else
+							echo CJSON::encode(array('code' => $code, 'result' => $result,
+								'html' => $html));
+					}
+					else {
+						switch($response['code']) {
+						case "202":
+							$checkType = array(
+								'in_yandex' => Yii::t('twitterModule.accounts', '_index_yandex'),
+								'yandex_rank' => Yii::t('twitterModule.accounts', '_rank_acc'),
+								'google_pr' => Yii::t('twitterModule.accounts', '_rank_acc'),
+							);
 
-        if (isset($_POST['tid']) AND CHelper::int($_POST['tid']) AND isset($_POST['_check']) AND in_array($_POST['_check'], $allow_action)) {
-            $account = Yii::app()->db->createCommand("SELECT a.id,a.itr,a.in_yandex,a.yandex_rank,a.google_pr,a.tweets,a.followers,a.created_at,a.listed_count,a.app,a._mdr,s._price FROM {{tw_accounts}} a INNER JOIN {{tw_accounts_settings}} s ON a.id=s.tid   WHERE a.id=:id")->queryRow(true, array(
-                ':id' => $_POST['tid']));
+							$messages = Yii::t('twitterModule.accounts', '_update_error_202', array(
+								'{type}' => $checkType[$_POST['_check']],
+								'{time}' => ceil(Yii::app()->params['twitter']['update_interval'][$_POST['_check']] / 60)));
+							break;
 
-            if ($account !== false) {
-                $data = array('_s[_key]' => md5(Yii::app()->params['twitter']['secret_key'] . $account['app'] . $account['id']),
-                    '_s[_tid]' => $account['id']);
+						case "33":
+							$messages = Yii::t('twitterModule.accounts', '_update_error_33');
+							break;
 
-                if (isset($_POST['_check']) AND !empty($_POST['_check']))
-                    $data['_s[_check]'] = $_POST['_check'];
+						default:
+							$messages = (trim($response['messages']) != NULL) ? $response['messages'] : Yii::t('twitterModule.settings', '_update_error_0');
+						}
 
-                $app = Yii::app()->db->createCommand("SELECT _url FROM {{tw_application}} WHERE id=:id")->queryRow(true, array(
-                    ':id' => $account['app']));
+						echo CJSON::encode(array('code' => $response['code'], 'html' => $_default,
+							'messages' => $messages));
+					}
+				}
+				else
+					echo CJSON::encode(array('code' => 201, 'messages' => Yii::t('twitterModule.accounts', '_error_connect_to_server'),
+						'html' => $_default));
+			}
+			else
+				echo CJSON::encode(array('code' => '404', 'message' => 'Account not found.',
+					'html' => $_default));
+		}
+		else
+			echo CJSON::encode(array('code' => '403', 'message' => Yii::t('internal', '_twitterAccountSetting_wrong_params'),
+				'html' => $_default));
 
-                $request = CHelper::_getURL($app['_url'] . '/twitter/stats/_get', "POST", $data);
-                $response = CJSON::decode($request['response']);
+		Yii::app()->end();
+	}
 
-                if ($request['code'] == 200 AND isset($response['code'])) {
-                    if ($response['code'] == 200) {
-                        $code = 200;
-                        $_y = array('in_yandex', 'in_google');
-                        $html = Yii::t('twitterModule.accounts', '_twitterAccountSetting_recentlyTested');
+	public function actionOrderCreate($pay)
+	{
+		$model  = new OrderTweets;
+		$params = isset($_POST['Order']) ? $_POST['Order'] : [];
 
-                        $fields = array('yandex_rank' => 'yandex_rank', 'in_yandex' => 'in_yandex',
-                            'google_pr' => 'google_pr');
+		$model->attributes = $model->at = array_merge($params, ['when' => $pay]);
 
-                        $updates = array();
-                        $values = array(':id' => $account['id']);
-
-                        foreach ($response['stats'] as $k => $stats) {
-                            if (array_key_exists($k, $fields)) {
-                                if ($stats['code'] == 200) {
-                                    $updates[] = $fields[$k] . '=:' . $fields[$k];
-                                    $values[':' . $fields[$k]] = $stats['value'];
-                                    $account[$fields[$k]] = $stats['value'];
-
-                                    if (in_array($k, $_y)) {
-                                        $result = ($stats['value'] == 1) ? Yii::t('main', '_yes') : Yii::t('main', '_no');
-                                    }
-                                    else {
-                                        $result = $stats['value'];
-                                    }
-                                }
-                                else if ($response['_check'] != "all") {
-                                    $code = 99;
-                                }
-                            }
-                        }
-
-                        $itr = THelper::itr($account['tweets'], $account['followers'], date("d.m.Y H:i:s", $account['created_at']), $account['listed_count'], $account['yandex_rank'], $$account['google_pr'], $account['_mdr']);
-                        $_price = THelper::itrCost($itr);
-
-                        $updates[] = 'itr=:itr';
-                        $values[':itr'] = $itr;
-
-                        if (round($account['_price']) < 1)
-                            Yii::app()->db->createCommand("UPDATE {{tw_accounts_settings}} SET _price=:price WHERE tid=:id")->execute(array(
-                                ':id' => $account['id'], ':price' => $_price));
-
-                        Yii::app()->db->createCommand("UPDATE {{tw_accounts}} SET " . implode(", ", $updates) . " WHERE id=:id")->execute($values);
-
-                        if ($response['_check'] == "all")
-                            echo CJSON::encode(array('code' => $code));
-                        else
-                            echo CJSON::encode(array('code' => $code, 'result' => $result,
-                                'html' => $html));
-                    } else {
-                        switch ($response['code']) {
-                            case "202":
-                                $checkType = array(
-                                    'in_yandex' => Yii::t('twitterModule.accounts', '_index_yandex'),
-                                    'yandex_rank' => Yii::t('twitterModule.accounts', '_rank_acc'),
-                                    'google_pr' => Yii::t('twitterModule.accounts', '_rank_acc'),
-                                );
-
-                                $messages = Yii::t('twitterModule.accounts', '_update_error_202', array(
-                                            '{type}' => $checkType[$_POST['_check']],
-                                            '{time}' => ceil(Yii::app()->params['twitter']['update_interval'][$_POST['_check']] / 60)));
-                                break;
-
-                            case "33":
-                                $messages = Yii::t('twitterModule.accounts', '_update_error_33');
-                                break;
-
-                            default:
-                                $messages = (trim($response['messages']) != null) ? $response['messages'] : Yii::t('twitterModule.settings', '_update_error_0');
-                        }
-
-                        echo CJSON::encode(array('code' => $response['code'], 'html' => $_default,
-                            'messages' => $messages));
-                    }
-                }
-                else
-                    echo CJSON::encode(array('code' => 201, 'messages' => Yii::t('twitterModule.accounts', '_error_connect_to_server'),
-                        'html' => $_default));
-            }
-            else
-                echo CJSON::encode(array('code' => '404', 'message' => 'Account not found.',
-                    'html' => $_default));
-        }
-        else
-            echo CJSON::encode(array('code' => '403', 'message' => Yii::t('internal', '_twitterAccountSetting_wrong_params'),
-                'html' => $_default));
-
-        Yii::app()->end();
-    }
-    
-    public function actionOrderCreate($pay)
-    {
-        $model = new OrderTweets;
-        $params = isset($_POST['Order']) ? $_POST['Order'] : [];
-
-        $model->attributes = $model->at = array_merge($params, ['when' => $pay]);
-
-        if ($model->validate())
-            Html::json(array('url' => '/twitter/tweets/status', 'code' => 200, 'messages' => Yii::t('twitterModule.tweets', '_order_save_ok')));
-        else
-            Html::json(['code' => 203, 'messages' => $model->getError()]);
-    }
+		if($model->validate())
+			Html::json(array('url' => '/twitter/tweets/status', 'code' => 200, 'messages' => Yii::t('twitterModule.tweets', '_order_save_ok')));
+		else
+			Html::json(['code' => 203, 'messages' => $model->getError()]);
+	}
 
 }

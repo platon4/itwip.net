@@ -96,10 +96,10 @@ class Manual extends \FormModel
 			$row = Yii::app()->db->createCommand("SELECT _filter FROM {{tw_filters}} WHERE id=:tid")->queryRow(true, [':tid' => $this->_tid]);
 
 			$this->attributes   = unserialize($row['_filter']);
-			$this->_age_blog_do = round(((time() - strtotime('15.07.2006 00:00:00')) / 86400) / 31);
+			$this->_age_blog_do = (int) round(((time() - strtotime('15.07.2006 00:00:00')) / 86400) / 31);
 
 			if(Yii::app()->user->_get('money_amount') < Yii::app()->user->_get('bonus_money'))
-				$filter->pay_method = 1;
+				$this->pay_method = 1;
 		}
 	}
 
@@ -416,7 +416,7 @@ class Manual extends \FormModel
 	public function getAccountsCount()
 	{
 		if($this->_accountsCount === NULL)
-			$this->_accountsCount = Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{tw_accounts_settings}} st INNER JOIN {{tw_accounts}} tw ON st.tid=tw.id" . $this->where()['where'] . "")->queryScalar($this->where()['values']);;
+			$this->_accountsCount = Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{tw_accounts_settings}} st INNER JOIN {{tw_accounts}} tw ON st.tid=tw.id" . $this->where()['where'] . "")->queryScalar($this->where()['values']);
 
 		return $this->_accountsCount;
 	}

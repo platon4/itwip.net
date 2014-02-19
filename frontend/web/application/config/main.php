@@ -35,6 +35,7 @@ return [
 					$urlManager->addRules($module->urlRules);
 				}
 			}
+
 			return true;
 		},
 	'components' => [
@@ -110,6 +111,8 @@ return [
 			'urlFormat' => 'path',
 			'rules' => [
 				'/' => 'main/index',
+				'twitter/bwlist' => 'twitter/default/bwlist',
+				'twitter/resetParams' => 'twitter/default/resetParams',
 				'js/www-lang-core.js' => 'main/jslang',
 				'accounts/auth' => 'accounts/default/auth',
 				'accounts/lost' => 'accounts/default/lost',
@@ -122,11 +125,12 @@ return [
 				'help' => 'main/help',
 				'incompatibility' => 'main/incompatibility',
 				'support' => 'accounts/default/support',
+
 				'ajax/<action:\w+>' => 'ajax/<action>',
 				'test/<action:\w+>' => 'test/<action>',
+				'<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
 				'<module:\w+>' => '<module>',
 				'<module:\w+>/<controller:\w+>' => '<module>/<controller>',
-				'<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
 				'<controller:\w+>/<action:\w+>' => '<controller>/<action>',
 				'<action:\w+>' => 'main/<action>',
 			],
