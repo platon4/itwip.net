@@ -20,7 +20,7 @@ class Finality extends \FormModel
 	public function getCount()
 	{
 		if($this->count === NULL)
-			$this->count = Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{tw_tweets_roster}} WHERE _key=:_key AND _placement=1")->queryScalar(array(':_key' => $this->_tid));
+			$this->count = Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{twitter_tweetsRoster}} WHERE _key=:_key AND _placement=1")->queryScalar(array(':_key' => $this->_tid));
 
 		return $this->count;
 	}

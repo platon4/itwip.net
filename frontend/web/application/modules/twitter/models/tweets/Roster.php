@@ -15,16 +15,16 @@ class Roster extends \FormModel
 	public $_tid;
 	public $_group;
 	public $_action = 'get';
-	public $ids = array();
+	public $ids = [];
 	public $_title;
-	public $edit = array();
+	public $edit = [];
 	protected $_pages;
-	protected $_media = array();
-	protected $_tweets = array();
-	protected $_figures = array();
+	protected $_media = [];
+	protected $_tweets = [];
+	protected $_figures = [];
 	protected $_allowPlace;
 	protected $_isSave;
-	protected $_groups = array(
+	protected $_groups = [
 		'all' => '',
 		'exceededLinks' => 1,
 		'character' => 2,
@@ -36,34 +36,43 @@ class Roster extends \FormModel
 		'wordsFilter' => 8,
 		'exceededHash' => 9,
 		'media' => 10,
-	);
+	];
 
 	public function rules()
 	{
-		return array(
-			array('_tid', 'ext.validators.hashValidator', 'min' => 10, 'max' => 15),
-			array('_tid', 'existsRoster'),
-			array('_group', 'in', 'range' => array_keys($this->_groups), 'message' => Yii::t('yii', 'Your request is invalid.')),
-			array('ids', 'processIds'),
-			array('_action,_title,edit', 'safe')
-		);
+		return [
+			['_tid', 'ext.validators.hashValidator', 'min' => 10, 'max' => 15],
+			['_tid', 'existsRoster'],
+			['_group', 'in', 'range' => array_keys($this->_groups), 'message' => Yii::t('yii', 'Your request is invalid.')],
+			['ids', 'processIds'],
+			['_title', 'required', 'message' => Yii::t('twitterModule.tweets', '_restore_title_is_empty'), 'on' => 'saveRoster'],
+			['_title', 'length', 'max' => 255, 'on' => 'saveRoster'],
+			['_action,edit', 'safe']
+		];
+	}
+
+	public function attributelabels()
+	{
+		return [
+			'_title' => 'Название списка'
+		];
 	}
 
 	public function existsRoster()
 	{
-		if(!Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{tw_tweets_roster}} WHERE _key=:key AND owner_id=:owner")->queryScalar(array(':owner' => Yii::app()->user->id, ':key' => $this->_tid)))
+		if(!Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{twitter_tweetsRoster}} WHERE _key=:key AND owner_id=:owner")->queryScalar(array(':owner' => Yii::app()->user->id, ':key' => $this->_tid)))
 			$this->addError('_tid', Yii::t('twitterModule.tweets', '_not_roster_exists'));
 	}
 
 	protected function afterValidate()
 	{
-		$actions = array(
+		$actions = [
 			'saveRoster' => '_saveRoster',
 			'get' => '_getTweets',
 			'info' => 'getFigures',
 			'remove' => 'removeTweets',
 			'tweetEdit' => 'tweetEdit'
-		);
+		];
 
 		$method = $actions[$this->_action];
 
@@ -80,7 +89,7 @@ class Roster extends \FormModel
 			foreach($this->ids as $id) {
 				$i++;
 
-				if(!CHelper::int($id) || $i > 50) {
+				if(!\CHelper::int($id) || $i > 50) {
 					$this->addError('ids', Yii::t('yii', 'Your request is invalid.'));
 
 					return false;
@@ -121,7 +130,7 @@ class Roster extends \FormModel
 				$this->_figures = json_decode(Yii::app()->redis->get($this->_tid . ':counts'));
 			}
 			else {
-				$rows = Yii::app()->db->createCommand("SELECT _indexes as i,tweet FROM {{tw_tweets_roster}} WHERE _key=:tid AND owner_id=:owner")->queryAll(true, array(':tid' => $this->_tid, ':owner' => Yii::app()->user->id));
+				$rows = Yii::app()->db->createCommand("SELECT _indexes as i,tweet FROM {{twitter_tweetsRoster}} WHERE _key=:tid AND owner_id=:owner")->queryAll(true, array(':tid' => $this->_tid, ':owner' => Yii::app()->user->id));
 
 				$vlds = Yii::app()->params['twitter']['tweets']['validators'];
 
@@ -152,7 +161,7 @@ class Roster extends \FormModel
 					}
 
 					if($redis_insert)
-						Yii::app()->redis->hSet('UniqueTweet:' . Yii::app()->user->id, md5(trim($row['tweet'])));
+						Yii::app()->redis->set('UniqueTweet:' . Yii::app()->user->id, md5(trim($row['tweet'])));
 
 					$counts['all'] += 1;
 				}
@@ -184,10 +193,10 @@ class Roster extends \FormModel
 
 		$where = "WHERE " . implode(" AND ", $fields);
 
-		$this->_pages           = new \CPagination(Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{tw_tweets_roster}} {$where}")->queryScalar($values));
+		$this->_pages           = new \CPagination(Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{twitter_tweetsRoster}} {$where}")->queryScalar($values));
 		$this->_pages->pageSize = 50;
 
-		$rows = Yii::app()->db->createCommand("SELECT * FROM {{tw_tweets_roster}} {$where} LIMIT " . $this->_pages->getOffset() . ", " . $this->_pages->getLimit())->queryAll(true, $values);
+		$rows = Yii::app()->db->createCommand("SELECT * FROM {{twitter_tweetsRoster}} {$where} LIMIT " . $this->_pages->getOffset() . ", " . $this->_pages->getLimit())->queryAll(true, $values);
 
 		$this->_tweets = $rows;
 		//$this->_media = Yii::app()->redis->hGetAll($this->_tid . ':media');
@@ -195,7 +204,7 @@ class Roster extends \FormModel
 
 	public function allowPlace()
 	{
-		if($this->_allowPlace === NULL && Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{tw_tweets_roster}} WHERE _key=:tid AND owner_id=:owner_id AND _placement=1")->queryScalar(array(':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id)) > 0)
+		if($this->_allowPlace === NULL && Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{twitter_tweetsRoster}} WHERE _key=:tid AND owner_id=:owner_id AND _placement=1")->queryScalar(array(':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id)) > 0)
 			$this->_allowPlace = true;
 		else
 			$this->_allowPlace = false;
@@ -205,7 +214,7 @@ class Roster extends \FormModel
 
 	public function isSave()
 	{
-		if($this->_isSave === NULL && !Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{tw_tweets_lists}} WHERE _uid=:tid AND owner_id=:owner_id")->queryScalar(array(':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id)))
+		if($this->_isSave === NULL && !Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{twitter_tweetsLists}} WHERE _hash=:lid AND owner_id=:owner_id")->queryScalar(array(':lid' => $this->_tid, ':owner_id' => Yii::app()->user->id)))
 			$this->_isSave = false;
 		else
 			$this->_isSave = true;
@@ -218,27 +227,12 @@ class Roster extends \FormModel
 	 */
 	protected function _saveRoster()
 	{
-
-		$this->setCode(404)->addError('_tid', 'Сохранение списков временно недоступно');
-		return false;
-
-		if(!\CHelper::isEmpty($this->_title)) {
-			$this->_title = trim($this->_title);
-
-			if(!Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{tw_tweets_lists}} WHERE _uid=:tid OR _title=:title")->queryScalar(array(':tid' => $this->_tid, ':title' => $this->_title))) {
-				$rowCount = Yii::app()->db->createCommand("INSERT INTO {{tw_tweets_lists}} (owner_id,_date,_title,_count,_uid) VALUES (:owner_id,:_date,:_title,:_count,:_uid)")
-					->execute(array(':owner_id' => Yii::app()->user->id, ':_date' => date("Y-m-d H:i:s"), ':_title' => $this->_title, ':_count' => $this->getFigures('all'), ':_uid' => $this->_tid));
-
-				if($rowCount)
-					Yii::app()->db->createCommand("UPDATE {{tw_tweets_roster}} SET is_save=1 WHERE _key=:tid AND owner_id=:owner_id")->execute(array(':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id));
-				else
-					$this->setCode(404)->addError('_tid', Yii::t('twitterModule.tweets', '_not_roster_exists_for_save'));
-			}
-			else
-				$this->setCode(402)->addError('_tid', Yii::t('twitterModule.tweets', '_restore_list_is_exists'));
+		if(Yii::app()->db->createCommand("INSERT INTO {{twitter_tweetsLists}} (owner_id,_hash,date_create,title) VALUES (:owner_id,:_hash,:_date,:title) ON DUPLICATE KEY UPDATE date_create=:_date, title=:title")->execute([':owner_id' => Yii::app()->user->id, ':_hash' => $this->_tid, ':_date' => date("Y-m-d H:i:s"), ':title' => $this->_title])) {
+			Yii::app()->db->createCommand("UPDATE {{twitter_tweetsRoster}} SET is_save=1 WHERE _key=:key")->execute([':key' => $this->_tid]);
 		}
-		else
-			$this->setCode(404)->addError('_tid', Yii::t('twitterModule.tweets', '_restore_title_is_empty'));
+		else {
+			$this->setCode(404)->addError('_tid', Yii::t('twitterModule.tweets', '_not_roster_exists_for_save'));
+		}
 	}
 
 	protected function tweetEdit()
@@ -254,14 +248,16 @@ class Roster extends \FormModel
 	protected function removeTweets()
 	{
 		if(!\CHelper::isEmpty($this->_group) && $this->_groups[$this->_group] != '')
-			Yii::app()->db->createCommand("DELETE FROM {{tw_tweets_roster}} WHERE _key=:tid AND owner_id=:owner_id AND FIND_IN_SET (:index, _indexes)")->execute(array(':index' => $this->_groups[$this->_group], ':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id));
+			Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:tid AND owner_id=:owner_id AND FIND_IN_SET (:index, _indexes)")->execute(array(':index' => $this->_groups[$this->_group], ':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id));
 		else
-			Yii::app()->db->createCommand("DELETE FROM {{tw_tweets_roster}} WHERE _key=:tid AND owner_id=:owner_id AND id IN('" . implode("', '", $this->ids) . "')")->execute(array(':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id));
+			Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:tid AND owner_id=:owner_id AND id IN('" . implode("', '", $this->ids) . "')")->execute(array(':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id));
 
 		Yii::app()->redis->delete($this->_tid . ':counts');
 
-		if($this->getFigures('all') === 0)
+		if($this->getFigures('all') === 0) {
+			Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsLists}} WHERE _hash=:tid AND owner_id=:owner_id");
 			$this->setCode(301)->addError('_tid', Yii::t('twitterModule.tweets', '_not_roster_exists'));
+		}
 		else
 			$this->setCode(200)->_getTweets(true);
 	}

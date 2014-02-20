@@ -39,7 +39,7 @@ class Manual extends \FormModel
 	public function getCount()
 	{
 		if($this->_count === NULL) {
-			$this->_count = Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{twitter_orders_perform}} WHERE order_hash=:hash")->queryScalar([':hash' => $this->h]);
+			$this->_count = Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{twitter_ordersPerform}} WHERE order_hash=:hash")->queryScalar([':hash' => $this->h]);
 		}
 
 		if($this->_count <= 0)
@@ -52,7 +52,7 @@ class Manual extends \FormModel
 	{
 		if($this->_rows === NULL) {
 
-			$orders = Yii::app()->db->createCommand("SELECT id,cost,return_amount,status,posted_date,_params,message FROM {{twitter_orders_perform}} WHERE order_hash=:hash LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())->queryAll(true, [':hash' => $this->h]);
+			$orders = Yii::app()->db->createCommand("SELECT id,cost,return_amount,status,posted_date,_params,message FROM {{twitter_ordersPerform}} WHERE order_hash=:hash LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())->queryAll(true, [':hash' => $this->h]);
 			$rows   = [];
 			$ids    = [];
 			$params = [];

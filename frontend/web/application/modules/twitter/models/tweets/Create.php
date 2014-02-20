@@ -82,9 +82,8 @@ class Create extends \FormModel
 	protected function tweetsAdd()
 	{
 		if($this->getInsertRows() !== array()) {
-
-			Yii::app()->db->createCommand("DELETE FROM {{tw_tweets_roster}} WHERE owner_id=:owner")->execute(array(':owner' => Yii::app()->user->id));
-			\CHelper::batchInsert('tw_tweets_roster', ['_key', 'owner_id', 'tweet', 'tweet_hash', '_url', '_url_hash', '_indexes', '_info', '_placement', '_date'], $this->getInsertRows());
+			Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE owner_id=:owner AND is_save=0")->execute(array(':owner' => Yii::app()->user->id));
+			\CHelper::batchInsert('twitter_tweetsRoster', ['_key', 'owner_id', 'tweet', 'tweet_hash', '_url', '_url_hash', '_indexes', '_info', '_placement', '_date'], $this->getInsertRows());
 			Yii::app()->redis->set('Roster:' . Yii::app()->user->id . ':' . $this->_key, $this->_key);
 			Yii::app()->redis->expire('Roster:' . Yii::app()->user->id . ':' . $this->_key, 60 * 60);
 

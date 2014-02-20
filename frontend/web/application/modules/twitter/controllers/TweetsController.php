@@ -172,18 +172,19 @@ class TweetsController extends Controller
 		Yii::app()->end();
 	}
 
-	public function actionPrepared($action = '', $tid = '', $order = '', $sort = '', $search = '')
+	public function actionPrepared($action = '')
 	{
-		$this->_message('Данная страница находится на реконструкций, приносим свои извинения за причиненые неудобства.', Yii::t('main', '_error'));
 		$tw = new Prepared;
 
 		if(!CHelper::isEmpty($action))
 			$tw->scenario = $action;
 
-		if($tw->load(['_tid' => $tid, '_order' => $order, '_sort' => $sort, '_search' => $search], true) && $tw->validate()) {
+		$tw->load($_GET);
+
+		if($tw->validate()) {
 			if($tw->getView() === true) {
 				if(Yii::app()->request->isAjaxRequest)
-					Html::json(['code' => 200, 'count' => $tw->rosterCount(), 'html' => $this->renderPartial($tw->getViewFile(true), ['model' => $tw], true)]);
+					Html::json(['code' => 200, 'count' => $tw->rosterCount(), 'html' => $this->renderPartial($tw->getViewFile(true), ['model' => $tw], true), 'message' => $tw->getMessage()]);
 				else
 					$this->render($tw->getViewFile(), array('model' => $tw));
 			}
@@ -204,10 +205,10 @@ class TweetsController extends Controller
 		if(isset($_POST['Tweets'])) {
 			$tw = new Create;
 
-			$tw->attributes = array(
-				'tweets' => $_POST['Tweets'],
+			$tw->attributes = [
+				'tweets' => isset($_POST['Tweets']) ? $_POST['Tweets'] : [],
 				'_key' => isset($_POST['_tid']) ? $_POST['_tid'] : ''
-			);
+			];
 
 			if($tw->validate()) {
 				if(Yii::app()->request->isAjaxRequest)
@@ -234,16 +235,20 @@ class TweetsController extends Controller
 	 */
 	public function actionRoster($_tid, $group = NULL, $action = 'get')
 	{
-		$v = new Roster;
+		$v         = new Roster;
+		$scenarios = ['saveRoster' => 'saveRoster'];
 
-		$v->attributes = [
+		if(array_key_exists($action, $scenarios))
+			$v->setScenario($scenarios[$action]);
+
+		$v->load([
 			'_tid' => $_tid,
 			'_group' => $group,
 			'_action' => $action,
 			'ids' => (isset($_POST['tweets'])) ? $_POST['tweets'] : [],
 			'_title' => (isset($_POST['title'])) ? $_POST['title'] : NULL,
 			'edit' => (isset($_POST['Edit'])) ? $_POST['Edit'] : [],
-		];
+		], true);
 
 		if($v->validate()) {
 			if(Yii::app()->request->isAjaxRequest) {

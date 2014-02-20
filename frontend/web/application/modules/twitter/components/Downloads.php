@@ -6,51 +6,62 @@ use Yii;
 
 class Downloads
 {
+	protected $fileSize;
+	protected $fileName;
+	protected $tweets;
 
-    protected $fileSize;
-    protected $fileName;
+	public function setTweets($tweets)
+	{
+		if(is_array($tweets)) {
+			$this->tweets = $tweets;
+		}
+		else {
+			throw(new \Exception('Not tweets list set.'));
+		}
+	}
 
-    public function setTweets()
-    {
-        
-    }
+	public function setOutPutFile()
+	{
 
-    public function setOutPutFile()
-    {
-        
-    }
+	}
 
-    public function outPutFile()
-    {
-        $this->setHeaders();
+	public function outPutFile()
+	{
+		$this->setHeaders();
 
-        Yii::app()->end();
-    }
+		if(is_array($this->tweets) && $this->tweets !== []) {
+			foreach($this->tweets as $tweet) {
+				echo $tweet['tweet'] . "\n";
+			}
+		}
 
-    public function setFileName($name)
-    {
-        $this->fileName = $name;
-    }
+		Yii::app()->end();
+	}
 
-    public function fileName()
-    {
-        return $this->fileName;
-    }
+	public function setFileName($name)
+	{
+		$this->fileName = $name;
+	}
 
-    protected function setHeaders()
-    {
-        header("Pragma: public");
-        header("Expires: 0");
-        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("Cache-Control: private", false);
-        header("Content-Type: plain/text");
-        header('Content-Disposition: attachment; filename="' . $this->fileName() . '.txt";');
-        header("Content-Transfer-Encoding: binary");
+	public function fileName()
+	{
+		return $this->fileName;
+	}
 
-        header("Content-Length: " . $this->fileSize);
-        header("Connection: close");
+	protected function setHeaders()
+	{
+		header("Pragma: public");
+		header("Expires: 0");
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+		header("Cache-Control: private", false);
+		header("Content-Type: plain/text");
+		header('Content-Disposition: attachment; filename="' . $this->fileName() . '.txt";');
+		header("Content-Transfer-Encoding: binary");
 
-        @ini_set('max_execution_time', 0);
-        @set_time_limit();
-    }
+		header("Content-Length: " . $this->fileSize);
+		header("Connection: close");
+
+		@ini_set('max_execution_time', 0);
+		@set_time_limit();
+	}
 }

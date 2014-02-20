@@ -452,7 +452,7 @@ class Manual extends \FormModel
 
 		if($this->_tweetsListCount > 0) {
 			$account = Twitter::accounts($this->rid);
-			$rows    = Yii::app()->db->createCommand("SELECT id,tweet FROM {{tw_tweets_roster}} WHERE _key=:key AND owner_id=:owner AND id IN ('" . implode("', '", $this->tweets) . "')")->queryAll(true, [':key' => $this->_tid, ':owner' => Yii::app()->user->id]);
+			$rows    = Yii::app()->db->createCommand("SELECT id,tweet FROM {{twitter_tweetsRoster}} WHERE _key=:key AND owner_id=:owner AND id IN ('" . implode("', '", $this->tweets) . "')")->queryAll(true, [':key' => $this->_tid, ':owner' => Yii::app()->user->id]);
 
 			if($rows !== array()) {
 				$tweets = [];
@@ -527,7 +527,7 @@ class Manual extends \FormModel
 		else
 			$order = '';
 
-		$tweetsRows = Yii::app()->db->createCommand("SELECT * FROM {{tw_tweets_roster}} WHERE " . implode(" AND ", $fields) . $order)->queryAll(true, $values);
+		$tweetsRows = Yii::app()->db->createCommand("SELECT * FROM {{twitter_tweetsRoster}} WHERE " . implode(" AND ", $fields) . $order)->queryAll(true, $values);
 
 		foreach($tweetsRows as $row) {
 			if(isset($sltdc['tweet:' . $this->rid . ':' . $row['id']]) && $sltdc['tweet:' . $this->rid . ':' . $row['id']] == $row['id'])
@@ -728,7 +728,7 @@ class Manual extends \FormModel
 		 */
 		if($accounts->isLoad()) {
 			$selectedTweets = Yii::app()->redis->hGetAll('twitter:o:m:' . $this->_tid . ':tweets');
-			$tweetsRows     = Yii::app()->db->createCommand("SELECT id,tweet,tweet_hash FROM {{tw_tweets_roster}} WHERE _key=:key AND owner_id=:owner AND _placement=1")->queryAll(true, [':key' => $this->_tid, ':owner' => Yii::app()->user->id]);
+			$tweetsRows     = Yii::app()->db->createCommand("SELECT id,tweet,tweet_hash FROM {{twitter_tweetsRoster}} WHERE _key=:key AND owner_id=:owner AND _placement=1")->queryAll(true, [':key' => $this->_tid, ':owner' => Yii::app()->user->id]);
 			$tweets         = [];
 
 			foreach($tweetsRows as $row) {
@@ -790,7 +790,7 @@ class Manual extends \FormModel
 				}
 			}
 
-			\CHelper::batchInsert('twitter_orders_perform', ['order_hash', 'hash', 'cost', 'return_amount', 'status', '_params'], $this->getTaksRows()); // Добавляем список заданий для работа
+			\CHelper::batchInsert('twitter_ordersPerform', ['order_hash', 'hash', 'cost', 'return_amount', 'status', '_params'], $this->getTaksRows()); // Добавляем список заданий для работа
 
 			$t->commit(); // Завершаем транзакцию
 
@@ -808,6 +808,6 @@ class Manual extends \FormModel
 	 */
 	public function clear()
 	{
-		Yii::app()->db->createCommand("DELETE FROM {{tw_tweets_roster}} WHERE _key=:key")->execute([':key' => $this->_tid]); // Удаляем список твитов
+		Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:key AND is_save=0")->execute([':key' => $this->_tid]); // Удаляем список твитов
 	}
 }

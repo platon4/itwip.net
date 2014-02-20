@@ -256,49 +256,13 @@ Tweets = {
         _tid: null,
         params: []
     },
-    remvoeList: function (uid) {
-        Dialog.open(_confirm, {
-            content: 'Вы дейстивтельно хотите удалить список твитов ?',
-            buttons: [
-                {
-                    text: btn_yes,
-                    id: "_confirmRemove",
-                    click: function () {
-                        var btn = $('#_confirmRemove'), btxt = btn.html(), _w = false;
-                        if (_w === true)
-                            return false;
-                        _ajax({
-                            url: "/twitter/ajaxTweets/prepared?act=remove&id=" + uid,
-                            success: function (result) {
-                                Dialog.close();
-                                Dialog.open(_info, {content: 'Список успешно удален'});
-                                Tweets._getPrepared();
-                            },
-                            beforeSend: function () {
-                                btn.html(loading_img);
-                                _w = true;
-                            },
-                            complete: function () {
-                                btn.html(btxt);
-                                _w = false;
-                            }
-                        });
-                    },
-                    class: "button btn_blue"
-                },
-                {text: btn_no, click: function () {
-                    $(this).dialog("close");
-                }, class: "button"}
-            ]
-        });
-    },
     getPreparedPage: function (page) {
         this.s.page = page;
         this._getPrepared();
     },
     _getPrepared: function () {
         _ajax({
-            url: "/twitter/tweets/prepared?page=" + this.s.page + '&search=' + this.s.queryString + '&order=' + this.s._order + '&sort=' + this.s._oType,
+            url: "/twitter/tweets/prepared?page=" + this.s.page + '&Prepared[search]=' + this.s.queryString + '&Prepared[order]=' + this.s._order + '&Prepared[sort]=' + this.s._oType,
             success: function (result) {
                 $('#preparedList').html(result.html);
                 $('#_all_count').html(result.count);
@@ -1821,6 +1785,70 @@ var Twitter = {
                     }
                 });
             }
+        }
+    },
+    prepared: {
+        d: {
+            queryString: '',
+            limit: 10,
+            _order: 'date',
+            _oType: 'ASC',
+            page: 1
+        },
+        remvoe: function (id) {
+            Dialog.open(_confirm, {
+                content: 'Вы дейстивтельно хотите удалить список твитов ?',
+                buttons: [
+                    {
+                        text: btn_yes,
+                        id: "_confirmRemove",
+                        click: function () {
+                            var btn = $('#_confirmRemove'), btxt = btn.html(), _w = false;
+                            if (_w === true)  return false;
+                            _ajax({
+                                url: "/twitter/tweets/prepared?action=remove&Prepared[_tid]=" + id,
+                                success: function (obj) {
+                                    if (obj['code'] === 200)
+                                        Twitter.prepared.get();
+
+                                    Dialog.open(_info, {content: obj['message']});
+                                },
+                                beforeSend: function () {
+                                    btn.html(loading_img);
+                                    _w = true;
+                                },
+                                complete: function () {
+                                    btn.html(btxt);
+                                    _w = false;
+                                }
+                            });
+                        },
+                        class: "button btn_blue"
+                    },
+                    {
+                        text: btn_no, click: function () {
+                        $(this).dialog("close");
+                    },
+                        class: "button"
+                    }
+                ]
+            });
+        },
+        get: function () {
+            _ajax({
+                url: "/twitter/tweets/prepared?page=" + this.d.page + '&Prepared[search]=' + this.d.queryString + '&Prepared[order]=' + this.d._order + '&Prepared[sort]=' + this.d._oType,
+                success: function (result) {
+                    $('#preparedList').html(result['html']);
+                    $('#_all_count').html(result['count']);
+                },
+                beforeSend: function () {
+                    $('#preparedList').html('<div style="text-align: center; padding: 5px;">' + loading_img + '</div>');
+                    $('#_searchButton').find('i').removeClass('fa-search').addClass('fa-spin fa-spinner');
+                },
+                complete: function () {
+                    $('#_searchButton').find('i').removeClass('fa-spin fa-spinner').addClass('fa-search');
+                }
+            });
         }
     }
 }

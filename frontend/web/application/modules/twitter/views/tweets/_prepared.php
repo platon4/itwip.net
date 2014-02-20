@@ -23,7 +23,6 @@ $this->breadcrumbs[] = array(
                 <table>
                     <tbody>
                         <tr>
-                            <td class="id"><a href="javascript: void(0);" onclick="Tweets._setPreparedOrder('id', this);"><?php echo Yii::t('twitterModule.prepared', '_id'); ?> <i class="fa fa-caret-down"></i></a></td>
                             <td class="date"><a href="javascript: void(0);" onclick="Tweets._setPreparedOrder('date', this);"><?php echo Yii::t('twitterModule.prepared', '_date'); ?> <i class="fa fa-caret-down"></i></a></td>
                             <td class="name"><?php echo Yii::t('twitterModule.prepared', '_name'); ?></td>
                             <td class="tweet"><?php echo Yii::t('twitterModule.prepared', '_tweets'); ?></td>
@@ -34,7 +33,7 @@ $this->breadcrumbs[] = array(
             </div>
         </div>
         <div id="preparedList" class="acconts_list">
-            <?php echo $this->renderPartial('_prepared_rows', array('model' => $model)); ?>
+            <?php echo $this->renderPartial('_preparedRows', array('model' => $model)); ?>
         </div>
     </div>
 </div>

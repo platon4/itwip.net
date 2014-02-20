@@ -91,7 +91,7 @@ class Fast extends \FormModel
 	public function uCount()
 	{
 		if($this->uCount === NULL) {
-			$this->uCount = Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{tw_tweets_roster}} WHERE _key=:_key AND _placement=1 AND FIND_IN_SET('7', _indexes)=0 AND _url_Hash IS NOT NULL")->queryScalar([':_key' => $this->_tid]);
+			$this->uCount = Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{twitter_tweetsRoster}} WHERE _key=:_key AND _placement=1 AND FIND_IN_SET('7', _indexes)=0 AND _url_Hash IS NOT NULL")->queryScalar([':_key' => $this->_tid]);
 		}
 
 		return $this->uCount;
@@ -99,7 +99,7 @@ class Fast extends \FormModel
 
 	public function getUrls()
 	{
-		$urls = Yii::app()->db->createCommand("SELECT id,_url FROM {{tw_tweets_roster}} WHERE _key=:_key AND _placement=1 AND FIND_IN_SET('7', _indexes)=0 AND _url_Hash IS NOT NULL")->queryAll(true, [':_key' => $this->_tid]);
+		$urls = Yii::app()->db->createCommand("SELECT id,_url FROM {{twitter_tweetsRoster}} WHERE _key=:_key AND _placement=1 AND FIND_IN_SET('7', _indexes)=0 AND _url_Hash IS NOT NULL")->queryAll(true, [':_key' => $this->_tid]);
 
 		return $urls;
 	}
@@ -137,9 +137,9 @@ class Fast extends \FormModel
 	public function orderProcess()
 	{
 		if($this->urlsExclude !== array())
-			$rows = Yii::app()->db->createCommand("SELECT * FROM {{tw_tweets_roster}} WHERE _key=:_key AND _placement=1 AND NOT id IN('" . implode("', '", $this->urlsExclude) . "') AND FIND_IN_SET('7', _indexes)=0 AND _url_Hash IS NOT NULL")->queryAll(true, [':_key' => $this->_tid]);
+			$rows = Yii::app()->db->createCommand("SELECT * FROM {{twitter_tweetsRoster}} WHERE _key=:_key AND _placement=1 AND NOT id IN('" . implode("', '", $this->urlsExclude) . "') AND FIND_IN_SET('7', _indexes)=0 AND _url_Hash IS NOT NULL")->queryAll(true, [':_key' => $this->_tid]);
 		else
-			$rows = Yii::app()->db->createCommand("SELECT * FROM {{tw_tweets_roster}} WHERE _key=:_key AND _placement=1 AND FIND_IN_SET('7', _indexes)=0 AND _url_Hash IS NOT NULL")->queryAll(true, [':_key' => $this->_tid]);
+			$rows = Yii::app()->db->createCommand("SELECT * FROM {{twitter_tweetsRoster}} WHERE _key=:_key AND _placement=1 AND FIND_IN_SET('7', _indexes)=0 AND _url_Hash IS NOT NULL")->queryAll(true, [':_key' => $this->_tid]);
 
 		if($rows !== false) {
 			foreach($rows as $row) {
@@ -199,7 +199,7 @@ class Fast extends \FormModel
 				}
 			}
 
-			\CHelper::batchInsert('twitter_orders_perform', ['order_hash', 'hash', 'url', 'url_hash', 'cost', 'status', '_params'], $this->getTaksRows()); // Добавляем список заданий для работа
+			\CHelper::batchInsert('twitter_ordersPerform', ['order_hash', 'hash', 'url', 'url_hash', 'cost', 'status', '_params'], $this->getTaksRows()); // Добавляем список заданий для работа
 
 			$t->commit(); // Завершаем транзакцию
 
@@ -217,6 +217,6 @@ class Fast extends \FormModel
 	 */
 	public function clear()
 	{
-		Yii::app()->db->createCommand("DELETE FROM {{tw_tweets_roster}} WHERE _key=:key")->execute([':key' => $this->_tid]); // Удаляем список твитов
+		Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:key  AND is_save=0")->execute([':key' => $this->_tid]); // Удаляем список твитов
 	}
 }

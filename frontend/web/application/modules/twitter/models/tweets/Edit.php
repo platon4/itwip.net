@@ -32,7 +32,7 @@ class Edit extends \FormModel
 		if($tw->allowNext()) {
 			$this->refactoring($tw);
 
-			Yii::app()->db->createCommand("UPDATE {{tw_tweets_roster}} SET tweet=:tweet,tweet_hash=:tweet_hash,_url=:url,_url_hash=:url_hash,_indexes=:indexes,_info=:info,_placement=:next WHERE id=:id")
+			Yii::app()->db->createCommand("UPDATE {{twitter_tweetsRoster}} SET tweet=:tweet,tweet_hash=:tweet_hash,_url=:url,_url_hash=:url_hash,_indexes=:indexes,_info=:info,_placement=:next WHERE id=:id")
 				->execute(array(
 					':id' => $this->id,
 					':tweet' => $this->tweet,
@@ -62,7 +62,7 @@ class Edit extends \FormModel
 
 	protected function refactoring($model)
 	{
-		$row = Yii::app()->db->createCommand("SELECT tweet_hash, _url_Hash FROM {{tw_tweets_roster}} WHERE id=:id")->queryRow(true, [':id' => $this->id]);
+			$row = Yii::app()->db->createCommand("SELECT tweet_hash, _url_Hash FROM {{twitter_tweetsRoster}} WHERE id=:id")->queryRow(true, [':id' => $this->id]);
 		Yii::app()->redis->hDel('UniqueTweet:' . Yii::app()->user->id, $row['tweet_hash']);
 		Yii::app()->redis->hDel('UniqueUrl:' . Yii::app()->user->id, $row['_url_Hash']);
 
@@ -73,10 +73,10 @@ class Edit extends \FormModel
 	{
 		if(!Yii::app()->redis->exists('Roster:' . Yii::app()->user->id . ':' . $this->_key)) {
 			Yii::app()->redis->delete(array('Roster:' . Yii::app()->user->id . ':' . $this->_key, 'UniqueTweet:' . Yii::app()->user->id, 'UniqueUrl:' . Yii::app()->user->id));
-			$rows = Yii::app()->db->createCommand("SELECT * FROM {{tw_tweets_roster}} WHERE _key=:key")->queryAll(true, [':key' => $this->_key]);
+			$rows = Yii::app()->db->createCommand("SELECT * FROM {{twitter_tweetsRoster}} WHERE _key=:key")->queryAll(true, [':key' => $this->_key]);
 
 			foreach($rows as $row) {
-				$indexes = explode($row['_indexes']);
+				$indexes = explode(",", $row['_indexes']);
 				if(!in_array(7, $indexes) && Yii::app()->redis->hExists('UniqueTweet:' . Yii::app()->user->id, $row['tweet_hash']))
 					Yii::app()->redis->hSet('UniqueTweet:' . Yii::app()->user->id, $row['tweet_hash'], $row['tweet_hash']);
 
