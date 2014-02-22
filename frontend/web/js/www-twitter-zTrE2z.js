@@ -1034,16 +1034,15 @@ var Twitter = {
 
                     var days = this.params.days[this.params.ds], hours = this.params.hours[this.params.hs];
 
-                    $('.time_targeting').find('.select').removeClass('select').addClass('no_select');
+                    $('.time_targeting').find('.select').removeClass('select').addClass('no_select').children().prop('checked', false);
 
                     $.each(days, function (index, value) {
                         $.each(hours, function (i, v) {
                             v = v + 1;
-                            $('#days_' + value + '_' + v).removeClass('no_select').addClass('select').children().attr('checked', 'checked');
+                            $('#days_' + value + '_' + v).removeClass('no_select').addClass('select').children().prop('checked', true);
                         });
                     });
 
-                    $('.time_targeting').find('.no_select').children().attr('checked', false);
                     $nav.find('.selection').removeClass('selection');
                     $e.addClass('selection');
                 },
@@ -1055,11 +1054,11 @@ var Twitter = {
 
                     if ($e.hasClass('select')) {
                         $e.removeClass('select').addClass('no_select');
-                        $e.children().attr('checked', false);
+                        $e.children().prop('checked', false);
                     }
                     else {
                         $e.removeClass('no_select').addClass('select');
-                        $e.children().attr('checked', true);
+                        $e.children().prop('checked', true);
                     }
                 }
             },

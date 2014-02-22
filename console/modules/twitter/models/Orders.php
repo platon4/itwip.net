@@ -15,6 +15,8 @@ class Orders extends Model
 		'indexes' => 'console\modules\twitter\models\orders\Indexes'
 	];
 
+	protected $tasks;
+
 	public function rules()
 	{
 		return [
@@ -27,7 +29,7 @@ class Orders extends Model
 	 */
 	public function orderFound()
 	{
-		if($this->getOrders() === false)
+		if($this->getOrder() === false || $this->getOrder() === NULL)
 			$this->addError('order', 'Not orders found to process.');
 	}
 
@@ -36,7 +38,7 @@ class Orders extends Model
 	 *
 	 * @return array
 	 */
-	public function getOrders()
+	public function getOrder()
 	{
 		if($this->_data === NULL) {
 			$this->_data = (new Query)
@@ -44,11 +46,26 @@ class Orders extends Model
 				->from('it_twitter_orders')
 				->where(['and', 'status=:status', ['or', 'start_date<=:date', 'start_date=0000-00-00']], [':date' => date('Y-m-d'), ':status' => 0])
 				->orderBy(['id' => SORT_DESC])
-				->limit(500)
+				->limit(100)
 				->all();
 		}
 
 		return $this->_data;
+	}
+
+	public function getTasks($hash)
+	{
+			$this->tasks = (new Query)
+				->select('id,hash,url,url_hash,cost,return_amount,status')
+				->from('it_twitter_ordersPerform')
+				->where(['order_hash' => $hash, 'status' => 1])
+				->orderBy(['id' => SORT_DESC])
+				->all();
+
+		if($this->tasks !== false || $this->tasks === NULL)
+			$this->addError('order', 'Not tasks found.');
+
+		return $this->tasks;
 	}
 
 	/*
@@ -58,16 +75,12 @@ class Orders extends Model
 	 */
 	public function processOrders()
 	{
-		$orders = $this->getOrders();
-
-		if(is_array($orders) && $orders !== array()) {
-			foreach($orders as $order) {
-				$this->appendOrder($order);
-			}
-
-			if(count($this->_orders))
-				return true;
+		foreach($this->getOrder() as $order) {
+			$this->appendOrder($order, $this->getTasks($order['order_hash']));
 		}
+
+		if(count($this->_orders))
+			return true;
 
 		return false;
 	}
@@ -143,13 +156,10 @@ class Orders extends Model
 	/*
 	 * Проверяем заказ, и добавляем его в список заказов для отправки роботу
 	 */
-	protected function appendOrder($data)
+	protected function appendOrder($data, $tasks)
 	{
 		if(array_key_exists($data['type_order'], $this->_order_types)) {
-			$this->_orders[] = (new $this->_order_types[$data['type_order']])->processOrder($data);
-
-			print_r($this->_orders);
-			die();
+			$this->_orders[] = (new $this->_order_types[$data['type_order']])->processOrder($data, $tasks);
 		}
 	}
 }

@@ -5,22 +5,30 @@ namespace console\modules\twitter\models\orders;
 trait OrdersTrait
 {
 	protected $_data = [];
-	protected $_row = [];
+	protected $_tasks = [];
 	protected $_indexes = [];
 	protected $_params;
 	protected $_update;
 
-	public function processOrder(array $data)
+	/*
+	 * Обрабатываем заказ
+	 */
+	public function processOrder(array $order, array $tasks)
 	{
-		if(is_array($data) && $data !== []) {
-			$this->process($data);
+		if(is_array($order) && $order !== []) {
+			$this->process($order, $tasks);
 
-			return ['row' => $this->getRow(), 'indexes' => $this->getIndexes(), 'update' => $this->getUpdate()];
+			return ['tasks' => $this->getTasks(), 'indexes' => $this->getIndexes(), 'update' => $this->getUpdate()];
 		}
 		else
 			return false;
 	}
 
+	/*
+	 * Получаем пареметры заказа
+	 *
+	 * @return array or @return null
+	 */
 	public function getParams($key = NULL)
 	{
 		if($this->_params === NULL) {
@@ -32,11 +40,14 @@ trait OrdersTrait
 		}
 
 		if($key === NULL)
-			return isset($this->_params[$key]) ? $this->_params[$key] : NULL;
-		else
 			return $this->_params;
+		else
+			return isset($this->_params[$key]) ? $this->_params[$key] : NULL;
 	}
 
+	/*
+	 * Возворощяем поля для обновление азказа
+	 */
 	protected function getUpdates()
 	{
 		return $this->_update;
@@ -47,9 +58,9 @@ trait OrdersTrait
 		return $this->_indexes;
 	}
 
-	protected function getRow()
+	protected function getTasks()
 	{
-		return $this->_row;
+		return $this->_tasks;
 	}
 
 	protected function getUpdate()
@@ -57,10 +68,13 @@ trait OrdersTrait
 		return $this->_update;
 	}
 
+	/*
+	 * Очищаем память
+	 */
 	public function __destruct()
 	{
 		$this->_data    = [];
-		$this->_rows    = [];
+		$this->_tasks    = [];
 		$this->_indexes = [];
 		$this->_params  = NULL;
 		$this->_update  = NULL;

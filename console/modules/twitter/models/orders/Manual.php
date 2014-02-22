@@ -3,6 +3,8 @@
 namespace console\modules\twitter\models\orders;
 
 use Yii;
+use yii\base\Model;
+use yii\db\Query;
 
 class Manual implements OrdersInterface
 {
@@ -11,8 +13,10 @@ class Manual implements OrdersInterface
 	/*
 	 * Обработка заказа
 	 */
-	protected function process($data)
+	protected function process($data, $tasks)
 	{
+		print_r($data);
+		print_r($tasks);
 		$redis = Yii::$app->redis;
 
 		if(is_array($data) && $data !== array()) {
