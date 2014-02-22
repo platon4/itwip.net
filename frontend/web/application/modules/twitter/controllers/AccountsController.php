@@ -269,8 +269,7 @@ class AccountsController extends Controller
 						$last_update = array('yandex_rank' => 0, 'in_yandex' => 0, 'in_google' => 0,
 							'google_pr' => 0);
 
-						$sth      = Yii::app()->db->createCommand("SELECT last_update, _type FROM {{tw_update}} WHERE tw_id=" . $model->id);
-						$last_row = $sth->queryAll();
+						$last_row = Yii::app()->redis->hGetAll('twitter:accounts:statsUpdate:' . $model->id);
 
 						if(count($last_row)) {
 							foreach($last_row as $_row) {
