@@ -15,8 +15,6 @@ class Orders extends Model
 		'indexes' => 'console\modules\twitter\models\orders\Indexes'
 	];
 
-	protected $tasks;
-
 	public function rules()
 	{
 		return [
@@ -41,31 +39,43 @@ class Orders extends Model
 	public function getOrder()
 	{
 		if($this->_data === NULL) {
-			$this->_data = (new Query)
+			$data = (new Query)
 				->select('*')
 				->from('it_twitter_orders')
 				->where(['and', 'status=:status', ['or', 'start_date<=:date', 'start_date=0000-00-00']], [':date' => date('Y-m-d'), ':status' => 0])
 				->orderBy(['id' => SORT_DESC])
 				->limit(100)
 				->all();
+
+			if($data !== false) {
+				$hashs = [];
+				foreach($data as $row)
+					$hashs[] = $row['order_hash'];
+
+				$tasks = (new Query)
+					->select('id,order_hash,hash,url,url_hash,cost,return_amount,status')
+					->from('it_twitter_ordersPerform')
+					->where(['order_hash' => $hashs, 'status' => 1])
+					->all();
+
+				$_data = [];
+				foreach($data as $_d) {
+					$_tasks = [];
+					foreach($tasks as $_t)
+						if($_t['order_hash'] == $_d['order_hash'])
+							$_tasks[] = $_t;
+
+					$_data[] = [
+						'order' => $_d,
+						'tasks' => $_tasks
+					];
+				}
+
+				$this->_data = $_data;
+			}
 		}
 
 		return $this->_data;
-	}
-
-	public function getTasks($hash)
-	{
-			$this->tasks = (new Query)
-				->select('id,hash,url,url_hash,cost,return_amount,status')
-				->from('it_twitter_ordersPerform')
-				->where(['order_hash' => $hash, 'status' => 1])
-				->orderBy(['id' => SORT_DESC])
-				->all();
-
-		if($this->tasks !== false || $this->tasks === NULL)
-			$this->addError('order', 'Not tasks found.');
-
-		return $this->tasks;
 	}
 
 	/*
@@ -76,7 +86,7 @@ class Orders extends Model
 	public function processOrders()
 	{
 		foreach($this->getOrder() as $order) {
-			$this->appendOrder($order, $this->getTasks($order['order_hash']));
+			$this->appendOrder($order);
 		}
 
 		if(count($this->_orders))
@@ -156,10 +166,10 @@ class Orders extends Model
 	/*
 	 * Проверяем заказ, и добавляем его в список заказов для отправки роботу
 	 */
-	protected function appendOrder($data, $tasks)
+	protected function appendOrder($data)
 	{
-		if(array_key_exists($data['type_order'], $this->_order_types)) {
-			$this->_orders[] = (new $this->_order_types[$data['type_order']])->processOrder($data, $tasks);
+		if(array_key_exists($data['order']['type_order'], $this->_order_types)) {
+			$this->_orders[] = (new $this->_order_types[$data['order']['type_order']])->processOrder($data);
 		}
 	}
 }

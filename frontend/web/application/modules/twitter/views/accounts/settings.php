@@ -1,20 +1,13 @@
 <?php
-
 $this->pageTitle = Yii::app()->name . ' - ' . Yii::t('main', '_twitterSettings_Title');
-
 $this->metaDescription = Yii::t('main', '_twitterSettings_Description');
 
-
-
 $this->breadcrumbs[] = array(
+	0 => array(Yii::t('breadcrumbs', '_twitter'), '/twitter'),
+	1 => array(Yii::t('breadcrumbs', '_tw_accounts'), '/twitter/accounts'),
+	2 => array(Yii::t('breadcrumbs', '_account_setting', array('{account}' => '@' . Html::encode($model->screen_name))),
 
-    0 => array(Yii::t('breadcrumbs', '_twitter'), '/twitter'),
-
-    1 => array(Yii::t('breadcrumbs', '_tw_accounts'), '/twitter/accounts'),
-
-    2 => array(Yii::t('breadcrumbs', '_account_setting', array('{account}' => '@' . Html::encode($model->screen_name))),
-
-        '')
+		'')
 
 );
 
@@ -22,13 +15,11 @@ $this->breadcrumbs[] = array(
 
 <?php
 
-if ($model->_status == 0)
+if($model->_status == 0) {
 
-{
+	?>
 
-    ?>
-
-    <div style="margin-bottom: 15px;">
+	<div style="margin-bottom: 15px;">
 
         <div class="line_info alert">
 
@@ -42,29 +33,27 @@ if ($model->_status == 0)
 
 <?php
 
-if (Yii::app()->user->hasFlash('tw_settings_message'))
+if(Yii::app()->user->hasFlash('tw_settings_message')) {
 
-{
+	$dialog = Yii::app()->user->getFlash('tw_settings_message');
 
-    $dialog=Yii::app()->user->getFlash('tw_settings_message');
+	?>
 
-    ?>
-
-    <div id="_flashDialog" style="margin-bottom: 11px;" class="line_info <?php echo ($dialog['type']=='success')?'ok':'alert'; ?>">
+	<div id="_flashDialog" style="margin-bottom: 11px;" class="line_info <?php echo ($dialog['type'] == 'success') ? 'ok' : 'alert'; ?>">
 
         <?php echo Html::encode($dialog['text']); ?>
 
     </div>
 
-    <script>
+	<script>
 
         setTimeout(function ction() {
 
-            $('#_flashDialog').fadeOut();
+				$('#_flashDialog').fadeOut();
 
-        }
+			}
 
-        , 4000);
+			, 4000);
 
     </script>
 
@@ -72,27 +61,25 @@ if (Yii::app()->user->hasFlash('tw_settings_message'))
 
 <?php
 
-if (Yii::app()->user->hasFlash('_settings_save_success'))
+if(Yii::app()->user->hasFlash('_settings_save_success')) {
 
-{
+	?>
 
-    ?>
-
-    <div id="_flash" style="margin-bottom: 11px;" class="line_info ok">
+	<div id="_flash" style="margin-bottom: 11px;" class="line_info ok">
 
         <?php echo Yii::app()->user->getFlash('_settings_save_success'); ?>
 
     </div>
 
-    <script>
+	<script>
 
         setTimeout(function ction() {
 
-            $('#_flash').fadeOut();
+				$('#_flash').fadeOut();
 
-        }
+			}
 
-        , 3000);
+			, 3000);
 
     </script>
 
@@ -148,95 +135,90 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                     <table>
 
-                        <tr><td class="information"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_yaAvtoritet'); ?> <span id="yandex_rank"><?php echo $model->yandex_rank; ?></span></td>
+                        <tr><td class="information"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_yaAvtoritet'); ?>
+								<span id="yandex_rank"><?php echo $model->yandex_rank; ?></span></td>
 
                             <td class="recheck"><?php
 
-                                if ($last_update['yandex_rank'] == 0)
+								if($last_update['yandex_rank'] == 0) {
 
-                                {
+									?>
+									<div class="updBtn" data-check="yandex_rank" data-send="<?php echo Html::encode($model->id); ?>">
+									<span onclick="Settings._credentials(this);
 
-                                    ?><div class="updBtn" data-check="yandex_rank" data-send="<?php echo Html::encode($model->id); ?>"><span onclick="Settings._credentials(this);
+                                                return false;"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_check'); ?></span>
+									</div><?php
 
-                                                return false;"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_check'); ?></span></div><?php
+								}
 
-                                    }
+								else {
 
-                                    else
+									?>
+									<div class="updBtn"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_recentlyTested'); ?></div><?php } ?></td></tr>
 
-                                    {
-
-                                        ?><div class="updBtn"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_recentlyTested'); ?></div><?php } ?></td></tr>
-
-                        <tr><td class="information"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_yaIndex'); ?> <span id="in_yandex"><?php echo ($model->in_yandex) ? Yii::t('main', '_yes') : Yii::t('main', '_no'); ?></span></td>
-
-                            <td class="recheck"><?php
-
-                                if ($model->in_yandex == 0)
-
-                                {
-
-                                    ?><?php
-
-                                    if ($last_update['in_yandex'] == 0)
-
-                                    {
-
-                                        ?><div class="updBtn" data-check="in_yandex" data-send="<?php echo Html::encode($model->id); ?>"><span onclick="Settings._credentials(this);
-
-                                                        return false;"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_check'); ?></span></div><?php
-
-                                        }
-
-                                        else
-
-                                        {
-
-                                            ?><div class="updBtn"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_recentlyTested'); ?></div><?php } ?><?php } ?></td></tr>
-
-                        <tr><td class="information"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_googlePr'); ?> <span id="google_pr"><?php echo $model->google_pr; ?></span></td>
+                        <tr><td class="information"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_yaIndex'); ?>
+								<span id="in_yandex"><?php echo ($model->in_yandex) ? Yii::t('main', '_yes') : Yii::t('main', '_no'); ?></span></td>
 
                             <td class="recheck"><?php
 
-                                if ($last_update['google_pr'] == 0)
+								if($model->in_yandex == 0) {
 
-                                {
+									?><?php
 
-                                    ?><div class="updBtn" data-check="google_pr" data-send="<?php echo Html::encode($model->id); ?>"><span onclick="Settings._credentials(this);
+									if($last_update['in_yandex'] == 0) {
 
-                                                return false;"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_check'); ?></span></div><?php
+										?>
+										<div class="updBtn" data-check="in_yandex" data-send="<?php echo Html::encode($model->id); ?>">
+										<span onclick="Settings._credentials(this);
 
-                                    }
+                                                        return false;"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_check'); ?></span>
+										</div><?php
 
-                                    else
+									}
 
-                                    {
+									else {
 
-                                        ?><div class="updBtn"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_recentlyTested'); ?></div><?php } ?></td></tr>
+										?>
+										<div class="updBtn"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_recentlyTested'); ?></div><?php } ?><?php } ?></td></tr>
+
+                        <tr><td class="information"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_googlePr'); ?>
+								<span id="google_pr"><?php echo $model->google_pr; ?></span></td>
+
+                            <td class="recheck"><?php
+
+								if($last_update['google_pr'] == 0) {
+
+									?>
+									<div class="updBtn" data-check="google_pr" data-send="<?php echo Html::encode($model->id); ?>">
+									<span onclick="Settings._credentials(this);
+
+                                                return false;"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_check'); ?></span>
+									</div><?php
+
+								}
+
+								else {
+
+									?>
+									<div class="updBtn"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_recentlyTested'); ?></div><?php } ?></td></tr>
 
                             <!-- <tr><td class="information"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_googleIndex'); ?> <span id="in_google"><?php echo ($model->in_google) ? Yii::t('main', '_yes') : Yii::t('main', '_no'); ?></span></td>
 
                             <td class="recheck"><?php
 
-                        if ($model->in_google == 0)
+							if($model->in_google == 0) {
 
-                        {
+								?><?php
 
-                            ?><?php
+								if($last_update['in_google'] == 0) {
 
-                            if ($last_update['in_google'] == 0)
+									?><div class="updBtn" data-check="in_google" data-send="<?php echo Html::encode($model->id); ?>"><span onclick="Settings._credentials(this); return false;"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_check'); ?></span></div><?php
 
-                            {
+								}
 
-                                ?><div class="updBtn" data-check="in_google" data-send="<?php echo Html::encode($model->id); ?>"><span onclick="Settings._credentials(this); return false;"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_check'); ?></span></div><?php
+								else {
 
-                            }
-
-                            else
-
-                            {
-
-                                ?><div class="updBtn"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_recentlyTested'); ?></div><?php } ?><?php } ?></td></tr> -->
+									?><div class="updBtn"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_recentlyTested'); ?></div><?php } ?><?php } ?></td></tr> -->
 
                     </table>
 
@@ -252,13 +234,13 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                                 <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch"<?php echo ($model->_status == 1) ? ' checked' : ''; ?><?php
 
-                                echo (in_array($model->_status, array(
+								echo (in_array($model->_status, array(
 
-                                    '1', '7'))) ? '' : ' disabled';
+									'1', '7'))) ? '' : ' disabled';
 
-                                ?> onchange="Settings._status(this, '<?php echo $model->id; ?>');
+								?> onchange="Settings._status(this, '<?php echo $model->id; ?>');
 
-                                return false;">
+									return false;">
 
                                 <label class="onoffswitch-label" for="myonoffswitch">
 
@@ -278,7 +260,8 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                 <div id="block_1_3_3">
 
-                    <span class="block"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_accountStatus'); ?> <span id="_status"><?php echo Html::twStatus($model->_status, $model->_message); ?></span></span>
+                    <span class="block"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_accountStatus'); ?>
+						<span id="_status"><?php echo Html::twStatus($model->_status, $model->_message); ?></span></span>
 
                     <span class="block itr"><i class="tooltip" title="<?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_iTRtooltip'); ?>">?</i> <?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_iTR'); ?> <?php echo $model->itr; ?> </span>
 
@@ -290,9 +273,9 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
         <div id="block_2" class="shadow"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_settings'); ?></div>
 
-        <?php echo Html::beginForm('', 'POST', array('id' => 'settingsForm')); ?>
+		<?php echo Html::beginForm('', 'POST', array('id' => 'settingsForm')); ?>
 
-        <div id="block_3">
+		<div id="block_3">
 
             <div id="block_3_line">
 
@@ -306,17 +289,15 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                     </div>
 
-                    <?php
+					<?php
 
-                    if ($settings->getError('_subject'))
+					if($settings->getError('_subject')) {
 
-                    {
+						echo Html::error($settings, '_subject');
 
-                        echo Html::error($settings, '_subject');
+					}
 
-                    }
-
-                    ?>
+					?>
 
                 </div>
 
@@ -330,17 +311,17 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                     <?php
 
-                    echo Html::activeRadioButtonList($settings, '_gender', array(
+					echo Html::activeRadioButtonList($settings, '_gender', array(
 
-                        '2' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_men'),
+						'2' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_men'),
 
-                        '1' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_woman'),
+						'1' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_woman'),
 
-                        '0' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_any')), array(
+						'0' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_any')), array(
 
-                        'separator' => '&nbsp;'));
+						'separator' => '&nbsp;'));
 
-                    ?>
+					?>
 
                 </div>
 
@@ -354,11 +335,11 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                     <?php
 
-                    echo Html::activeDropDownList($settings, '_age', $ageData, array(
+					echo Html::activeDropDownList($settings, '_age', $ageData, array(
 
-                        'class' => 'styler'));
+						'class' => 'styler'));
 
-                    ?>
+					?>
 
                 </div>
 
@@ -368,21 +349,22 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
             <div id="block_3_line">
 
-                <div id="block_3_line_text"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_modeOperation'); ?> <i class="tooltip" title="<?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_modeOperationTooltip'); ?>">?</i></div>
+                <div id="block_3_line_text"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_modeOperation'); ?>
+					<i class="tooltip" title="<?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_modeOperationTooltip'); ?>">?</i></div>
 
                 <div id="block_3_line_form">
 
                     <?php
 
-                    echo Html::activeRadioButtonList($settings, 'working_in', array(
+					echo Html::activeRadioButtonList($settings, 'working_in', array(
 
-                        '0' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_modeOperationManual'),
+						'0' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_modeOperationManual'),
 
-                        '1' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_modeOperationAutomatic')), array(
+						'1' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_modeOperationAutomatic')), array(
 
-                        'separator' => '&nbsp;'));
+						'separator' => '&nbsp;'));
 
-                    ?>
+					?>
 
                 </div>
 
@@ -392,17 +374,15 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                 <div id="block_3_line_text"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_pricePost'); ?>
 
-                    <span class="text_price_fix"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_pricePostRecommend'); ?> <?php echo CMoney::_c(CMoney::itrCost($model->itr), true); ?> <?php
+					<span class="text_price_fix"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_pricePostRecommend'); ?> <?php echo CMoney::_c(CMoney::itrCost($model->itr), true); ?> <?php
 
-                        if ($model->in_yandex)
+						if($model->in_yandex) {
 
-                        {
+							echo '(+ ' . CMoney::_c(2, true) . ' "быстроробот")';
 
-                            echo '(+ ' . CMoney::_c(2, true) . ' "быстроробот")';
+						}
 
-                        }
-
-                        ?></span>
+						?></span>
 
                 </div>
 
@@ -410,23 +390,21 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                     <?php
 
-                    echo Html::activeTextField($settings, '_price', array(
+					echo Html::activeTextField($settings, '_price', array(
 
-                        'placeholder' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_pricePostInput')));
+						'placeholder' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_pricePostInput')));
 
-                    ?>
+					?>
 
-                    <?php
+					<?php
 
-                    if ($settings->getError('_price'))
+					if($settings->getError('_price')) {
 
-                    {
+						echo Html::error($settings, '_price');
 
-                        echo Html::error($settings, '_price');
+					}
 
-                    }
-
-                    ?>
+					?>
 
                 </div>
 
@@ -434,29 +412,28 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
             <div id="block_3_line">
 
-                <div id="block_3_line_text"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_priceRuntime'); ?> <i class="tooltip" title="<?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_priceRuntimeTooltip'); ?>">?</i></div>
+                <div id="block_3_line_text"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_priceRuntime'); ?>
+					<i class="tooltip" title="<?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_priceRuntimeTooltip'); ?>">?</i></div>
 
                 <div id="block_3_line_form">
 
                     <?php
 
-                    echo Html::activeTextField($settings, '_timeout', array(
+					echo Html::activeTextField($settings, '_timeout', array(
 
-                        'placeholder' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_priceRuntimeInput')));
+						'placeholder' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_priceRuntimeInput')));
 
-                    ?>
+					?>
 
-                    <?php
+					<?php
 
-                    if ($settings->getError('_timeout'))
+					if($settings->getError('_timeout')) {
 
-                    {
+						echo Html::error($settings, '_timeout');
 
-                        echo Html::error($settings, '_timeout');
+					}
 
-                    }
-
-                    ?>				
+					?>
 
                 </div>
 
@@ -476,11 +453,11 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
             <?php
 
-            echo Html::activeRadioButtonList($settings, 'fast_posting', array(
+			echo Html::activeRadioButtonList($settings, 'fast_posting', array(
 
-                '1' => Yii::t('main', '_yes'), '0' => Yii::t('main', '_no')), array('separator' => '&nbsp;'));
+				'1' => Yii::t('main', '_yes'), '0' => Yii::t('main', '_no')), array('separator' => '&nbsp;'));
 
-            ?>
+			?>
 
                     </div>
 
@@ -492,7 +469,7 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                     <?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_retweet'); ?>
 
-                    <span class="text_price_fix"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_PriceFixed'); ?> N руб.</span>
+					<span class="text_price_fix"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_PriceFixed'); ?> N руб.</span>
 
                 </div>
 
@@ -500,13 +477,13 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                     <?php
 
-                    echo Html::activeRadioButtonList($settings, 'allow_retweet', array(
+					echo Html::activeRadioButtonList($settings, 'allow_retweet', array(
 
-                        '1' => Yii::t('main', '_yes'),
+						'1' => Yii::t('main', '_yes'),
 
-                        '0' => Yii::t('main', '_no')), array('separator' => '&nbsp;'));
+						'0' => Yii::t('main', '_no')), array('separator' => '&nbsp;'));
 
-                    ?>
+					?>
 
                 </div>
 
@@ -516,7 +493,8 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                 <div id="block_3_line_text">
 
-                    <?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_followers'); ?> <i class="tooltip" title="<?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_followersTooltip'); ?>">?</i>
+                    <?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_followers'); ?>
+					<i class="tooltip" title="<?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_followersTooltip'); ?>">?</i>
 
                     <span class="text_price_fix"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_PriceFixed'); ?> N руб.</span>
 
@@ -526,13 +504,13 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                     <?php
 
-                    echo Html::activeRadioButtonList($settings, 'allow_following', array(
+					echo Html::activeRadioButtonList($settings, 'allow_following', array(
 
-                        '1' => Yii::t('main', '_yes'),
+						'1' => Yii::t('main', '_yes'),
 
-                        '0' => Yii::t('main', '_no')), array('separator' => '&nbsp;'));
+						'0' => Yii::t('main', '_no')), array('separator' => '&nbsp;'));
 
-                    ?>
+					?>
 
                 </div>
 
@@ -542,7 +520,8 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                 <div id="block_3_line_text">
 
-                    <?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_fast_index'); ?> <i class="tooltip" title="<?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_fast_indexTooltip'); ?>">?</i>
+                    <?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_fast_index'); ?>
+					<i class="tooltip" title="<?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_fast_indexTooltip'); ?>">?</i>
 
                     <span class="text_price_fix"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_PriceFixed'); ?> от 3 до 100 руб.</span>
 
@@ -552,13 +531,13 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                     <?php
 
-                    echo Html::activeRadioButtonList($settings, 'allow_following', array(
+					echo Html::activeRadioButtonList($settings, 'allow_following', array(
 
-                        '1' => Yii::t('main', '_yes'),
+						'1' => Yii::t('main', '_yes'),
 
-                        '0' => Yii::t('main', '_no')), array('separator' => '&nbsp;'));
+						'0' => Yii::t('main', '_no')), array('separator' => '&nbsp;'));
 
-                    ?>
+					?>
 
                 </div>
 
@@ -568,7 +547,8 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                 <div id="block_3_line_text">
 
-                    <?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_bonus_pay'); ?> <i class="tooltip" title="<?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_bonus_payTooltip'); ?>">?</i>
+                    <?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_bonus_pay'); ?>
+					<i class="tooltip" title="<?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_bonus_payTooltip'); ?>">?</i>
 
                 </div>
 
@@ -576,13 +556,13 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                     <?php
 
-                    echo Html::activeRadioButtonList($settings, '_allow_bonus_pay', array(
+					echo Html::activeRadioButtonList($settings, '_allow_bonus_pay', array(
 
-                        '1' => Yii::t('main', '_yes'),
+						'1' => Yii::t('main', '_yes'),
 
-                        '0' => Yii::t('main', '_no')), array('separator' => '&nbsp;'));
+						'0' => Yii::t('main', '_no')), array('separator' => '&nbsp;'));
 
-                    ?>
+					?>
 
                 </div>
 
@@ -598,86 +578,51 @@ if (Yii::app()->user->hasFlash('_settings_save_success'))
 
                     <span class="block" style="margin-bottom: 7px;"><?php
 
-                        echo Html::CheckBox('Filter[personal]', $filter->personal, array(
+						echo Html::CheckBox('Filter[personal]', $filter->personal, array(
 
-                            'onchange' => 'inputActive(\'Settings__filter\'); return false;'));
+							'onchange' => 'inputActive(\'Settings__filter\'); return false;'));
 
-                        ?> <?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_stopWordsFilters'); ?></span>
+						?> <?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_stopWordsFilters'); ?></span>
 
                     <span class="block"><?php
 
-                        echo Html::activeTextArea($settings, '_filter', array(
+						echo Html::activeTextArea($settings, '_filter', array(
 
-                            'class' => 'styler no_resize', 'placeholder' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_stopWordsTextarea'),
+							'class' => 'styler no_resize', 'placeholder' => Yii::t('twitterModule.accounts', '_twitterAccountSetting_stopWordsTextarea'),
 
-                            'disabled' => (!$filter->personal) ? 'disabled' : ''));
+							'disabled' => (!$filter->personal) ? 'disabled' : ''));
 
-                        ?></span>
+						?></span>
 
-                    <?php
+					<?php
 
-                    if ($settings->getError('_filter'))
+					if($settings->getError('_filter')) {
 
-                    {
+						echo Html::error($settings, '_filter');
 
-                        echo Html::error($settings, '_filter');
-
-                    }
-
-                    ?>		
-
+					}
+					?>
                 </div>
-
             </div>
-
         </div>
-
         <div id="block_4">
-
-            <?php if ($model->_status == 4)
-
-            { ?>
-
-                <a href="/twitter/accounts/reAuth?tid=<?php echo $model->id; ?>" class="button" />Обновить доступ приложению</a>
-
-            <?php } else if($model->_status == 6 OR Yii::app()->user->checkAccess('admin')) { ?>
-
-                <a href="/twitter/accounts/reCheck?tid=<?php echo $model->id; ?>" class="button" />Перепроверить данные</a>
-
-            <?php } ?>
-
-            <button class="button btn_red" onclick="Settings.accountRemove('<?php echo $model->id; ?>', '<?php
-
-            echo Yii::t('twitterModule.accounts', '_account_remove_title', array(
-
-                '{account}' => Html::encode($model->screen_name)));
-
-            ?>', '<?php echo Yii::t('twitterModule.accounts', '_account_remove_text'); ?>');
-
-                    return false;"><i class="icon-trash"></i> Удалить аккаунт</button>
-
+            <?php if($model->_status == 4) { ?>
+				<a href="/twitter/accounts/reAuth?tid=<?php echo $model->id; ?>" class="button" />Обновить доступ приложению</a>
+			<?php }
+			else if($model->_status == 6 OR Yii::app()->user->checkAccess('admin')) { ?>
+				<a href="/twitter/accounts/reCheck?tid=<?php echo $model->id; ?>" class="button" />Перепроверить данные</a>
+			<?php } ?>
+			<button class="button btn_red" onclick="Settings.accountRemove('<?php echo $model->id; ?>', '<?php echo Yii::t('twitterModule.accounts', '_account_remove_title', array('{account}' => Html::encode($model->screen_name))); ?>', '<?php echo Yii::t('twitterModule.accounts', '_account_remove_text'); ?>'); return false;"><i class="icon-trash"></i> Удалить аккаунт</button>
             <button class="button btn_green">Сохранить настройки</button>
-
         </div>
-
-<?php echo Html::endForm(); ?>	
-
+		<?php echo Html::endForm(); ?>
     </div>
-
 </div>
-
 <div id="dialog-message" title="<?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_deleteModalTitle'); ?>" style="display: none;">
-
     <div class="ui-dialog-content-text">
-
-<?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_deleteModalText'); ?>
-
+		<?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_deleteModalText'); ?>
     </div>
-
     <div class="ui-dialog-content-button">
-
         <button class="button btn_red"><?php echo Yii::t('main', '_yes'); ?></button> <button class="button"><?php echo Yii::t('main', '_no'); ?></button>
-
     </div>
-
 </div>

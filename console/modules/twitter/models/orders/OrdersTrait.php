@@ -13,10 +13,10 @@ trait OrdersTrait
 	/*
 	 * Обрабатываем заказ
 	 */
-	public function processOrder(array $order, array $tasks)
+	public function processOrder(array $order)
 	{
 		if(is_array($order) && $order !== []) {
-			$this->process($order, $tasks);
+			$this->process($order);
 
 			return ['tasks' => $this->getTasks(), 'indexes' => $this->getIndexes(), 'update' => $this->getUpdate()];
 		}
