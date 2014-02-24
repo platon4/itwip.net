@@ -2,10 +2,13 @@
     <?php foreach($model->m->getRows() as $row) { ?>
 		<tr>
 			<td class="id"><?php echo $row['id']; ?></td>
-			<td class=""><a href="<?php echo Html::encode($row['url']); ?>" target="_blank"><?php echo Html::encode($row['url']); ?></a></td>
+			<td class="link">
+            <a href="<?php echo Html::encode($row['url']); ?>" target="_blank"><?php echo Html::encode($row['url']); ?></a>
+            <a href="<?php echo $row['yandex_url']; ?>">проверить <i class="fa fa-external-link"></i></a>
+            </td>
 			<td class="date"><?php echo $row['posted_date']; ?></td>
 			<td class="date"><?php echo $row['check_date']; ?></td>
-			<td class="">
+			<td class="status">
 				<?php
 					switch($row['status'])
 					{
@@ -24,16 +27,16 @@
 					}
 				?>
 			</td>
-			<td class=""><a href="<?php echo $row['yandex_url']; ?>">проверить <i class="fa fa-external-link"></i></a></td>
 		</tr>
     <?php } ?>
 </table>
-<div id="pagesNavigation" style="float: left; padding: 7px 7px;">
-	 <?php $this->renderPartial('application.views.main._pages', array('ajax_query' => 'Twitter.o.g.getPage', 'pages' => $model->m->getPages())); ?>
-</div>
-<div style="float: right; margin-right: 6px;">
+<div class="table_bottom_inside">
+	<div class="page_nav_page">
+	    <?php $this->renderPartial('application.views.main._pages', array('ajax_query' => 'Twitter.o.g.getPage', 'pages' => $model->m->getPages())); ?>
+	</div>
+	<div class="page_nav_how">
 	 <?php echo Yii::t('twitterModule.accounts', '_pageNavHow'); ?>
-	<select name="shoOnPage" onchange="Twitter.o.g.setLimit(this.value); return false;">
+	    <select name="shoOnPage" onchange="Twitter.o.g.setLimit(this.value); return false;">
 			<?php foreach($model->m->getLimits() as $option) {
 				?>
 				<?php
@@ -49,5 +52,6 @@
 				?>
 			<?php } ?>
 		</select>
+	</div>
 </div>
-<div style="clear: both;"></div>
+

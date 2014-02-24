@@ -11,7 +11,7 @@ $this->breadcrumbs[] = array(
 <script>
 	Twitter.o.g.set({"hash": "<?php echo Html::encode($model->m->h); ?>","t":"indexes"});
 </script>
-<div id="status_orders" class="block">
+<div id="status_orders_fast" class="block">
 	<div class="block_title"><div class="block_title_inset"><h5>Детали заказа быстрой индексации (ID <?php echo $model->m->getOrder()['id']; ?>)</h5></div></div>
 	<div class="block_content">
 		<div class="table_head">
@@ -19,11 +19,10 @@ $this->breadcrumbs[] = array(
 				<table>
 					<tr>
 						<td class="id">ID</td>
-						<td class="">Ссылка</td>
+						<td class="link">Ссылка</td>
 						<td class="date"><span title="Время размещения ссылки для индексации в твиттер"><i class="fa fa-clock-o"></i> Размещения</span></td>
 						<td class="date"><span title="Время проверки ссылки на индексацию"><i class="fa fa-clock-o"></i> Проверки</span></td>
-						<td class="">Статус</td>
-						<td class="">Проверить</td>
+						<td class="status">Статус</td>
 					</tr>
 				</table>
 			</div>

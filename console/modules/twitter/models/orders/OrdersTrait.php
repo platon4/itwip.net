@@ -17,7 +17,6 @@ trait OrdersTrait
 	{
 		if(is_array($order) && $order !== []) {
 			$this->process($order);
-die();
 			return ['tasks' => $this->getTasks(), 'indexes' => $this->getIndexes(), 'update' => $this->getUpdate()];
 		}
 		else

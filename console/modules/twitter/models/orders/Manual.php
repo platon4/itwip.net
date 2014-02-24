@@ -15,8 +15,6 @@ class Manual implements OrdersInterface
 	 */
 	protected function process($data)
 	{
-		print_r($data);
-
 		$this->_row = [
 			'order_id' => $data['order']['id'],
 			'order_owner' => $data['order']['owner_id'],

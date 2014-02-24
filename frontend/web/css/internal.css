@@ -618,6 +618,16 @@ a.active {font-size: 13px; text-decoration: none; color: #4F4F4F; cursor: defaul
 #status_orders .acconts_list table .icons { width: 80px; text-align: right; }
 #status_orders .acconts_list table .icons a.delete:hover { color: #FF0000 }
 
+#status_orders_fast { min-width: 890px; }
+#status_orders_fast .table_head table .id { width: 48px; text-align: left; padding-left: 7px; }
+#status_orders_fast .table_head table .link { width:; text-align: left; padding-left: 7px; }
+#status_orders_fast .table_head table .date { width: 110px; text-align: left; padding-left: 7px; }
+#status_orders_fast .table_head table .status { width: 130px; text-align: left; padding-left: 7px; }
+#status_orders_fast .acconts_list table .id { width: 51px; text-align: left; padding-left: 7px; }
+#status_orders_fast .acconts_list table .link { width: ; text-align: left; padding-left: 7px; }
+#status_orders_fast .acconts_list table .date { width: 110px; text-align: left; padding-left: 7px; }
+#status_orders_fast .acconts_list table .status { width:130px; text-align: left; padding-left: 7px; color:; font-size:10px; }
+
 /* Детали заказа */
 #details_orders {}
 #details_orders .table_head table .account { width: 200px !important;}

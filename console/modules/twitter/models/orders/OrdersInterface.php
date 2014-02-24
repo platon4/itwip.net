@@ -8,5 +8,9 @@ interface OrdersInterface
 
 	public function getAccount();
 
+    public function getInterval();
+
+    public function getStartDate();
+
 	public function __destruct();
 } 
