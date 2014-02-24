@@ -15,7 +15,7 @@ class Manual implements OrdersInterface
 	 */
 	protected function process($data)
 	{
-		$redis = Yii::$app->redis;
+		print_r($data);
 
 		$this->_row = [
 			'order_id' => $data['order']['id'],
@@ -25,7 +25,7 @@ class Manual implements OrdersInterface
 		];
 
 		$this->_indexes = [
-			['key' => 'account', 'value' => $this->getParams('account')]
+			['key' => 'account', 'value' => $this->getTaskParams('account')]
 		];
 
 		$this->_update = [
@@ -36,6 +36,6 @@ class Manual implements OrdersInterface
 
 	public function getAccount()
 	{
-		return $this->getParams('account');
+		return $this->getTaskParams('account');
 	}
 }

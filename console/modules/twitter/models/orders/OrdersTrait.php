@@ -17,7 +17,7 @@ trait OrdersTrait
 	{
 		if(is_array($order) && $order !== []) {
 			$this->process($order);
-
+die();
 			return ['tasks' => $this->getTasks(), 'indexes' => $this->getIndexes(), 'update' => $this->getUpdate()];
 		}
 		else
@@ -29,7 +29,7 @@ trait OrdersTrait
 	 *
 	 * @return array or @return null
 	 */
-	public function getParams($key = NULL)
+	public function getTaskParams($key = NULL)
 	{
 		if($this->_params === NULL) {
 			if(isset($this->_data['_params'])) {

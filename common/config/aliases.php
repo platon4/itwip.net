@@ -1,3 +1,5 @@
 <?php
-Yii::setAlias('common', dirname(__DIR__));
-Yii::setAlias('console', dirname(dirname(__DIR__)) . '/console');
+
+Yii::setAlias('common', realpath(__DIR__ . '/../'));
+Yii::setAlias('frontend', realpath(__DIR__ . '/../../frontend'));
+Yii::setAlias('console', realpath(__DIR__ . '/../../console'));

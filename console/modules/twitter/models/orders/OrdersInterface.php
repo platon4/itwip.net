@@ -6,8 +6,6 @@ interface OrdersInterface
 {
 	public function processOrder(array $data);
 
-	public function getParams($key = NULL);
-
 	public function getAccount();
 
 	public function __destruct();
