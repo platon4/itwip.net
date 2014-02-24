@@ -4,7 +4,7 @@ $this->metaDescription = Yii::t('main', '_tw_status_orders_details_Description')
 $this->breadcrumbs[] = array(
 	0 => array(Yii::t('breadcrumbs', '_twitter'), '/twitter'),
 	1 => array(Yii::t('breadcrumbs', '_tw_advertiser'), ''),
-	2 => array(Yii::t('breadcrumbs', '_tw_status_orders'), '/twitter/tweets/status'),
+	2 => array(Yii::t('breadcrumbs', '_tw_status_orders'), '/twitter/orders/status'),
 	3 => array(Yii::t('breadcrumbs', '_tw_status_orders_details'), '')
 );
 ?>

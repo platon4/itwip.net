@@ -13,27 +13,8 @@ class Manual implements OrdersInterface
 	/*
 	 * Обработка заказа
 	 */
-	protected function process($data)
+	public  function create(array $data)
 	{
-		$this->_row = [
-			'order_id' => $data['order']['id'],
-			'order_owner' => $data['order']['owner_id'],
-			'order_type' => $data['order']['type_order'],
-			'account_id' => $this->getAccount()
-		];
-
-		$this->_indexes = [
-			['key' => 'account', 'value' => $this->getTaskParams('account')]
-		];
-
-		$this->_update = [
-			'fields' => ['process_date=:process_date'],
-			'values' => [':process_date' => date('Y-m-d H:i:s')]
-		];
-	}
-
-	public function getAccount()
-	{
-		return $this->getTaskParams('account');
+        return [];
 	}
 }

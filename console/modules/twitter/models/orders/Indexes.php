@@ -4,16 +4,13 @@ namespace console\modules\twitter\models\orders;
 
 class Indexes implements  OrdersInterface
 {
-	use OrdersTrait;
+    use OrdersTrait;
 
-	protected function process($data)
-	{
-		print_r($data);
-		die();
-	}
-
-	/*
-	 * Освобождаем память
-	 */
-
+    /*
+     * Обработка заказа
+     */
+    public  function create(array $data)
+    {
+        return [];
+    }
 }

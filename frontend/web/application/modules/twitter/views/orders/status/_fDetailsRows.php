@@ -3,8 +3,8 @@
 		<tr>
 			<td class="id"><?php echo $row['id']; ?></td>
 			<td class="link">
-            <a href="<?php echo Html::encode($row['url']); ?>" target="_blank"><?php echo Html::encode($row['url']); ?></a>
-            <a href="<?php echo $row['yandex_url']; ?>">проверить <i class="fa fa-external-link"></i></a>
+            <a class="links" href="<?php echo Html::encode($row['url']); ?>" target="_blank"><?php echo Html::encode($row['url']); ?></a>
+            <a class="test" href="<?php echo $row['yandex_url']; ?>" target="_blank"><span title="Проверить наличие ссылки в индексе Яндекса">[проверить]</span></a>
             </td>
 			<td class="date"><?php echo $row['posted_date']; ?></td>
 			<td class="date"><?php echo $row['check_date']; ?></td>
@@ -13,16 +13,16 @@
 					switch($row['status'])
 					{
 						case 0:
-							echo 'Ожидает размещения';
+							echo '<span class="wait" title="Ожидается размещение твита с ссылкой для индексации.">Ожидает размещения</span>';
 							break;
 						case 1:
-							echo 'На индексации';
+							echo '<span class="work" title="Твит с ссылкой размещён, ожидаем время для проверки на индексацию.">На индексации</span>';
 							break;
 						case 2:
-							echo 'Проиндексирована';
+							echo '<span class="ok">Проиндексирована</span>';
 							break;
 						case 3:
-							echo 'Не проиндексирована';
+							echo '<span class="fail" title="К сожалению Ваша ссылка не была проиндексированна Яндексом, деньги будут возвращены на Ваш счёт.">Не проиндексирована</span>';
 							break;
 					}
 				?>

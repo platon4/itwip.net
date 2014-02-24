@@ -624,9 +624,14 @@ a.active {font-size: 13px; text-decoration: none; color: #4F4F4F; cursor: defaul
 #status_orders_fast .table_head table .date { width: 110px; text-align: left; padding-left: 7px; }
 #status_orders_fast .table_head table .status { width: 130px; text-align: left; padding-left: 7px; }
 #status_orders_fast .acconts_list table .id { width: 51px; text-align: left; padding-left: 7px; }
-#status_orders_fast .acconts_list table .link { width: ; text-align: left; padding-left: 7px; }
-#status_orders_fast .acconts_list table .date { width: 110px; text-align: left; padding-left: 7px; }
+#status_orders_fast .acconts_list table .link { width: ; text-align: left; padding-left: 7px; font-size: 11px; }
+#status_orders_fast .acconts_list table .link a.test { color: #7E7E7E; cursor: pointer !important; }
+#status_orders_fast .acconts_list table .date { width: 110px; text-align: left; padding-left: 7px; color: #7E7E7E; font-size: 11px; }
 #status_orders_fast .acconts_list table .status { width:130px; text-align: left; padding-left: 7px; color:; font-size:10px; }
+#status_orders_fast .acconts_list table .status span.wait { color:#7E7E7E; }
+#status_orders_fast .acconts_list table .status span.work { color:#FF0B0B; }
+#status_orders_fast .acconts_list table .status span.ok { color:#1F9D00; }
+#status_orders_fast .acconts_list table .status span.fail { color:#F61212; }
 
 /* Детали заказа */
 #details_orders {}
