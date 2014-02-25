@@ -19,6 +19,8 @@ class WebUser extends CWebUser
 			'path' => $conf['path'],
 			'domain' => $conf['domain'],
 		);
+
+        $this->setStateKeyPrefix('aeca95a0e4be8d86279a0841a65bc4b7');
 		parent::init();
 	}
 
