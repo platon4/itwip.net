@@ -239,17 +239,9 @@ a:hover {
                             </h2>
                         </div>
                     </div>
-                    <!--
-                    <div id="notification" style="display:none">
-                        <div class="title_modal_info">Мы пришлём уведомление об открытии, на эл.почту</div>
-                        <input type="text" placeholder="Оставьте в поле вашу эл.почту: email@gmail.com">
-                        <button id="authButton" class="button btn_blue">Согласен</button>
-                        <div class="notification_all">Уже подписались на уведомление человек: 1698</div>
-                    </div>
-                    -->
                     <div id="notification">
                         <div class="title_modal_info">А пока предлагаем посетить наше сообщество</div>
-                            Зарегистрированные пользователи могут обсудить обновление <a href="http://community.itwip.net/novosti-servisa/zakrytie-servisa-na-obnovlenie.html">- тут.</a><br>
+                            Зарегистрированные пользователи могут обсудить обновление - <a href="http://community.itwip.net/novosti-servisa/zakrytie-servisa-na-obnovlenie.html">тут.</a><br>
                             А не зарегистрированные узнать последние новости.
                     </div>
                     <div class="line"></div>
