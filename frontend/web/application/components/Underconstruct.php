@@ -8,7 +8,7 @@ class Underconstruct
 
         if(Yii::app()->user->checkAccess('tester') && !Yii::app()->user->isGuest)
             $underconstruct = FALSE;
-        elseif(Yii::app()->getRequest()->getUrl() == '/accounts/auth')
+        elseif(strpos(Yii::app()->getRequest()->getUrl(), '/accounts/auth') === 0)
             $underconstruct = FALSE;
 
         if($underconstruct === TRUE) {
