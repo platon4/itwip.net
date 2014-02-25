@@ -25,11 +25,20 @@ return array(
         'bizRule' => null,
         'data' => null
     ),
+    'tester' => array(
+        'type' => CAuthItem::TYPE_ROLE,
+        'description' => 'Tester',
+        'children' => array(
+            'trusted',
+        ),
+        'bizRule' => null,
+        'data' => null
+    ),
     'moderator' => array(
         'type' => CAuthItem::TYPE_ROLE,
         'description' => 'Moderator',
         'children' => array(
-            'trusted',
+            'tester',
         ),
         'bizRule' => null,
         'data' => null

@@ -7,6 +7,7 @@ $params = array_merge(
 
 return [
 	'basePath' => dirname(__DIR__),
+    'preload' => ['underconstruct'],
 	'name' => 'iTwip',
 	'homeUrl' => 'http://itwip.net/',
 	'sourceLanguage' => 'en_US',
@@ -39,6 +40,9 @@ return [
 			return true;
 		},
 	'components' => [
+        'underconstruct' => [
+            'class' => 'Underconstruct'
+        ],
 		'cache' => [
 			'class' => 'system.caching.CFileCache',
 		],
