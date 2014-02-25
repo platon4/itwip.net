@@ -241,7 +241,7 @@ a:hover {
                     </div>
                     <div id="notification">
                         <div class="title_modal_info">А пока предлагаем посетить наше сообщество</div>
-                            Зарегистрированные пользователи могут обсудить обновление - <a href="http://community.itwip.net/novosti-servisa/zakrytie-servisa-na-obnovlenie.html">тут.</a><br>
+                            Зарегистрированные пользователи могут обсудить обновление - <a href="http://community.itwip.net/novosti-servisa/zakrytie-servisa-na-obnovlenie.html">тут</a>.<br>
                             А не зарегистрированные узнать последние новости.
                     </div>
                     <div class="line"></div>
