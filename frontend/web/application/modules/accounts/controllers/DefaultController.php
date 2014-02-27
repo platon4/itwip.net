@@ -2,6 +2,8 @@
 
 class DefaultController extends Controller
 {
+    public $activeMenu = 'accounts';
+
     public function actions()
     {
         return array(

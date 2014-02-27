@@ -2,6 +2,8 @@
 
 class MessagesController extends Controller
 {
+    public $activeMenu = 'accounts';
+
     public function filters()
     {
         return array(

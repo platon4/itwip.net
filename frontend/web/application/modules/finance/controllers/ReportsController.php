@@ -1,6 +1,8 @@
 <?php
 
-class ReportsController extends Controller {
+class ReportsController extends Controller
+{
+    public $activeMenu = 'accounts';
 
     public function filters()
     {
@@ -285,5 +287,4 @@ class ReportsController extends Controller {
         echo json_encode(array('code'=>200,'html'=>$html));
         Yii::app()->end();
     }
-
 }

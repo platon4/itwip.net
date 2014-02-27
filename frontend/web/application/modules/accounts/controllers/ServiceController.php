@@ -1,6 +1,8 @@
 <?php
 
-class ServiceController extends Controller {
+class ServiceController extends Controller
+{
+    public $activeMenu = 'accounts';
 
     public function filters()
     {

@@ -251,7 +251,7 @@ Tweets = {
         queryString: '',
         limit: 10,
         _order: 'date',
-        _oType: 'ASC',
+        _oType: 'DESC',
         parseTemplate: '',
         _tid: null,
         params: []

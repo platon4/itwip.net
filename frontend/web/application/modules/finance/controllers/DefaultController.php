@@ -1,6 +1,8 @@
 <?php
 
-class DefaultController extends Controller {
+class DefaultController extends Controller
+{
+    public $activeMenu = 'accounts';
 
     public function init()
     {
@@ -32,9 +34,6 @@ class DefaultController extends Controller {
 
     public function actionIndex()
     {
-        //if(!Yii::app()->user->checkAccess('admin') AND Yii::app()->user->id!=3)
-           // $this->_message('На странице ведутся технические работы. В скором времени доступ будет восстановлен.');
-        
         $balances=Yii::app()->db->createCommand("SELECT amount,_money_type FROM {{money_blocking}} WHERE owner_id=:owner")->queryAll(true,array(
             ':owner'=>Yii::app()->user->id));
 
@@ -187,5 +186,4 @@ class DefaultController extends Controller {
                 throw new CHttpException('404',Yii::t('financeModule.index','Unable to resolve the request.'));
         }
     }
-
 }

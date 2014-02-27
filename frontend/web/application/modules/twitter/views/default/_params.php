@@ -96,7 +96,7 @@
                 </td>
             </tr>
         </table>
-    </div> 
+    </div>
     <div id="block_1_2"></div>
     <div id="block_1_3">
         <h3 class="top_title"><?php echo Yii::t('twitterModule.tweets','_title_more_settings'); ?></h3>
@@ -138,12 +138,21 @@
 					<?php echo Html::activeCheckBox($model, 'pType[manual]'); ?> <?php echo Yii::t('main', '_manual'); ?> <?php echo Html::activeCheckBox($model, 'pType[auto]'); ?> <?php echo Yii::t('main', '_auto'); ?>
 				</td>
             </tr>
+            <tr>
+                <td class="info_param radios">Способ оплаты</td>
+                <td class="param radios">
+                    <?php echo Html::activeCheckBox($model, 'payMethod[rv]'); ?> <?php echo Yii::t('twitterModule.tweets', '_balance_spend_personal'); ?> <?php echo Html::activeCheckBox($model, 'payMethod[bv]'); ?> <?php echo Yii::t('twitterModule.tweets', '_balance_spend_bonus'); ?>
+                </td>
+            </tr>
         </table>
         <h3 class="top_title"><?php echo Yii::t('twitterModule.tweets','_title_personal_accounts_filtering'); ?></h3>
         <table>
-            <tr><td><?php echo Html::activeCheckBox($model, 'show_only_white_list'); ?> <?php echo Yii::t('twitterModule.tweets', '_accounts_filtering_4'); ?></td></tr>
-            <tr><td><?php echo Html::activeCheckBox($model, 'not_black_list'); ?> <?php echo Yii::t('twitterModule.tweets', '_accounts_filtering_5'); ?></td></tr>
-            <tr><td><?php echo Html::activeRadioButtonList($model, 'pay_method', [0 => Yii::t('twitterModule.tweets', '_balance_spend_personal'), 1 => Yii::t('twitterModule.tweets', '_balance_spend_bonus')], ['separator' => '&nbsp;']); ?></td></tr>
-        </table> 
+            <tr>
+                <td class="info_param">Черно-белый список</td>
+                <td class="param">
+                    <?php echo Html::dropDownList('Twitter[bw]', '', [0 => Yii::t('main', '_does_not_matter'), 1 => Yii::t('twitterModule.tweets', '_accounts_filtering_4'), 2 => Yii::t('twitterModule.tweets', '_accounts_filtering_5')]); ?>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>

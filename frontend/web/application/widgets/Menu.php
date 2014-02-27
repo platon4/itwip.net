@@ -2,275 +2,211 @@
 
 class Menu extends CWidget
 {
+    public $breadcrumbs = [];
+    public $favMenu = [];
+    public $menu = [];
+    public $ajax = FALSE;
+    public $active = [];
+    public $mainMenu = [];
+    public $addonsList;
+    public $activeBlock;
 
-	public $breadcrumbs = array();
-	public $favMenu = array();
-	public $menu = array();
-	public $ajax = false;
-	public $active = array();
-	public $mainMenu = array();
-	public $isActive = false;
-	public $activeBlock = "main";
-	public $addonsList;
+    public function init()
+    {
+        $this->getMenuData();
+        $this->getFavoritsList();
 
-	public function init()
-	{
-		$this->getMenuData();
-		$this->getFavoritsList();
+        if(!$this->ajax)
+            $this->render('userMenu', array('userMenu' => $this->menu['list']));
+        else
+            $this->render('favMenu', array('userMenu' => $this->menu['list']));
+    }
 
-		if(!$this->ajax) {
-			$this->render('userMenu', array('userMenu' => $this->menu['list']));
-		}
-		else {
-			$this->render('favMenu', array('userMenu' => $this->menu['list']));
-		}
+    public function getMenu()
+    {
+        $i = 0;
 
-		Yii::app()->session['_menu'] = $this->activeBlock;
-	}
+        foreach($this->menu['list'] as $element) {
 
-	public function setActiveMenu()
-	{
-		$z3q6f    = explode("/", Yii::app()->request->requestUri);
-		$inActive = array();
+            $i++;
 
-		foreach($z3q6f as $k) {
-			if(trim($k)) {
-				$inActive[] = $k;
-			}
-		}
+            $params = ["data-active=\"con_m_" . $i . "\""];
 
-		if(isset($inActive[0]) AND in_array($inActive[0], $this->menu['main'])) {
-			$this->isActive    = true;
-			$this->activeBlock = $inActive[0];
-		}
-		else {
-			if(!$this->isActive && isset($this->menu['main']) && isset($this->menu['active']) && count($inActive)) {
-				foreach($this->menu['main'] as $_k) {
-					if(isset($this->menu['active'][$_k])) {
-						foreach($this->menu['active'][$_k] as $chk) {
-							if($chk == $inActive[0]) {
-								$this->isActive    = true;
-								$this->activeBlock = $_k;
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+            if($i === 1)
+                $params[] = "style=\"border-top: none;\"";
 
-	public function getMenu()
-	{
-		$this->setActiveMenu();
+            if($this->activeBlock == $element['_active'])
+                $params[] = "class=\"active no_remove\"";
 
-		$i = 0;
+            if($element['url'] == '/')
+                $link = '/';
+            else
+                $link = !empty($element['url']) ? $element['url'] : 'javascript:;';
 
-		foreach($this->menu['list'] as $element) {
+            echo '<li ' . implode(" ", $params) . '><a href="' . $link . '" id="m_' . $i . '"><span class="menu_icon"><i class="' . $element['icon'] . '"></i></span><span class="menu_alt"> ' . Yii::t('menu', $element['_key']) . '</span></a>' . Html::openTag('div', array('class' => 'gradient')) . Html::closeTag('div') . '</li>';
+        }
+    }
 
-			$i++;
+    public function getParentMenu($data, $parent = FALSE)
+    {
+        echo CHtml::openTag('ul');
 
-			$params = array();
+        foreach($data as $element) {
+            echo Html::openTag('li');
 
-			if($i == 1) {
-				$params[] = "style=\"border-top: none;\"";
-			}
+            if(trim($element['url']) != "") {
+                $favActive = (in_array($element['id'], $this->favMenu)) ? " active" : "";
 
-			if($this->activeBlock == $element['nactive']) {
-				$params[] = "class=\"active no_remove\"";
-			}
+                if($parent)
+                    $angel = Html::openTag('i', array('class' => 'fa fa-caret-right')) . Html::closeTag('i');
+                else
+                    $angel = '';
 
-			$params[] = "data-active=\"con_m_" . $i . "\"";
+                echo Html::link($angel . Yii::t('menu', $element['_key']) . Html::openTag('span', array(
+                        'id'      => 'fav_' . $element['id'], 'class' => 'like_menu fav-icon' . $favActive,
+                        'onclick' => '_addFav(\'' . $element['id'] . '\', this); return false;')) . Html::closeTag('span'), $element['url']);
+            } else {
+                echo Yii::t('menu', $element['_key']);
+            }
 
-			if(count($params)) {
-				$imp_elm = " " . implode(" ", $params);
-			}
-			else {
-				$imp_elm = NULL;
-			}
+            echo Html::closeTag('li');
 
-			if($element['url'] == '/') {
-				$link = '/';
-			}
-			else
-				$link = (trim($element['url']) != "") ? Yii::app()->createUrl($element['url']) : 'javascript:;';
+            if(isset($element['smenu']) && count($element['smenu'])) {
+                $this->getParentMenu($element['smenu'], TRUE);
+            }
+        }
 
-			echo '<li' . $imp_elm . '><a href="' . $link . '" id="m_' . $i . '"><span class="menu_icon"><i class="' . $element['icon'] . '"></i></span><span class="menu_alt"> ' . Yii::t('menu', $element['_key']) . '</span></a>' . Html::openTag('div', array('class' => 'gradient')) . Html::closeTag('div') . '</li>';
-		}
+        echo CHtml::closeTag('ul');
+    }
 
-		return;
-	}
+    public function getParentMenuSelect($data, $level = 0)
+    {
+        $level = $level + 1;
 
-	public function getParentMenu($data, $parent = false)
-	{
-		echo CHtml::openTag('ul');
+        $separator = NULL;
 
-		foreach($data as $element) {
-			echo Html::openTag('li');
+        for($e = 0 ; $e < $level ; $e++) {
+            $separator .= "-";
+        }
 
-			if(trim($element['url']) != "") {
-				$favActive = (in_array($element['id'], $this->favMenu)) ? " active" : "";
+        foreach($data as $element) {
+            if(!in_array($element['id'], $this->favMenu)) {
+                if(trim($element['url']) == "" OR !$element['parrent']) {
+                    $disabled = "disabled";
+                } else {
+                    $disabled = "";
+                }
 
-				if($parent)
-					$angel = Html::openTag('i', array('class' => 'fa fa-caret-right')) . Html::closeTag('i');
-				else
-					$angel = '';
+                echo Html::openTag('option', array('disabled' => $disabled, 'value' => $element['id'])) . $separator . " " . Yii::t('menu', $element['_key']) . Html::closeTag('option');
 
-				echo Html::link($angel . Yii::t('menu', $element['_key']) . Html::openTag('span', array(
-						'id' => 'fav_' . $element['id'], 'class' => 'like_menu fav-icon' . $favActive,
-						'onclick' => '_addFav(\'' . $element['id'] . '\', this); return false;')) . Html::closeTag('span'), $element['url']);
-			}
-			else {
-				echo Yii::t('menu', $element['_key']);
-			}
+                if(isset($element['smenu']) && count($element['smenu'])) {
+                    $this->getParentMenuSelect($element['smenu'], $level);
+                }
+            }
+        }
+    }
 
-			echo Html::closeTag('li');
+    public function getFavoritsList()
+    {
+        if(is_string($this->favMenu) && $this->ajax)
+            $load_fav = explode(",", trim($this->favMenu));
+        else
+            $load_fav = explode(",", trim(Yii::app()->user->_get('favMenu')));
 
-			if(isset($element['smenu']) && count($element['smenu'])) {
-				$this->getParentMenu($element['smenu'], true);
-			}
-		}
+        $favArr = (trim($this->addonsList)) ? explode(",", trim($this->addonsList)) : $load_fav;
 
-		echo CHtml::closeTag('ul');
-	}
+        foreach($favArr as $v) {
+            if(intval($v)) {
+                $this->favMenu[] = $v;
+            }
+        }
+    }
 
-	public function getParentMenuSelect($data, $level = 0)
-	{
-		$level = $level + 1;
+    public function getFavoritsMenu()
+    {
+        if(count($this->favMenu)) {
+            echo CHtml::openTag('ul');
 
-		$separator = NULL;
+            foreach($this->menu['_list'] as $element) {
+                if(in_array($element['id'], $this->favMenu)) {
+                    echo Html::openTag('li');
 
-		for($e = 0; $e < $level; $e++) {
-			$separator .= "-";
-		}
+                    if(trim($element['url']) != "") {
+                        $favActive = (in_array($element['id'], $this->favMenu)) ? " active" : "";
 
-		foreach($data as $element) {
-			if(!in_array($element['id'], $this->favMenu)) {
-				if(trim($element['url']) == "" OR !$element['parrent']) {
-					$disabled = "disabled";
-				}
-				else {
-					$disabled = "";
-				}
+                        echo Html::link(Yii::t('menu', $element['_key']), $element['url']) . Html::openTag('span', array(
+                                'class' => 'like_menu fav-icon' . $favActive, 'onclick' => '_addFav(\'' . $element['id'] . '\', this); return false;')) . Html::closeTag('span');
+                    } else {
+                        echo Yii::t('menu', $element['_key']);
+                    }
 
-				echo Html::openTag('option', array('disabled' => $disabled, 'value' => $element['id'])) . $separator . " " . Yii::t('menu', $element['_key']) . Html::closeTag('option');
+                    echo Html::closeTag('li');
 
-				if(isset($element['smenu']) && count($element['smenu'])) {
-					$this->getParentMenuSelect($element['smenu'], $level);
-				}
-			}
-		}
-	}
+                    if(isset($element['smenu']) && count($element['smenu'])) {
+                        $this->getParrentMenu($element['smenu']);
+                    }
+                }
+            }
 
-	public function getFavoritsList()
-	{
-		if(is_string($this->favMenu) && $this->ajax)
-			$load_fav = explode(",", trim($this->favMenu));
-		else
-			$load_fav = explode(",", trim(Yii::app()->user->_get('favMenu')));
+            echo CHtml::closeTag('ul');
+        }
+    }
 
-		$favArr = (trim($this->addonsList)) ? explode(",", trim($this->addonsList)) : $load_fav;
+    protected function _setMenu($menu, $id = 0, $_k = FALSE)
+    {
+        $list = [];
 
-		foreach($favArr as $v) {
-			if(intval($v)) {
-				$this->favMenu[] = $v;
-			}
-		}
-	}
+        foreach($menu as $svalue) {
+            if(!Yii::app()->user->checkAccess($svalue['access']))
+                continue;
 
-	public function getFavoritsMenu()
-	{
-		if(count($this->favMenu)) {
-			echo CHtml::openTag('ul');
+            if($id) {
+                if($svalue['parrent'] == $id) {
+                    $this->active[$_k][] = substr($svalue['_key'], 1);
+                    $svalue['smenu'] = $this->_setMenu($menu, $svalue['id'], $_k);
+                    $list[] = $svalue;
+                }
+            } else {
+                if(!$svalue['parrent']) {
+                    $this->mainMenu[] = $svalue['_active'];
+                    $svalue['smenu'] = $this->_setMenu($menu, $svalue['id'], $svalue['_active']);
+                    $list[] = $svalue;
+                }
+            }
+        }
 
-			foreach($this->menu['_list'] as $element) {
-				if(in_array($element['id'], $this->favMenu)) {
-					echo Html::openTag('li');
+        return $list;
+    }
 
-					if(trim($element['url']) != "") {
-						$favActive = (in_array($element['id'], $this->favMenu)) ? " active" : "";
+    protected function getMenuData()
+    {
+        $this->menu = Yii::app()->cache->get(md5("menu_getMenuData" . Yii::app()->user->_get('role')));
 
-						echo Html::link(Yii::t('menu', $element['_key']), $element['url']) . Html::openTag('span', array(
-								'class' => 'like_menu fav-icon' . $favActive, 'onclick' => '_addFav(\'' . $element['id'] . '\', this); return false;')) . Html::closeTag('span');
-					}
-					else {
-						echo Yii::t('menu', $element['_key']);
-					}
+        if($this->menu === FALSE) {
+            $_list = Yii::app()->db->createCommand()->select('*')->from('{{menu}}')->order('nsort ASC')->queryAll();
+            $data = $this->_setMenu($_list);
 
-					echo Html::closeTag('li');
+            $klist = array();
 
-					if(isset($element['smenu']) && count($element['smenu'])) {
-						$this->getParrentMenu($element['smenu']);
-					}
-				}
-			}
+            foreach($_list as $k => $v) {
+                $klist[$v['_active']][] = $v;
+            }
 
-			echo CHtml::closeTag('ul');
-		}
-	}
+            $this->menu = array('_klist' => $klist, '_list' => $_list, 'list' => $data, 'active' => $this->active,
+                                'main'   => $this->mainMenu);
 
-	/**
-	 * Protected functions
-	 */
-	protected function _setMenu($menu, $id = 0, $_k = false)
-	{
-		$list = array();
-		$data = $menu;
+            Yii::app()->cache->set(md5("menu_getMenuData" . Yii::app()->user->_get('role')), $this->menu, 24 * 60 * 60);
 
-		foreach($data as $svalue) {
-			if(!Yii::app()->user->checkAccess($svalue['access']))
-				continue;
+            unset($data);
+            unset($klist);
+            unset($_list);
+            $this->_clear();
+        }
+    }
 
-			if($id) {
-				if($svalue['parrent'] == $id) {
-					$this->active[$_k][] = substr($svalue['_key'], 1);
-					$svalue['smenu']     = $this->_setMenu($menu, $svalue['id'], $_k);
-					$list[]              = $svalue;
-				}
-			}
-			else {
-
-				if(!$svalue['parrent']) {
-					$this->mainMenu[] = $svalue['nactive'];
-					$svalue['smenu']  = $this->_setMenu($menu, $svalue['id'], $svalue['nactive']);
-					$list[]           = $svalue;
-				}
-			}
-		}
-
-		return $list;
-	}
-
-	protected function getMenuData()
-	{
-		$this->menu = Yii::app()->cache->get(md5("menu_getMenuData" . Yii::app()->user->_get('role')));
-
-		if($this->menu === false) {
-			$_list = Yii::app()->db->createCommand()->select('*')->from('{{menu}}')->order('nsort ASC')->queryAll();
-			$data  = $this->_setMenu($_list);
-
-			$klist = array();
-
-			foreach($_list as $k => $v) {
-				$klist[$v['nactive']][] = $v;
-			}
-
-			$this->menu = array('_klist' => $klist, '_list' => $_list, 'list' => $data, 'active' => $this->active,
-				'main' => $this->mainMenu);
-
-			Yii::app()->cache->set(md5("menu_getMenuData" . Yii::app()->user->_get('role')), $this->menu, 24 * 60 * 60);
-
-			unset($data);
-			unset($klist);
-			unset($_list);
-			$this->_clear();
-		}
-	}
-
-	protected function _clear()
-	{
-		$this->active   = array();
-		$this->mainMenu = array();
-	}
-
+    protected function _clear()
+    {
+        $this->active = [];
+        $this->mainMenu = [];
+    }
 }

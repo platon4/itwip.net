@@ -343,8 +343,8 @@ class Manual extends \FormModel
                 /*
                  * Черный-Белый список
                  */
-                '_show_only_white_list' => ['c' => 'EXISTS (SELECT `id` FROM {{tw_black_white_list}} WHERE tw_id = `tw`.`id` AND _type=1 AND owner_id=' . Yii::app()->user->id . ')', 'w' => '=', 't' => 'sql'],
-                '_not_black_list'       => ['c' => 'NOT EXISTS (SELECT `id` FROM {{tw_black_white_list}} WHERE tw_id = `tw`.`id` AND _type=0 AND owner_id=' . Yii::app()->user->id . ')', 'w' => '=', 't' => 'sql'],
+                '_show_only_white_list' => ['c' => 'EXISTS (SELECT `id` FROM {{twitter_bwList}} WHERE tw_id = `tw`.`id` AND _type=1 AND owner_id=' . Yii::app()->user->id . ')', 'w' => '=', 't' => 'sql'],
+                '_not_black_list'       => ['c' => 'NOT EXISTS (SELECT `id` FROM {{twitter_bwList}} WHERE tw_id = `tw`.`id` AND _type=0 AND owner_id=' . Yii::app()->user->id . ')', 'w' => '=', 't' => 'sql'],
             ];
 
             if(isset($this->blogging_topics[0]) && $this->blogging_topics[0] == 0)

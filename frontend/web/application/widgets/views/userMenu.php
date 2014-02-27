@@ -8,22 +8,20 @@
 		<?php 
 			$i = 0;
 			
-			foreach($userMenu as $list) 
-			{
+			foreach($userMenu as $list) {
 				$i ++;
-				
-				if($list['nactive'] == "main") 
-				{
+
+				if($list['_active'] == "main") {
 		?>
-				<div id="con_m_1" class="list <?php echo ($list['nactive'] == $this->activeBlock) ? "active" : "none"; ?>">
+				<div id="con_m_1" class="list <?php echo ($list['_active'] == $this->activeBlock) ? "active" : "none"; ?>">
 					<h5 class="menu_title"><?php echo Yii::t('menu', '_main'); ?></h5>
 					<div id="favMenu">
-						<?php $this->render('favMenu', array('userMenu' => $userMenu)); ?>
+						<?php $this->render('favMenu', ['userMenu' => $userMenu]); ?>
 					</div>
 				</div>				
 				<?php } else { ?>
-				<div id="con_m_<?php echo $i; ?>" class="list <?php echo ($list['nactive'] == $this->activeBlock) ? "active" : "none"; ?>">
-					<?php if($list['nactive'] == "regulations") { ?>
+				<div id="con_m_<?php echo $i; ?>" class="list <?php echo ($list['_active'] == $this->activeBlock) ? "active" : "none"; ?>">
+					<?php if($list['_active'] == "regulations") { ?>
 						<?php $this->render('application.views.menu._regulations'); ?>
 					<?php } else { ?>
 						<h5 class="menu_title"><?php echo Yii::t('menu', $list['_key']); ?></h5>

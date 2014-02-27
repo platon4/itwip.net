@@ -62,11 +62,10 @@ class Edit extends \FormModel
 
 	protected function refactoring($model)
 	{
-			$row = Yii::app()->db->createCommand("SELECT tweet_hash, _url_Hash FROM {{twitter_tweetsRoster}} WHERE id=:id")->queryRow(true, [':id' => $this->id]);
+		$row = Yii::app()->db->createCommand("SELECT tweet_hash, _url_Hash FROM {{twitter_tweetsRoster}} WHERE id=:id")->queryRow(true, [':id' => $this->id]);
+
 		Yii::app()->redis->hDel('UniqueTweet:' . Yii::app()->user->id, $row['tweet_hash']);
 		Yii::app()->redis->hDel('UniqueUrl:' . Yii::app()->user->id, $row['_url_Hash']);
-
-
 	}
 
 	public function initTweets()

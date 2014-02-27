@@ -57,26 +57,6 @@ class WebUser extends CWebUser
 		}
 	}
 
-	public function getBWList()
-	{
-		if($this->_bwlist === NULL) {
-			$bw = Yii::app()->db->createCommand("SELECT id,tw_id,_type FROM {{twitter_bwList}} WHERE owner_id=:owner")->queryAll(true, [':owner' => Yii::app()->user->id]);
-			$white = [];
-			$black = [];
-
-			foreach($bw as $row) {
-				if($row['_type'] == 1)
-					$white[] = $row['tw_id'];
-				elseif($row['_type'] == 0)
-					$black[] = $row['tw_id'];
-			}
-
-			$this->_bwlist = ['white' => $white, 'black' => $black];
-		}
-
-		return $this->_bwlist;
-	}
-
 	public function _getLoyalt($key, $id = 0)
 	{
 		if(!$id)

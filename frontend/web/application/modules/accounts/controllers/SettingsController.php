@@ -1,6 +1,8 @@
 <?php
 
-class SettingsController extends Controller {
+class SettingsController extends Controller
+{
+    public $activeMenu = 'accounts';
 
     public function filters()
     {

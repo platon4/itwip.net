@@ -1,6 +1,8 @@
 <?php
 
-class AffiliateProgramController extends Controller {
+class AffiliateProgramController extends Controller
+{
+    public $activeMenu = 'accounts';
 
     public function filters()
     {

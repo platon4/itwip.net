@@ -9,6 +9,8 @@ use twitter\models\tweets\Finality;
 
 class TweetsController extends Controller
 {
+    public $activeMenu = 'tw_adv';
+
 	public function filters()
 	{
 		return array(
@@ -36,6 +38,8 @@ class TweetsController extends Controller
 
 	public function actionRequest($act = '', $id = 0)
 	{
+        $this->activeMenu = 'tw_exe';
+
 		if(intval($id) AND Yii::app()->request->isAjaxRequest) {
 			$order = Yii::app()->db->createCommand("SELECT tt.*,a.owner_id FROM {{tweets_to_twitter}} tt INNER JOIN {{tw_accounts}} a ON tt._tw_account=a.id WHERE tt.id=:id LIMIT 1")->queryRow(true, array(
 				':id' => $id));
@@ -91,6 +95,8 @@ class TweetsController extends Controller
 
 	public function actionFulfilled($tid = 0, $_o = '', $_a = '')
 	{
+        $this->activeMenu = 'tw_exe';
+        
 		$model             = new Fulfilled;
 		$model->attributes = array(
 			'tid' => $tid,

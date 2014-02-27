@@ -11,7 +11,9 @@
  *
  * @author Александр
  */
-class ReferralsController extends Controller {
+class ReferralsController extends Controller
+{
+    public $activeMenu = 'shop';
 
     public function filters()
     {
