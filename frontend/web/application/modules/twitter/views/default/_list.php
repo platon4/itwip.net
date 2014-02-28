@@ -41,12 +41,12 @@
                         <img alt="pic" src="/i/elements/yandex_no.png" />
                  <?php } ?>
                 </td>
-                <td class="black" id="blackStat_<?php echo $row['id']; ?>"><?php echo Html::encode($row['black_list']); ?></td>
-                <td class="white" id="whiteStat_<?php echo $row['id']; ?>"><?php echo Html::encode($row['white_list']); ?></td>
+                <td class="black" id="blackStat_<?php echo $row['id']; ?>"><?= $row['blacklisted']; ?></td>
+                <td class="white" id="whiteStat_<?php echo $row['id']; ?>"><?= $row['whitelisted']; ?></td>
                 <td class="price"><?php echo CMoney::_c($row['_price'],true); ?></td>
                 <td id="beField" data-id="<?php echo $row['id']; ?>"class="add_b_w">
-                    <a data-type="black" title="Занести в чёрный список" href="javascript:;" onclick="Tweets._bwlist(this);" class="button black_button icon_small<?php if($row['inBlackList']) { echo ' selected'; } ?>"><i class="fa fa-check-square"></i></a>
-                    <a data-type="white" title="Занести в белый список" href="javascript:;" onclick="Tweets._bwlist(this);" class="button icon_small<?php if($row['inWhiteList']) { echo ' selected'; } ?>"><i class="fa fa-check-square-o"></i></a>
+                    <a data-type="black" title="Занести в чёрный список" href="javascript:;" onclick="Tweets._bwlist(this);" class="button black_button icon_small<?php if($row['bw'] !==null && $row['bw'] == 0) { echo ' selected'; } ?>"><i class="fa fa-check-square"></i></a>
+                    <a data-type="white" title="Занести в белый список" href="javascript:;" onclick="Tweets._bwlist(this);" class="button icon_small<?php if($row['bw'] == 1) { echo ' selected'; } ?>"><i class="fa fa-check-square-o"></i></a>
                 </td>
                 <td class="view"><button title="Посмотреть детали аккаунта" class="button icon_small" onclick="Tweets.getAccountInfo('<?php echo $row['id']; ?>', 'Детали twitter аккаунта');"><i class="fa fa-eye"></i></button></td>
             </tr>

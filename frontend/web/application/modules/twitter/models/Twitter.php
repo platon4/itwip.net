@@ -47,7 +47,6 @@ class Twitter extends \FormModel
     protected $_ages;
     protected $_subjects;
     protected $_count;
-    protected $_bwlist;
     protected $_stats;
 
     /**
@@ -71,6 +70,7 @@ class Twitter extends \FormModel
     protected $pTypes;
     protected $payMethods;
     protected $_where;
+    protected $bwList;
 
     public function rules()
     {
@@ -219,36 +219,17 @@ class Twitter extends \FormModel
 
     public function getRows()
     {
-        $accountsRows = Yii::app()->db->createCommand("SELECT `tw`.`id`, `tw`.`screen_name`, `tw`.`name`, `tw`.`avatar`, `tw`.`date_add`, `tw`.`itr`,`tw`.`followers`, `tw`.`whitelisted`, `tw`.`blacklisted`, `tw`.`_posts_count`, `st`.`_price`,`tw`.`tape`,`tw`.`in_yandex` FROM {{tw_accounts_settings}} st INNER JOIN {{tw_accounts}} tw ON st.tid=tw.id
-                                                                                            " . $this->where()['params'] . " ORDER BY " . $this->_orders[$this->_o] . ' ' . $this->_a . " LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())
+        $rows = Yii::app()->db->createCommand("SELECT
+        `tw`.`id`, `tw`.`screen_name`, `tw`.`name`,
+        `tw`.`avatar`, `tw`.`date_add`, `tw`.`itr`,
+        `tw`.`followers`, `tw`.`whitelisted`, `tw`.`blacklisted`,
+        `tw`.`_posts_count`, `st`.`_price`,
+        `tw`.`tape`,`tw`.`in_yandex`,
+        (SELECT _type FROM {{twitter_bwList}} WHERE owner_id='" . Yii::app()->user->id . "' AND tw_id=tw.id) as bw
+        FROM {{tw_accounts_settings}} st INNER JOIN {{tw_accounts}} tw ON st.tid=tw.id " . $this->where()['params'] . "
+        ORDER BY " . $this->_orders[$this->_o] . ' ' . $this->_a . "
+        LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())
             ->queryAll(TRUE, $this->where()['values']);
-
-        $in_bwList = $this->bwList();
-        $rows = [];
-
-        foreach($accountsRows as $k => $row) {
-            $rows[] = [
-                'id'          => $row['id'],
-                'screen_name' => $row['screen_name'],
-                'name'        => $row['name'],
-                'avatar'      => $row['avatar'],
-                'date_add'    => $row['date_add'],
-                'itr'         => $row['itr'],
-                'followers'   => $row['followers'],
-                'tape'        => $row['tape'],
-                'in_yandex'   => $row['in_yandex'],
-                'inBlackList' => 0,
-                'inWhiteList' => 0,
-                '_price'      => $row['_price'],
-                'black_list'  => $row['blacklisted'],
-                'white_list'  => $row['whitelisted']
-            ];
-
-            if(in_array($row['id'], $in_bwList['black']))
-                $rows[$k]['inBlackList'] = 1;
-            elseif(in_array($row['id'], $in_bwList['white']))
-                $rows[$k]['inWhiteList'] = 1;
-        }
 
         return $rows;
     }
@@ -343,31 +324,6 @@ class Twitter extends \FormModel
     }
 
     /*
-     * Черно-белый список твиттер аккаунтов
-     */
-    public function bwList()
-    {
-        if($this->_bwlist === NULL) {
-            $rows = Yii::app()->db->createCommand("SELECT tw_id, _type FROM {{twitter_bwList}} WHERE owner_id=:owner")->queryAll(TRUE, [':owner' => Yii::app()->user->id]);
-
-            $l = ['b' => [], 'w' => []];
-
-            if($rows !== FALSE) {
-                foreach($rows as $row) {
-                    if($row['_type'] == 0)
-                        $l['b'][] = $row['tw_id'];
-                    else
-                        $l['w'][] = $row['tw_id'];
-                }
-            }
-
-            $this->_bwlist = ['black' => $l['b'], 'white' => $l['w']];
-        }
-
-        return $this->_bwlist;
-    }
-
-    /*
      * @return array
      */
     public function getAges()
@@ -387,6 +343,17 @@ class Twitter extends \FormModel
             $this->_subjects = \Html::groupByKey(\Subjects::model()->findALl(array('order' => 'sort')), 'id', '_key', 'parrent');
 
         return $this->_subjects;
+    }
+
+    public function bwList($k)
+    {
+        if($this->bwList === NULL) {
+            $this->bwList = Yii::app()->db->createCommand("SELECT bw._type FROM {{twitter_bwList}} bw, {{tw_accounts_settings}} st, {{tw_accounts}} tw" . $this->where()['params'] . " AND bw.owner_id='" . Yii::app()->user->id . "' GROUP BY bw._type")->queryAll(TRUE, $this->where()['values']);
+        }
+
+        print_r($this->bwList);
+        die();
+        return isset($this->bwList[$k]) ? $this->bwList[$k] : 0;
     }
 
     /*

@@ -142,7 +142,7 @@ class ajaxController extends Controller
 		$tid = (isset($_POST['tid']) AND CHelper::int($_POST['tid'])) ? CHelper::int($_POST['tid']) : 0;
 
 		if($tid) {
-			$sth = Yii::app()->db->createCommand("SELECT `a`.`id`, `a`.`screen_name`, `a`.`name`, `a`.`avatar`, `a`.`created_at`, `a`.`_lang`, `a`.`date_add`, `a`.`itr`, `a`.`in_google`, `a`.`google_pr`, `a`.`in_yandex`, `a`.`yandex_rank`, `a`.`tweets`, `a`.`following`, `a`.`followers`, `a`.`white_list`, `a`.`black_list`, `a`.`_posts_count`, `s`.`_price`, `s`.`_age`, `s`.`_gender`, `s`.`_subjects`,`s`.`working_in` FROM {{tw_accounts}} `a` LEFT JOIN {{tw_accounts_settings}} `s` ON `a`.`id`=`s`.`tid` WHERE `a`.`id`=:id");
+			$sth = Yii::app()->db->createCommand("SELECT `a`.`id`, `a`.`screen_name`, `a`.`name`, `a`.`avatar`, `a`.`created_at`, `a`.`_lang`, `a`.`date_add`, `a`.`itr`, `a`.`in_google`, `a`.`google_pr`, `a`.`in_yandex`, `a`.`yandex_rank`, `a`.`tweets`, `a`.`following`, `a`.`followers`, `a`.`whitelisted`, `a`.`blacklisted`, `a`.`_posts_count`, `s`.`_price`, `s`.`_age`, `s`.`_gender`, `s`.`_subjects`,`s`.`working_in` FROM {{tw_accounts}} `a` LEFT JOIN {{tw_accounts_settings}} `s` ON `a`.`id`=`s`.`tid` WHERE `a`.`id`=:id");
 
 			$sth->bindParam(':id', $tid, PDO::PARAM_INT);
 			$dataRead = $sth->query();
