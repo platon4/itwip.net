@@ -80,8 +80,7 @@ class TweetsController extends Controller
 				throw new CHttpException('403', Yii::t('yii', 'Your request is invalid.'));
 		}
 
-		$rows = Yii::app()->db->createCommand("SELECT tt.*,a.screen_name,a.name,a.avatar FROM {{tweets_to_twitter}} tt INNER JOIN {{tw_accounts}} a ON tt._tw_account=a.id WHERE tt.approved=0 AND tt.status=0 AND a.owner_id=:id LIMIT 50")->queryAll(true, array(
-			':id' => Yii::app()->user->id));
+		$rows = Yii::app()->db->createCommand("SELECT tt.*,a.screen_name,a.name,a.avatar FROM {{tweets_to_twitter}} tt INNER JOIN {{tw_accounts}} a ON tt._tw_account=a.id WHERE tt.approved=0 AND tt.status=0 AND a.owner_id=:id LIMIT 50")->queryAll(true, array(':id' => Yii::app()->user->id));
 
 		if(Yii::app()->request->isAjaxRequest) {
 			echo json_encode(array('code' => 200, 'html' => array($this->renderPartial('_request_rows', array(
@@ -96,7 +95,7 @@ class TweetsController extends Controller
 	public function actionFulfilled($tid = 0, $_o = '', $_a = '')
 	{
         $this->activeMenu = 'tw_exe';
-        
+
 		$model             = new Fulfilled;
 		$model->attributes = array(
 			'tid' => $tid,

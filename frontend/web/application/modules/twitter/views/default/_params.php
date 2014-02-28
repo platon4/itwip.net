@@ -92,7 +92,7 @@
             <tr>
                 <td class="info_param  radios"><?php echo Yii::t('twitterModule.tweets','_floor_blogger'); ?></td>
                 <td class="param  radios">
-					<?php echo Html::radioButton('Twitter[gender]', false, ['value' => 2]); ?> <label for="Accounts__gender_0">Мужской</label>&nbsp;<?php echo Html::radioButton('Twitter[gender]',false, ['value' => 1]); ?> <label for="Accounts__gender_1">Женский</label>&nbsp;<?php echo Html::radioButton('Twitter[gender]', false, ['value' => 0]); ?> <label for="Accounts__gender_2">Не важно</label></span>
+					<?php echo Html::radioButton('Twitter[gender]', false, ['value' => 2]); ?> <label for="Accounts__gender_0">Мужской</label>&nbsp;<?php echo Html::radioButton('Twitter[gender]',false, ['value' => 1]); ?> <label for="Accounts__gender_1">Женский</label>&nbsp;<?php echo Html::radioButton('Twitter[gender]', true, ['value' => 0]); ?> <label for="Accounts__gender_2">Не важно</label></span>
                 </td>
             </tr>
         </table>
