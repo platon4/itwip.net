@@ -35,6 +35,8 @@ class Twitter extends \FormModel
     public $payMethod = ['rv' => 1, 'bv' => 1];
     public $bw;
 
+    public $_q;
+
     public $limit = 10;
     public $fbw;
     public $_a = 'DESC';
@@ -128,6 +130,7 @@ class Twitter extends \FormModel
             ['gender', 'in', 'range' => [0, 1, 2], 'on' => 'get'],
 
             ['fbw', 'in', 'range' => ['black', 'white'], 'on' => 'get'],
+            ['_q', 'length', 'max' => 2, 'on' => 'get'],
 
             /* Сценари добавление в черно белый список пользователя */
             ['id', 'numerical', 'integerOnly' => TRUE, 'allowEmpty' => FALSE, 'message' => 'Неправильно указан идентификатор запроса.', 'on' => 'bw'],
@@ -161,7 +164,8 @@ class Twitter extends \FormModel
             '_q'            => 'Поиск твита',
             '_o'            => 'Параметр сортировки',
             '_a'            => 'Параметр сортировки',
-            'sDate'         => 'размещать с'
+            'sDate'         => 'размещать с',
+            '_q'            => 'Аккаунт'
         ];
     }
 
@@ -229,10 +233,10 @@ class Twitter extends \FormModel
 
             if($this->fbw == 'black') {
                 $t = '0';
-                $this->_rowsCount=$this->bwList('black');
+                $this->_rowsCount = $this->bwList('black');
             } else {
                 $t = '1';
-                $this->_rowsCount=$this->bwList('white');
+                $this->_rowsCount = $this->bwList('white');
             }
 
             $p[] = 'EXISTS (SELECT `id` FROM {{twitter_bwList}} WHERE tw_id = `tw`.`id` AND _type=' . $t . ' AND owner_id=' . Yii::app()->user->id . ')';
@@ -308,6 +312,11 @@ class Twitter extends \FormModel
                 $fileds['bw'][] = 'EXISTS (SELECT `id` FROM {{twitter_bwList}} WHERE tw_id = `tw`.`id` AND _type=1 AND owner_id=' . Yii::app()->user->id . ')';
             elseif($this->bw == 2)
                 $fileds['bw'][] = 'NOT EXISTS (SELECT `id` FROM {{twitter_bwList}} WHERE tw_id = `tw`.`id` AND _type=0 AND owner_id=' . Yii::app()->user->id . ')';
+
+            if($this->_q) {
+                $fileds[] = "(`tw`.`screen_name` LIKE :account OR `tw`.`name` LIKE :account)";
+                $values[':account'] = '%' . $this->_q . '%';
+            }
 
             $this->_where = ['params' => $fileds, 'values' => $values];
         }
