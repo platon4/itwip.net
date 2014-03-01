@@ -513,7 +513,7 @@ Tweets = {
         this.getAccountList();
     },
     getFromLis: function (t) {
-        this.s.sendData = '_tlist=' + t;
+        this.s.sendData = 'Twitter[fbw]=' + t;
         this.getAccountList();
     },
     getAccountInfo: function (tid, title) {

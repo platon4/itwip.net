@@ -36,7 +36,7 @@ class Twitter extends \FormModel
     public $bw;
 
     public $limit = 10;
-
+    public $fbw;
     public $_a = 'DESC';
     public $_o = 'date';
 
@@ -71,6 +71,7 @@ class Twitter extends \FormModel
     protected $payMethods;
     protected $_where;
     protected $bwList;
+    protected $_rowsCount;
 
     public function rules()
     {
@@ -125,6 +126,8 @@ class Twitter extends \FormModel
             ['followers_ot', 'compare', 'compareAttribute' => 'followers_do', 'operator' => '<=', 'message' => Yii::t('twitterModule.tweets', '_error_comapare_followers'), 'on' => 'get'],
 
             ['gender', 'in', 'range' => [0, 1, 2], 'on' => 'get'],
+
+            ['fbw', 'in', 'range' => ['black', 'white'], 'on' => 'get'],
 
             /* Сценари добавление в черно белый список пользователя */
             ['id', 'numerical', 'integerOnly' => TRUE, 'allowEmpty' => FALSE, 'message' => 'Неправильно указан идентификатор запроса.', 'on' => 'bw'],
@@ -219,6 +222,24 @@ class Twitter extends \FormModel
 
     public function getRows()
     {
+        $p = $this->where()['params'];
+        $e = NULL;
+
+        if($this->fbw !== NULL) {
+
+            if($this->fbw == 'black') {
+                $t = '0';
+                $this->_rowsCount=$this->bwList('black');
+            } else {
+                $t = '1';
+                $this->_rowsCount=$this->bwList('white');
+            }
+
+            $p[] = 'EXISTS (SELECT `id` FROM {{twitter_bwList}} WHERE tw_id = `tw`.`id` AND _type=' . $t . ' AND owner_id=' . Yii::app()->user->id . ')';
+            $e = 'bw';
+
+        }
+
         $rows = Yii::app()->db->createCommand("SELECT
         `tw`.`id`, `tw`.`screen_name`, `tw`.`name`,
         `tw`.`avatar`, `tw`.`date_add`, `tw`.`itr`,
@@ -226,7 +247,7 @@ class Twitter extends \FormModel
         `tw`.`_posts_count`, `st`.`_price`,
         `tw`.`tape`,`tw`.`in_yandex`,
         (SELECT _type FROM {{twitter_bwList}} WHERE owner_id='" . Yii::app()->user->id . "' AND tw_id=tw.id) as bw
-        FROM {{tw_accounts_settings}} st INNER JOIN {{tw_accounts}} tw ON st.tid=tw.id " . $this->where()['params'] . "
+        FROM {{tw_accounts_settings}} st INNER JOIN {{tw_accounts}} tw ON st.tid=tw.id WHERE " . $this->implode(" AND ", $p, $e) . "
         ORDER BY " . $this->_orders[$this->_o] . ' ' . $this->_a . "
         LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())
             ->queryAll(TRUE, $this->where()['values']);
@@ -284,11 +305,11 @@ class Twitter extends \FormModel
             }
 
             if($this->bw == 1)
-                $fileds[] = 'EXISTS (SELECT `id` FROM {{twitter_bwList}} WHERE tw_id = `tw`.`id` AND _type=1 AND owner_id=' . Yii::app()->user->id . ')';
+                $fileds['bw'][] = 'EXISTS (SELECT `id` FROM {{twitter_bwList}} WHERE tw_id = `tw`.`id` AND _type=1 AND owner_id=' . Yii::app()->user->id . ')';
             elseif($this->bw == 2)
-                $fileds[] = 'NOT EXISTS (SELECT `id` FROM {{twitter_bwList}} WHERE tw_id = `tw`.`id` AND _type=0 AND owner_id=' . Yii::app()->user->id . ')';
+                $fileds['bw'][] = 'NOT EXISTS (SELECT `id` FROM {{twitter_bwList}} WHERE tw_id = `tw`.`id` AND _type=0 AND owner_id=' . Yii::app()->user->id . ')';
 
-            $this->_where = ['params' => ' WHERE ' . implode(' AND ', $fileds), 'values' => $values];
+            $this->_where = ['params' => $fileds, 'values' => $values];
         }
 
         return $this->_where;
@@ -297,18 +318,25 @@ class Twitter extends \FormModel
     public function getPages()
     {
         if($this->_pages === NULL) {
-            $this->_pages = new \CPagination($this->getCount());
+            $this->_pages = new \CPagination($this->getRowsCount());
             $this->_pages->pageSize = $this->getLimit();
         }
 
         return $this->_pages;
     }
 
+    public function getRowsCount()
+    {
+        if($this->_rowsCount === NULL)
+            $this->_rowsCount = $this->getCount();
+
+        return $this->_rowsCount;
+    }
+
     public function getCount()
     {
-        if($this->_count === NULL) {
-            $this->_count = Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{tw_accounts_settings}} st INNER JOIN {{tw_accounts}} tw ON st.tid=tw.id" . $this->where()['params'] . "")->queryScalar($this->where()['values']);
-        }
+        if($this->_count === NULL)
+            $this->_count = Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{tw_accounts_settings}} st INNER JOIN {{tw_accounts}} tw ON st.tid=tw.id WHERE " . $this->implode(" AND ", $this->where()['params']) . "")->queryScalar($this->where()['values']);
 
         return $this->_count;
     }
@@ -347,13 +375,46 @@ class Twitter extends \FormModel
 
     public function bwList($k)
     {
-        if($this->bwList === NULL) {
-            $this->bwList = Yii::app()->db->createCommand("SELECT bw._type FROM {{twitter_bwList}} bw, {{tw_accounts_settings}} st, {{tw_accounts}} tw" . $this->where()['params'] . " AND bw.owner_id='" . Yii::app()->user->id . "' GROUP BY bw._type")->queryAll(TRUE, $this->where()['values']);
+        if($this->bwList === NULL && $this->getCount()) {
+            $p = $this->where()['params'];
+            $sql = "SELECT COUNT(*) FROM {{tw_accounts_settings}} st INNER JOIN {{tw_accounts}} tw ON st.tid=tw.id WHERE ";
+
+            $b = Yii::app()->db->createCommand($sql . $this->implode(" AND ", array_merge($p, ['EXISTS (SELECT `id` FROM {{twitter_bwList}} WHERE tw_id = `tw`.`id` AND _type=0 AND owner_id=' . Yii::app()->user->id . ')'])) . "", 'bw')->queryScalar($this->where()['values']);
+            $w = Yii::app()->db->createCommand($sql . $this->implode(" AND ", array_merge($p, ['EXISTS (SELECT `id` FROM {{twitter_bwList}} WHERE tw_id = `tw`.`id` AND _type=1 AND owner_id=' . Yii::app()->user->id . ')'])) . "", 'bw')->queryScalar($this->where()['values']);
+
+            $this->bwList = ['black' => $b, 'white' => $w];
         }
 
-        print_r($this->bwList);
-        die();
         return isset($this->bwList[$k]) ? $this->bwList[$k] : 0;
+    }
+
+    protected function implode($s, $data, $exclude = [], $i = 0)
+    {
+        if(is_array($data)) {
+            $str = '';
+            foreach($data as $k => $v) {
+                if(!\CHelper::isEmpty($exclude)) {
+                    if((is_array($exclude) && in_array($k, $exclude) || ($k == $exclude))) {
+                        continue;
+                    }
+                }
+
+                $i++;
+
+                if($i !== 1)
+                    $str .= $s;
+
+                if(is_array($v)) {
+                    $str .= $this->implode($s, $v, $exclude, 0);
+                } else {
+                    $str .= $v;
+                }
+            }
+
+            return $str;
+        }
+
+        return '';
     }
 
     /*
