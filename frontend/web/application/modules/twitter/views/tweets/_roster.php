@@ -28,7 +28,7 @@ $this->breadcrumbs[] = array(
         <div id="block_2">
             <div id="block_2_top">
                 <div id="block_2_top_inset">
-                    <a class="sAllTweets" onclick="Tweets.listToogle('all'); return false;"><?= Yii::t('twitterModule.tweets', '_tweets_all_added'); ?> <?= isset($model->getFigures()->all) ? $model->getFigures()->all : 0; ?></a>
+                    <a class="sAllTweets" onclick="Tweets.listToogle('all'); return false;"><?= Yii::t('twitterModule.tweets', '_tweets_all_added'); ?> <?= $model->getFigures('all'); ?></a>
                     <a class="button icon aHidden" href="#block_2_bottom" title="<?php echo Yii::t('twitterModule.tweets', '_list_down_bottom'); ?>"><i class="fa fa-arrow-down"></i></a>
                     <a class="button icon select_all aHidden" href="javascript:;" onclick="Tweets.selectAll(); return false;" title="<?php echo Yii::t('twitterModule.tweets', '_select_all_checkbox'); ?>"><i class="fa fa-check"></i></a>
                 </div>

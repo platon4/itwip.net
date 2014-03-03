@@ -246,12 +246,17 @@ return array(
 	'_errors_filter_match' => ' {words}',
 	'_errors_censor_match' => ' {words}',
 
-	'_errors_hash_limited' => 'Превышено максимальное количество допустимых хэштегов',
+    /*
+     * Ошибки валидации твитов
+     */
+	'_error_groups_hash-tags' => 'Превышено максимальное количество допустимых хэштегов',
+    '_error_groups_references' => 'Вы превысели кол-во упомнаний(@login) в одном твите.',
+    '_error_groups_unique-url' => 'Указанная ссылка "{url}" уже присутствует в списке',
+    '_error_groups_links' => 'Превышено коло-го ссылок в твите, допускается только одна ссылка.',
+    '_error_groups_censor' => 'Цензура в твите: {words}',
 
 	'_tweet_success_save' => 'Твит успешно сохранен',
 
-	'_errors_uniq_url' => 'Указанная ссылка "{url}" уже присутствует в списке',
-	'_errors_references_limited' => 'Вы превысели кол-во упомнаний(@login) в одном твите.',
 	'_stats_references' => 'Превышено кол-во упомнаний',
     '_error_create_tweets_roster' => 'Не удалось обработать список твитов, пожалуйста попробуйте еще раз.'
 );

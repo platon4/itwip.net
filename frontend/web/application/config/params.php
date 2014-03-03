@@ -20,18 +20,6 @@ return [
 			)
 		),
 		'tweets' => array(
-			'validators' => array(
-				1 => 'exceededLinks',
-				2 => 'character',
-				3 => 'censor',
-				4 => 'adult',
-				5 => 'dublicate',
-				6 => 'blockDomain',
-				7 => 'notUniqueUrl',
-				8 => 'wordsFilter',
-				9 => 'exceededHash',
-				10 => 'references'
-			),
 			'hashCount' => 3
 		),
 		'secret_key' => 'zla2x45v.,y312A6{]1A/!x3s6q2z32v0q6.z;q25z1',

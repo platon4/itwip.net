@@ -47,18 +47,11 @@ abstract class Tweet
     protected $tweet;
     protected $_filters;
 
-    public function __construct(array $tweets, $hash, $config = [])
+    public function __construct($hash, $config = [])
     {
         $this->preInit();
         $this->hash = $hash;
-        $this->setTweets($tweets);
         $this->config = array_merge($this->config, $config);
-
-    }
-
-    public function setTweets($tweets)
-    {
-        $this->tweets = $tweets;
     }
 
     public function getFilters($key)
@@ -228,9 +221,17 @@ abstract class Tweet
         return $keys;
     }
 
+    public function getAllIndexes()
+    {
+        return $this->_validators;
+    }
+
     public function getInfo()
     {
+        if($this->hasErrors())
+            return json_encode($this->getErrors());
 
+        return '';
     }
 
     /*

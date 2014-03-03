@@ -30,8 +30,8 @@ class Create extends \FormModel
 
     public function preInit()
     {
-        if(Yii::app()->redis->exists('twitter:collection:run:' . Yii::app()->user->id))
-            $this->addError('tweets', 'В данный момент обрабатывается другой список твитов, пожалуйста дождитесь окончание оброботки.');
+        //if(Yii::app()->redis->exists('twitter:collection:run:' . Yii::app()->user->id))
+           // $this->addError('tweets', 'В данный момент обрабатывается другой список твитов, пожалуйста дождитесь окончание оброботки.');
     }
 
     /*

@@ -1,54 +1,49 @@
 <?php
-if ($model->getTweets() !== array())
-{
+if($model->getTweets() !== array()) {
 
     $i = $model->getPages()->getOffset();
 
-    foreach ($model->getTweets() as $row)
-    {
+    foreach($model->getTweets() as $row) {
         $i++;
         ?>
         <form id="_twForm">
-            <div class="post no_border_top" id="post_<?php echo $row['id']; ?>">
-                <div class="number">
-                    <div style="vertical-align: middle; margin-left: 5px; float: left;"><?php echo $i; ?></div>		
-                </div>
-                <div class="text_edit">
-                    <div class="text" id="text_<?php echo $row['id']; ?>"><?php echo Html::tweet($row['tweet']); ?></div>
-                </div>
-                <div style="display:none;" id="errorList_<?php echo $row['id']; ?>"></div>
-                <div class="check">
-                    <?php
-                    $infoRows = json_decode($row['_info']);
-                    $msgInfo='false';
-                    if (!CHelper::isEmpty($infoRows))
-                    {
-                        echo sprintf('<span class="alert"><i class="fa fa-exclamation-triangle" data-tooltip="true" data-tid="msg_%s"></i></span><div id="msg_%s" style="display: none;">', $row['id'],$row['id']);
-                        
-                        foreach ($infoRows as $info)
-                        {
-                            foreach ($info as $msg)
-                            {
-                                $replace = array();
-                                $msgInfo='true';
-                                if (isset($msg->replace))
-                                    $replace = array($msg->replace->key => $msg->replace->value);
-
-                                echo '<div>' . Yii::t('twitterModule.tweets', $msg->text, $replace) . '</div>';
-                            }
-                        }
-
-                        echo '</div>';
-                    }
-                    ?>
-                    <a class="edit" onclick="Tweets.edit({tid: '<?php echo $row['id']; ?>', title: '<?php echo Yii::t('twitterModule.tweets', '_remove_post_confirm_title', array('{n}' => $i)); ?>', tweet: '<?php echo Html::encode($row['tweet'], 'javascript'); ?>', msg: <?php echo $msgInfo; ?>});
-                            return false;" href="javascript:;"><i class="fa fa-pencil" title=""></i></a>
-                    <a class="delete" onclick="Tweets.removeTweets('<?php echo Yii::t('twitterModule.tweets', '_remove_post_confirm_text'); ?>', $row['id']);
-                            return false;" href="javascript:;"><i class="fa fa-remove" title="Удалить твит"></i></a>
-                       <?php echo Html::checkBox('tweets[]', '', array('value' => $row['id'], 'id' => 'tweets')); ?>	
-                </div>
+        <div class="post no_border_top" id="post_<?php echo $row['id']; ?>">
+            <div class="number">
+                <div style="vertical-align: middle; margin-left: 5px; float: left;"><?php echo $i; ?></div>
             </div>
-        <?php } ?>
+            <div class="text_edit">
+                <div class="text" id="text_<?php echo $row['id']; ?>"><?php echo Html::tweet($row['tweet']); ?></div>
+            </div>
+            <div style="display:none;" id="errorList_<?php echo $row['id']; ?>"></div>
+            <div class="check">
+                <?php
+                $messages = trim($row['_info']) != '' ? json_decode($row['_info'], true) : '';
+
+                $msgInfo = 'false';
+                if(!CHelper::isEmpty($messages)) {
+                    echo sprintf('<span class="alert"><i class="fa fa-exclamation-triangle" data-tooltip="true" data-tid="msg_%s"></i></span><div id="msg_%s" style="display: none;">', $row['id'], $row['id']);
+
+                    foreach($messages as $key => $msg) {
+                        $msgInfo = 'true';
+                        $replace = [];
+
+                        if(isset($msg['replace']))
+                            $replace = $msg['replace'];
+
+                        echo '<div>' . Yii::t('twitterModule.tweets', '_error_groups_' . $key, $replace) . '</div>';
+                    }
+
+                    echo '</div>';
+                }
+                ?>
+                <a class="edit" onclick="Tweets.edit({tid: '<?php echo $row['id']; ?>', title: '<?php echo Yii::t('twitterModule.tweets', '_remove_post_confirm_title', array('{n}' => $i)); ?>', tweet: '<?php echo Html::encode($row['tweet'], 'javascript'); ?>', msg: <?php echo $msgInfo; ?>});
+                    return false;" href="javascript:;"><i class="fa fa-pencil" title=""></i></a>
+                <a class="delete" onclick="Tweets.removeTweets('<?php echo Yii::t('twitterModule.tweets', '_remove_post_confirm_text'); ?>', $row['id']);
+                    return false;" href="javascript:;"><i class="fa fa-remove" title="Удалить твит"></i></a>
+                <?php echo Html::checkBox('tweets[]', '', array('value' => $row['id'], 'id' => 'tweets')); ?>
+            </div>
+        </div>
+    <?php } ?>
     </form>
     <div id="block_2_bottom">
         <div id="block_2_bottom_inset">
@@ -64,7 +59,7 @@ if ($model->getTweets() !== array())
             <a class="button icon aHidden" href="javascript:;" onclick="Tweets.selectAll(); return false;"><i class="fa fa-check "></i></a>
         </div>
     </div>
-    <?php } else { ?>
+<?php } else { ?>
     <div class="post no_border_top no_border_bottom">
         <div style="padding: 7px 0; text-align: center;"><?php echo Yii::t('twitterModule.tweets', '_no_tweets_count'); ?></div>
     </div>

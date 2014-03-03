@@ -1,5 +1,4 @@
-function _addFav(id, el)
-{
+function _addFav(id, el) {
     if (id == 0 || id == 'undefined')
         return false;
 
@@ -10,10 +9,8 @@ function _addFav(id, el)
         url: "/ajax/favMenu",
         data: {"_fID": id},
         dataType: "json",
-        success: function(obj, textStatus)
-        {
-            if (obj['status'] == 1)
-            {
+        success: function (obj, textStatus) {
+            if (obj['status'] == 1) {
                 $(el).addClass("fav-icon active").removeClass("fa fa-spinner fa-spin");
             }
             else {
@@ -23,15 +20,12 @@ function _addFav(id, el)
 
             $("#favMenu").html(obj['favMenu']);
         },
-        beforeSend: function()
-        {
+        beforeSend: function () {
             $(el).removeClass("fav-icon").addClass("fa fa-spinner fa-spin");
             $("#favLoading").html('<img src="/i/loads.gif">');
         },
-        complete: function(obj, textStatus)
-        {
-            if (textStatus == "error")
-            {
+        complete: function (obj, textStatus) {
+            if (textStatus == "error") {
                 $(el).addClass("fav-icon").removeClass("fa-spinner fa-spin");
                 $("#favLoading").html(btn);
             }
@@ -49,23 +43,19 @@ Affiliate = {
         _a: 'DESC',
         cCount: 0,
     },
-    _getPage: function(p)
-    {
+    _getPage: function (p) {
         this.s.page = p;
         this._getContent();
     },
-    _getFromQuery: function(q, b)
-    {
+    _getFromQuery: function (q, b) {
         this.s.page = 1;
         this.s._q = q;
         this._getContent();
     },
-    _setOrder: function(s, element)
-    {
+    _setOrder: function (s, element) {
         $(".table_head_inside").find('i').removeClass('fa fa-caret-up').addClass('fa fa-caret-down');
 
-        if (this.s._o == s && this.s.cCount == 0)
-        {
+        if (this.s._o == s && this.s.cCount == 0) {
             this.s._a = "DESC";
             this.s.cCount = 1;
 
@@ -81,21 +71,17 @@ Affiliate = {
 
         this._getContent();
     },
-    _getContent: function()
-    {
-        _ajax(
-                {
-                    url: "/accounts/affiliateProgram/referral?act=list&page=" + this.s.page + "&_q=" + this.s._q + '&_o=' + this.s._o + '&_a=' + this.s._a,
-                    success: function(result)
-                    {
-                        $('#_referraList').html(result.html);
-                        $('#pagesListpagesList').html(result.pages);
-                    },
-                    beforeSend: function()
-                    {
-                        $('#_referraList').html('<tr><td style="text-align: center;"><img src="/i/loads.gif" alt="Loading..."></td></tr>');
-                    }
-                });
+    _getContent: function () {
+        _ajax({
+            url: "/accounts/affiliateProgram/referral?act=list&page=" + this.s.page + "&_q=" + this.s._q + '&_o=' + this.s._o + '&_a=' + this.s._a,
+            success: function (result) {
+                $('#_referraList').html(result.html);
+                $('#pagesListpagesList').html(result.pages);
+            },
+            beforeSend: function () {
+                $('#_referraList').html('<tr><td style="text-align: center;"><img src="/i/loads.gif" alt="Loading..."></td></tr>');
+            }
+        });
     },
 }
 
@@ -104,65 +90,59 @@ Subjects = {
         subjectCount: 1,
         wait: false,
     },
-    _addSubject: function(e, l)
-    {
+    _addSubject: function (e, l) {
         if (Subjects._params.wait == true) {
             return false;
         }
         var message = '';
 
-        _ajax(
-                {
-                    data: _data($("#_subjectsBox").serializeAny('select'), {"t": this._params.subjectCount}),
-                    url: "/twitter/ajax/_getSubjects",
-                    success: function(obj)
-                    {
-                        if (obj.code == 200)
-                        {
-                            $(l).parent().parent().append(obj.html);
-                            Subjects._params.subjectCount++;
-                            $('select').styler();
-                        }
-                        else {
-                            if (obj.code == 203)
-                            {
-                                message = obj.message;
-                            }
-                            else {
-                                message = unknow_response;
-                            }
-
-                            Dialog.open(_error, {content: message, buttons: [{text: _close, class: "button", click: function() {
-                                            $(this).dialog("close");
-                                        }}]});
-                        }
-
-                        $(l).children().removeClass('fa-spinner fa-spin').addClass('fa-plus');
-                    },
-                    beforeSend: function()
-                    {
-                        $(l).children().removeClass('fa-plus').addClass('fa-spinner fa-spin');
-                        Subjects._params.wait = true;
-                    },
-                    complete: function()
-                    {
-                        $(l).children().removeClass('fa-spinner fa-spin').addClass('fa-plus');
-                        Subjects._params.wait = false;
+        _ajax({
+            data: _data($("#_subjectsBox").serializeAny('select'), {"t": this._params.subjectCount}),
+            url: "/twitter/ajax/_getSubjects",
+            success: function (obj) {
+                if (obj.code == 200) {
+                    $(l).parent().parent().append(obj.html);
+                    Subjects._params.subjectCount++;
+                    $('select').styler();
+                }
+                else {
+                    if (obj.code == 203) {
+                        message = obj.message;
                     }
-                });
+                    else {
+                        message = unknow_response;
+                    }
+
+                    Dialog.open(_error, {content: message, buttons: [
+                        {text: _close, class: "button", click: function () {
+                            $(this).dialog("close");
+                        }}
+                    ]});
+                }
+
+                $(l).children().removeClass('fa-spinner fa-spin').addClass('fa-plus');
+            },
+            beforeSend: function () {
+                $(l).children().removeClass('fa-plus').addClass('fa-spinner fa-spin');
+                Subjects._params.wait = true;
+            },
+            complete: function () {
+                $(l).children().removeClass('fa-spinner fa-spin').addClass('fa-plus');
+                Subjects._params.wait = false;
+            }
+        });
     },
-    _removeSubject: function(e)
-    {
+    _removeSubject: function (e) {
         $(e).parent().remove();
         this._params.subjectCount--;
     }
 }
-$(function() {
+$(function () {
     $(document).tooltip({
         position: {
             my: "center bottom-10",
             at: "center top",
-            using: function(position, feedback) {
+            using: function (position, feedback) {
                 $(this).css(position);
                 $(this).css('display', 'test');
                 $("<div>").addClass("arrow").addClass(feedback.vertical).addClass(feedback.horizontal).appendTo(this);
