@@ -273,7 +273,7 @@ a.active {font-size: 13px; text-decoration: none; color: #4F4F4F; cursor: defaul
 /*========== Заявки на рекламу ==========*/
 #request {}
 #request .table_head table .account { width: 220px; }
-#request .table_head table .details { width: ; }
+#request .table_head table .details { }
 #request .table_head table .date { width: 105px; }
 #request .table_head table .price { width: 85px; }
 #request .table_head table .icons { width: 42px; }
@@ -291,7 +291,7 @@ a.active {font-size: 13px; text-decoration: none; color: #4F4F4F; cursor: defaul
 /*========== Выполненые заказы ==========*/
 #fulfilled {}
 #fulfilled .table_head table .account { width: 220px; }
-#fulfilled .table_head table .details { width: ; }
+#fulfilled .table_head table .details {  }
 #fulfilled .table_head table .date { width: 125px; }
 #fulfilled .table_head table .price { width: 85px; }
 #fulfilled .table_head table .icons { width: 18px; }
@@ -379,37 +379,16 @@ a.active {font-size: 13px; text-decoration: none; color: #4F4F4F; cursor: defaul
 .editingPosts #block_1 { display: table; width:100%; padding-bottom: 10px; padding-top: 5px;}
 .editingPosts #block_1_1 {  display: table-cell;  padding-left: 15px; }
 
-.editingPosts #block_all { padding: 10px 0px 5px 5px; }
-.editingPosts #block_all .fa-camera { font-size: 11px; }
-.editingPosts #block_exceededLinks { padding: 0px 0px 5px 5px; }
-.editingPosts #block_exceededLinks .fa-square { color: #C43419; }
-.editingPosts #block_character { padding: 0px 0px 5px 5px; }
-.editingPosts #block_character .fa-square { color:  #F2A700}
-.editingPosts #block_censor { padding: 0px 0px 5px 5px; }
-.editingPosts #block_censor .fa-square { color: #BA52A2 }
-.editingPosts #block_adult { padding: 0px 0px 5px 5px; }
-.editingPosts #block_adult .fa-square { color: #4571C2 }
-.editingPosts #block_dublicate { padding: 0px 0px 5px 5px; }
-.editingPosts #block_dublicate .fa-square { color: #993300; }
-.editingPosts #block_blockDomain { padding: 0px 0px 5px 5px; }
-.editingPosts #block_blockDomain .fa-square { color: #FF5300; } 
-.editingPosts #block_notUniqueUrl { padding: 0px 0px 5px 5px; }
-.editingPosts #block_notUniqueUrl .fa-square { color: #8BEA00; } 
-
-.editingPosts #block_wordsFilter { padding: 0px 0px 5px 5px; }
-.editingPosts #block_wordsFilter .fa-square { color: #00CCA7; }
-
-.editingPosts #block_exceededHash { padding: 0px 0px 5px 0px; }
-.editingPosts #block_exceededHash .fa-square { color: #009999; }
-
-.editingPosts #block_references { padding: 0px 0px 5px 0px; }
-.editingPosts #block_references .fa-square { color: #08715C; }
+.editingPosts #block_rindexes { padding: 0px 0px 5px 5px; }
 
 .editingPosts #block_1_2 { display: table-cell; padding-left: 20px; }
 .editingPosts #block_1_3 { display: table-cell; padding-left: 20px; }
 
 .editingPosts .delete_post { text-decoration: none; font-size: 12px; color: #FBACAC}
 .editingPosts #block_2_top { background: none repeat scroll 0 0 #FAFAFA; border: 1px solid #EAECEB; display: block; width: auto;text-align: right}
+.editingPosts #block_2_top .sAllTweets { float: left; line-height: 30px; margin-left: 7px; text-decoration: none; }
+.editingPosts #block_2_top .sAllTweets:hover { text-decoration: underline; }
+
 .editingPosts #block_2_top_inset { background-image: linear-gradient(to bottom, #F2F2F2, #EAEAEA); margin: 1px; height: 30px; padding: 2px }
 .editingPosts #block_2_bottom { background: none repeat scroll 0 0 #FAFAFA; border: 1px solid #EAECEB; display: block; width: auto;text-align: right}
 .editingPosts #block_2_bottom_inset { background-image: linear-gradient(to bottom, #F2F2F2, #EAEAEA); margin: 1px; height: 30px; padding: 2px ;}
@@ -462,7 +441,7 @@ a.active {font-size: 13px; text-decoration: none; color: #4F4F4F; cursor: defaul
 .postingPosts #block_filter #block_filter_list {  display: block; margin: 15px 0px 15px; border-top: 1px solid #F0F0F0;}
 .postingPosts #block_filter #block_filter_list .filter { width: 100%; padding: 8px 0px; display: table; background-color: #FCFCFC; border-bottom: 1px solid #F0F0F0}
 .postingPosts #block_filter #block_filter_list .filter:hover{ background-color: #F7F7F7;}
-.postingPosts #block_filter #block_filter_list .filter .selects { display: table-cell; vertical-align: middle; width: 40px; padding-left: 15px; color: }
+.postingPosts #block_filter #block_filter_list .filter .selects { display: table-cell; vertical-align: middle; width: 40px; padding-left: 15px; }
 .postingPosts #block_filter #block_filter_list .filter .text { display: table-cell; color: #707070; font-size: 13px}
 .postingPosts #block_filter #block_filter_list .filter .delete { display: table-cell; vertical-align: middle; width: 20px; text-align: center; padding-right: 10px;}
 .postingPosts #block_filter #block_filter_list .filter .delete i:hover { cursor: help;}
@@ -527,14 +506,14 @@ a.active {font-size: 13px; text-decoration: none; color: #4F4F4F; cursor: defaul
 
 .postingPosts #block_accounts .line_title:hover { cursor: default; }
 
-.postingPosts #block_accounts .table_head table .level { min-width: 30px; width: ;}
+.postingPosts #block_accounts .table_head table .level { min-width: 30px; }
 .postingPosts #block_accounts .table_head table .followers { min-width: 73px; }
-.postingPosts #block_accounts .table_head table .rang { min-width: 63px; width: ;}
-.postingPosts #block_accounts .table_head table .pr { min-width: 25px; width: ;}
+.postingPosts #block_accounts .table_head table .rang { min-width: 63px; }
+.postingPosts #block_accounts .table_head table .pr { min-width: 25px; }
 .postingPosts #block_accounts .table_head table .tape { min-width: 31px; }
-.postingPosts #block_accounts .table_head table .index { min-width: 50px; width: ;}
-.postingPosts #block_accounts .table_head table .select { min-width: 20px; width: ;}
-.postingPosts #block_accounts .table_head table .price { min-width: 73px; width: ;}
+.postingPosts #block_accounts .table_head table .index { min-width: 50px; }
+.postingPosts #block_accounts .table_head table .select { min-width: 20px; }
+.postingPosts #block_accounts .table_head table .price { min-width: 73px; }
 .postingPosts #block_accounts .table_head table .text { min-width: 120px; width: 100%;  vertical-align: bottom !important;}
 .postingPosts #block_accounts .table_head table .check { }
 
@@ -544,14 +523,14 @@ a.active {font-size: 13px; text-decoration: none; color: #4F4F4F; cursor: defaul
 .postingPosts #block_accounts .acconts_list table tr td { padding: 7px 10px; }
 .postingPosts #block_accounts .acconts_list table .account { min-width: 222px; }
 .postingPosts #block_accounts .acconts_list table .followers { min-width: 73px; }
-.postingPosts #block_accounts .acconts_list table .level { color: #4F4F4F; font-size: 11px; min-width: 31px; text-align: center; width: ; }
-.postingPosts #block_accounts .acconts_list table .rang { color: #4F4F4F; font-size: 11px; min-width: 64px; text-align: center; width: ; }
-.postingPosts #block_accounts .acconts_list table .pr { color: #4F4F4F; font-size: 11px; min-width: 26px; text-align: center; width: ; }
+.postingPosts #block_accounts .acconts_list table .level { color: #4F4F4F; font-size: 11px; min-width: 31px; text-align: center;  }
+.postingPosts #block_accounts .acconts_list table .rang { color: #4F4F4F; font-size: 11px; min-width: 64px; text-align: center;  }
+.postingPosts #block_accounts .acconts_list table .pr { color: #4F4F4F; font-size: 11px; min-width: 26px; text-align: center;  }
 .postingPosts #block_accounts .acconts_list table .tape { font-size: 18px; text-align: center; min-width: 32px; }
 .postingPosts #block_accounts .acconts_list table .index { min-width: 51px; text-align: center; width: 5.71%; }
 .postingPosts #block_accounts .acconts_list table .index img { height: 20px; width: 20px; }
-.postingPosts #block_accounts .acconts_list table .select { min-width: 20px; text-align: center; font-size: 14px; width: ; }
-.postingPosts #block_accounts .acconts_list table .price { min-width: 74px; text-align: left; width: ; }
+.postingPosts #block_accounts .acconts_list table .select { min-width: 20px; text-align: center; font-size: 14px;  }
+.postingPosts #block_accounts .acconts_list table .price { min-width: 74px; text-align: left;  }
 .postingPosts #block_accounts .acconts_list table .text { color: #4F4F4F; font-size: 11px; min-width: 120px; text-align: left; width: 100%; }
 .postingPosts #block_accounts .acconts_list table .check { min-width: 18px; text-align: center; }
 
@@ -620,14 +599,14 @@ a.active {font-size: 13px; text-decoration: none; color: #4F4F4F; cursor: defaul
 
 #status_orders_fast { min-width: 890px; }
 #status_orders_fast .table_head table .id { width: 48px; text-align: left; padding-left: 7px; }
-#status_orders_fast .table_head table .link { width:; text-align: left; padding-left: 7px; }
+#status_orders_fast .table_head table .link {  text-align: left; padding-left: 7px; }
 #status_orders_fast .table_head table .date { width: 110px; text-align: left; padding-left: 7px; }
 #status_orders_fast .table_head table .status { width: 130px; text-align: left; padding-left: 7px; }
 #status_orders_fast .acconts_list table .id { width: 51px; text-align: left; padding-left: 7px; }
-#status_orders_fast .acconts_list table .link { width: ; text-align: left; padding-left: 7px; font-size: 11px; }
+#status_orders_fast .acconts_list table .link {  text-align: left; padding-left: 7px; font-size: 11px; }
 #status_orders_fast .acconts_list table .link a.test { color: #7E7E7E; cursor: pointer !important; }
 #status_orders_fast .acconts_list table .date { width: 110px; text-align: left; padding-left: 7px; color: #7E7E7E; font-size: 11px; }
-#status_orders_fast .acconts_list table .status { width:130px; text-align: left; padding-left: 7px; color:; font-size:10px; }
+#status_orders_fast .acconts_list table .status { width:130px; text-align: left; padding-left: 7px;  font-size:10px; }
 #status_orders_fast .acconts_list table .status span.wait { color:#7E7E7E; }
 #status_orders_fast .acconts_list table .status span.work { color:#FF0B0B; }
 #status_orders_fast .acconts_list table .status span.ok { color:#1F9D00; }
@@ -854,13 +833,13 @@ td.balance table#t1 tr td.personal_money_lock { min-width: 77px; width: 77px; pa
 /*========== Партнёрская прогамма ==========*/
 
 #affiliate_program .table_head table .date { width:120px; }
-#affiliate_program .table_head table .name { width:; }
+#affiliate_program .table_head table .name {  }
 #affiliate_program .table_head table .balance { width:105px; }
 #affiliate_program .table_head table .income { width:80px; }
 
 #affiliate_program .acconts_list table td { font-size: 11px;}
 #affiliate_program .acconts_list table .date { width:117px; padding-left: 15px; color: #999999; font-size: 11px;}
-#affiliate_program .acconts_list table .name { width:; }
+#affiliate_program .acconts_list table .name {  }
 #affiliate_program .acconts_list table .balance { width:105px; }
 #affiliate_program .acconts_list table .income { width:80px; }
 
@@ -892,7 +871,7 @@ td.balance table#t1 tr td.personal_money_lock { min-width: 77px; width: 77px; pa
 #shop_referrals .table_head table .balance_my { width:70px; }
 #shop_referrals .table_head table .balance_bonus { width:93px; }
 #shop_referrals .table_head table .add_accounts { width:95px; }
-#shop_referrals .table_head table .price { width: ; }
+#shop_referrals .table_head table .price {  }
 #shop_referrals .table_head table .icon { width: 24px; padding-right: 5px; padding-left: 5px; }
 
 #shop_referrals .acconts_list table td { font-size: 11px;}
@@ -903,7 +882,7 @@ td.balance table#t1 tr td.personal_money_lock { min-width: 77px; width: 77px; pa
 #shop_referrals .acconts_list table .balance_my { width:70px; }
 #shop_referrals .acconts_list table .balance_bonus { width:93px; }
 #shop_referrals .acconts_list table .add_accounts { width:95px; }
-#shop_referrals .acconts_list table .price { width: ; text-align: center;}
+#shop_referrals .acconts_list table .price {  text-align: center;}
 #shop_referrals .acconts_list table .icon { width: 24px; padding-right: 8px; padding-left: 5px; }
 
 

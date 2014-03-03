@@ -78,7 +78,7 @@ class Prepared extends \FormModel
 	public function getList()
 	{
 		if($this->_list === NULL) {
-			$this->_list = Yii::app()->db->createCommand("SELECT r.*, (SELECT COUNT(*) FROM {{twitter_tweetsRoster}} WHERE _key=r._hash) as _count FROM {{twitter_tweetsLists}} r WHERE owner_id=:owner")->queryAll(true, array(':owner' => Yii::app()->user->id));
+			$this->_list = Yii::app()->db->createCommand("SELECT r.*, (SELECT COUNT(*) FROM {{twitter_tweetsRoster}} WHERE _key=r._hash) as _count FROM {{twitter_tweetsLists}} r WHERE owner_id=:owner")->queryAll(true, [':owner' => Yii::app()->user->id]);
 		}
 
 		return $this->_list;
@@ -119,7 +119,7 @@ class Prepared extends \FormModel
 		$roster = $this->getRoster();
 		if(Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsLists}} WHERE _hash=:id AND owner_id=:owner")->execute([':id' => $this->_tid, ':owner' => Yii::app()->user->id])) {
 			$this->_message = 'Список "' . \Html::encode($this->getRoster()['title']) . '" успешно удален.';
-			Yii::app()->db->createCommand("UPDATE {{twitter_tweetsRoster}} SET is_save=0 WHERE _key=:tid")->execute([':tid' => $roster['_hash']]);
+			Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsListsRows}} WHERE _hash=:tid")->execute([':tid' => $roster['_hash']]);
 		}
 		else {
 			$this->_message = 'Не удалось удалить список "' . \Html::encode($this->getRoster()['title']) . '".';

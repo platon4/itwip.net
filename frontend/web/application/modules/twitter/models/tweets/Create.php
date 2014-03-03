@@ -3,105 +3,118 @@
 namespace twitter\models\tweets;
 
 use Yii;
-use twitter\components\Validator;
+use \twitter\components\validators;
 
-/**
- * Description of TweetsCreate
- *
- * @author eolitich
- */
 class Create extends \FormModel
 {
-	public $_key;
-	public $tweets = [];
-	protected $tweetsRows = [];
-	protected $validator;
+    public $tweets = [];
 
-	public function rules()
-	{
-		return array(
-			array('_key', 'ext.validators.hashValidator', 'min' => 10, 'max' => 15),
-			array('tweets', '_tweets')
-		);
-	}
+    protected $hash;
+    protected $_tweets = [];
 
-	public function beforeValidate()
-	{
-		Yii::app()->redis->delete(array('Roster:' . Yii::app()->user->id . ':' . $this->_key, 'UniqueTweet:' . Yii::app()->user->id, 'UniqueUrl:' . Yii::app()->user->id));
+    public function rules()
+    {
+        return [
+            ['tweets', 'preInit'],
+            ['tweets', 'makeTweets']
+        ];
+    }
 
-		return true;
-	}
+    public function afterValidate()
+    {
+        if(!$this->hasErrors()) {
+            if(\CHelper::isEmpty($this->getTweets()) || !$this->createRoster())
+                $this->addError('_tweets', Yii::t('twitterModule.tweets', '_error_create_tweets_roster'));
+        }
+    }
 
-	public function afterValidate()
-	{
-		if(!$this->tweetsAdd())
-			$this->addError('_tweets', Yii::t('twitterModule.tweets', '_error_create_tweets_roster'));
-	}
+    public function preInit()
+    {
+        if(Yii::app()->redis->exists('twitter:collection:run:' . Yii::app()->user->id))
+            $this->addError('tweets', 'В данный момент обрабатывается другой список твитов, пожалуйста дождитесь окончание оброботки.');
+    }
 
-	public function _tweets()
-	{
-		$i = 0;
+    /*
+     * Проверяем если список твиттов не пуст
+     */
+    public function makeTweets()
+    {
+        if(!\CHelper::isEmpty($this->tweets) && count($this->tweets)) {
+            foreach($this->tweets as $tweet) {
+                if(trim($tweet) != '') {
+                    $t = explode("\n", $tweet);
+                    foreach($t as $v) {
+                        if(trim($v) != '')
+                            $this->pushTweet($v);
+                    }
+                }
+            }
+        } else {
+            $this->addError('_tweets', Yii::t('twitterModule.tweets', '_error_no_tweets_add_edit'));
+        }
+    }
 
-		if(is_array($this->tweets) AND count($this->tweets)) {
-			foreach($this->tweets as $tweet) {
-				if(trim($tweet) != '') {
-					$t = explode("\n", $tweet);
+    /*
+     * Добавляем твит в общий список твитов на добавление
+     */
+    public function pushTweet($tweet)
+    {
+        $this->_tweets[] = $tweet;
+    }
 
-					foreach($t as $l) {
-						if(trim($l) != '') {
-							$this->tweetProccess($l);
-							$i++;
-						}
-					}
-				}
-			}
-		}
+    public function getTweets()
+    {
+        return $this->_tweets;
+    }
 
-		if(!$i)
-			$this->addError('_tweets', Yii::t('twitterModule.tweets', '_error_no_tweets_add_edit'));
-	}
+    public function getHash()
+    {
+        if($this->hash === null)
+            $this->hash = \CHelper::generateID();
 
-	public function tweetProccess($tweet)
-	{
-		$validator = $this->loadValidator();
+        return $this->hash;
+    }
 
-		$validator->validate($tweet);
-		$this->tweetsRows[] = [$this->_key, Yii::app()->user->id, $tweet, $validator->getTweetHash(), $validator->getUrl(), $validator->getUrlHash(), $validator->getIndexes(), $validator->getErrors(true), $validator->allowNext(), date('Y-m-d H:i:s')];
-	}
+    public function makeRows()
+    {
+        $validator = new validators\TweetEdit($this->getTweets(), $this->getHash());
+        $rows = [];
 
-	protected function getInsertRows()
-	{
-		return $this->tweetsRows;
-	}
+        foreach($this->getTweets() as $tweet) {
+            $validator->validate($tweet);
 
-	public function _getKey()
-	{
-		return $this->_key;
-	}
+            $rows[] = [
+                $this->getHash(),
+                Yii::app()->user->id,
+                $tweet,
+                $validator->getHash(),
+                $validator->getUrl(),
+                $validator->getUrlHash(),
+                $validator->getIndexes(),
+                $validator->getInfo(),
+                $validator->allowNext(),
+                date('Y-m-d')
+            ];
+        }
 
-	protected function tweetsAdd()
-	{
-		if($this->getInsertRows() !== array()) {
-			Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE owner_id=:owner AND is_save=0")->execute(array(':owner' => Yii::app()->user->id));
-			\CHelper::batchInsert('twitter_tweetsRoster', ['_key', 'owner_id', 'tweet', 'tweet_hash', '_url', '_url_hash', '_indexes', '_info', '_placement', '_date'], $this->getInsertRows());
-			Yii::app()->redis->set('Roster:' . Yii::app()->user->id . ':' . $this->_key, $this->_key);
-			Yii::app()->redis->expire('Roster:' . Yii::app()->user->id . ':' . $this->_key, 60 * 60);
+        $validator->afterInit();
 
-			return true;
-		}
-		else {
-			$this->addError('tweets', Yii::t('twitterModule.tweets', '_invalid_tweets_list_to'));
+        return $rows;
+    }
 
-			return false;
-		}
-	}
+    public function createRoster()
+    {
+        try {
+            $t = Yii::app()->db->beginTransaction();
 
-	protected function loadValidator()
-	{
-		if($this->validator === NULL) {
-			$this->validator = new Validator();
-		}
+            \CHelper::batchInsert('twitter_tweetsRoster', ['_key', 'owner_id', 'tweet', 'tweet_hash', '_url', '_url_hash', '_indexes', '_info', '_placement', '_date'], $this->makeRows());
 
-		return $this->validator;
-	}
+            $t->commit();
+            return true;
+        } catch(Exception $e) {
+
+            $t->rollBack();
+            return false;
+        }
+    }
 }

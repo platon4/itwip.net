@@ -14,12 +14,12 @@ class RunController extends \console\components\Controller
     public function init()
     {
         $this->c = Yii::$app->db->createCommand();
-        $this->q = new Query;
+        $this->q = new Query();
     }
 
     public function actionIndex()
     {
-        echo $this->c->update('{{%tw_accounts_settings}}', ['_timeout' => rand(15, 30)], '_timeout<15')->execute();
+
     }
 
     /*

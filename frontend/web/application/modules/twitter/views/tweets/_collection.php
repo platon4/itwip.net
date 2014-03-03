@@ -31,8 +31,7 @@ $this->breadcrumbs[] = array(
         <div id="block_1">
             <div id="block_1_1">
                 <form id="tweetsData">
-                    <?php echo Html::hiddenField('_tid', CHelper::generateID()); ?>
-                    <div id="block_1_1_1"><textarea id="PostingList" name="Tweets[]"></textarea></div>
+                    <div id="block_1_1_1"><textarea id="PostingList" name="Create[tweets][]"></textarea></div>
                     <div id="_data" style="height: 0; visibility: hidden;"></div>
                 </form>				
                 <script>
@@ -210,7 +209,7 @@ $this->breadcrumbs[] = array(
             {
                 case 200:
                     $("#" + $(this).attr('data-html')).append(data.result.html);
-                    $('#_data').append('<textarea id="tweet_' + data.result.areaID + '" name="Tweets[]" style="visibility: hidden; height: 0px;">' + data.result.tweets + '</textarea>');
+                    $('#_data').append('<textarea id="tweet_' + data.result.areaID + '" name="Create[tweets][]" style="visibility: hidden; height: 0px;">' + data.result.tweets + '</textarea>');
                     $('#all_tweets_add').html(parseInt($('#all_tweets_add').html()) + data.result.count);
                     break;
 

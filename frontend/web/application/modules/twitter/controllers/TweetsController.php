@@ -207,19 +207,14 @@ class TweetsController extends Controller
 	 */
 	public function actionCollection()
 	{
-		if(isset($_POST['Tweets'])) {
-			$tw = new Create;
+        $tw = new Create;
 
-			$tw->attributes = [
-				'tweets' => isset($_POST['Tweets']) ? $_POST['Tweets'] : [],
-				'_key' => isset($_POST['_tid']) ? $_POST['_tid'] : ''
-			];
-
+		if($tw->load($_POST)) {
 			if($tw->validate()) {
 				if(Yii::app()->request->isAjaxRequest)
-					Html::json(array('code' => 301, 'url' => Yii::app()->homeUrl . 'twitter/tweets/roster?_tid=' . $tw->_getKey()));
+					Html::json(array('code' => 301, 'url' => Yii::app()->homeUrl . 'twitter/tweets/roster?_tid=' . $tw->getHash()));
 				else
-					$this->redirect(Yii::app()->homeUrl . '/twitter/tweets/roster?_tid=' . $tw->_getKey());
+					$this->redirect(Yii::app()->homeUrl . '/twitter/tweets/roster?_tid=' . $tw->getHash());
 			}
 			else {
 				if(Yii::app()->request->isAjaxRequest)

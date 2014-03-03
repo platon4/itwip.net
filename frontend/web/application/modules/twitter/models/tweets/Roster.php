@@ -5,11 +5,7 @@ namespace twitter\models\tweets;
 use Yii;
 use twitter\models\tweets\Edit;
 
-/**
- * Description of TweetsRoster
- *
- * @author eolitich
- */
+
 class Roster extends \FormModel
 {
 	public $_tid;
@@ -228,7 +224,7 @@ class Roster extends \FormModel
 	protected function _saveRoster()
 	{
 		if(Yii::app()->db->createCommand("INSERT INTO {{twitter_tweetsLists}} (owner_id,_hash,date_create,title) VALUES (:owner_id,:_hash,:_date,:title) ON DUPLICATE KEY UPDATE date_create=:_date, title=:title")->execute([':owner_id' => Yii::app()->user->id, ':_hash' => $this->_tid, ':_date' => date("Y-m-d H:i:s"), ':title' => $this->_title])) {
-			Yii::app()->db->createCommand("UPDATE {{twitter_tweetsRoster}} SET is_save=1 WHERE _key=:key")->execute([':key' => $this->_tid]);
+
 		}
 		else {
 			$this->setCode(404)->addError('_tid', Yii::t('twitterModule.tweets', '_not_roster_exists_for_save'));
@@ -261,5 +257,4 @@ class Roster extends \FormModel
 		else
 			$this->setCode(200)->_getTweets(true);
 	}
-
 }

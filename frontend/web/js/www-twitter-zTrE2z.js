@@ -598,7 +598,7 @@ Tweets = {
                 switch (obj.code) {
                     case 200:
                         $("#_sitemaplist").append(obj.html);
-                        $('#_data').append('<textarea id="tweet_' + obj.areaID + '" name="Tweets[]" style="visibility: hidden; height: 0px;">' + obj.tweets + '</textarea>');
+                        $('#_data').append('<textarea id="tweet_' + obj.areaID + '" name="Create[tweets][]" style="visibility: hidden; height: 0px;">' + obj.tweets + '</textarea>');
                         Tweets.collectionStats(obj.count - Tweets.s.oldCount);
                         Tweets.s.oldCount = obj.count;
                         Tweets.s.urlWait = false;
@@ -641,7 +641,7 @@ Tweets = {
 
                         if (obj.code == 201) {
                             $('#_sitemaplist').append(obj.html);
-                            $('#_data').append('<textarea id="tweet_' + obj.areaID + '" name="Tweets[]" style="visibility: hidden; height: 0px;">' + obj.tweets + '</textarea>');
+                            $('#_data').append('<textarea id="tweet_' + obj.areaID + '" name="Create[tweets][]" style="visibility: hidden; height: 0px;">' + obj.tweets + '</textarea>');
                             Tweets.collectionStats(obj.ecount);
                             Tweets.s.urlWait = false;
                         }
