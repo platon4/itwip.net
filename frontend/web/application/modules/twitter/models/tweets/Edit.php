@@ -49,8 +49,6 @@ class Edit extends \FormModel
             try {
                 $t = Yii::app()->db->beginTransaction();
 
-                $this->refactoring();
-
                 Yii::app()->db->createCommand("UPDATE {{twitter_tweetsRoster}} SET tweet=:tweet,tweet_hash=:tweet_hash,_url=:url,_url_hash=:url_hash,_indexes=:indexes,_info=:info,_placement=:next WHERE id=:id")
                     ->execute([
                         ':id'         => $this->id,
@@ -78,17 +76,5 @@ class Edit extends \FormModel
                 break;
             }
         }
-    }
-
-    protected function refactoring()
-    {
-        $row = $this->getRoster();
-
-        Yii::app()->db->createCommand("UPDATE {{twitter_tweetsListsRows}} SET tweet=:tweet WHERE _key=:key AND ((id=:id) OR (parent=:id))")
-            ->execute([
-                ':id'    => $row['parent'] ? $row['parent'] : $row['id'],
-                ':tweet' => $this->tweet,
-                ':key'   => $this->_key
-            ]);
     }
 }

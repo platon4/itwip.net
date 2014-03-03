@@ -233,13 +233,12 @@ class Roster extends \FormModel
     {
         if($this->_group != 'all') {
             $db = Yii::app()->db;
+
             if($this->_group != '') {
                 $db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:tid AND owner_id=:owner_id AND FIND_IN_SET (:index, _indexes)")->execute(array(':index' => $this->_group, ':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id));
             } else {
                 $db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:tid AND owner_id=:owner_id AND id IN('" . implode("', '", $this->ids) . "')")->execute(array(':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id));
             }
-
-            $db->createCommand("DELETE FROM {{twitter_tweetsListsRows}} WHERE id");
 
             Yii::app()->redis->delete('twitter:tweets:' . $this->_tid . ':counts');
 

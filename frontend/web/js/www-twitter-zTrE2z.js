@@ -1798,6 +1798,22 @@ var Twitter = {
             _oType: 'ASC',
             page: 1
         },
+        roster: function (h, e) {
+            _ajax({
+                url: "/twitter/tweets/prepared?page=" + this.d.page + '&Prepared[search]=' + this.d.queryString + '&Prepared[order]=' + this.d._order + '&Prepared[sort]=' + this.d._oType,
+                success: function (result) {
+                    $('#preparedList').html(result['html']);
+                    $('#_all_count').html(result['count']);
+                },
+                beforeSend: function () {
+                    $('#preparedList').html('<div style="text-align: center; padding: 5px;">' + loading_img + '</div>');
+                    $('#_searchButton').find('i').removeClass('fa-search').addClass('fa-spin fa-spinner');
+                },
+                complete: function () {
+                    $('#_searchButton').find('i').removeClass('fa-spin fa-spinner').addClass('fa-search');
+                }
+            });
+        },
         remvoe: function (id) {
             Dialog.open(_confirm, {
                 content: 'Вы дейстивтельно хотите удалить список твитов ?',
