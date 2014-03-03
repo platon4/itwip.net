@@ -6,15 +6,23 @@ use Yii;
 
 class TweetEdit extends Tweet
 {
+    private $id;
+
+    public function __construct($id, $hash)
+    {
+        parent::__construct($hash);
+
+        $this->id = $id;
+    }
+
     /*
       * Проверка твита на уникальность
       */
     protected function validateUniqueTweet($attribute)
     {
-        if(Yii::app()->redis->hExists('twitter:validators:tweets:' . Yii::app()->user->id, $this->getHash()))
+        if(Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{twitter_tweetsRoster}} WHERE id!=:id AND tweet_hash=:hash")->queryScalar([':id' => $this->id, ':hash' => $this->getHash()])) {
             $this->addError($attribute, array());
-        else
-            Yii::app()->redis->hSet('twitter:validators:tweets:' . Yii::app()->user->id, $this->getHash(), $this->tweet);
+        }
     }
 
     /*
@@ -22,11 +30,8 @@ class TweetEdit extends Tweet
      */
     protected function validateUniqueUrl($attribute)
     {
-        if($this->urlCount == 1) {
-            if(Yii::app()->redis->hExists('twitter:validators:url:' . Yii::app()->user->id, $this->getUrlHash()))
-                $this->addError($attribute, array('replace' => array('{url}' => $this->urls)));
-            else
-                Yii::app()->redis->hSet('twitter:validators:url:' . Yii::app()->user->id, $this->getUrlHash(), $this->getUrl());
+        if($this->urlCount === 1 && Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{twitter_tweetsRoster}} WHERE id!=:id AND _url_Hash=:hash")->queryScalar([':id' => $this->id, ':hash' => $this->getUrlHash()])) {
+            $this->addError($attribute, array('replace' => array('{url}' => $this->getUrl())));
         }
     }
 } 

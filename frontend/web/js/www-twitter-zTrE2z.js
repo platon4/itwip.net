@@ -1790,7 +1790,7 @@ var Twitter = {
             }
         }
     },
-    prepared: {
+    p: {
         d: {
             queryString: '',
             limit: 10,
@@ -1812,7 +1812,7 @@ var Twitter = {
                                 url: "/twitter/tweets/prepared?action=remove&Prepared[_tid]=" + id,
                                 success: function (obj) {
                                     if (obj['code'] === 200)
-                                        Twitter.prepared.get();
+                                        Twitter.p.get();
 
                                     Dialog.open(_info, {content: obj['message']});
                                 },

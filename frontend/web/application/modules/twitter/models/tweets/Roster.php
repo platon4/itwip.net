@@ -203,6 +203,17 @@ class Roster extends \FormModel
     {
         if(Yii::app()->db->createCommand("INSERT INTO {{twitter_tweetsLists}} (owner_id,_hash,date_create,title) VALUES (:owner_id,:_hash,:_date,:title) ON DUPLICATE KEY UPDATE date_create=:_date, title=:title")->execute([':owner_id' => Yii::app()->user->id, ':_hash' => $this->_tid, ':_date' => date("Y-m-d H:i:s"), ':title' => $this->_title])) {
 
+            $tweets = Yii::app()->db->createCommand("SELECT id,tweet FROM {{twitter_tweetsRoster}} tr WHERE _key=:key AND NOT EXISTS (SELECT id FROM {{twitter_tweetsListsRows}} WHERE id=tr.parent)")->queryAll(true, [':key' => $this->_tid]);
+
+            if(!empty($tweets)) {
+                $inserts = [];
+
+                foreach($tweets as $tweet) {
+                    $inserts[] = [$this->_tid, $tweet['tweet'], $tweet['id']];
+                }
+
+                \CHelper::batchInsert('twitter_tweetsListsRows', ['_hash', 'tweet', 'parent'], $inserts);
+            }
         } else {
             $this->setCode(404)->addError('_tid', Yii::t('twitterModule.tweets', '_not_roster_exists_for_save'));
         }
@@ -221,20 +232,23 @@ class Roster extends \FormModel
     protected function removeTweets()
     {
         if($this->_group != 'all') {
-            if($this->_group != '')
-                Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:tid AND owner_id=:owner_id AND FIND_IN_SET (:index, _indexes)")->execute(array(':index' => $this->_group, ':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id));
-            else
-                Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:tid AND owner_id=:owner_id AND id IN('" . implode("', '", $this->ids) . "')")->execute(array(':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id));
+            $db = Yii::app()->db;
+            if($this->_group != '') {
+                $db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:tid AND owner_id=:owner_id AND FIND_IN_SET (:index, _indexes)")->execute(array(':index' => $this->_group, ':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id));
+            } else {
+                $db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:tid AND owner_id=:owner_id AND id IN('" . implode("', '", $this->ids) . "')")->execute(array(':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id));
+            }
+
+            $db->createCommand("DELETE FROM {{twitter_tweetsListsRows}} WHERE id");
 
             Yii::app()->redis->delete('twitter:tweets:' . $this->_tid . ':counts');
 
             if($this->getFigures('all') === 0) {
-                Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsLists}} WHERE _hash=:tid AND owner_id=:owner_id");
+                $db->createCommand("DELETE FROM {{twitter_tweetsLists}} WHERE _hash=:tid AND owner_id=:owner_id");
                 $this->setCode(301)->addError('_tid', Yii::t('twitterModule.tweets', '_not_roster_exists'));
             } else
                 $this->setCode(200)->_getTweets(true);
-        }
-        else {
+        } else {
             $this->addError('_action', Yii::t('yii', 'Your request is invalid.'));
         }
     }

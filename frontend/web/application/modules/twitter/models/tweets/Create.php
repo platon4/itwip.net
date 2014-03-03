@@ -77,7 +77,7 @@ class Create extends \FormModel
 
     public function makeRows()
     {
-        $validator = new validators\TweetEdit($this->getTweets(), $this->getHash());
+        $validator = new validators\TweetCollection($this->getHash());
         $rows = [];
 
         foreach($this->getTweets() as $tweet) {

@@ -376,7 +376,7 @@ a.active {font-size: 13px; text-decoration: none; color: #4F4F4F; cursor: defaul
 .editingPosts { width: auto; min-width: 750px;}
 ._symbolsLimit {color: red;}
 
-.editingPosts #block_1 { display: table; width:100%; padding-bottom: 10px; padding-top: 5px;}
+.editingPosts #block_1 { display: table; min-width: 850px; padding-bottom: 10px; padding-top: 5px; }
 .editingPosts #block_1_1 {  display: table-cell;  padding-left: 15px; }
 
 .editingPosts #block_rindexes { padding: 0px 0px 5px 5px; }

@@ -8,6 +8,8 @@ use twitter\components\validators\TweetEdit;
 class Edit extends \FormModel
 {
     protected $validator;
+    protected $_roster;
+
     public $id;
     public $tweet;
     public $_key;
@@ -16,55 +18,77 @@ class Edit extends \FormModel
     {
         return [
             ['id', 'numerical', 'integerOnly' => true, 'allowEmpty' => false],
+            ['id', 'rosterExists'],
             ['_key', 'ext.validators.hashValidator', 'min' => 10, 'max' => 15],
-            ['tweet', 'safe']
+            ['tweet', 'length', 'max' => 1000, 'tooLong' => 'Превышено допустимое коло-го символов в твите.'],
         ];
+    }
+
+    public function rosterExists()
+    {
+        if($this->getRoster() === false) {
+            $this->addError('id', 'Не удалось найти редактируемый твит, пожалуйста попробуйте еще раз.');
+        }
+    }
+
+    public function getRoster()
+    {
+        if($this->_roster === null) {
+            $this->_roster = Yii::app()->db->createCommand("SELECT * FROM {{twitter_tweetsRoster}} WHERE id=:id")->queryRow(true, [':id' => $this->id]);
+        }
+
+        return $this->_roster;
     }
 
     public function afterValidate()
     {
-        $tw = new TweetEdit();
-
-        $this->initTweets();
-
+        $tw = new TweetEdit($this->id, $this->_key);
         $tw->validate($this->tweet);
+
         if($tw->allowNext()) {
-            $this->refactoring($tw);
+            try {
+                $t = Yii::app()->db->beginTransaction();
 
-            Yii::app()->db->createCommand("UPDATE {{twitter_tweetsRoster}} SET tweet=:tweet,tweet_hash=:tweet_hash,_url=:url,_url_hash=:url_hash,_indexes=:indexes,_info=:info,_placement=:next WHERE id=:id")
-                ->execute(array(
-                    ':id'         => $this->id,
-                    ':tweet'      => $this->tweet,
-                    ':tweet_hash' => $tw->getTweetHash(),
-                    ':url'        => $tw->getUrl(),
-                    ':url_hash'   => $tw->getUrlHash(),
-                    ':indexes'    => $tw->getIndexes(),
-                    ':info'       => $tw->getErrors(true),
-                    ':next'       => $tw->allowNext()
-                ));
+                $this->refactoring();
 
-            Yii::app()->redis->delete($this->_key . ':counts');
+                Yii::app()->db->createCommand("UPDATE {{twitter_tweetsRoster}} SET tweet=:tweet,tweet_hash=:tweet_hash,_url=:url,_url_hash=:url_hash,_indexes=:indexes,_info=:info,_placement=:next WHERE id=:id")
+                    ->execute([
+                        ':id'         => $this->id,
+                        ':tweet'      => $this->tweet,
+                        ':tweet_hash' => $tw->getHash(),
+                        ':url'        => $tw->getUrl(),
+                        ':url_hash'   => $tw->getUrlHash(),
+                        ':indexes'    => $tw->getIndexes(),
+                        ':info'       => $tw->getInfo(),
+                        ':next'       => $tw->allowNext()
+                    ]);
+
+                $t->commit();
+            } catch(Exception $e) {
+                $t->rollBack();
+            }
         } else {
-            foreach($tw->getErrors() as $error) {
-                if(isset($error[0]['replace']))
-                    $replace = array($error[0]['replace']['key'] => $error[0]['replace']['value']);
-                else
-                    $replace = array();
+            foreach($tw->getErrors() as $key => $error) {
+                $replace = [];
 
-                $this->addError('tweet', Yii::t('twitterModule.tweets', $error[0]['text'], $replace));
+                if(isset($error['replace']))
+                    $replace = $error['replace'];
 
-                return;
+                $this->addError('tweet', Yii::t('twitterModule.tweets', '_error_groups_' . $key, $replace));
+                break;
             }
         }
     }
 
-    protected function refactoring($model)
+    protected function refactoring()
     {
-        $row = Yii::app()->db->createCommand("SELECT tweet_hash, _url_Hash FROM {{twitter_tweetsRoster}} WHERE id=:id")->queryRow(true, [':id' => $this->id]);
-    }
+        $row = $this->getRoster();
 
-    public function initTweets()
-    {
-
+        Yii::app()->db->createCommand("UPDATE {{twitter_tweetsListsRows}} SET tweet=:tweet WHERE _key=:key AND ((id=:id) OR (parent=:id))")
+            ->execute([
+                ':id'    => $row['parent'] ? $row['parent'] : $row['id'],
+                ':tweet' => $this->tweet,
+                ':key'   => $this->_key
+            ]);
     }
 }

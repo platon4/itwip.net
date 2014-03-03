@@ -254,6 +254,7 @@ return array(
     '_error_groups_unique-url' => 'Указанная ссылка "{url}" уже присутствует в списке',
     '_error_groups_links' => 'Превышено коло-го ссылок в твите, допускается только одна ссылка.',
     '_error_groups_censor' => 'Цензура в твите: {words}',
+    '_error_groups_unique-tweet' => 'Твит уже присуствует в списке',
 
 	'_tweet_success_save' => 'Твит успешно сохранен',
 
