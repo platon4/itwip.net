@@ -16,4 +16,4 @@
         <div style="text-align:center; padding:6px;">Сохраненные списки постов отсутствуют</div>
     <?php } ?>
 </table>
-<?php echo $this->renderPartial('application.views.main._pages', array('ajax_query' => 'Tweets.getPreparedPage', 'pages' => $model->getPages())); ?>
+<?php echo $this->renderPartial('application.views.main._pages', array('ajax_query' => 'Twitter.p.setPage', 'pages' => $model->getPages())); ?>

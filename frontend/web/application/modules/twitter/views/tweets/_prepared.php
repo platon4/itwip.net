@@ -16,14 +16,14 @@ $this->breadcrumbs[] = array(
         </div>
         <div style="cursor: default" class="line_title no_border_bottom">
             <?php echo Yii::t('twitterModule.prepared', '_save_list'); ?>: <span id="_all_count"><?php echo $model->rosterCount(); ?></span>
-            <span style="margin: -4px 2px 0px 0px;" class="group_input search float_right"><input type="text" id="setQuery" placeholder="<?php echo Yii::t('twitterModule.prepared', '_search_name'); ?>" onkeyup="Tweets._getPreparedFromQuery('setQuery', '_searchButton');"><button id="_searchButton" class="button icon" onclick="Tweets._getPreparedFromQuery('setQuery', '_searchButton');"><i class="fa fa-search"></i></button></span>
+            <span style="margin: -4px 2px 0px 0px;" class="group_input search float_right"><input type="text" id="setQuery" placeholder="<?php echo Yii::t('twitterModule.prepared', '_search_name'); ?>" onkeyup="Twitter.p.getFromQuery('setQuery', '_searchButton');"><button id="_searchButton" class="button icon" onclick="Twitter.p.getFromQuery('setQuery', '_searchButton');"><i class="fa fa-search"></i></button></span>
         </div>
         <div class="table_head">
             <div class="table_head_inside">
                 <table>
                     <tbody>
                         <tr>
-                            <td class="date"><a href="javascript: void(0);" onclick="Tweets._setPreparedOrder('date', this);"><?php echo Yii::t('twitterModule.prepared', '_date'); ?> <i class="fa fa-caret-down"></i></a></td>
+                            <td class="date"><a href="javascript: void(0);" onclick="Twitter.p.setOrder('date', this);"><?php echo Yii::t('twitterModule.prepared', '_date'); ?> <i class="fa fa-caret-down"></i></a></td>
                             <td class="name"><?php echo Yii::t('twitterModule.prepared', '_name'); ?></td>
                             <td class="tweet"><?php echo Yii::t('twitterModule.prepared', '_tweets'); ?></td>
                             <td class="edit"> </td>

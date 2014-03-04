@@ -256,26 +256,6 @@ Tweets = {
         _tid: null,
         params: []
     },
-    getPreparedPage: function (page) {
-        this.s.page = page;
-        this._getPrepared();
-    },
-    _getPrepared: function () {
-        _ajax({
-            url: "/twitter/tweets/prepared?page=" + this.s.page + '&Prepared[search]=' + this.s.queryString + '&Prepared[order]=' + this.s._order + '&Prepared[sort]=' + this.s._oType,
-            success: function (result) {
-                $('#preparedList').html(result.html);
-                $('#_all_count').html(result.count);
-            },
-            beforeSend: function () {
-                $('#preparedList').html('<div style="text-align: center; padding: 5px;">' + loading_img + '</div>');
-                $('#_searchButton').find('i').removeClass('fa-search').addClass('fa-spin fa-spinner');
-            },
-            complete: function () {
-                $('#_searchButton').find('i').removeClass('fa-spin fa-spinner').addClass('fa-search');
-            }
-        });
-    },
     filterRun: function (i, t, k) {
         $('#_filterRun').next().slideDown('fast', function () {
             if ($(this).is(":visible") == true) {
@@ -391,13 +371,6 @@ Tweets = {
             Tweets.getAccountList();
         }, 300)
     },
-    _getPreparedFromQuery: function (element) {
-        this.s.queryString = $("#setQuery").val();
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-            Tweets._getPrepared();
-        }, 300)
-    },
     _setOrder: function (prm, element) {
         this.s.page = 0;
         $(".table_head_inside").find('i').removeClass('fa-caret-up').addClass('fa-caret-down');
@@ -414,22 +387,6 @@ Tweets = {
         }
 
         this.getAccountList();
-    },
-    _setPreparedOrder: function (prm, element) {
-        $(".table_head_inside").find('i').removeClass('fa-caret-up').addClass('fa-caret-down');
-        if (this.s._order == prm && cCount == 0) {
-            this.s._oType = "DESC";
-            cCount = 1;
-            $(element).find('i').removeClass('fa-caret-up').addClass('fa-caret-down');
-        }
-        else {
-            this.s._oType = "ASC";
-            this.s._order = prm;
-            cCount = 0;
-            $(element).find('i').removeClass('fa-caret-down').addClass('fa-caret-up');
-        }
-
-        this._getPrepared();
     },
     getAccountList: function (b) {
         var data;
@@ -1800,17 +1757,20 @@ var Twitter = {
         },
         roster: function (h, e) {
             _ajax({
-                url: "/twitter/tweets/prepared?page=" + this.d.page + '&Prepared[search]=' + this.d.queryString + '&Prepared[order]=' + this.d._order + '&Prepared[sort]=' + this.d._oType,
-                success: function (result) {
-                    $('#preparedList').html(result['html']);
-                    $('#_all_count').html(result['count']);
+                url: "/twitter/tweets/recollection?h=" + h,
+                success: function (obj) {
+                    if (obj['code'] == 301) {
+                        window.location.href = obj['url'];
+                    }
+                    else {
+                        Dialog.open(_error, {"content": obj.message});
+                    }
                 },
                 beforeSend: function () {
-                    $('#preparedList').html('<div style="text-align: center; padding: 5px;">' + loading_img + '</div>');
-                    $('#_searchButton').find('i').removeClass('fa-search').addClass('fa-spin fa-spinner');
+                    $(e).children().removeClass('fa-twitter').addClass('fa-spin fa-spinner');
                 },
                 complete: function () {
-                    $('#_searchButton').find('i').removeClass('fa-spin fa-spinner').addClass('fa-search');
+                    $(e).children().removeClass('fa-spin fa-spinner').addClass('fa-twitter');
                 }
             });
         },
@@ -1853,18 +1813,50 @@ var Twitter = {
                 ]
             });
         },
+        setPage: function (page) {
+            this.d.page = page;
+            Twitter.p.get();
+        },
+        setOrder: function (prm, element) {
+            $(".table_head_inside").find('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+            if (this.d._order == prm && cCount == 0) {
+                this.d._oType = "DESC";
+                cCount = 1;
+                $(element).find('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+            }
+            else {
+                this.d._oType = "ASC";
+                this.d._order = prm;
+                cCount = 0;
+                $(element).find('i').removeClass('fa-caret-down').addClass('fa-caret-up');
+            }
+
+            Twitter.p.get();
+        },
+        getFromQuery: function (element) {
+            this.d.queryString = $("#setQuery").val();
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                Twitter.p.get();
+            }, 300)
+        },
         get: function () {
             _ajax({
                 url: "/twitter/tweets/prepared?page=" + this.d.page + '&Prepared[search]=' + this.d.queryString + '&Prepared[order]=' + this.d._order + '&Prepared[sort]=' + this.d._oType,
-                success: function (result) {
-                    $('#preparedList').html(result['html']);
-                    $('#_all_count').html(result['count']);
+                success: function (obj) {
+                    if (obj['code'] == 200) {
+                        $('#preparedList').html(obj['html']);
+                        $('#_all_count').html(obj['count']);
+                    } else {
+                        Dialog.open(_error, {"content": obj['message']});
+                    }
                 },
                 beforeSend: function () {
-                    $('#preparedList').html('<div style="text-align: center; padding: 5px;">' + loading_img + '</div>');
+                    $('#preparedList').css('opacity', '0.5');
                     $('#_searchButton').find('i').removeClass('fa-search').addClass('fa-spin fa-spinner');
                 },
                 complete: function () {
+                    $('#preparedList').css('opacity', '1');
                     $('#_searchButton').find('i').removeClass('fa-spin fa-spinner').addClass('fa-search');
                 }
             });

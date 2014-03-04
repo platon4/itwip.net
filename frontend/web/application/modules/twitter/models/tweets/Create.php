@@ -8,13 +8,14 @@ use \twitter\components\validators;
 class Create extends \FormModel
 {
     public $tweets = [];
-
+    public $h;
     protected $hash;
     protected $_tweets = [];
 
     public function rules()
     {
         return [
+            ['h', 'ext.validators.hashValidator', 'min' => 10, 'max' => 15, 'on' => 'recreate'],
             ['tweets', 'preInit'],
             ['tweets', 'makeTweets']
         ];
@@ -30,8 +31,8 @@ class Create extends \FormModel
 
     public function preInit()
     {
-        //if(Yii::app()->redis->exists('twitter:collection:run:' . Yii::app()->user->id))
-           // $this->addError('tweets', 'В данный момент обрабатывается другой список твитов, пожалуйста дождитесь окончание оброботки.');
+        if(Yii::app()->redis->exists('twitter:collection:run:' . Yii::app()->user->id))
+            $this->addError('tweets', 'В данный момент обрабатывается другой список твитов, пожалуйста дождитесь окончание оброботки.');
     }
 
     /*
@@ -39,18 +40,28 @@ class Create extends \FormModel
      */
     public function makeTweets()
     {
-        if(!\CHelper::isEmpty($this->tweets) && count($this->tweets)) {
-            foreach($this->tweets as $tweet) {
-                if(trim($tweet) != '') {
-                    $t = explode("\n", $tweet);
-                    foreach($t as $v) {
-                        if(trim($v) != '')
-                            $this->pushTweet($v);
-                    }
-                }
+        if($this->getScenario() === 'recreate') {
+
+            $rows = Yii::app()->db->createCommand("SELECT * FROM {{twitter_tweetsListsRows}} WHERE _hash=:hash")->queryAll(true, [':hash' => $this->h]);
+
+            foreach($rows as $row) {
+                if(trim($row['tweet']) != '')
+                    $this->pushTweet($row['tweet']);
             }
         } else {
-            $this->addError('_tweets', Yii::t('twitterModule.tweets', '_error_no_tweets_add_edit'));
+            if(!\CHelper::isEmpty($this->tweets) && count($this->tweets)) {
+                foreach($this->tweets as $tweet) {
+                    if(trim($tweet) != '') {
+                        $t = explode("\n", $tweet);
+                        foreach($t as $v) {
+                            if(trim($v) != '')
+                                $this->pushTweet($v);
+                        }
+                    }
+                }
+            } else {
+                $this->addError('_tweets', Yii::t('twitterModule.tweets', '_error_no_tweets_add_edit'));
+            }
         }
     }
 
