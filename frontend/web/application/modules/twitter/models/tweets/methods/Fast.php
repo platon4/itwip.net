@@ -217,6 +217,6 @@ class Fast extends \FormModel
 	 */
 	public function clear()
 	{
-		Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:key  AND is_save=0")->execute([':key' => $this->_tid]); // Удаляем список твитов
+		Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:key")->execute([':key' => $this->_tid]); // Удаляем список твитов
 	}
 }

@@ -93,7 +93,7 @@ class Manual extends \FormModel
     public function init()
     {
         if($this->getScenario() == 'method') {
-            $row = Yii::app()->db->createCommand("SELECT _filter FROM {{tw_filters}} WHERE id=:tid")->queryRow(TRUE, [':tid' => $this->_tid]);
+            $row = Yii::app()->db->createCommand("SELECT _filter FROM {{tw_filters}} WHERE id=:tid")->queryRow(true, [':tid' => $this->_tid]);
 
             $this->attributes = unserialize($row['_filter']);
             $this->_age_blog_do = (int) round(((time() - strtotime('15.07.2006 00:00:00')) / 86400) / 31);
@@ -117,7 +117,7 @@ class Manual extends \FormModel
             ['_tid', 'safe', 'on' => 'method'],
 
             ['_tid', 'ext.validators.hashValidator', 'min' => 10, 'max' => 15, 'on' => 'tweets,get,order,rows,save'], //проверяем хэш заказа
-            ['rid', 'numerical', 'integerOnly' => TRUE, 'allowEmpty' => FALSE, 'message' => Yii::t('yii', 'Your request is invalid.'), 'on' => 'tweets,save'],
+            ['rid', 'numerical', 'integerOnly' => true, 'allowEmpty' => false, 'message' => Yii::t('yii', 'Your request is invalid.'), 'on' => 'tweets,save'],
             ['act', 'in', 'range' => ['no_use', 'all'], 'message' => Yii::t('yii', 'Your request is invalid.'), 'on' => 'tweets'],
             ['_q', 'length', 'max' => 140, 'on' => 'tweets'],
 
@@ -129,7 +129,7 @@ class Manual extends \FormModel
             ['limit', 'in', 'range' => [10, 20, 30, 40, 50, 100], 'on' => 'get,rows'],
             ['_gender', 'in', 'range' => [0, 1, 2], 'on' => 'get,rows'],
             ['pay_method', 'in', 'range' => [0, 1], 'message' => Yii::t('twitterModule.tweets', '_no_pay_system'), 'on' => 'get,rows'],
-            ['_ya_r_ot,_age_blog_ot,_googl_rang_ot,_ya_r_do', 'numerical', 'integerOnly' => TRUE, 'min' => 0, 'tooSmall' => Yii::t('twitterModule.tweets', '_error_numerical_min_0'), 'on' => 'get,rows'],
+            ['_ya_r_ot,_age_blog_ot,_googl_rang_ot,_ya_r_do', 'numerical', 'integerOnly' => true, 'min' => 0, 'tooSmall' => Yii::t('twitterModule.tweets', '_error_numerical_min_0'), 'on' => 'get,rows'],
 
             /*
              * iTr
@@ -152,7 +152,7 @@ class Manual extends \FormModel
             /*
              * Google
              */
-            ['_googl_rang_ot,_googl_rang_do', 'numerical', 'integerOnly' => TRUE, 'min' => 0, 'max' => 10, 'on' => 'get,rows'],
+            ['_googl_rang_ot,_googl_rang_do', 'numerical', 'integerOnly' => true, 'min' => 0, 'max' => 10, 'on' => 'get,rows'],
             ['_googl_rang_ot', 'compare', 'compareAttribute' => '_googl_rang_do', 'operator' => '<', 'message' => Yii::t('twitterModule.tweets', '_error_comapare_googl_rang'), 'on' => 'get,rows'],
 
             /*
@@ -163,7 +163,7 @@ class Manual extends \FormModel
             /*
              * Читатели
              */
-            ['followers_ot,followers_do', 'numerical', 'integerOnly' => TRUE, 'min' => 500, 'max' => 99999999999, 'on' => 'get,rows'],
+            ['followers_ot,followers_do', 'numerical', 'integerOnly' => true, 'min' => 500, 'max' => 99999999999, 'on' => 'get,rows'],
             ['followers_ot', 'compare', 'compareAttribute' => 'followers_do', 'operator' => '<=', 'message' => Yii::t('twitterModule.tweets', '_error_comapare_followers'), 'on' => 'get,rows'],
 
             ['pType', 'ConfirmTypeValidate', 'on' => 'get,rows'],
@@ -172,8 +172,8 @@ class Manual extends \FormModel
             ['_added_system', 'in', 'range' => ['all', 'today', 'three_days', 'seven_days', 'month'], 'on' => 'get,rows'],
             ['_age_blog_ot,_age_blog_do,_show_only_white_list,_not_black_list,_age,blogging_topics,tape', 'safe', 'on' => 'get,rows'],
 
-            ['_a', 'in', 'range' => ['DESC', 'ASC'], 'allowEmpty' => FALSE, 'on' => 'rows'],
-            ['_o', 'in', 'range' => array_keys($this->_orders), 'allowEmpty' => FALSE, 'on' => 'rows'],
+            ['_a', 'in', 'range' => ['DESC', 'ASC'], 'allowEmpty' => false, 'on' => 'rows'],
+            ['_o', 'in', 'range' => array_keys($this->_orders), 'allowEmpty' => false, 'on' => 'rows'],
 
             /*
              * Сценари order (создание заказа)
@@ -266,7 +266,7 @@ class Manual extends \FormModel
                     foreach($day as $hour) {
                         if(!intval($hour) || $hour < 0 || $hour > 24) {
                             $this->addError('t', 'Параметр временного таргетинга указан неверно.');
-                            return FALSE;
+                            return false;
                         }
                         $h++;
                     }
@@ -274,7 +274,7 @@ class Manual extends \FormModel
                     $d++;
                 } else {
                     $this->addError('t', 'Параметр временного таргетинга указан неверно.');
-                    return FALSE;
+                    return false;
                 }
             }
 
@@ -310,7 +310,7 @@ class Manual extends \FormModel
      */
     public function where()
     {
-        if($this->_where === NULL) {
+        if($this->_where === null) {
             $fileds = ['`tw`.`_status`=\'1\''];
 
             if($this->pay_method == 0)
@@ -388,7 +388,7 @@ class Manual extends \FormModel
         $accountsRows = Yii::app()->db->createCommand("SELECT st.working_in,st._price,st._stop,tw.id,tw.screen_name,tw.name,tw.avatar,tw.itr,tw.yandex_rank, tw.google_pr,tw.in_yandex,tw.followers,tw.tape
                                                                                         FROM {{tw_accounts_settings}} st INNER JOIN {{tw_accounts}} tw ON st.tid=tw.id
                                                                                             " . $this->where()['where'] . "ORDER BY " . $this->_orders[$this->_o] . ' ' . $this->_a . " LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())
-            ->queryAll(TRUE, $this->where()['values']);
+            ->queryAll(true, $this->where()['values']);
 
         $rows = [];
         $keys = Yii::app()->redis->hKeys('twitter:o:m:' . $this->_tid . ':tweets');
@@ -413,7 +413,7 @@ class Manual extends \FormModel
      */
     public function getAccountsCount()
     {
-        if($this->_accountsCount === NULL)
+        if($this->_accountsCount === null)
             $this->_accountsCount = Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{tw_accounts_settings}} st INNER JOIN {{tw_accounts}} tw ON st.tid=tw.id" . $this->where()['where'] . "")->queryScalar($this->where()['values']);
 
         return $this->_accountsCount;
@@ -430,7 +430,7 @@ class Manual extends \FormModel
             foreach($this->tweets as $id) {
                 if(!\CHelper::int($id)) {
                     $this->addError('tweets', 'Некорректный список твитов');
-                    return FALSE;
+                    return false;
                 }
             }
         } else {
@@ -449,7 +449,7 @@ class Manual extends \FormModel
 
         if($this->_tweetsListCount > 0) {
             $account = Twitter::accounts($this->rid);
-            $rows = Yii::app()->db->createCommand("SELECT id,tweet FROM {{twitter_tweetsRoster}} WHERE _key=:key AND owner_id=:owner AND id IN ('" . implode("', '", $this->tweets) . "')")->queryAll(TRUE, [':key' => $this->_tid, ':owner' => Yii::app()->user->id]);
+            $rows = Yii::app()->db->createCommand("SELECT id,tweet FROM {{twitter_tweetsRoster}} WHERE _key=:key AND owner_id=:owner AND id IN ('" . implode("', '", $this->tweets) . "')")->queryAll(true, [':key' => $this->_tid, ':owner' => Yii::app()->user->id]);
 
             if($rows !== array()) {
                 $tweets = [];
@@ -467,17 +467,17 @@ class Manual extends \FormModel
                         Yii::app()->redis->hSet('twitter:o:m:' . $this->_tid . ':tweets', 'tweet:' . $this->rid . ':' . $tweetID, $tweetID);
                     }
                 } else {
-                    return FALSE;
+                    return false;
                 }
             } else {
                 $this->addError('tweets', 'Ошибка при сохранение твитов, список не найден, или не верные параметры, пожалуйста попробуйте еще раз.');
-                return FALSE;
+                return false;
             }
         } else {
             Yii::app()->redis->hDelete('twitter:o:m:' . $this->_tid . ':tweets', 'tweet:' . $this->rid);
         }
 
-        return TRUE;
+        return true;
     }
 
     /*
@@ -491,7 +491,7 @@ class Manual extends \FormModel
         $fields = ['_key=:key', 'owner_id=:owner', '_placement=1'];
         $values = [':key' => $this->_tid, ':owner' => Yii::app()->user->id];
 
-        if($this->_q !== NULL) {
+        if($this->_q !== null) {
             $fields[] = 'tweet LIKE :like';
             $values[':like'] = '%' . $this->_q . '%';
         }
@@ -500,7 +500,7 @@ class Manual extends \FormModel
         $sltdc = [];
         $exclude = [];
 
-        if($rows !== FALSE) {
+        if($rows !== false) {
             if(!\CHelper::isEmpty($rows)) {
                 foreach($rows as $k => $e) {
                     if(substr($k, 0, strlen('tweet:' . $this->rid)) == 'tweet:' . $this->rid)
@@ -520,7 +520,7 @@ class Manual extends \FormModel
         else
             $order = '';
 
-        $tweetsRows = Yii::app()->db->createCommand("SELECT * FROM {{twitter_tweetsRoster}} WHERE " . implode(" AND ", $fields) . $order)->queryAll(TRUE, $values);
+        $tweetsRows = Yii::app()->db->createCommand("SELECT * FROM {{twitter_tweetsRoster}} WHERE " . implode(" AND ", $fields) . $order)->queryAll(true, $values);
 
         foreach($tweetsRows as $row) {
             if(isset($sltdc['tweet:' . $this->rid . ':' . $row['id']]) && $sltdc['tweet:' . $this->rid . ':' . $row['id']] == $row['id'])
@@ -559,7 +559,7 @@ class Manual extends \FormModel
      */
     public function getPages()
     {
-        if($this->_pages === NULL) {
+        if($this->_pages === null) {
             $this->_pages = new \CPagination($this->getAccountsCount());
             $this->_pages->pageSize = $this->getLimit();
         }
@@ -639,7 +639,7 @@ class Manual extends \FormModel
      */
     public function getStartDate()
     {
-        return $this->sDate === NULL ? date('Y-m-d') : $this->sDate;
+        return $this->sDate === null ? date('Y-m-d') : $this->sDate;
     }
 
     /*
@@ -721,7 +721,7 @@ class Manual extends \FormModel
          */
         if($accounts->isLoad()) {
             $selectedTweets = Yii::app()->redis->hGetAll('twitter:o:m:' . $this->_tid . ':tweets');
-            $tweetsRows = Yii::app()->db->createCommand("SELECT id,tweet,tweet_hash FROM {{twitter_tweetsRoster}} WHERE _key=:key AND owner_id=:owner AND _placement=1")->queryAll(TRUE, [':key' => $this->_tid, ':owner' => Yii::app()->user->id]);
+            $tweetsRows = Yii::app()->db->createCommand("SELECT id,tweet,tweet_hash FROM {{twitter_tweetsRoster}} WHERE _key=:key AND owner_id=:owner AND _placement=1")->queryAll(true, [':key' => $this->_tid, ':owner' => Yii::app()->user->id]);
             $tweets = [];
 
             foreach($tweetsRows as $row) {
@@ -778,7 +778,7 @@ class Manual extends \FormModel
                     $this->addError('order', Yii::t('twitterModule.tweets', '_errors_order_no_money', array('{typeBalance}' => '')));
                     $t->rollBack();
 
-                    return FALSE;
+                    return false;
                 }
             }
 
@@ -786,12 +786,12 @@ class Manual extends \FormModel
 
             $t->commit(); // Завершаем транзакцию
 
-            return TRUE;
+            return true;
         } catch(Exception $e) {
             $this->addError('order', Yii::t('twitterModule.orders', '_orders_create_system_error')); //Выводим ошибку транзакций
             $t->rollBack(); //Откатывает транзакцию
 
-            return FALSE;
+            return false;
         }
     }
 
@@ -800,6 +800,6 @@ class Manual extends \FormModel
      */
     public function clear()
     {
-        Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:key AND is_save=0")->execute([':key' => $this->_tid]); // Удаляем список твитов
+        Yii::app()->db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:key")->execute([':key' => $this->_tid]); // Удаляем список твитов
     }
 }
