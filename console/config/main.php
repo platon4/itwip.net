@@ -12,7 +12,8 @@ return [
 	'id' => 'console',
 	'basePath' => dirname(__DIR__),
 	'modules' => [
-		'twitter' => 'console\modules\twitter\Twitter'
+		'twitter' => 'console\modules\twitter\Twitter',
+        'cleaner' => 'console\modules\cleaner\Cleaner'
 	],
 	'extensions' => require(__DIR__ . '/../../vendor/yiisoft/extensions.php'),
 	'components' => [

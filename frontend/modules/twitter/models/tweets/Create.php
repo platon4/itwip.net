@@ -41,7 +41,6 @@ class Create extends \FormModel
     public function makeTweets()
     {
         if($this->getScenario() === 'recreate') {
-
             $rows = Yii::app()->db->createCommand("SELECT * FROM {{twitter_tweetsListsRows}} WHERE _hash=:hash")->queryAll(true, [':hash' => $this->h]);
 
             foreach($rows as $row) {

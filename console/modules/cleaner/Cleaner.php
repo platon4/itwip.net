@@ -3,7 +3,8 @@
 namespace console\modules\cleaner;
 
 use Yii;
+use yii\base\Module;
 
-class Cleaner {
+class Cleaner extends Module {
 
-} 
+}

@@ -21,15 +21,15 @@ class TweetsController extends Controller
 
     public function accessRules()
     {
-        return array(
-            array('allow',
+        return [
+            ['allow',
                 'actions' => ['finality', 'recollection', 'collection', 'roster', 'fulfilled', 'request', 'processing', 'index', 'prepared'],
                 'roles'   => ['user'],
-            ),
-            array('deny', // deny all users
+            ],
+            ['deny', // deny all users
                 'users' => ['*'],
-            ),
-        );
+            ],
+        ];
     }
 
     public function actionIndex()

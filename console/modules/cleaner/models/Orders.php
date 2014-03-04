@@ -37,7 +37,7 @@ class Orders extends Model
     public function createOrders()
     {
         /* Берем список заказов из базы */
-        $_data = (new Query())
+        $_data = (new Query)
             ->select('id,owner_id,type_order,order_hash,order_cost,return_amount,payment_type,_params')
             ->from('it_twitter_orders')
             ->where(['and', 'status=:status', 'process_date<=:date'], [':date' => date('Y-m-d'), ':status' => 0])
@@ -54,7 +54,7 @@ class Orders extends Model
                 $hashs[] = $row['order_hash'];
 
             /* Выбираем список заданий заказа по хэшу заказа */
-            $_tasks = (new Query())
+            $_tasks = (new Query)
                 ->select('id,order_hash,hash,url,url_hash,cost,return_amount,status,_params')
                 ->from('it_twitter_ordersPerform')
                 ->where(['order_hash' => $hashs, 'status' => 1, 'is_process' => 0])
@@ -68,7 +68,7 @@ class Orders extends Model
                         $tasks[] = $_t;
 
                 if(array_key_exists($row['type_order'], $this->_order_types)) {
-                    $this->appendOrder((new $this->_order_types[$row['type_order']]())->create(['order' => $row, 'tasks' => $tasks]));
+                    $this->appendOrder((new $this->_order_types[$row['type_order']])->create(['order' => $row, 'tasks' => $tasks]));
                 }
             }
         }
