@@ -12,7 +12,7 @@ class OrdersController extends \console\components\Controller
      */
     public function actionCreate()
     {
-        $model = new Orders;
+        $model = new Orders();
 
         /* Устанавливаем сценарий валидаций */
         $model->setScenario('create');

@@ -113,6 +113,6 @@ class Orders extends Model
      */
     public function makeOrders()
     {
-
+        print_r($this->getOrders());
     }
 }

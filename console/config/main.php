@@ -14,7 +14,7 @@ return [
     'modules'    => [
         'twitter' => 'console\modules\twitter\Twitter',
         'cleaner' => 'console\modules\cleaner\Cleaner',
-        'finance' => 'console\modules\cleaner\Finance'
+        'finance' => 'console\modules\finance\Finance'
     ],
     'extensions' => require(__DIR__ . '/../../vendor/yiisoft/extensions.php'),
     'components' => [

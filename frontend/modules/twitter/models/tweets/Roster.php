@@ -231,24 +231,19 @@ class Roster extends \FormModel
 
     protected function removeTweets()
     {
-        if($this->_group != 'all') {
-            $db = Yii::app()->db;
+        $db = Yii::app()->db;
 
-            if($this->_group != '') {
-                $db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:tid AND owner_id=:owner_id AND FIND_IN_SET (:index, _indexes)")->execute(array(':index' => $this->_group, ':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id));
-            } else {
-                $db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:tid AND owner_id=:owner_id AND id IN('" . implode("', '", $this->ids) . "')")->execute(array(':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id));
-            }
+        if($this->_group != 'all' && $this->ids !== [])
+            $db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:tid AND owner_id=:owner_id AND FIND_IN_SET (:index, _indexes)")->execute(array(':index' => $this->_group, ':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id));
+        else
+            $db->createCommand("DELETE FROM {{twitter_tweetsRoster}} WHERE _key=:tid AND owner_id=:owner_id AND id IN('" . implode("', '", $this->ids) . "')")->execute(array(':tid' => $this->_tid, ':owner_id' => Yii::app()->user->id));
 
-            Yii::app()->redis->delete('twitter:tweets:' . $this->_tid . ':counts');
+        Yii::app()->redis->delete('twitter:tweets:' . $this->_tid . ':counts');
 
-            if($this->getFigures('all') === 0) {
-                $db->createCommand("DELETE FROM {{twitter_tweetsLists}} WHERE _hash=:tid AND owner_id=:owner_id");
-                $this->setCode(301)->addError('_tid', Yii::t('twitterModule.tweets', '_not_roster_exists'));
-            } else
-                $this->setCode(200)->_getTweets(true);
-        } else {
-            $this->addError('_action', Yii::t('yii', 'Your request is invalid.'));
-        }
+        if($this->getFigures('all') === 0) {
+            $db->createCommand("DELETE FROM {{twitter_tweetsLists}} WHERE _hash=:tid AND owner_id=:owner_id");
+            $this->setCode(301)->addError('_tid', Yii::t('twitterModule.tweets', '_not_roster_exists'));
+        } else
+            $this->setCode(200)->_getTweets(true);
     }
 }
