@@ -110,7 +110,7 @@ class Prepared extends \FormModel
             } else
                 $order = '';
 
-            $this->_list = Yii::app()->db->createCommand("SELECT r.*, (SELECT COUNT(*) FROM {{twitter_tweetsRoster}} WHERE _key=r._hash) as _count FROM {{twitter_tweetsLists}} r WHERE " . implode(" AND ", $where) . $order)->queryAll(true, $values);
+            $this->_list = Yii::app()->db->createCommand("SELECT r.*, (SELECT COUNT(*) FROM {{twitter_tweetsListsRows}} WHERE _hash=r._hash) as _count FROM {{twitter_tweetsLists}} r WHERE " . implode(" AND ", $where) . $order)->queryAll(true, $values);
         }
 
         return $this->_list;

@@ -10,18 +10,19 @@ $this->breadcrumbs[] = array(
 ?>
 <script>
 	Twitter.o.g.set({"hash": "<?php echo Html::encode($model->m->h); ?>","t":"manual"});
+    Twitter.o.status.data.url = '<?= Yii::app()->request->getRequestUri(); ?>';
 </script>
 <div id="details_orders" class="block">
     <div class="block_title"><div class="block_title_inset"><i class=""></i> <h5>Детали заказа (ID <?php echo $model->m->getOrder()['id']; ?>)</h5></div></div>
-    <div class="block_content">      
+    <div class="block_content">
         <div class="table_head">
             <div class="table_head_inside">
                 <table>
                     <tr>
                         <td class="account">Аккаунт</td>
                         <td class="tweet">Твит</td>
-                        <td class="status"><a href="javascript: void(0);" onclick="Order.setOrder('status', this);">Статус <i class="fa fa-caret-down"></i></a></td>						                                                  
-                        <td class="price"><a href="javascript: void(0);" onclick="Order.setOrder('price', this);">Цена <i class="fa fa-caret-down"></i></a></td>
+                        <td class="status"><a href="javascript: void(0);" onclick="Twitter.o.status.setOrder('status', this);">Статус <i class="fa fa-caret-down"></i></a></td>
+                        <td class="price"><a href="javascript: void(0);" onclick="Twitter.o.status.setOrder('price', this);">Цена <i class="fa fa-caret-down"></i></a></td>
                         <td class="icon"></td>
                     </tr>
                 </table>

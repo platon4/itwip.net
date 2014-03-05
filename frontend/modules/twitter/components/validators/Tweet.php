@@ -175,7 +175,7 @@ abstract class Tweet
         if($this->getUrl() !== null && $this->urlCount === 1)
             return md5($this->getUrl());
 
-        return '';
+        return null;
     }
 
     public function allowNext()

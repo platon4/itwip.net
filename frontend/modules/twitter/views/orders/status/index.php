@@ -7,11 +7,6 @@ $this->breadcrumbs[] = array(
 	2 => array(Yii::t('breadcrumbs', '_tw_status_orders'), '')
 );
 ?>
-<!--
-<div class="line_info alert" style="margin-bottom: 20px;">
-    <b>Внимание.</b> Проходят работы на стороне сервера, размещение твитов временно приостановлено. Созданные заказы будут размещены позже. Стараемся стать лучше и быстрее для Вас.  
-</div>
--->
 <div id="status_orders" class="block">
 	<div class="block_title"><div class="block_title_inset"><h5>Статусы и процесс выполнения заказов</h5></div></div>
 	<div class="block_content">

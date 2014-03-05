@@ -42,6 +42,7 @@ class Roster extends \FormModel
             ['ids', 'processIds'],
             ['_title', 'required', 'message' => Yii::t('twitterModule.tweets', '_restore_title_is_empty'), 'on' => 'saveRoster'],
             ['_title', 'length', 'max' => 255, 'on' => 'saveRoster'],
+            ['_title', 'noAlreadySaved', 'on' => 'saveRoster'],
             ['_action,edit', 'safe']
         ];
     }
@@ -196,6 +197,13 @@ class Roster extends \FormModel
         return $this->_isSave;
     }
 
+    public function noAlreadySaved()
+    {
+        if(Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{twitter_tweetsLists}} WHERE _hash=:_hash")->queryScalar([':_hash' => $this->_tid])) {
+            $this->addError('_title', 'Невозможно сохранить список, так как данный список уже сохранен');
+        }
+    }
+
     /*
      * Доделовать
      */
@@ -203,16 +211,16 @@ class Roster extends \FormModel
     {
         if(Yii::app()->db->createCommand("INSERT INTO {{twitter_tweetsLists}} (owner_id,_hash,date_create,title) VALUES (:owner_id,:_hash,:_date,:title) ON DUPLICATE KEY UPDATE date_create=:_date, title=:title")->execute([':owner_id' => Yii::app()->user->id, ':_hash' => $this->_tid, ':_date' => date("Y-m-d H:i:s"), ':title' => $this->_title])) {
 
-            $tweets = Yii::app()->db->createCommand("SELECT id,tweet FROM {{twitter_tweetsRoster}} tr WHERE _key=:key AND NOT EXISTS (SELECT id FROM {{twitter_tweetsListsRows}} WHERE id=tr.parent)")->queryAll(true, [':key' => $this->_tid]);
+            $tweets = Yii::app()->db->createCommand("SELECT id,tweet FROM {{twitter_tweetsRoster}} tr WHERE _key=:key")->queryAll(true, [':key' => $this->_tid]);
 
             if(!empty($tweets)) {
                 $inserts = [];
 
                 foreach($tweets as $tweet) {
-                    $inserts[] = [$this->_tid, $tweet['tweet'], $tweet['id']];
+                    $inserts[] = [$this->_tid, $tweet['tweet']];
                 }
 
-                \CHelper::batchInsert('twitter_tweetsListsRows', ['_hash', 'tweet', 'parent'], $inserts);
+                \CHelper::batchInsert('twitter_tweetsListsRows', ['_hash', 'tweet'], $inserts);
             }
         } else {
             $this->setCode(404)->addError('_tid', Yii::t('twitterModule.tweets', '_not_roster_exists_for_save'));
@@ -241,7 +249,6 @@ class Roster extends \FormModel
         Yii::app()->redis->delete('twitter:tweets:' . $this->_tid . ':counts');
 
         if($this->getFigures('all') === 0) {
-            $db->createCommand("DELETE FROM {{twitter_tweetsLists}} WHERE _hash=:tid AND owner_id=:owner_id");
             $this->setCode(301)->addError('_tid', Yii::t('twitterModule.tweets', '_not_roster_exists'));
         } else
             $this->setCode(200)->_getTweets(true);

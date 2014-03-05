@@ -140,95 +140,6 @@ Request = {
     }
 }
 
-Order = {
-    s: {
-        _order: '',
-        _oType: 'DESC',
-        page: 1
-    },
-    removeTweet: function (id, e) {
-        Dialog.open('Подтверждение удаления', {
-            content: '<div style="padding: 7px 15px 0px;">Вы действительно хотите удалить заказ ?</div>',
-            buttons: [
-                {text: _cancel, click: function () {
-                    $(this).dialog("close");
-                }, class: "button"},
-                {
-                    text: 'Удалить',
-                    id: 'as523se5',
-                    click: function () {
-                        if (_w === true)
-                            return false;
-
-                        var b = $('#as523se5'), btxt = b.html();
-
-                        _ajax({
-                            url: "/twitter/ajaxTweets/order?act=removeTweet&id=" + id,
-                            success: function (obj) {
-                                Dialog.open(_info, {content: obj.content});
-
-                                if (obj.code == 199)
-                                    window.location.href = '/twitter/tweets/status';
-
-                                if (obj.code == 200)
-                                    Order.getTweets();
-                            },
-                            beforeSend: function () {
-                                b.html('<i class="fa fa-spin fa-spinner"></i>');
-                                _w = true;
-                            },
-                            complete: function () {
-                                b.html(btxt);
-                                _w = false;
-                            }
-                        });
-                    },
-                    class: "button btn_orange"
-                }
-            ],
-        });
-    },
-    remove: function (id, e) {
-        var b = $(e), btxt = b.html();
-        Dialog.open('Подтверждение удаления', {
-            content: '<div style="padding: 7px 15px 0px;">Вы действительно хотите удалить заказ ?</div>',
-            buttons: [
-                {text: _cancel, click: function () {
-                    $(this).dialog("close");
-                }, class: "button"},
-                {
-                    text: 'Удалить',
-                    id: 'aser3S523se5',
-                    click: function () {
-                        if (_w === true)
-                            return false;
-
-                        var b = $('#aser3S523se5'), btxt = b.html();
-
-                        _ajax({
-                            url: "/twitter/ajaxTweets/order?act=remove&id=" + id,
-                            success: function (obj) {
-                                Dialog.open(_info, {content: obj.content});
-                                if (obj.code == 200)
-                                    window.location.reload("true");
-                            },
-                            beforeSend: function () {
-                                b.html('<i class="fa fa-spin fa-spinner"></i>');
-                                _w = true;
-                            },
-                            complete: function () {
-                                b.html(btxt);
-                                _w = false;
-                            }
-                        });
-                    },
-                    class: "button btn_orange"
-                }
-            ],
-        });
-    }
-}
-
 Tweets = {
     s: {
         checkWait: false,
@@ -956,7 +867,10 @@ var Twitter = {
             p: {
                 ping: 0,
                 id: 0,
-                payment: 0
+                payment: 0,
+                limit: 10,
+                order: 'group',
+                sort: 'DESC'
             },
             s: {
                 _tweets: 0,
@@ -1558,6 +1472,65 @@ var Twitter = {
                             class: "button btn_orange"
                         }
                     ]
+                });
+            }
+        },
+        status: {
+            data: {
+                limit: 10,
+                order: 'group',
+                sort: 'DESC',
+                page: 1,
+                url: ''
+            },
+            getPage: function (page) {
+                this.data.page = page;
+                this.get();
+            },
+            setLimit: function (limit) {
+                this.data.page = 1;
+                this.data.limit = limit;
+                this.get();
+            },
+            setOrder: function (prm, element) {
+                $(".table_head_inside").find('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+                if (this.data.order == prm && cCount == 0) {
+                    this.data.sort = "DESC";
+                    cCount = 1;
+                    $(element).find('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+                }
+                else {
+                    this.data.sort = "ASC";
+                    this.data.order = prm;
+                    cCount = 0;
+                    $(element).find('i').removeClass('fa-caret-down').addClass('fa-caret-up');
+                }
+
+                this.data.page = 1;
+                this.get();
+            },
+            get: function () {
+                if (_w === true) return false;
+
+                _ajax({
+                    url: this.data.url + "&page=" + this.data.page + '&a[limit]=' + this.data.limit + '&a[_o]=' + this.data.order + '&a[_a]=' + this.data.sort,
+                    success: function (obj) {
+                        if (obj['code'] == 200) {
+                            $('#_orderList').html(obj['html']);
+                            $('#_limit').styler();
+                        }
+                        else {
+                            Dialog.open(_error, {"content": obj.message});
+                        }
+                    },
+                    beforeSend: function () {
+                        _w = true;
+                        $('#_orderList').css('opacity', 0.5);
+                    },
+                    complete: function () {
+                        $('#_orderList').css('opacity', 1);
+                        _w = false;
+                    }
                 });
             }
         },
