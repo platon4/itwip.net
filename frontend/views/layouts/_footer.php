@@ -55,7 +55,7 @@
 	<div id="footer_block_2_3">
 		<span class="contact"><?php echo Yii::t('main', '_footer_contact'); ?>: <span><b class="e-mail"></b> support@itwip.net</span> <!--<span><i class="icq"></i> 532352352</span>--> <span><i class="skype"></i> <a href="skype:itwip.net?chat">itwip.net</a></span></span>
 		<span class="ver">
-            <span style="position:relative; top: 16px;padding-right: 5px;">Версия 1.0.0</span>
+            <span style="position:relative; top: 16px;padding-right: 5px;">Версия 1.1.0</span>
             <span style="float:right">
             <!-- begin WebMoney Transfer : attestation label -->
             <a  style=" margin-top: -10px;" href="https://passport.webmoney.ru/asp/certview.asp?wmid=412128443746" target="_blank"><img src="http://www.megastock.ru/doc/Logo/v_blue_on_white_ru.png" alt="Здесь находится аттестат нашего WM идентификатора 412128443746" border="0" /></a>
