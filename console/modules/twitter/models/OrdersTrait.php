@@ -6,9 +6,10 @@ trait OrdersTrait
 {
     protected $_data;
     protected $_params;
-    protected $_updates = [];
-    protected $_taks = [];
+    protected $_update = [];
+    protected $_task = [];
     protected $_interval;
+    protected $_processDate;
 
     /*
      * Обработка заказа
@@ -20,7 +21,7 @@ trait OrdersTrait
 
         return [
             'update' => $this->getUpdate(),
-            'taks'   => $this->getTaks()
+            'taks'   => $this->getTask()
         ];
     }
 
@@ -40,16 +41,26 @@ trait OrdersTrait
 
     public function getUpdate()
     {
-        return $this->_updates;
+        return $this->_update;
     }
 
-    public function getTaks()
+    public function getTask()
     {
-        return $this->_taks;
+        return $this->_task;
+    }
+
+    public function setProcessDate($date)
+    {
+        $this->_update['order'][$this->get('id')]['process_date'] = $date;
     }
 
     public function clear()
     {
         $this->_interval = null;
+        $this->hCount = 0;
+        $this->hours = [];
+        $this->_update = [];
+        $this->_task;
+        $this->_processDate = null;
     }
 } 

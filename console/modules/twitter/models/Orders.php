@@ -3,6 +3,7 @@
 namespace console\modules\twitter\models;
 
 use Yii;
+use yii\base\Exception;
 use yii\base\Model;
 use yii\db\Query;
 
@@ -86,6 +87,16 @@ class Orders extends Model
     }
 
     /*
+     * Проверяем если список обновлений не пуст
+     *
+     * @return boolean
+     */
+    public function hasUpdates()
+    {
+        return !empty($this->_updates);
+    }
+
+    /*
      * Получаем список созданных заказов
      *
      * @return array
@@ -95,9 +106,52 @@ class Orders extends Model
         return $this->_orders;
     }
 
+    /*
+     * Получаем список для обновление заказов и задачи
+     *
+     * @return array
+     */
     public function getUpdates()
     {
         return $this->_updates;
+    }
+
+    public function makeTaks()
+    {
+
+    }
+
+    public function updateOrders()
+    {
+        if($this->hasUpdates()) {
+            $rows = $this->getUpdates();
+
+            $orderSQL = "UPDATE {{%twitter_orders}}";
+            $taskSQL = "UPDATE {{%twitter_ordersPerform}}";
+
+            foreach($rows as $row) {
+                if(isset($row['order']) && !empty($row['order'])) {
+
+                    foreach($row['order'] as $order) {
+                        $orderSQL .= $this->buildUpdate($order);
+                    }
+                }
+
+                if(isset($row['task']) && !empty($row['task'])) {
+                    foreach($row['task'] as $task) {
+                        $taskSQL .= $this->buildUpdate($task);
+                    }
+                }
+            }
+
+            echo $orderSQL . "\n";
+            echo $taskSQL . "\n";
+        }
+    }
+
+    public function buildUpdate($data)
+    {
+
     }
 
     /*
@@ -105,9 +159,17 @@ class Orders extends Model
      */
     public function makeOrders()
     {
-        if($this->hasOrders()) {
-            print_r($this->getOrders());
-            print_r($this->getUpdates());
+        if($this->hasOrders() || $this->hasUpdates()) {
+            try {
+                $t = Yii::$app->db->beginTransaction();
+
+                $this->makeTaks();
+                $this->updateOrders();
+
+                $t->commit();
+            } catch(Exception $e) {
+                $t->rollBack();
+            }
         }
     }
 }
