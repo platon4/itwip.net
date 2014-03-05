@@ -52,7 +52,9 @@ class Orders extends Model
         if(!empty($orders)) {
             foreach($orders as $order) {
                 if(array_key_exists($order['type_order'], $this->_order_types)) {
-                    $this->appendOrder((new $this->_order_types[$order['type_order']]())->process($order));
+                    $e = new $this->_order_types[$order['type_order']]();
+                    $this->appendOrder($e->process($order));
+                    $e->clear();
                 }
             }
         } else

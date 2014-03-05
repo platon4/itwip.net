@@ -10,6 +10,9 @@ class Manual implements OrdersInterface
 {
     use \console\modules\twitter\models\OrdersTrait;
 
+    protected $days = [];
+    protected $hours = [];
+
     public function make()
     {
         if($this->getProcessDate() <= date('Y-m-d')) {
@@ -21,8 +24,25 @@ class Manual implements OrdersInterface
     {
         $params = $this->getParam('targeting');
 
-        if(isset($params['t'])) {
-            print_r($params['t']);
+        if(isset($params['t']) && is_array($params['t'])) {
+
+        } else {
+
         }
+    }
+
+    public function getInterval()
+    {
+        if($this->_interval === null) {
+            $params = $this->getParam('targeting');
+
+            if(isset($params['targeting']['interval']) && $params['targeting']['interval'] >= 30) {
+                $this->_interval = rand($params['targeting']['interval'] - 10, $params['targeting']['interval'] + 10);
+            } else {
+                $this->_interval = rand(20, 40);
+            }
+        }
+
+        return $this->_interval;
     }
 }

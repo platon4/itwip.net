@@ -8,6 +8,7 @@ trait OrdersTrait
     protected $_params;
     protected $_updates = [];
     protected $_taks = [];
+    protected $_interval;
 
     /*
      * Обработка заказа
@@ -45,5 +46,10 @@ trait OrdersTrait
     public function getTaks()
     {
         return $this->_taks;
+    }
+
+    public function clear()
+    {
+        $this->_interval = null;
     }
 } 

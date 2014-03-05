@@ -13,11 +13,11 @@ class Fast extends \FormModel
 	public $_time;
 	public $_tid;
 	public $dropdown = [
-		15 => ['txt' => '12 часов, цена: 15 руб.', 'price' => 15, 'time' => 12],
-		25 => ['txt' => '9 часов, цена: 25 руб.', 'price' => 25, 'time' => 9],
-		35 => ['txt' => '6 часов, цена: 35 руб.', 'price' => 35, 'time' => 6],
-		55 => ['txt' => '3 часа, цена: 55 руб.', 'price' => 55, 'time' => 3],
-		100 => ['txt' => '1 час, цена: 100 руб.', 'price' => 100, 'time' => 1],
+		10 => ['txt' => '12 часов, цена: 10 руб.', 'price' => 10, 'time' => 12],
+		20 => ['txt' => '9 часов, цена: 20 руб.', 'price' => 20, 'time' => 9],
+		30 => ['txt' => '6 часов, цена: 30 руб.', 'price' => 30, 'time' => 6],
+		40 => ['txt' => '3 часа, цена: 40 руб.', 'price' => 40, 'time' => 3],
+		65 => ['txt' => '1 час, цена: 65 руб.', 'price' => 65, 'time' => 1],
 	];
 
 	public $urlsExclude = [];
@@ -169,7 +169,7 @@ class Fast extends \FormModel
 			/*
 			 * Создаем заказ
 			 */
-			$db->createCommand("INSERT INTO {{twitter_orders}} (owner_id,type_order,order_hash,order_cost, return_amount, create_date,status,payment_type,_params) VALUES (:owner,:type_order,:order_hash,:order_cost,:return_amount, :create_date,:status,:all_taks,0,:_params)")
+			$db->createCommand("INSERT INTO {{twitter_orders}} (owner_id,type_order,order_hash,order_cost, return_amount, create_date,status,payment_type,_params) VALUES (:owner,:type_order,:order_hash,:order_cost,:return_amount, :create_date,:status,0,:_params)")
 				->execute([
 					':owner' => Yii::app()->user->id,
 					':type_order' => 'indexes',

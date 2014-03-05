@@ -24,4 +24,3 @@ composer.phar
 phpunit.phar
 # local phpunit config
 /phpunit.xml
-/frontend/config/main.local.php
