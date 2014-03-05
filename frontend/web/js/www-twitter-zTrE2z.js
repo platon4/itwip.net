@@ -1206,7 +1206,7 @@ var Twitter = {
                         if ($d.attr('data-select') == 'no') {
                             if ($c.is(':checked') === true) {
                                 if ($(this).is(':checked') === false) {
-                                    $(this).attr('checked', true).next().addClass('checked');
+                                    $(this).prop('checked', true).next().addClass('checked');
                                     Twitter.o.m.s._accounts++;
                                     Twitter.o.m.d.put($i);
                                     Twitter.o.m.s._amount += parseFloat($d.attr('data-price'));
@@ -1214,11 +1214,13 @@ var Twitter = {
                                 }
                             }
                             else {
-                                $(this).attr('checked', false).next().removeClass('checked');
-                                Twitter.o.m.s._accounts--;
-                                Twitter.o.m.d.remove($i);
-                                Twitter.o.m.s._amount -= parseFloat($d.attr('data-price'));
-                                Twitter.o.m.s._tweets -= 1;
+                                if ($(this).is(':checked') === true) {
+                                    $(this).prop('checked', false).next().removeClass('checked');
+                                    Twitter.o.m.s._accounts--;
+                                    Twitter.o.m.d.remove($i);
+                                    Twitter.o.m.s._amount -= parseFloat($d.attr('data-price'));
+                                    Twitter.o.m.s._tweets -= 1;
+                                }
                             }
                         }
                     });

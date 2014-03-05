@@ -41,6 +41,12 @@ class Manual extends \FormModel
     {
         if($this->getOrder() === false)
             $this->addError('order', 'Извините, но такого заказа нету.');
+
+        if($this->_o === '')
+            $this->_o = 'status';
+
+        if($this->_a === '')
+            $this->_a = 'ASC';
     }
 
     public function getCount()
