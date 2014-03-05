@@ -1475,65 +1475,6 @@ var Twitter = {
                 });
             }
         },
-        status: {
-            data: {
-                limit: 10,
-                order: 'group',
-                sort: 'DESC',
-                page: 1,
-                url: ''
-            },
-            getPage: function (page) {
-                this.data.page = page;
-                this.get();
-            },
-            setLimit: function (limit) {
-                this.data.page = 1;
-                this.data.limit = limit;
-                this.get();
-            },
-            setOrder: function (prm, element) {
-                $(".table_head_inside").find('i').removeClass('fa-caret-up').addClass('fa-caret-down');
-                if (this.data.order == prm && cCount == 0) {
-                    this.data.sort = "DESC";
-                    cCount = 1;
-                    $(element).find('i').removeClass('fa-caret-up').addClass('fa-caret-down');
-                }
-                else {
-                    this.data.sort = "ASC";
-                    this.data.order = prm;
-                    cCount = 0;
-                    $(element).find('i').removeClass('fa-caret-down').addClass('fa-caret-up');
-                }
-
-                this.data.page = 1;
-                this.get();
-            },
-            get: function () {
-                if (_w === true) return false;
-
-                _ajax({
-                    url: this.data.url + "&page=" + this.data.page + '&a[limit]=' + this.data.limit + '&a[_o]=' + this.data.order + '&a[_a]=' + this.data.sort,
-                    success: function (obj) {
-                        if (obj['code'] == 200) {
-                            $('#_orderList').html(obj['html']);
-                            $('#_limit').styler();
-                        }
-                        else {
-                            Dialog.open(_error, {"content": obj.message});
-                        }
-                    },
-                    beforeSend: function () {
-                        _w = true;
-                        $('#_orderList').css('opacity', 0.5);
-                    },
-                    complete: function () {
-                        $('#_orderList').css('opacity', 1);
-                        _w = false;
-                    }
-                });
-            }
-        },
         make: function (e, w) {
             var btn = $('#' + e), btxt = btn.html(), additional = '', q = new Array(), c = 0;
             if (_w === true) return false;
@@ -1685,7 +1626,9 @@ var Twitter = {
             d: {
                 page: 1,
                 limit: 10,
-                hash: ''
+                hash: '',
+                order: '',
+                sort: 'DESC'
             },
             set: function (options) {
                 this.d = $.extend(this.d, options);
@@ -1699,9 +1642,26 @@ var Twitter = {
                 this.d.limit = n;
                 this.get();
             },
+            setOrder: function (prm, element) {
+                $(".table_head_inside").find('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+                if (this.d.order == prm && cCount == 0) {
+                    this.d.sort = "DESC";
+                    cCount = 1;
+                    $(element).find('i').removeClass('fa-caret-up').addClass('fa-caret-down');
+                }
+                else {
+                    this.d.sort = "ASC";
+                    this.d.order = prm;
+                    cCount = 0;
+                    $(element).find('i').removeClass('fa-caret-down').addClass('fa-caret-up');
+                }
+
+                this.d.page = 1;
+                this.get();
+            },
             get: function () {
                 _ajax({
-                    url: "/twitter/orders/status?h=" + this.d.hash + "&t=" + this.d.t + "&page=" + this.d.page + "&limit=" + this.d.limit,
+                    url: "/twitter/orders/status?h=" + this.d.hash + "&t=" + this.d.t + "&page=" + this.d.page + "&limit=" + this.d.limit + "&_o=" + this.d.order + "&_a=" + this.d.sort,
                     success: function (obj) {
                         if (obj.code === 200)
                             $("#_orderList").html(obj['html']);
