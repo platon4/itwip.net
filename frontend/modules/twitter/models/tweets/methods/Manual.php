@@ -750,7 +750,7 @@ class Manual extends \FormModel
             /*
              * Создаем заказ
              */
-            $db->createCommand("INSERT INTO {{twitter_orders}} (owner_id,type_order,order_hash,order_cost,return_amount,process_date,create_date,status,all_taks,payment_type,_params) VALUES (:owner,:type_order,:order_hash,:order_cost,:return_amount,:process_date,:create_date,:status,:all_taks,:payment,:_params)")
+            $db->createCommand("INSERT INTO {{twitter_orders}} (owner_id,type_order,order_hash,order_cost,return_amount,process_date,create_date,status,payment_type,_params) VALUES (:owner,:type_order,:order_hash,:order_cost,:return_amount,:process_date,:create_date,:status,:all_taks,:payment,:_params)")
                 ->execute([
                     ':owner'         => Yii::app()->user->id,
                     ':type_order'    => 'manual',
@@ -760,7 +760,6 @@ class Manual extends \FormModel
                     ':process_date'  => $this->getStartDate(),
                     ':create_date'   => date('Y-m-d H:i:s'),
                     ':status'        => $this->pay,
-                    ':all_taks'      => $this->getTaksCount(),
                     ':payment'       => $this->pay_method,
                     ':_params'       => $this->getOrderParams()
                 ]);
