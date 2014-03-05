@@ -3,18 +3,26 @@
 namespace console\modules\twitter\models\orders;
 
 use Yii;
-use yii\base\Model;
 use yii\db\Query;
+use console\modules\twitter\models\OrdersInterface;
 
 class Manual implements OrdersInterface
 {
-	use OrdersTrait;
+    use \console\modules\twitter\models\OrdersTrait;
 
-	/*
-	 * Обработка заказа
-	 */
-	public  function create(array $data)
-	{
-        return [];
-	}
+    public function make()
+    {
+        if($this->getProcessDate() <= date('Y-m-d')) {
+
+        }
+    }
+
+    public function getProcessDate()
+    {
+        $params = $this->getParam('targeting');
+
+        if(isset($params['t'])) {
+            print_r($params['t']);
+        }
+    }
 }

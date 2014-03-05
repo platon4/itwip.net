@@ -10,6 +10,7 @@ class Orders extends Model
 {
     protected $_data;
     protected $_orders = [];
+    protected $_updates = [];
     protected $_order_types = [
         'manual'  => 'console\modules\twitter\models\orders\Manual',
         'indexes' => 'console\modules\twitter\models\orders\Indexes'
@@ -18,7 +19,7 @@ class Orders extends Model
     public function rules()
     {
         return [
-            ['order', 'createOrders', 'skipOnEmpty' => FALSE, 'on' => 'create']
+            ['order', 'createOrders', 'skipOnEmpty' => false, 'on' => 'create']
         ];
     }
 
@@ -36,45 +37,25 @@ class Orders extends Model
      */
     public function createOrders()
     {
+        $query = new Query();
+
         /* Берем список заказов из базы */
-        $_data = (new Query())
+        $orders = $query
             ->select('id,owner_id,type_order,order_hash,order_cost,return_amount,payment_type,_params')
-            ->from('it_twitter_orders')
-            ->where(['and', 'status=:status', 'process_date<=:date'], [':date' => date('Y-m-d'), ':status' => 0])
+            ->from('{{%twitter_orders}}')
+            ->where(['and', 'status=:status', 'process_date<=:date'], [':status' => 0, ':date' => date('Y-m-d')])
             ->orderBy(['id' => SORT_ASC])
             ->limit(10)
             ->all();
 
         /* Если заказы есть обрабатаваем дальше */
-        if(is_array($_data) && $_data !== []) {
-            $hashs = [];
-
-            /* Создаем список хэшей заказов для дальнейшей выборки заданий заказа */
-            foreach($_data as $row)
-                $hashs[] = $row['order_hash'];
-
-            /* Выбираем список заданий заказа по хэшу заказа */
-            $_tasks = (new Query())
-                ->select('id,order_hash,hash,url,url_hash,cost,return_amount,status,_params')
-                ->from('it_twitter_ordersPerform')
-                ->where(['order_hash' => $hashs, 'status' => 1, 'is_process' => 0])
-                ->limit(100)
-                ->all();
-
-            foreach($_data as $row) {
-                $tasks = [];
-                foreach($_tasks as $_t)
-                    if($_t['order_hash'] == $row['order_hash'])
-                        $tasks[] = $_t;
-
-                if(array_key_exists($row['type_order'], $this->_order_types)) {
-                    $this->appendOrder((new $this->_order_types[$row['type_order']]())->create(['order' => $row, 'tasks' => $tasks]));
+        if(!empty($orders)) {
+            foreach($orders as $order) {
+                if(array_key_exists($order['type_order'], $this->_order_types)) {
+                    $this->appendOrder((new $this->_order_types[$order['type_order']]())->process($order));
                 }
             }
-        }
-
-        /* Если список заказов пуст, добавляем ошибку */
-        if(!$this->hasOrders())
+        } else
             $this->addError('orders', 'Not found order process.');
     }
 
@@ -85,7 +66,11 @@ class Orders extends Model
      */
     public function appendOrder($data)
     {
-        $this->_orders[] = $data;
+        if(!empty($data['taks']))
+            $this->_orders[] = $data['taks'];
+
+        if(!empty($data['update']))
+            $this->_updates[] = $data['update'];
     }
 
     /*
@@ -108,11 +93,19 @@ class Orders extends Model
         return $this->_orders;
     }
 
+    public function getUpdates()
+    {
+        return $this->_updates;
+    }
+
     /*
      * Создаем задания для робота, и отправляем ему
      */
     public function makeOrders()
     {
-        print_r($this->getOrders());
+        if($this->hasOrders()) {
+            print_r($this->getOrders());
+            print_r($this->getUpdates());
+        }
     }
 }

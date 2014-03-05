@@ -2,17 +2,21 @@
 
 namespace console\modules\twitter\models\orders;
 
-class Indexes implements  OrdersInterface
-{
-    use OrdersTrait;
+use Yii;
+use yii\db\Query;
+use console\modules\twitter\models\OrdersInterface;
 
-    /*
-     * Обработка заказа
-     */
-    public  function create(array $data)
+class Indexes implements OrdersInterface
+{
+    use \console\modules\twitter\models\OrdersTrait;
+
+    public function getUpdate()
     {
-        print_r($data);
-        die();
-        return [];
+        return $this->_updates;
+    }
+
+    public function getTaks()
+    {
+        return $this->_taks;
     }
 }
