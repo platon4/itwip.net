@@ -32,7 +32,7 @@ a:hover {
 }
 
 #info {
-    background: url("http://itwip.net/i/index/bg_info_user.png") repeat scroll 0 0 transparent;
+    background: url("<?= Yii::app()->getBaseUrl(); ?>/i/index/bg_info_user.png") repeat scroll 0 0 transparent;
     width: 100%;
     height: 100%;
     display: table;
@@ -179,7 +179,7 @@ a:hover {
 }
 
 #logo {
-    background-image: url("http://itwip.net/i/index/logo.png");
+    background-image: url("<?= Yii::app()->getBaseUrl(); ?>/i/index/logo.png");
     height: 53px;
     width: 165px;
     background-repeat: no-repeat;
@@ -228,26 +228,26 @@ a:hover {
             <div id="modal_info_inset">
                 <div class="content_modal_info">
                     <div id="top_modal">
-                        <div id="logo"><a href="http://itwip.net/"></a></div>
+                        <div id="logo"><a href="https://itwip.net/"></a></div>
                         <div id="text">
                             <span style="font-size: 13px; display: block; margin-top: -5px; margin-bottom: 7px;">Ведутся работы по обновлению сервиса</span>
                             <h2>
                                 <i>
                                     <noindex>Регистрации будет доступна после открытия.</noindex>
-                                    <br>
-                                    Администрация, сервиса рекламы в соц.сетях iTwip.</i>
+                                    <br> Администрация, сервиса рекламы в соц.сетях iTwip.</i>
                             </h2>
                         </div>
                     </div>
                     <div id="notification">
                         <div class="title_modal_info">А пока предлагаем посетить наше сообщество</div>
-                            Зарегистрированные пользователи могут обсудить обновление - <a href="http://community.itwip.net/novosti-servisa/zakrytie-servisa-na-obnovlenie.html">тут</a>.<br>
-                            А не зарегистрированные узнать последние новости.
+                        Зарегистрированные пользователи могут обсудить обновление -
+                        <a href="http://community.itwip.net/novosti-servisa/zakrytie-servisa-na-obnovlenie.html">тут</a>.<br> А не зарегистрированные узнать последние новости.
                     </div>
                     <div class="line"></div>
                     <div id="contact">
-                        Наше сообщество - <a href="http://community.itwip.net">http://community.itwip.net</a> ,
-                        наша эл.почта - <a href="mailto:support@itwip.net?subject=iTwip.net - закрытый сайт.">support@itwip.net</a>
+                        Наше сообщество -
+                        <a href="http://community.itwip.net">http://community.itwip.net</a> , наша эл.почта -
+                        <a href="mailto:support@itwip.net?subject=iTwip.net - закрытый сайт.">support@itwip.net</a>
                     </div>
                 </div>
             </div>
