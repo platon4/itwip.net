@@ -49,7 +49,7 @@
     <div class="text_like">Поделится нами с друзьями:</div>
     <div class="like_all">
         <script type="text/javascript" src="//yandex.st/share/share.js" charset="utf-8"></script>
-        <div class="yashare-auto-init" data-yashareL10n="ru" data-yashareQuickServices="yaru,vkontakte,facebook,twitter,odnoklassniki,moimir,gplus" data-yashareTheme="counter" data-yashareLink="http://itwip.net"  data-yashareTitle="iTwip.net - Реклама в социальных сетях, монетизация аккаунтов"></div> 
+        <div class="yashare-auto-init" data-yashareL10n="ru" data-yashareQuickServices="yaru,vkontakte,facebook,twitter,odnoklassniki,moimir,gplus" data-yashareTheme="counter" data-yashareLink="https://www.itwip.net"  data-yashareTitle="iTwip.net - Реклама в социальных сетях, монетизация аккаунтов"></div>
     </div>
     </div>
 	<div id="footer_block_2_3">
@@ -58,10 +58,10 @@
             <span style="position:relative; top: 16px;padding-right: 5px;">Версия 1.1.0</span>
             <span style="float:right">
             <!-- begin WebMoney Transfer : attestation label -->
-            <a  style=" margin-top: -10px;" href="https://passport.webmoney.ru/asp/certview.asp?wmid=412128443746" target="_blank"><img src="http://www.megastock.ru/doc/Logo/v_blue_on_white_ru.png" alt="Здесь находится аттестат нашего WM идентификатора 412128443746" border="0" /></a>
+            <a  style=" margin-top: -10px;" href="https://passport.webmoney.ru/asp/certview.asp?wmid=412128443746" target="_blank"><img src="https://www.megastock.ru/doc/Logo/v_blue_on_white_ru.png" alt="Здесь находится аттестат нашего WM идентификатора 412128443746" border="0" /></a>
             <!-- end WebMoney Transfer : attestation label -->
             <!-- begin WebMoney Transfer : accept label -->
-            <a  style="margin-left: 5px;margin-top: -10px;" href="http://www.megastock.ru/" target="_blank"><img src="http://www.megastock.ru/doc/Logo/acc_blue_on_white_ru.png" alt="www.megastock.ru" border="0"></a>
+            <a  style="margin-left: 5px;margin-top: -10px;" href="http://www.megastock.ru/" target="_blank"><img src="https://www.megastock.ru/doc/Logo/acc_blue_on_white_ru.png" alt="www.megastock.ru" border="0"></a>
             <!-- end WebMoney Transfer : accept label -->
             <!-- Yandex.Metrika counter --><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter23221156 = new Ya.Metrika({id:23221156, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/23221156" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->        
             </span>
@@ -87,5 +87,4 @@
   ga('create', 'UA-36434380-2', 'itwip.net');
   ga('send', 'pageview');
 
-</script>    
-    <?php echo "\n"; ?>
+</script>
