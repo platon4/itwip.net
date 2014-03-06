@@ -33,7 +33,7 @@ class Controller extends CController
             Yii::app()->session['_referral_code'] = $_GET['_r'];
 
         $_f = Yii::app()->clientScript;
-        $_f->scriptMap = ['jquery.js' => 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'];
+        $_f->scriptMap = ['jquery.js' => 'https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'];
         $_f->registerCoreScript('jquery');
         $_f->registerScriptFile($_url . '/js/jquery.custom.min.js');
         $_f->registerScriptFile($_url . '/js/www-lang-core.js');
