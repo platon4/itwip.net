@@ -21,7 +21,7 @@ trait OrdersTrait
 
         return [
             'update' => $this->getUpdate(),
-            'taks'   => $this->getTask()
+            'task'   => $this->getTask()
         ];
     }
 

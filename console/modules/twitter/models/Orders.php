@@ -44,7 +44,7 @@ class Orders extends Model
         $orders = $query
             ->select('id,owner_id,type_order,order_hash,order_cost,return_amount,payment_type,_params')
             ->from('{{%twitter_orders}}')
-            ->where(['and', 'status=:status', 'process_date<=:date'], [':status' => 0, ':date' => date('Y-m-d')])
+            ->where(['and', 'status=:status', 'process_date<=:date'], [':status' => 1, ':date' => date('Y-m-d')])
             ->orderBy(['id' => SORT_ASC])
             ->limit(10)
             ->all();
@@ -69,8 +69,8 @@ class Orders extends Model
      */
     public function appendOrder($data)
     {
-        if(!empty($data['taks']))
-            $this->_orders[] = $data['taks'];
+        if(!empty($data['task']))
+            $this->_orders[] = $data['task'];
 
         if(!empty($data['update']))
             $this->_updates[] = $data['update'];
@@ -101,9 +101,12 @@ class Orders extends Model
      *
      * @return array
      */
-    public function getOrders()
+    public function getOrders($key = '')
     {
-        return $this->_orders;
+        if($key == 'columns')
+            return ['order_id', 'sbuorder_id', 'tweet_hash', 'url_hash', 'process_time', 'params'];
+        else
+            return $this->_orders;
     }
 
     /*
@@ -118,7 +121,20 @@ class Orders extends Model
 
     public function makeTaks()
     {
+        if($this->hasOrders()) {
 
+            $rows = [];
+
+            foreach($this->getOrders() as $key => $values) {
+                foreach($values as $field => $value) {
+                    foreach($value as $v) {
+                        $rows[$field][] = $v;
+                    }
+                }
+            }
+
+            Yii::$app->db->createCommand()->batchInsert('{{%twitter_tweeting}}', $this->getOrders('columns'), $rows)->execute();
+        }
     }
 
     public function updateOrders()
@@ -126,32 +142,27 @@ class Orders extends Model
         if($this->hasUpdates()) {
             $rows = $this->getUpdates();
 
-            $orderSQL = "UPDATE {{%twitter_orders}}";
-            $taskSQL = "UPDATE {{%twitter_ordersPerform}}";
-
             foreach($rows as $row) {
-                if(isset($row['order']) && !empty($row['order'])) {
-
-                    foreach($row['order'] as $order) {
-                        $orderSQL .= $this->buildUpdate($order);
-                    }
-                }
-
-                if(isset($row['task']) && !empty($row['task'])) {
-                    foreach($row['task'] as $task) {
-                        $taskSQL .= $this->buildUpdate($task);
-                    }
-                }
+                $this->buildUpdate("{{%twitter_orders}}", $row, 'order');
+                $this->buildUpdate("{{%twitter_ordersPerform}}", $row, 'task');
             }
-
-            echo $orderSQL . "\n";
-            echo $taskSQL . "\n";
         }
     }
 
-    public function buildUpdate($data)
+    public function buildUpdate($table, $data, $t)
     {
+        if(isset($data[$t]) && !empty($data[$t])) {
+            foreach($data[$t] as $id => $fields) {
+                if(is_array($fields)) {
+                    $columns = [];
+                    foreach($fields as $field => $value) {
+                        $columns[$field] = $value;
+                    }
 
+                    Yii::$app->db->createCommand()->update($table, $columns, ['id' => $id])->execute();
+                }
+            }
+        }
     }
 
     /*

@@ -12,34 +12,28 @@ class Manual implements OrdersInterface
 
     protected $hCount = 0;
     protected $hours = [];
+    protected $hTask = false;
+    protected $_taskParams = [];
 
     public function make()
     {
-        if($this->getProcessDate() <= date('Y-m-d')) {
+        $this->init();
+
+        if($this->hasTask()) {
             $this->setTask();
-        } else {
-            $this->setProcessDate($this->getProcessDate());
         }
+
+        $this->setProcessDate($this->getProcessDate());
     }
 
-    public function setTask()
+    public function init()
     {
-        $task = $this->getTasks();
+        if($this->processOrder() > 0)
+            $this->hTask = true;
 
-        print_r($task);
     }
 
-    public function getTasks()
-    {
-        return (new Query())
-            ->select('*')
-            ->from('{{%twitter_ordersPerform}}')
-            ->where(['order_hash' => $this->get('order_hash')])
-            ->limit($this->getLimit())
-            ->all();
-    }
-
-    public function getProcessDate()
+    public function processOrder()
     {
         if($this->_processDate === null) {
             $params = $this->getParam('targeting');
@@ -59,7 +53,7 @@ class Manual implements OrdersInterface
 
                     if(isset($params['t'][$i])) {
                         if($start === true) {
-                            if(date('w') === $i && $c === 0) {
+                            if((int) date('w') === $i && $c === 0) {
                                 $found = true;
                                 foreach($params['t'][$i] as $hour) {
                                     $this->hours[] = $hour;
@@ -71,17 +65,115 @@ class Manual implements OrdersInterface
                         }
                     }
 
-                    if($i >= 6) $i = 0; else $i++;
-                    $b++;
-                } while($d < $count && $b <= 24);
+                    if($i >= 6)
+                        $i = 0;
+                    else
+                        $i++;
 
-                if($found === false)
+                    $b++;
+                } while($d < $count && $b <= 14);
+
+                if($found === true) {
+                    $this->_processDate = date('Y-m-d');
+                    return 2;
+                } else {
                     $this->_processDate = date('Y-m-d', time() + ($c * 86400));
+                    return 0;
+                }
             } else {
-                $this->_processDate = date('Y-m-d', time() + 86400);
+                $this->_processDate = date('Y-m-d');
+                return 1;
             }
         }
+    }
 
+    public function setTask()
+    {
+        $tasks = $this->getTasks();
+
+        if(!empty($tasks)) {
+            foreach($tasks as $row) {
+                $this->_setTaskParams($row);
+                $this->processTask($row);
+            }
+        }
+    }
+
+    public function processTask($task)
+    {
+        $this->_task[] = [
+            'order_id'     => $this->get('id'),
+            'sbuorder_id'  => $task['id'],
+            'tweet_hash'   => $task['hash'],
+            'url_hash'     => $task['url_hash'],
+            'process_time' => $this->getTaskProcessTime($task),
+            'params'       => $this->getTaskParams($task)
+        ];
+    }
+
+    public function getTaskProcessTime()
+    {
+        if(!empty($this->hours) && is_array($this->hours)) {
+            $h = '';
+            foreach($this->hours as $k => $hour) {
+                $hour = $hour - 1;
+
+                if($hour >= date('H')) {
+                    if($this->getInterval() > 35) {
+                        unset($this->hours[$k]);
+                    }
+
+                    $h = $hour . ':00:00';
+                    break;
+                }
+            }
+
+            return $h;
+        } else {
+            return date('H:i:s');
+        }
+    }
+
+    public function getTaskParams($data)
+    {
+        return json_encode([
+            'tweet'       => $this->_getTaskParams('tweet'),
+            'account'     => $this->_getTaskParams('account'),
+            'order_owner' => $this->get('owner_id'),
+            'toowb'       => $data['cost'],
+            'tooow'       => $data['return_amount'],
+            'interval'    => $this->getInterval()
+        ]);
+    }
+
+    public function _setTaskParams($data)
+    {
+        if(isset($data['_params']))
+            $this->_taskParams = json_decode($data['_params'], true);
+    }
+
+    public function _getTaskParams($key)
+    {
+        return isset($this->_taskParams[$key]) ? $this->_taskParams[$key] : '';
+    }
+
+    public function hasTask()
+    {
+        return $this->hTask;
+    }
+
+    public function getTasks()
+    {
+        return (new Query())
+            ->select('*')
+            ->from('{{%twitter_ordersPerform}}')
+            ->where(['order_hash' => $this->get('order_hash')])
+            ->limit($this->getLimit())
+            ->all();
+    }
+
+    public function getProcessDate()
+    {
         return $this->_processDate;
     }
 
