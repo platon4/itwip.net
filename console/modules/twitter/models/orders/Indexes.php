@@ -10,13 +10,20 @@ class Indexes implements OrdersInterface
 {
     use \console\modules\twitter\models\OrdersTrait;
 
-    public function getUpdate()
+    public function make()
     {
-        return $this->_updates;
+        $this->init();
+
+        $this->setTask();
     }
 
-    public function getTaks()
+    public function getTasks()
     {
-        return $this->_taks;
+        return (new Query())
+            ->select('*')
+            ->from('{{%twitter_ordersPerform}}')
+            ->where(['order_hash' => $this->get('order_hash'), 'is_process' => 0, 'status' => 0])
+            ->limit($this->getLimit())
+            ->all();
     }
 }

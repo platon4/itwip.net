@@ -59,6 +59,7 @@ class Manual implements OrdersInterface
                                     $this->hours[] = $hour;
                                     $this->hCount++;
                                 }
+
                                 break;
                             }
                             $d++;
@@ -167,7 +168,7 @@ class Manual implements OrdersInterface
         return (new Query())
             ->select('*')
             ->from('{{%twitter_ordersPerform}}')
-            ->where(['order_hash' => $this->get('order_hash')])
+            ->where(['order_hash' => $this->get('order_hash'), 'is_process' => 0, 'status' => 1])
             ->limit($this->getLimit())
             ->all();
     }
@@ -195,5 +196,10 @@ class Manual implements OrdersInterface
         }
 
         return $this->_interval;
+    }
+
+    public function setProcessDate($date)
+    {
+        $this->_update['order'][$this->get('id')]['process_date'] = $date;
     }
 }

@@ -40,9 +40,9 @@ $this->breadcrumbs[] = [0 => [Yii::t('breadcrumbs', '_twitter'), '/twitter']];
                             <td class="level"><a href="javascript:;" onclick="Tweets._setOrder('itr', this);">iTR <i class="fa fa-caret-down"></i></a></td>
                             <td class="tape"><a href="javascript:;" onclick="Tweets._setOrder('tape', this);"><i class="fa fa-comments-o"></i> <i class="fa fa-caret-down"></i></a></td>
                             <td class="index"> <span title="Наличие быстроробота яндекс на аккаунте.">Б.робот</span></td>
+                            <td class="price"><a href="javascript:;" onclick="Tweets._setOrder('price', this);">Цена твита <i class="fa fa-caret-down"></i></a></td>
                             <td class="black"><span title="Кол-во пользователей у которых этот аккаунт в чёрном списке"><a href="javascript:;" onclick="Tweets._setOrder('blist', this);">Чёрный <i class="fa fa-caret-down"></i></a></span></td>
                             <td class="white"><span title="Кол-во пользователей у которых этот аккаунт в белом списке"><a href="javascript:;" onclick="Tweets._setOrder('wlist', this);">Белый <i class="fa fa-caret-down"></i></a></span></td>
-                            <td class="price"><a href="javascript:;" onclick="Tweets._setOrder('price', this);">Цена поста <i class="fa fa-caret-down"></i></a></td>
                             <td class="add_b_w"><span class="fa fa-check-square"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-check-square-o"></span></td>
                             <td class="view no_border"></td>
                         </tr>

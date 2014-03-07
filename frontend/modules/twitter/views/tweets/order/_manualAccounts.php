@@ -65,6 +65,7 @@
 	</div>
 </div>
 <div class="end_posting">
-	<span style="float: left; padding-top: 7px; font-weight: bold">Разместится подготовленных твитов: <span id="_all_tweets" class="allTweetsPlacement">0</span> из <span id="_tweetsCount">0</span>, выбрано аккаунтов: <span id="_all_accounts">0</span>, на сумму: <span id="_all_amount">0</span> руб.</span>
-	<button id="embedButton" class="button btn_blue" disabled="disabled" onclick="Twitter.o.m.confirm(this); return false;"><?php echo Yii::t('twitterModule.tweets', '_place_posts'); ?> <i class="icon-double-angle-right"></i></button>
+	<span style="float: left; padding-top: 7px; font-weight: bold">Разместится твитов: <span id="_all_tweets" class="allTweetsPlacement">0</span> из <span id="_tweetsCount">0</span>, выбрано аккаунтов: <span id="_all_accounts">0</span>, на сумму: <span id="_all_amount">0</span> руб.</span>
+    <button class="button"><i class="fa fa-hand-o-left"></i> Вернутся к редактированию твитов<i class="icon-double-angle-right"></i></button>
+    <button id="embedButton" class="button btn_green" disabled="disabled" onclick="Twitter.o.m.confirm(this); return false;"><i class="fa fa-chevron-down"></i> <?php echo Yii::t('twitterModule.tweets', '_place_posts'); ?> <i class="icon-double-angle-right"></i></button>
 </div>

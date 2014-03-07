@@ -42,16 +42,12 @@
                         <ul>
                             <li class="webmoney">
                                 <label>
-                                    <img src="/i/elements/webmoney-blue.png"   style="margin-top: 0px; margin-bottom: -3px;" /> <?php echo Yii::t('financeModule.index','_webmoney'); ?> <?php echo Html::activeRadioButton($form,'_system',array(
-                    'uncheckValue'=>null,'value'=>1));
-                ?>
+                                    <?php echo Html::activeRadioButton($form,'_system',array('uncheckValue'=>null,'value'=>1));?> <img src="/i/elements/webmoney-blue.png" style="margin-top: 0px; margin-bottom: -3px;" /> <?php echo Yii::t('financeModule.index','_webmoney'); ?>
                                 </label>
                             </li>
                             <li class="robokassa no_padding">
                                 <label>
-                                    <img src="/i/elements/robo.png"  style="margin-top: 0px; margin-bottom: -3px;" /> <?php echo Yii::t('financeModule.index','_robokassa'); ?> <?php echo Html::activeRadioButton($form,'_system',array(
-                                        'uncheckValue'=>null,'value'=>2));
-                ?>
+                                    <?php echo Html::activeRadioButton($form,'_system',array('uncheckValue'=>null,'value'=>2)); ?> <img src="/i/elements/robo.png" style="margin-top: 0px; margin-bottom: -3px;" /> <?php echo Yii::t('financeModule.index','_robokassa'); ?>
                                 </label>
                             </li>
                         </ul>

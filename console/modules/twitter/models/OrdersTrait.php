@@ -49,11 +49,6 @@ trait OrdersTrait
         return $this->_task;
     }
 
-    public function setProcessDate($date)
-    {
-        $this->_update['order'][$this->get('id')]['process_date'] = $date;
-    }
-
     public function clear()
     {
         $this->_interval = null;

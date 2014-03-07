@@ -29,6 +29,7 @@
     </form>
     <div class="end_posting">
         <span style="float: left; padding-top: 7px; font-weight: bold">Страниц к индексации: <span id="urlsCount"><?php echo $model->uCount(); ?></span>, цена: <span id="urlsPrices"><?php echo $model->getPrices()[12]; ?></span> руб., на сумму: <span id="urlsPricesAll"><?php echo $model->uCount() * $model->getPrices()[12]; ?></span> руб.</span>
-        <button onclick="Twitter.o.f.confirm(this);" class="button btn_blue" id="embedButton">Создать заказ на индексацию страниц<i class="icon-double-angle-right"></i></button>
+        <button onclick="Twitter.o.f.confirm(this);" class="button" id="embedButton"><i class="fa fa-hand-o-left"></i> Вернутся к редактированию твитов<i class="icon-double-angle-right"></i></button>
+        <button onclick="Twitter.o.f.confirm(this);" class="button btn_green" id="embedButton"><i class="fa fa-chevron-down"></i> Создать заказ<i class="icon-double-angle-right"></i></button>
     </div>
 </div>

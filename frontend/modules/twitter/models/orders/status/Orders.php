@@ -45,7 +45,12 @@ class Orders extends \FormModel
             $db = Yii::app()->db;
             $rows = [];
 
-            $orders = $db->createCommand("SELECT o.*, (SELECT COUNT(*) FROM {{twitter_ordersPerform}} WHERE order_hash=o.order_hash AND IF(o.type_order='manual', status>1, status>0)) as completed_taks, (SELECT COUNT(*) FROM {{twitter_ordersPerform}}  WHERE order_hash=o.order_hash) as all_taks, (SELECT SUM(return_amount) FROM {{twitter_ordersPerform}} WHERE order_hash=o.order_hash AND status=2) as amount_use FROM {{twitter_orders}} o WHERE o.owner_id=:owner ORDER BY id DESC LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())->queryAll(true, [':owner' => Yii::app()->user->id]);
+            $orders = $db->createCommand("SELECT o.*,
+                                                (SELECT COUNT(*) FROM {{twitter_ordersPerform}} WHERE order_hash=o.order_hash AND IF(o.type_order='manual', status>1, status>0)) as completed_taks,
+                                                (SELECT COUNT(*) FROM {{twitter_ordersPerform}}  WHERE order_hash=o.order_hash) as all_taks,
+                                                (SELECT SUM(return_amount) FROM {{twitter_ordersPerform}} WHERE order_hash=o.order_hash AND status=2) as amount_use,
+                                                (SELECT SUM(return_amount) FROM {{twitter_ordersPerform}} WHERE order_hash=o.order_hash) as return_amount FROM {{twitter_orders}} o WHERE o.owner_id=:owner ORDER BY id DESC LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())->queryAll(true, [':owner' => Yii::app()->user->id]);
+
             foreach($orders as $order) {
                 $order['params'] = json_decode($order['_params'], true);
                 unset($order['_params']);
@@ -87,6 +92,14 @@ class Orders extends \FormModel
         return isset($this->_times[$t]) ? Yii::t('twitterModule.orders', '{n} час | {n} часа | {n} часов', $this->_times[$t]) : 'не определено';
     }
 
+    public function getCompleteProcent($complete, $all)
+    {
+        if($complete == 0 || $all == 0)
+            return 0;
+
+        return round(($complete / $all) * 100, 2);
+    }
+
     public function getLimit()
     {
         return $this->limit;
@@ -96,4 +109,4 @@ class Orders extends \FormModel
     {
         return Yii::app()->request->isAjaxRequest ? 'status/_indexRows' : 'status/index';
     }
-} 
+}

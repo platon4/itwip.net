@@ -1449,7 +1449,7 @@ var Twitter = {
             },
             confirm: function () {
                 Dialog.open('Подтверждение заказа', {
-                    content: '<div style="padding: 7px 15px 0;" id="_orderProcessing"><strong>Подтвердение заказа на сумму:</strong> ' + parseInt($('#urlsPricesAll').html()) + ' руб.</div>',
+                    content: '<div style="padding: 7px 15px 0;" id="_orderProcessing"><strong>Подтверждение заказа на сумму:</strong> ' + parseInt($('#urlsPricesAll').html()) + ' руб.</div>',
                     buttons: [
                         {
                             text: _cancel, click: function () {
@@ -1582,7 +1582,7 @@ var Twitter = {
         },
         confirmPay: function (id, e) {
             var $t = $('#order_' + id);
-            Dialog.open('Подтверждение заказа', {
+            Dialog.open('Подтверждение оплаты заказа', {
                     content: '<div id="orderMessage">Вы действительно хотите оплатить заказ на сумму: ' + $t.attr('data-amount') + ' ' + ($t.attr('data-atype') == 1 ? ' руб.Б.' : 'руб.') + ' ?</div>',
                     buttons: [
                         {
@@ -1618,7 +1618,7 @@ var Twitter = {
                                     }
                                 });
                             },
-                            class: "button btn_blue"
+                            class: "button btn_green"
                         }
                     ]
                 }

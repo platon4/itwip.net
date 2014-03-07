@@ -61,7 +61,7 @@ class OrdersController extends Controller
 		$model->setScenario('remove');
 
 		if($model->load($_GET, true) && $model->validate()) {
-
+            Html::json(['message' => $model->getMessage(), 'code' => 200]);
 		}
 		else
 			Html::json(['message' => $model->getError(), 'code' => 203]);
