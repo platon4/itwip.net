@@ -177,13 +177,11 @@ class Fast extends \FormModel
             /*
              * Создаем заказ
              */
-            $db->createCommand("INSERT INTO {{twitter_orders}} (owner_id,type_order,order_hash,order_cost,return_amount, create_date,status,payment_type,_params) VALUES (:owner,:type_order,:order_hash,:order_cost,:return_amount, :create_date,:status,0,:_params)")
+            $db->createCommand("INSERT INTO {{twitter_orders}} (owner_id,type_order,order_hash,create_date,status,payment_type,_params) VALUES (:owner,:type_order,:order_hash,:create_date,:status,0,:_params)")
                 ->execute([
                     ':owner'         => Yii::app()->user->id,
                     ':type_order'    => 'indexes',
                     ':order_hash'    => $this->_tid,
-                    ':order_cost'    => $this->getSum(),
-                    ':return_amount' => $this->getSum(),
                     ':create_date'   => date('Y-m-d H:i:s'),
                     ':status'        => $this->pay,
                     ':_params'       => json_encode(['time' => $this->_time])

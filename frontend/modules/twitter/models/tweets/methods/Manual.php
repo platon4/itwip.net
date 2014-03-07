@@ -750,13 +750,11 @@ class Manual extends \FormModel
             /*
              * Создаем заказ
              */
-            $db->createCommand("INSERT INTO {{twitter_orders}} (owner_id,type_order,order_hash,order_cost,return_amount,process_date,create_date,status,payment_type,_params) VALUES (:owner,:type_order,:order_hash,:order_cost,:return_amount,:process_date,:create_date,:status,:payment,:_params)")
+            $db->createCommand("INSERT INTO {{twitter_orders}} (owner_id,type_order,order_hash,process_date,create_date,status,payment_type,_params) VALUES (:owner,:type_order,:order_hash,:process_date,:create_date,:status,:payment,:_params)")
                 ->execute([
                     ':owner'         => Yii::app()->user->id,
                     ':type_order'    => 'manual',
                     ':order_hash'    => $this->_tid,
-                    ':order_cost'    => $this->getSum(),
-                    ':return_amount' => $this->getExtractSum(),
                     ':process_date'  => $this->getStartDate(),
                     ':create_date'   => date('Y-m-d H:i:s'),
                     ':status'        => $this->pay,
