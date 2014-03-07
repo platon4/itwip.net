@@ -220,25 +220,21 @@ class Finance
 			$sql_user .= 'money_amount=money_amount+' . $amount;
 
 		if($operationID) {
-			$_b = Yii::app()->db->createCommand("SELECT * FROM {{money_blocking}} WHERE _id=:id")->queryRow(true, array(
-				':id' => $operationID));
+			$_b = Yii::app()->db->createCommand("SELECT * FROM {{money_blocking}} WHERE _id=:id LIMIT 1")->queryRow(true, [':id' => $operationID]);
 
-			if(count($_b)) {
+			if($_b !== false) {
 				if(($_b['amount'] - $amount) > 0)
-					Yii::app()->db->createCommand("UPDATE {{money_blocking}} SET amount=amount-:money WHERE id=:id")->execute(array(
-						':id' => $_b['id'], ':money' => $amount));
+					Yii::app()->db->createCommand("UPDATE {{money_blocking}} SET amount=amount-:money WHERE id=:id")->execute([':id' => $_b['id'], ':money' => $amount]);
 				else
-					Yii::app()->db->createCommand("DELETE FROM {{money_blocking}} WHERE id=:id")->execute(array(
-						':id' => $_b['id']));
+					Yii::app()->db->createCommand("DELETE FROM {{money_blocking}} WHERE id=:id")->execute([':id' => $_b['id']]);
 			}
 		}
 
 		$sql_user .= ' WHERE id=:id';
 
-		Yii::app()->db->createCommand($sql_user)->execute(array(
-			':id' => $user_id));
+		Yii::app()->db->createCommand($sql_user)->execute([':id' => $user_id]);
 
-		Finance::_setMoneyLog($amount, $user_id, $moneyType, 2, 0, $for, $operationID, $operationNotice, 2);
+		self::_setMoneyLog($amount, $user_id, $moneyType, 2, 0, $for, $operationID, $operationNotice, 2);
 	}
 
 	/**

@@ -259,26 +259,26 @@ class ReportsController extends Controller
             $_prev_date=$money['_date'];
         }
 
-        if($act == 'out')
-        {
-            $lists=array(
-                0=>array('lang_key'=>'_twitter','precent'=>((100 * $ps['twitter']) / $_amount),
-                    'color'=>'00C3F8'),
-                1=>array('lang_key'=>'_extract_balance','precent'=>((100 * $ps['balance']) / $_amount),
-                    'color'=>'EC4853'),
-            );//список елементов в графике                
-        } else
-        {
-            $lists=array(
-                0=>array('lang_key'=>'_twitter','precent'=>((100 * $ps['twitter']) / $_amount),
-                    'color'=>'00C3F8'),
-                1=>array('lang_key'=>'_referrals','precent'=>((100 * $ps['referrals']) / $_amount),
-                    'color'=>'F86865'),
-                2=>array('lang_key'=>'_bonus_stats','precent'=>((100 * $ps['bonus']) / $_amount),
-                    'color'=>'FFA700'),
-                3=>array('lang_key'=>'_add_balance','precent'=>((100 * $ps['balance']) / $_amount),
-                    'color'=>'56CC41'),
-            );//список елементов в графике           
+        if($act == 'out') {
+            $lists = array(
+                0 => array('lang_key' => '_twitter', 'precent' => ($ps['twitter'] > 0 ? (100 * $ps['twitter']) / $_amount : 0),
+                           'color'    => '00C3F8'),
+                1 => array('lang_key' => '_extract_balance', 'precent' => ($ps['balance'] > 0 ? (100 * $ps['balance']) / $_amount : 0),
+                           'color'    => 'EC4853'),
+            );
+            //список елементов в графике
+        } else {
+            $lists = array(
+                0 => array('lang_key' => '_twitter', 'precent' => ($ps['twitter'] > 0 ? (100 * $ps['twitter']) / $_amount : 0),
+                           'color'    => '00C3F8'),
+                1 => array('lang_key' => '_referrals', 'precent' => ($ps['referrals'] > 0 ? (100 * $ps['referrals']) / $_amount : 0),
+                           'color'    => 'F86865'),
+                2 => array('lang_key' => '_bonus_stats', 'precent' => ($ps['bonus'] > 0 ? (100 * $ps['bonus']) / $_amount : 0),
+                           'color'    => 'FFA700'),
+                3 => array('lang_key' => '_add_balance', 'precent' => ($ps['balance'] > 0 ? (100 * $ps['balance']) / $_amount : 0),
+                           'color'    => '56CC41'),
+            );
+            //список елементов в графике
         }
 
         $html=$this->renderPartial('_graph',array('data'=>$data,'lists'=>$lists,

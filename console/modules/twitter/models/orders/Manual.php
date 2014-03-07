@@ -23,6 +23,7 @@ class Manual implements OrdersInterface
             $this->setTask();
         }
 
+        echo $this->getProcessDate()."\n";
         $this->setProcessDate($this->getProcessDate());
     }
 
@@ -59,8 +60,6 @@ class Manual implements OrdersInterface
                                     $this->hours[] = $hour;
                                     $this->hCount++;
                                 }
-
-                                break;
                             }
                             $d++;
                         }
@@ -105,11 +104,14 @@ class Manual implements OrdersInterface
         $this->_task[] = [
             'order_id'     => $this->get('id'),
             'sbuorder_id'  => $task['id'],
+            'orderType'    => 'manual',
             'tweet_hash'   => $task['hash'],
             'url_hash'     => $task['url_hash'],
             'process_time' => $this->getTaskProcessTime($task),
             'params'       => $this->getTaskParams($task)
         ];
+
+        $this->_update['task'][$task['id']]['is_process'] = 1;
     }
 
     public function getTaskProcessTime()

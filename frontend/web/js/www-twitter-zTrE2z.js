@@ -1365,15 +1365,16 @@ var Twitter = {
                                 var b = $('#as523se5'), btxt = b.html();
 
                                 _ajax({
-                                    url: "/twitter/orders/status?h=" + Twitter.o.g.d.h + "&t=manual&act=remove&id=" + id,
+                                    url: "/twitter/orders/remove?id=" + id + "&s=1",
                                     success: function (obj) {
-                                        Dialog.open(_info, {content: obj.content});
-
                                         if (obj.code == 199)
                                             window.location.href = '/twitter/orders/status';
 
                                         if (obj.code == 200)
-                                            Order.getTweets();
+                                        {
+                                            Dialog.open(_info, {content: obj.message});
+                                            Twitter.o.g.get();
+                                        }
                                     },
                                     beforeSend: function () {
                                         b.html('<i class="fa fa-spin fa-spinner"></i>');

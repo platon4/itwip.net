@@ -12,9 +12,19 @@ class Indexes implements OrdersInterface
 
     public function make()
     {
-        $this->init();
+    }
 
-        $this->setTask();
+    public function processTask($task)
+    {
+        $this->_task[] = [
+            'order_id'     => $this->get('id'),
+            'sbuorder_id'  => $task['id'],
+            'orderType'    => 'indexes',
+            'tweet_hash'   => $task['hash'],
+            'url_hash'     => $task['url_hash'],
+            'process_time' => $this->getTaskProcessTime($task),
+            'params'       => $this->getTaskParams($task)
+        ];
     }
 
     public function getTasks()

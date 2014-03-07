@@ -12,6 +12,7 @@ class Orders extends Model
     protected $_data;
     protected $_orders = [];
     protected $_updates = [];
+    protected $_tasks = [];
     protected $_order_types = [
         'manual'  => 'console\modules\twitter\models\orders\Manual',
         'indexes' => 'console\modules\twitter\models\orders\Indexes'
@@ -42,11 +43,11 @@ class Orders extends Model
 
         /* Берем список заказов из базы */
         $orders = $query
-            ->select('id,owner_id,type_order,order_hash,order_cost,return_amount,payment_type,_params')
+            ->select('id,owner_id,type_order,order_hash,payment_type,_params')
             ->from('{{%twitter_orders}}')
-            ->where(['and', 'status=:status', 'process_date<=:date'], [':status' => 1, ':date' => date('Y-m-d')])
+            ->where(['and', 'status=:status', 'process_date<=:date'], [':status' => 0, ':date' => date('Y-m-d')])
             ->orderBy(['id' => SORT_ASC])
-            ->limit(10)
+            ->limit(50)
             ->all();
 
         /* Если заказы есть обрабатаваем дальше */
@@ -69,10 +70,10 @@ class Orders extends Model
      */
     public function appendOrder($data)
     {
-        if(!empty($data['task']))
+        if(isset($data['task']) && !empty($data['task']))
             $this->_orders[] = $data['task'];
 
-        if(!empty($data['update']))
+        if(isset($data['update']) && !empty($data['update']))
             $this->_updates[] = $data['update'];
     }
 
@@ -170,12 +171,14 @@ class Orders extends Model
      */
     public function makeOrders()
     {
+        die();
         if($this->hasOrders() || $this->hasUpdates()) {
             try {
                 $t = Yii::$app->db->beginTransaction();
 
                 $this->makeTaks();
                 $this->updateOrders();
+                $this->updateTasks();
 
                 $t->commit();
             } catch(Exception $e) {
