@@ -15,6 +15,7 @@ class Order extends \FormModel
         'manual'  => [0, 1, 2],
         'indexes' => [0]
     ];
+    protected $_params;
 
     public function rules()
     {
@@ -125,6 +126,15 @@ class Order extends \FormModel
         }
     }
 
+    protected function getParams($key)
+    {
+        if($this->_params === null) {
+            $this->_params = json_decode($this->getOrder()['_params'], true);
+        }
+
+        return isset($this->_params[$key]) ? $this->_params[$key] : null;
+    }
+
     protected function removeTask()
     {
         $row = $this->getOrder();
@@ -134,7 +144,8 @@ class Order extends \FormModel
                 $t = Yii::app()->db->beginTransaction();
 
                 if($row['order_status'] > 0 && isset($this->returnAmount[$row['type_order']]) && in_array($row['status'], $this->returnAmount[$row['type_order']])) {
-                    \Finance::rePayment($row['return_amount'], Yii::app()->user->id, $row['payment_type'], 0, $row['order_id']);
+                    $twAccountLogin = Yii::app()->db->createCommand("SELECT screen_name FROM {{tw_accounts}} WHERE id=:id")->queryScalar([':id' => $this->getParams('account')]);
+                    \Finance::rePayment($row['return_amount'], Yii::app()->user->id, $row['payment_type'], 1, $row['order_id'], $twAccountLogin);
                 }
 
                 Yii::app()->db->createCommand("DELETE FROM {{twitter_ordersPerform}} WHERE id=:id")->execute([':id' => $row['id']]);

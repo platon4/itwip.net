@@ -33,32 +33,15 @@ class DefaultController extends \console\components\Controller
 
             try {
                 $transaction = Yii::$app->db->beginTransaction();
-
+                $order_status = $order['_status'];
                 $hash = String::generateHash();
-
-                $command->insert('{{%twitter_orders}}', [
-                    'id'           => $order['id'],
-                    'owner_id'     => $order['owner_id'],
-                    'type_order'   => 'manual',
-                    'order_hash'   => $hash,
-                    'create_date'  => $order['_date'],
-                    'status'       => $order['_status'],
-                    'payment_type' => $order['_type_payment'],
-                    '_params'      => json_encode([
-                        'targeting' => [
-                            'interval' => 30,
-                            't'        => 'all',
-                        ],
-                        'ping'      => $order['_ping']
-                    ])
-                ])
-                    ->execute();
 
                 $tasks = $query->from('{{%tweets_to_twitter}}')->where(['_order' => $order['id']])->all();
 
                 if(!empty($tasks)) {
 
                     $t = 0;
+                    $s = 0;
 
                     foreach($tasks as $task) {
                         $t++;
@@ -101,19 +84,44 @@ class DefaultController extends \console\components\Controller
 
                         if($order['_status'] > 0) {
                             if($task['approved'] && $task['status'] == 1 && $task['status'] == 3) {
-                                echo 'Return money: ' . $task['status'] . "\n";
+                                \common\api\finance\Operation::returnMoney($price_return, $order['owner_id'], $order['_type_payment'], 4, $order['id']);
                             }
-                        }
 
-                        echo "\tTask: " . $t . "\n";
+                            if($task['status'] == 0)
+                                $s++;
+                        }
 
                         $this->urlCount = 0;
                         $this->urls = [];
                         $this->url = null;
                     }
+
+                    if($order_status > 0 && $s == 0)
+                        $order_status = 2;
+
+                    $command->insert('{{%twitter_orders}}', [
+                        'id'           => $order['id'],
+                        'owner_id'     => $order['owner_id'],
+                        'type_order'   => 'manual',
+                        'order_hash'   => $hash,
+                        'create_date'  => $order['_date'],
+                        'status'       => $order_status,
+                        'payment_type' => $order['_type_payment'],
+                        '_params'      => json_encode([
+                            'targeting' => [
+                                'interval' => 30,
+                                't'        => 'all',
+                            ],
+                            'ping'      => $order['_ping']
+                        ])
+                    ])
+                        ->execute();
+
                 } else {
                     if($order['_status'] == 1) {
-                        echo "Return money order\n";
+                        $amount = $order['_amount'] - $order['_amount_user'];
+
+                        \common\api\finance\Operation::returnMoney($amount, $order['owner_id'], $order['_type_payment'], 0, $order['id']);
                     }
 
                     $command->delete('{{%tw_orders}}', ['id' => $order['id']])->execute();

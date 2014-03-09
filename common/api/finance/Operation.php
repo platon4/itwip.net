@@ -1,7 +1,8 @@
 <?php
 
-namespace common\components\finance;
+namespace common\api\finance;
 
+use Yii;
 use yii\db\Query;
 
 class Operation
@@ -59,6 +60,6 @@ class Operation
         if($notice)
             $columns['_notice'] = $notice;
 
-        $command->insert('{{%monetaryTransactions}}', $columns)->execute();
+        $command->insert('{{%money_logs}}', $columns)->execute();
     }
 }
