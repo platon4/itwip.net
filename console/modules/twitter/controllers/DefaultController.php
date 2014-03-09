@@ -20,47 +20,8 @@ class DefaultController extends \console\components\Controller
     protected $urls = [];
     protected $url;
 
-
-
-
     public function actionIndex()
     {
-    }
-
-
-
-
-
-
-
-
-    protected function extractUrls($tweet)
-    {
-        preg_match_all($this->config['patternUrl'], strtolower($tweet), $urls);
-
-        if(!empty($urls[0])) {
-            $this->urlCount = count($urls[0]);
-
-            if($this->urlCount) {
-                foreach($urls[0] as $url)
-                    $this->urls[] = trim($url);
-            }
-        }
-    }
-
-    public function getUrl()
-    {
-        if($this->url === null && $this->urlCount === 1)
-            $this->url = current($this->urls);
-
-        return $this->url;
-    }
-
-
-
-    protected function funcltionprocessorder()
-    {
-
         $query = new Query();
         $command = Yii::$app->db->createCommand();
 
@@ -106,8 +67,8 @@ class DefaultController extends \console\components\Controller
 
                         $command->insert('{{%twitter_ordersPerform}}', [
                             'id'            => $task['id'],
-                            'order_hash'    => md5($tweet),
-                            'hash'          => 'manual',
+                            'order_hash'    => $hash,
+                            'hash'          => md5($tweet),
                             'url'           => $url,
                             'url_hash'      => $url_hash,
                             'cost'          => $price,
@@ -122,12 +83,7 @@ class DefaultController extends \console\components\Controller
                         ])->execute();
 
                         if($order['_status'] > 0) {
-                            if($task['approved'] && ($task['status'] == 1 || $task['status'] == 3)) {
-                                \common\api\finance\Operation::returnMoney($price_return, $order['owner_id'], $order['_type_payment'], 4, $order['id']);
-                                echo "\t Return amount with tweet:" . $price_return ."\n";
-                            }
-
-                            if($task['status'] == 0)
+                             if($task['status'] == 0)
                                 $s++;
                         }
 
@@ -158,15 +114,7 @@ class DefaultController extends \console\components\Controller
                         ->execute();
 
                 } else {
-                    if($order['_status'] == 1) {
-                        $amount = $order['_amount'] - $order['_amount_user'];
 
-                        \common\api\finance\Operation::returnMoney($amount, $order['owner_id'], $order['_type_payment'], 5, $order['id']);
-                        echo "\t Return amount with order (remove):" . $amount ."\n";
-                    }
-
-                    $command->delete('{{%tw_orders}}', ['id' => $order['id']])->execute();
-                    $command->delete('{{%money_blocking}}', ['for' => 0, '_id' => $order['id']])->execute();
                 }
 
                 $transaction->commit();
@@ -176,5 +124,27 @@ class DefaultController extends \console\components\Controller
 
             echo "Order: " . $o . "\n";
         }
+    }
+
+    protected function extractUrls($tweet)
+    {
+        preg_match_all($this->config['patternUrl'], strtolower($tweet), $urls);
+
+        if(!empty($urls[0])) {
+            $this->urlCount = count($urls[0]);
+
+            if($this->urlCount) {
+                foreach($urls[0] as $url)
+                    $this->urls[] = trim($url);
+            }
+        }
+    }
+
+    public function getUrl()
+    {
+        if($this->url === null && $this->urlCount === 1)
+            $this->url = current($this->urls);
+
+        return $this->url;
     }
 } 
