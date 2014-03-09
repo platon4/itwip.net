@@ -1370,8 +1370,7 @@ var Twitter = {
                                         if (obj.code == 199)
                                             window.location.href = '/twitter/orders/status';
 
-                                        if (obj.code == 200)
-                                        {
+                                        if (obj.code == 200) {
                                             Dialog.open(_info, {content: obj.message});
                                             Twitter.o.g.get();
                                         }
@@ -1482,13 +1481,15 @@ var Twitter = {
             var btn = $('#' + e), btxt = btn.html(), additional = '', q = new Array(), c = 0;
             if (_w === true) return false;
 
+            additional = '&Order[data][pay_method]=' + $('input[name="Manual\\[pay_method\\]"]:checked').val();
+
             if (this.m.d.data.accounts.length > 0) {
                 $.each(this.m.d.data.accounts, function (i, v) {
                     if (v !== undefined)
                         q[i] = v;
                 });
 
-                additional = '&Order[data][accounts]=' + q.join(':');
+                additional = additional + '&Order[data][accounts]=' + q.join(':');
             }
 
             _ajax({

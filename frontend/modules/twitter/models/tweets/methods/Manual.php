@@ -128,7 +128,7 @@ class Manual extends \FormModel
              */
             ['limit', 'in', 'range' => [10, 20, 30, 40, 50, 100], 'on' => 'get,rows'],
             ['_gender', 'in', 'range' => [0, 1, 2], 'on' => 'get,rows'],
-            ['pay_method', 'in', 'range' => [0, 1], 'message' => Yii::t('twitterModule.tweets', '_no_pay_system'), 'on' => 'get,rows'],
+            ['pay_method', 'in', 'range' => [0, 1], 'message' => Yii::t('twitterModule.tweets', '_no_pay_system'), 'on' => 'get,rows,order'],
             ['_ya_r_ot,_age_blog_ot,_googl_rang_ot,_ya_r_do', 'numerical', 'integerOnly' => true, 'min' => 0, 'tooSmall' => Yii::t('twitterModule.tweets', '_error_numerical_min_0'), 'on' => 'get,rows'],
 
             /*

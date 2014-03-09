@@ -25,7 +25,7 @@ class DefaultController extends \console\components\Controller
         $query = new Query();
         $command = Yii::$app->db->createCommand();
 
-        $orders = $query->from('{{%tw_orders}}')->limit(5)->all();
+        $orders = $query->from('{{%tw_orders}}')->all();
         $o = 0;
 
         foreach($orders as $order) {
@@ -65,7 +65,6 @@ class DefaultController extends \console\components\Controller
                         else
                             $status = strtr($task['status'], array("0" => "1", "1" => "2", "2" => "3", "3" => "4"));
 
-                        echo "\tStatus: " . $task['status'] . " -> " . $status . "\n";
                         $command->insert('{{%twitter_ordersPerform}}', [
                             'id'            => $task['id'],
                             'order_hash'    => $hash,
@@ -84,6 +83,12 @@ class DefaultController extends \console\components\Controller
                         ])->execute();
 
                         if($order['_status'] > 0) {
+
+                            if($task['approved'] && ($task['status'] == 1 || $task['status'] == 3)) {
+                                \common\api\finance\Operation::returnMoney($price_return, $order['owner_id'], $order['_type_payment'], 4, $order['id']);
+                                echo "\tReturn from tweet: " . $price_return . "\n";
+                            }
+
                             if($task['status'] == 0)
                                 $s++;
                         }
@@ -113,8 +118,6 @@ class DefaultController extends \console\components\Controller
                         ])
                     ])
                         ->execute();
-
-                } else {
 
                 }
 

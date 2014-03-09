@@ -15,9 +15,9 @@ class Operation
         $command = Yii::$app->db->createCommand();
 
         if($moneyType == 1)
-            $columns = ['bonus_money' => 'bonus_money+' . $amount];
+            $columns = 'bonus_money=bonus_money+' . $amount;
         else
-            $columns = ['money_amount' => 'money_amount + ' . $amount];
+            $columns = 'money_amount=money_amount+' . $amount;
 
         if($operationID) {
             $_b = (new Query())
@@ -27,13 +27,13 @@ class Operation
 
             if($_b !== false) {
                 if(($_b['amount'] - $amount) > 0)
-                    $command->update('{{%money_blocking}}', ['amount' => 'amount-:money'], 'id=:id', [':id' => $_b['id'], ':money' => $amount])->execute();
+                    Yii::$app->db->createCommand('UPDATE {{%money_blocking}} SET amount=amount-:money WHERE id=:id')->bindValues([':id' => $_b['id'], ':money' => $amount])->execute();
                 else
                     $command->delete('{{%money_blocking}}', 'id=:id', [':id' => $_b['id']])->execute();
             }
         }
 
-        $command->update('{{%accounts}}', $columns, 'id=:id', [':id' => $user_id]);
+        Yii::$app->db->createCommand('UPDATE {{%accounts}} SET ' . $columns . ' WHERE id=:id')->bindValues([':id' => $user_id])->execute();
 
         self::log($amount, $user_id, $moneyType, 2, 0, $for, $operationID, $operationNotice, 2);
     }
