@@ -20,8 +20,47 @@ class DefaultController extends \console\components\Controller
     protected $urls = [];
     protected $url;
 
+
+
+
     public function actionIndex()
     {
+    }
+
+
+
+
+
+
+
+
+    protected function extractUrls($tweet)
+    {
+        preg_match_all($this->config['patternUrl'], strtolower($tweet), $urls);
+
+        if(!empty($urls[0])) {
+            $this->urlCount = count($urls[0]);
+
+            if($this->urlCount) {
+                foreach($urls[0] as $url)
+                    $this->urls[] = trim($url);
+            }
+        }
+    }
+
+    public function getUrl()
+    {
+        if($this->url === null && $this->urlCount === 1)
+            $this->url = current($this->urls);
+
+        return $this->url;
+    }
+
+
+
+    protected function funcltionprocessorder()
+    {
+
         $query = new Query();
         $command = Yii::$app->db->createCommand();
 
@@ -137,27 +176,5 @@ class DefaultController extends \console\components\Controller
 
             echo "Order: " . $o . "\n";
         }
-    }
-
-    protected function extractUrls($tweet)
-    {
-        preg_match_all($this->config['patternUrl'], strtolower($tweet), $urls);
-
-        if(!empty($urls[0])) {
-            $this->urlCount = count($urls[0]);
-
-            if($this->urlCount) {
-                foreach($urls[0] as $url)
-                    $this->urls[] = trim($url);
-            }
-        }
-    }
-
-    public function getUrl()
-    {
-        if($this->url === null && $this->urlCount === 1)
-            $this->url = current($this->urls);
-
-        return $this->url;
     }
 } 

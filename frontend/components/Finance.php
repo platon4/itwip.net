@@ -197,6 +197,9 @@ class Finance
 						'{id}' => $operationData, '{account}' => $notice)), //Возврат за определеный твит с заказа
 				3 => Yii::t('financeModule.index', '_checking_tweets_delete_bloger', array(
 						'{account}' => $notice)),
+
+                4 => Yii::t('financeModule.index', 'twitter_removeFromTransfer_tweet', ['{id}' => $operationData]),
+                5 => Yii::t('financeModule.index', 'twitter_removeFromTransfer', ['{id}' => $operationData])
 			)
 		);
 

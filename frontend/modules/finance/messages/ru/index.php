@@ -129,4 +129,7 @@ return array(
     '_out_money'=>'Вывод средств из сервиса на WebMoney',
     
     '_shop_ref_buy'=>'Покупка реферала: {ref}',
+
+    'twitter_removeFromTransfer_tweet' => 'Возврат средств с заказа ID: {id}, не удалось разместить твит, или блогер отклонил твит.',
+    'twitter_removeFromTransfer' => 'Возврат средств с заказа ID: {id}',
 );
