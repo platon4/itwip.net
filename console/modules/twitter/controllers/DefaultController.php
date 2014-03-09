@@ -25,7 +25,7 @@ class DefaultController extends \console\components\Controller
         $query = new Query();
         $command = Yii::$app->db->createCommand();
 
-        $orders = $query->from('{{%tw_orders}}')->all();
+        $orders = $query->from('{{%tw_orders}}')->limit(5)->all();
         $o = 0;
 
         foreach($orders as $order) {
@@ -63,8 +63,9 @@ class DefaultController extends \console\components\Controller
                         if(!$task['approved'])
                             $status = 0;
                         else
-                            $status = str_replace([0, 1, 2, 3], [1, 2, 3, 4], $task['status']);
+                            $status = strtr($task['status'], array("0" => "1", "1" => "2", "2" => "3", "3" => "4"));
 
+                        echo "\tStatus: " . $task['status'] . " -> " . $status . "\n";
                         $command->insert('{{%twitter_ordersPerform}}', [
                             'id'            => $task['id'],
                             'order_hash'    => $hash,
@@ -83,7 +84,7 @@ class DefaultController extends \console\components\Controller
                         ])->execute();
 
                         if($order['_status'] > 0) {
-                             if($task['status'] == 0)
+                            if($task['status'] == 0)
                                 $s++;
                         }
 
@@ -117,6 +118,7 @@ class DefaultController extends \console\components\Controller
 
                 }
 
+                //$transaction->rollBack();
                 $transaction->commit();
             } catch(\Exception $e) {
                 $transaction->rollBack();
