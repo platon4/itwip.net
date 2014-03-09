@@ -49,6 +49,17 @@ trait OrdersTrait
         return $this->_task;
     }
 
+    public function _setTaskParams($data)
+    {
+        if(isset($data['_params']))
+            $this->_taskParams = json_decode($data['_params'], true);
+    }
+
+    public function _getTaskParams($key)
+    {
+        return isset($this->_taskParams[$key]) ? $this->_taskParams[$key] : '';
+    }
+
     public function clear()
     {
         $this->_interval = null;

@@ -73,10 +73,10 @@ class Orders extends Model
             $orders = $query
                 ->select('id,owner_id,type_order,order_hash,payment_type,_params')
                 ->from('{{%twitter_orders}}')
-                ->where(['and', 'status=:status', 'process_date<=:date'], [':status' => 1, ':date' => date('Y-m-d')])
+                ->where(['and', 'status=:status', 'process_date<=:date', 'is_process=0', 'type_order=:index'], [':index'=>'indexes', ':status' => 1, ':date' => date('Y-m-d')])
                 ->orderBy(['id' => SORT_ASC])
                 ->limit(10)
-                ->all();
+                ->all(); //, 'type_order=:index'  ':index'=>'indexes',
 
             /** Если заказы есть обрабатаваем дальше */
             if(!empty($orders)) {
@@ -101,11 +101,19 @@ class Orders extends Model
      */
     public function appendOrder($data)
     {
-        if(isset($data['task']) && !empty($data['task']))
-            $this->_orders[] = $data['task'];
+        if(isset($data['task']) && !empty($data['task'])) {
+            foreach($data['task'] as $task) {
+                $this->_orders[] = $task;
+            }
+        }
 
-        if(isset($data['update']) && !empty($data['update']))
-            $this->_updates[] = $data['update'];
+        if(isset($data['update']) && !empty($data['update'])) {
+            foreach($data['update'] as $key => $update) {
+                foreach($update as $k => $v)
+                    $this->_updates[$key][$k] = $update;
+            }
+        }
+        $this->_updates[] = $data['update'];
     }
 
     /**
@@ -131,12 +139,13 @@ class Orders extends Model
     /**
      * Получаем список созданных заказов
      *
+     * @param string $key
      * @return array
      */
     public function getOrders($key = '')
     {
         if($key == 'columns')
-            return ['order_id', 'sbuorder_id', 'tweet_hash', 'url_hash', 'process_time', 'params'];
+            return ['order_id', 'sbuorder_id', 'orderType', 'tweet_hash', 'url_hash', 'process_time', 'params'];
         else
             return $this->_orders;
     }
@@ -158,10 +167,8 @@ class Orders extends Model
             $rows = [];
 
             foreach($this->getOrders() as $key => $values) {
-                foreach($values as $field => $value) {
-                    foreach($value as $v) {
-                        $rows[$field][] = $v;
-                    }
+                foreach($values as $k => $v) {
+                    $rows[$key][] = $v;
                 }
             }
 
@@ -197,23 +204,21 @@ class Orders extends Model
         }
     }
 
-    /*
+    /**
      * Создаем задания для робота, и отправляем ему
      */
     public function makeOrders()
     {
-        print_r($this->getUpdates());
-        die();
         if($this->hasOrders() || $this->hasUpdates()) {
             try {
                 $t = Yii::$app->db->beginTransaction();
 
                 $this->makeTaks();
                 $this->updateOrders();
-                $this->updateTasks();
 
                 $t->commit();
             } catch(Exception $e) {
+                echo $e;
                 $t->rollBack();
             }
         }

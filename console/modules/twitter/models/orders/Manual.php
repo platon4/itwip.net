@@ -24,13 +24,24 @@ class Manual implements OrdersInterface
         }
 
         $this->setProcessDate($this->getProcessDate());
+        $this->isFinish();
     }
 
     public function init()
     {
         if($this->processOrder() > 0)
             $this->hTask = true;
+    }
 
+    public function isFinish()
+    {
+        $count = (new Query())
+            ->from('{{%twitter_ordersPerform}}')
+            ->where(['order_hash' => $this->get('order_hash'), 'status' => 1])
+            ->count();
+
+        if($count == 0)
+            $this->_update['order'][$this->get('id')]['is_process'] = 1;
     }
 
     public function processOrder()
@@ -143,17 +154,6 @@ class Manual implements OrdersInterface
             'tooow'       => $data['return_amount'],
             'interval'    => $this->getInterval()
         ]);
-    }
-
-    public function _setTaskParams($data)
-    {
-        if(isset($data['_params']))
-            $this->_taskParams = json_decode($data['_params'], true);
-    }
-
-    public function _getTaskParams($key)
-    {
-        return isset($this->_taskParams[$key]) ? $this->_taskParams[$key] : '';
     }
 
     public function hasTask()
