@@ -25,7 +25,7 @@ class DefaultController extends \console\components\Controller
         $query = new Query();
         $command = Yii::$app->db->createCommand();
 
-        $orders = $query->from('{{%tw_orders}}')->limit(20)->all();
+        $orders = $query->from('{{%tw_orders}}')->all();
         $o = 0;
 
         foreach($orders as $order) {
@@ -85,6 +85,7 @@ class DefaultController extends \console\components\Controller
                         if($order['_status'] > 0) {
                             if($task['approved'] && $task['status'] == 1 && $task['status'] == 3) {
                                 \common\api\finance\Operation::returnMoney($price_return, $order['owner_id'], $order['_type_payment'], 4, $order['id']);
+                                echo "\t Return amount with tweet:" . $price_return ."\n";
                             }
 
                             if($task['status'] == 0)
@@ -121,15 +122,15 @@ class DefaultController extends \console\components\Controller
                     if($order['_status'] == 1) {
                         $amount = $order['_amount'] - $order['_amount_user'];
 
-                        \common\api\finance\Operation::returnMoney($amount, $order['owner_id'], $order['_type_payment'], 0, $order['id']);
+                        \common\api\finance\Operation::returnMoney($amount, $order['owner_id'], $order['_type_payment'], 5, $order['id']);
+                        echo "\t Return amount with order (remove):" . $amount ."\n";
                     }
 
                     $command->delete('{{%tw_orders}}', ['id' => $order['id']])->execute();
                     $command->delete('{{%money_blocking}}', ['for' => 0, '_id' => $order['id']])->execute();
                 }
 
-                $transaction->rollBack();
-                //$transaction->commit();
+                $transaction->commit();
             } catch(\Exception $e) {
                 $transaction->rollBack();
             }
