@@ -36,7 +36,7 @@ class Roster extends \FormModel
     public function rules()
     {
         return [
-            ['_tid', 'ext.validators.hashValidator', 'min' => 10, 'max' => 15],
+            ['_tid', 'ext.validators.hashValidator', 'min' => 7, 'max' => 20],
             ['_tid', 'existsRoster'],
             ['_group', 'in', 'range' => $this->groups, 'message' => Yii::t('yii', 'Your request is invalid.')],
             ['ids', 'processIds'],

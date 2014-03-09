@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Exception;
 use yii\base\Model;
 use yii\db\Query;
+use console\components\Logger;
 
 class Orders extends Model
 {
@@ -17,6 +18,29 @@ class Orders extends Model
         'manual'  => 'console\modules\twitter\models\orders\Manual',
         'indexes' => 'console\modules\twitter\models\orders\Indexes'
     ];
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        register_shutdown_function([$this, 'flush'], true);
+    }
+
+    /**
+     * Регистрируем запуск скрипта, в избежание двух запусков одновременно
+     *
+     * в случае ошибки, пометка автоматом удаляется через 2 минуты
+     */
+    public function registerRun()
+    {
+        Yii::$app->redis->set('console:run:twitter:orders:create', true);
+        Yii::$app->redis->expire('console:run:twitter:orders:create', 120);
+    }
+
+    public function isRun()
+    {
+        return Yii::$app->redis->exists('console:run:twitter:orders:create');
+    }
 
     public function rules()
     {
@@ -34,36 +58,43 @@ class Orders extends Model
         }
     }
 
-    /*
-     * Берем 10 заказов в минуту (100 заказов в 10 мин) заказов для оброботки
+    /**
+     * Берем 10 заказов в минуту (10 * 1440 = 14400 заказов в сутку) заказов для оброботки
      */
     public function createOrders()
     {
-        $query = new Query();
+        if($this->isRun() === false) {
+            /** Регистрируем запуск комманды, для избижание 2 запуска */
+            $this->registerRun();
 
-        /* Берем список заказов из базы */
-        $orders = $query
-            ->select('id,owner_id,type_order,order_hash,payment_type,_params')
-            ->from('{{%twitter_orders}}')
-            ->where(['and', 'status=:status', 'process_date<=:date'], [':status' => 0, ':date' => date('Y-m-d')])
-            ->orderBy(['id' => SORT_ASC])
-            ->limit(50)
-            ->all();
+            $query = new Query();
 
-        /* Если заказы есть обрабатаваем дальше */
-        if(!empty($orders)) {
-            foreach($orders as $order) {
-                if(array_key_exists($order['type_order'], $this->_order_types)) {
-                    $e = new $this->_order_types[$order['type_order']]();
-                    $this->appendOrder($e->process($order));
-                    $e->clear();
+            /* Берем список заказов из базы */
+            $orders = $query
+                ->select('id,owner_id,type_order,order_hash,payment_type,_params')
+                ->from('{{%twitter_orders}}')
+                ->where(['and', 'status=:status', 'process_date<=:date'], [':status' => 1, ':date' => date('Y-m-d')])
+                ->orderBy(['id' => SORT_ASC])
+                ->limit(10)
+                ->all();
+
+            /** Если заказы есть обрабатаваем дальше */
+            if(!empty($orders)) {
+                foreach($orders as $order) {
+                    if(array_key_exists($order['type_order'], $this->_order_types)) {
+                        $e = new $this->_order_types[$order['type_order']]();
+                        $this->appendOrder($e->process($order));
+                        $e->clear();
+                    }
                 }
-            }
-        } else
-            $this->addError('orders', 'Not found order process.');
+            } else
+                $this->addError('orders', 'Not found order process.');
+        } else {
+            Logger::log('Double launch commands "twitter/orders/create"', 1);
+        }
     }
 
-    /*
+    /**
      * Добовляем заказ в список
      *
      * @var $data array
@@ -77,7 +108,7 @@ class Orders extends Model
             $this->_updates[] = $data['update'];
     }
 
-    /*
+    /**
      * Проверяем если список заказов не пуст
      *
      * @return boolean
@@ -87,7 +118,7 @@ class Orders extends Model
         return !empty($this->_orders);
     }
 
-    /*
+    /**
      * Проверяем если список обновлений не пуст
      *
      * @return boolean
@@ -97,7 +128,7 @@ class Orders extends Model
         return !empty($this->_updates);
     }
 
-    /*
+    /**
      * Получаем список созданных заказов
      *
      * @return array
@@ -110,7 +141,7 @@ class Orders extends Model
             return $this->_orders;
     }
 
-    /*
+    /**
      * Получаем список для обновление заказов и задачи
      *
      * @return array
@@ -171,6 +202,7 @@ class Orders extends Model
      */
     public function makeOrders()
     {
+        print_r($this->getUpdates());
         die();
         if($this->hasOrders() || $this->hasUpdates()) {
             try {
@@ -185,5 +217,13 @@ class Orders extends Model
                 $t->rollBack();
             }
         }
+    }
+
+    /**
+     * Удалить мусор, по завершения выполненой комманды
+     */
+    public function flush()
+    {
+        Yii::$app->redis->delete('console:run:twitter:orders:create');
     }
 }

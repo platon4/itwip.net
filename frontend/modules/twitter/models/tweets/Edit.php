@@ -19,7 +19,7 @@ class Edit extends \FormModel
         return [
             ['id', 'numerical', 'integerOnly' => true, 'allowEmpty' => false],
             ['id', 'rosterExists'],
-            ['_key', 'ext.validators.hashValidator', 'min' => 10, 'max' => 15],
+            ['_key', 'ext.validators.hashValidator', 'min' => 7, 'max' => 20],
             ['tweet', 'length', 'max' => 1000, 'tooLong' => 'Превышено допустимое коло-го символов в твите.'],
         ];
     }

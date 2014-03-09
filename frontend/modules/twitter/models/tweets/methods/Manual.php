@@ -116,7 +116,7 @@ class Manual extends \FormModel
              */
             ['_tid', 'safe', 'on' => 'method'],
 
-            ['_tid', 'ext.validators.hashValidator', 'min' => 10, 'max' => 15, 'on' => 'tweets,get,order,rows,save'], //проверяем хэш заказа
+            ['_tid', 'ext.validators.hashValidator', 'min' => 7, 'max' => 20, 'on' => 'tweets,get,order,rows,save'], //проверяем хэш заказа
             ['rid', 'numerical', 'integerOnly' => true, 'allowEmpty' => false, 'message' => Yii::t('yii', 'Your request is invalid.'), 'on' => 'tweets,save'],
             ['act', 'in', 'range' => ['no_use', 'all'], 'message' => Yii::t('yii', 'Your request is invalid.'), 'on' => 'tweets'],
             ['_q', 'length', 'max' => 140, 'on' => 'tweets'],

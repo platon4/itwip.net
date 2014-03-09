@@ -25,6 +25,8 @@ class Indexes implements OrdersInterface
             'process_time' => $this->getTaskProcessTime($task),
             'params'       => $this->getTaskParams($task)
         ];
+
+        $this->_update['task'][$task['id']]['is_process'] = 1;
     }
 
     public function getTasks()
@@ -33,7 +35,6 @@ class Indexes implements OrdersInterface
             ->select('*')
             ->from('{{%twitter_ordersPerform}}')
             ->where(['order_hash' => $this->get('order_hash'), 'is_process' => 0, 'status' => 0])
-            ->limit($this->getLimit())
             ->all();
     }
 }

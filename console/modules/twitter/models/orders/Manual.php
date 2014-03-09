@@ -23,7 +23,6 @@ class Manual implements OrdersInterface
             $this->setTask();
         }
 
-        echo $this->getProcessDate()."\n";
         $this->setProcessDate($this->getProcessDate());
     }
 
@@ -42,46 +41,43 @@ class Manual implements OrdersInterface
             if(isset($params['t']) && is_array($params['t'])) {
 
                 $found = false;
-                $i = $c = $b = $d = 0;
-                $count = count($params['t']);
-                $start = false;
+                $i = $c = $w = $skipDay = 0;
+                $start = $stop = false;
+                $day = (int) date('w');
 
                 do {
-                    if((int) date('w') === $i) {
+                    if($day === $i && $skipDay === 0)
                         $start = true;
-                    } elseif($start === true && $d === 0)
-                        $c++;
 
                     if(isset($params['t'][$i])) {
-                        if($start === true) {
-                            if((int) date('w') === $i && $c === 0) {
+                        if($day === $i) {
+                            if($skipDay === 0) {
                                 $found = true;
                                 foreach($params['t'][$i] as $hour) {
                                     $this->hours[] = $hour;
                                     $this->hCount++;
                                 }
                             }
-                            $d++;
                         }
-                    }
 
-                    if($i >= 6)
-                        $i = 0;
-                    else
+                        if($skipDay)
+                            $stop = true;
+                    } elseif($start === true)
+                        $skipDay++;
+
+                    if($i < 6) {
                         $i++;
+                    } else {
+                        $i = 0;
+                        $w++;
+                    }
+                } while($w < 2 && $stop === false);
 
-                    $b++;
-                } while($d < $count && $b <= 14);
+                $this->_processDate = date('Y-m-d', time() + ($skipDay * 86400));
 
-                if($found === true) {
-                    $this->_processDate = date('Y-m-d');
-                    return 2;
-                } else {
-                    $this->_processDate = date('Y-m-d', time() + ($c * 86400));
-                    return 0;
-                }
+                return $found === true ? 2 : 0;
             } else {
-                $this->_processDate = date('Y-m-d');
+                $this->_processDate = date('Y-m-d', time() + 86400);
                 return 1;
             }
         }
@@ -190,8 +186,8 @@ class Manual implements OrdersInterface
         if($this->_interval === null) {
             $params = $this->getParam('targeting');
 
-            if(isset($params['targeting']['interval']) && $params['targeting']['interval'] >= 30) {
-                $this->_interval = rand($params['targeting']['interval'] - 10, $params['targeting']['interval'] + 10);
+            if(isset($params['interval']) && $params['interval'] >= 30) {
+                $this->_interval = rand($params['interval'] - rand(5, 15), $params['interval'] + rand(5, 15));
             } else {
                 $this->_interval = rand(20, 40);
             }

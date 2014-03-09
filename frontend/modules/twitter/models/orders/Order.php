@@ -111,6 +111,8 @@ class Order extends \FormModel
                 Yii::app()->db->createCommand("DELETE FROM {{twitter_orders}} WHERE id=:id")->execute([':id' => $row['id']]);
                 Yii::app()->db->createCommand("DELETE FROM {{twitter_ordersPerform}} WHERE order_hash=:hash")->execute([':hash' => $row['order_hash']]);
 
+                $this->removeFromTweeting($row['id']);
+
                 $this->setCode(200)->setMessage('Заказ № ' . $this->id . ' успешно удален.');
                 $t->commit();
 
@@ -145,6 +147,7 @@ class Order extends \FormModel
                     $this->setCode(200)->setMessage('Твит успешно удален.');
                 }
 
+                $this->removeFromTweeting($row['id'], 1);
                 $t->commit();
 
             } catch(\Exception $e) {
@@ -154,5 +157,10 @@ class Order extends \FormModel
         } else {
             $this->addError('id', 'В данный момент ваш заказ обрабатывается, удаление невозможно.');
         }
+    }
+
+    protected function removeFromTweeting($id, $t = 0)
+    {
+        Yii::app()->db->createCommand("DELETE FROM {{twitter_tweeting}} WHERE " . ($t === 1 ? 'sbuorder_id' : 'order_id') . "=:id")->execute([':id' => $id]);
     }
 }

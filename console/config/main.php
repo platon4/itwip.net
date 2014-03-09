@@ -11,6 +11,7 @@ $params = array_merge(
 return [
     'id'         => 'console',
     'basePath'   => dirname(__DIR__),
+    'timeZone'   => 'Europe/Moscow',
     'modules'    => [
         'twitter' => 'console\modules\twitter\Twitter',
         'cleaner' => 'console\modules\cleaner\Cleaner',

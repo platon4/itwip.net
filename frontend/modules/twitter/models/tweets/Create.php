@@ -15,7 +15,7 @@ class Create extends \FormModel
     public function rules()
     {
         return [
-            ['h', 'ext.validators.hashValidator', 'min' => 10, 'max' => 15, 'on' => 'recreate'],
+            ['h', 'ext.validators.hashValidator', 'min' => 7, 'max' => 20, 'on' => 'recreate'],
             ['tweets', 'preInit'],
             ['tweets', 'makeTweets']
         ];

@@ -35,7 +35,7 @@ class Fast extends \FormModel
             ['_tid', 'safe', 'on' => 'method'],
             ['urlsCount', 'urlsCount', 'on' => 'method'],
 
-            ['_tid', 'ext.validators.hashValidator', 'min' => 10, 'max' => 15, 'on' => 'urls,order'],
+            ['_tid', 'ext.validators.hashValidator', 'min' => 7, 'max' => 20, 'on' => 'urls,order'],
 
             ['pay', 'in', 'range' => ['now', 'later'], 'allowEmpty' => false, 'on' => 'order'],
             ['urlsExclude', 'urlsExcludeValidate', 'on' => 'order'],

@@ -32,7 +32,7 @@ class Indexes extends \FormModel
     public function rules()
     {
         return [
-            ['h', 'ext.validators.hashValidator', 'min' => 10, 'max' => 15],
+            ['h', 'ext.validators.hashValidator', 'min' => 7, 'max' => 20],
             ['limit', 'in', 'range' => array_keys($this->limits), 'message' => 'Неправильное количество заказов на странице.'],
             ['_count', 'getCount']
         ];

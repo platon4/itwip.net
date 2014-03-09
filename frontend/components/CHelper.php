@@ -234,11 +234,12 @@ class CHelper
         } else
             $stronghash = md5(uniqid(mt_rand(), true));
 
-        $salt = sha1(str_shuffle("abchefghjkmnpqrstuvwxyz0123456789") . $stronghash);
+        $salt = str_shuffle('QAZPOIWSXCDERTYUIMNBBVFGHJC' . sha1(str_shuffle("abchefghjkmnpqrstuvwxyz0123456789") . $stronghash));
+
         $hash = '';
 
-        for($i = 0 ; $i < rand(10, 15) ; $i++) {
-            $hash .= $salt{mt_rand(0, 39)};
+        for($i = 0 ; $i < rand(7, 20) ; $i++) {
+            $hash .= $salt{mt_rand(0, 66)};
         }
 
         return $hash;
@@ -264,7 +265,7 @@ class CHelper
 
     public static function validID($id)
     {
-        return (preg_match("/^[a-zA-Z0-9]{10,15}+$/", $id)) ? true : false;
+        return (preg_match("/^[a-zA-Z0-9]{7,20}+$/", $id)) ? true : false;
     }
 
     public static function validReferralCode($code)

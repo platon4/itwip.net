@@ -12,7 +12,7 @@ class Finality extends \FormModel
 	public function rules()
 	{
 		return [
-			['_tid', 'ext.validators.hashValidator', 'min' => 10, 'max' => 15],
+			['_tid', 'ext.validators.hashValidator', 'min' => 7, 'max' => 20],
 			['_tid', 'tweetsValid']
 		];
 	}
