@@ -83,7 +83,7 @@ class DefaultController extends \console\components\Controller
                         ])->execute();
 
                         if($order['_status'] > 0) {
-                            if($task['approved'] && $task['status'] == 1 && $task['status'] == 3) {
+                            if($task['approved'] && ($task['status'] == 1 || $task['status'] == 3)) {
                                 \common\api\finance\Operation::returnMoney($price_return, $order['owner_id'], $order['_type_payment'], 4, $order['id']);
                                 echo "\t Return amount with tweet:" . $price_return ."\n";
                             }
