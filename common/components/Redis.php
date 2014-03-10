@@ -42,7 +42,7 @@ class Redis extends \yii\base\Component
 		return $this->redis->get($key);
 	}
 
-	public function getMultiple($keys)
+	public function mGet($keys)
 	{
 		return $this->redis->mGet($keys);
 	}

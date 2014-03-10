@@ -4,6 +4,8 @@ namespace console\modules\twitter\controllers;
 
 use Yii;
 use console\modules\twitter\models\Orders;
+use console\modules\twitter\models\Indexes;
+use yii\db\Query;
 
 class OrdersController extends \console\components\Controller
 {
@@ -21,5 +23,13 @@ class OrdersController extends \console\components\Controller
         if(!$model->validate()) {
             // here put error code
         }
+    }
+
+    public function actionCheckIndexes()
+    {
+        $model = new Indexes();
+        $model->setScenario('check');
+
+        $model->validate();
     }
 }

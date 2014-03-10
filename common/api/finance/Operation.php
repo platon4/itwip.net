@@ -7,6 +7,44 @@ use yii\db\Query;
 
 class Operation
 {
+    public static function put($amount, $user_id, $moneyType = 0, $for, $operationData = 0, $moneyLog = true)
+    {
+        if(!is_numeric($amount) OR !$amount)
+            return false;
+
+        $upd = array();
+
+        $is_blocked = 0;
+
+        if(intval($operationData)) {
+            Yii::$app->db->createCommand("INSERT INTO {{%money_blocking}} (owner_id,amount,_date,_for,_id,_money_type) VALUES (:owner_id,:amount,:_date,:_for,:_id,:_money_type)")
+                ->bindValues([
+                    ':owner_id'    => $user_id,
+                    ':amount'      => $amount,
+                    ':_date'       => date("Y-m-d H:i:s"),
+                    ':_for'        => $for,
+                    ':_id'         => $operationData,
+                    ':_money_type' => $moneyType
+                ])
+                ->execute();
+
+            $is_blocked = 1;
+        } else {
+            if($moneyType == 1)
+                $upd[] = 'bonus_money=bonus_money+' . $amount;
+            else
+                $upd[] = 'money_amount=money_amount+' . $amount;
+        }
+
+        if(count($upd))
+            Yii::$app->db->createCommand("UPDATE {{%accounts}} SET " . implode(", ", $upd) . " WHERE id=:id")->bindValues([':id' => $user_id])->execute();
+
+        if($moneyLog)
+            self::log($amount, $user_id, $moneyType, 0, $is_blocked, $for, $operationData);
+
+        return true;
+    }
+
     public static function returnMoney($amount, $user_id, $moneyType, $for, $operationID = 0, $operationNotice = '')
     {
         if(!is_numeric($amount) OR !$amount)
