@@ -3,14 +3,91 @@
 namespace common\api\finance;
 
 use Yii;
+use yii\base\Exception;
 use yii\db\Query;
 
 class Operation
 {
-    public static function put($amount, $user_id, $moneyType = 0, $for, $operationData = 0, $moneyLog = true)
+    public static $_transactionTypes = [
+        'income'      => 0,
+        'consumption' => 1,
+        'return'      => 2
+    ];
+
+    public static $_transactionAccrued = [
+        0 => [
+            'promo'               => 0,
+            'webmoney'            => 1,
+            'robokassa'           => 2,
+            'refferal'            => 3,
+            'tweetsCheck'         => 4,
+            'tweetsCheckSuccess'  => 5,
+            'indexesCheck'        => 6,
+            'indexesCheckSuccess' => 7,
+        ],
+        1 => [
+            'guaranty'                 => 0,
+            'moneyOut'                 => 1,
+            'orderSuccessfulExecuted'  => 2,
+            'tweetCheckUnsuccessfully' => 3,
+            'buyReferral'              => 4
+        ],
+        2 => [
+            'removeOrder'         => 0,
+            'remvoeTweet'         => 1,
+            'bloggerDeletedTweet' => 3
+
+        ]
+    ];
+
+    public static $_moneyType = [
+        'purse' => 0,
+        'bonus' => 1
+    ];
+
+    protected static function accrued($transactionType, $accrued)
     {
-        if(!is_numeric($amount) OR !$amount)
-            return false;
+        $a = isset(self::$_transactionAccrued[$transactionType][$accrued]) ? self::$_transactionAccrued[$transactionType][$accrued] : false;
+
+        if($a !== false)
+            return $a;
+        else
+            throw new Exception('Invalid accrued.');
+    }
+
+    protected static function transactionType($t)
+    {
+        $transaction = isset(self::$_transactionTypes[$t]) ? self::$_transactionTypes[$t] : false;
+
+        if($transaction !== false)
+            return $transaction;
+        else
+            throw new Exception('Invalid transaction type.');
+    }
+
+    protected static function moneyType($m)
+    {
+        $money = isset(self::$_moneyType[$m]) ? self::$_moneyType[$m] : false;
+
+        if($money !== false)
+            return $money;
+        else
+            throw new Exception('Invalid money type.');
+    }
+
+    protected static function amountValid($amount)
+    {
+        if(is_numeric($amount) && $amount > 0)
+            return true;
+        else
+            throw new Exception('Invalid amount.');
+    }
+
+    public static function put($amount, $user_id, $moneyType, $accrued, $operationData = 0, $moneyLog = true)
+    {
+        self::amountValid($amount);
+        $moneyType = self::moneyType($moneyType);
+        $accrued = self::accrued(0, $accrued);
 
         $upd = array();
 
@@ -22,7 +99,7 @@ class Operation
                     ':owner_id'    => $user_id,
                     ':amount'      => $amount,
                     ':_date'       => date("Y-m-d H:i:s"),
-                    ':_for'        => $for,
+                    ':_for'        => $accrued,
                     ':_id'         => $operationData,
                     ':_money_type' => $moneyType
                 ])
@@ -40,40 +117,45 @@ class Operation
             Yii::$app->db->createCommand("UPDATE {{%accounts}} SET " . implode(", ", $upd) . " WHERE id=:id")->bindValues([':id' => $user_id])->execute();
 
         if($moneyLog)
-            self::log($amount, $user_id, $moneyType, 0, $is_blocked, $for, $operationData);
+            self::log($amount, $user_id, $moneyType, 0, $is_blocked, $accrued, $operationData);
 
         return true;
     }
 
-    public static function returnMoney($amount, $user_id, $moneyType, $for, $operationID = 0, $operationNotice = '')
+    public static function unlockMoney($sum, $user_id, $moneyType, $accrued, $operationID)
     {
-        if(!is_numeric($amount) OR !$amount)
-            return false;
+        self::amountValid($sum);
+        $moneyType = self::moneyType($moneyType);
+        $accrued = self::accrued(0, $accrued);
 
-        $command = Yii::$app->db->createCommand();
+        if($moneyType == 1)
+            $columns = 'bonus_money=bonus_money+' . $sum;
+        else
+            $columns = 'money_amount=money_amount+' . $sum;
+
+        self::moneyLockUpdate($sum, $operationID, $accrued);
+
+        Yii::$app->db->createCommand('UPDATE {{%accounts}} SET ' . $columns . ' WHERE id=:id')->bindValues([':id' => $user_id])->execute();
+
+        self::log($sum, $user_id, $moneyType, 2, 0, $accrued, $operationID, '', 2);
+    }
+
+    public static function returnMoney($amount, $user_id, $moneyType, $accrued, $operationID = 0, $operationNotice = '')
+    {
+        self::amountValid($amount);
+        $moneyType = self::moneyType($moneyType);
+        $accrued = self::accrued(0, $accrued);
 
         if($moneyType == 1)
             $columns = 'bonus_money=bonus_money+' . $amount;
         else
             $columns = 'money_amount=money_amount+' . $amount;
 
-        if($operationID) {
-            $_b = (new Query())
-                ->from('{{%money_blocking}}')
-                ->where(['_id' => $operationID])
-                ->one();
-
-            if($_b !== false) {
-                if(($_b['amount'] - $amount) > 0)
-                    Yii::$app->db->createCommand('UPDATE {{%money_blocking}} SET amount=amount-:money WHERE id=:id')->bindValues([':id' => $_b['id'], ':money' => $amount])->execute();
-                else
-                    $command->delete('{{%money_blocking}}', 'id=:id', [':id' => $_b['id']])->execute();
-            }
-        }
+        self::moneyLockUpdate($amount, $operationID, $accrued);
 
         Yii::$app->db->createCommand('UPDATE {{%accounts}} SET ' . $columns . ' WHERE id=:id')->bindValues([':id' => $user_id])->execute();
 
-        self::log($amount, $user_id, $moneyType, 2, 0, $for, $operationID, $operationNotice, 2);
+        self::log($amount, $user_id, $moneyType, 2, 0, $accrued, $operationID, $operationNotice, 2);
     }
 
     /*
@@ -99,5 +181,26 @@ class Operation
             $columns['_notice'] = $notice;
 
         $command->insert('{{%money_logs}}', $columns)->execute();
+    }
+
+    protected static function moneyLockUpdate($amount, $operationID, $accrued)
+    {
+        $command = Yii::$app->db->createCommand();
+
+        if($operationID) {
+            $_b = (new Query())
+                ->from('{{%money_blocking}}')
+                ->where(['_for' => $accrued, '_id' => $operationID])
+                ->one();
+
+            if($_b !== false) {
+                if(($_b['amount'] - $amount) > 0)
+                    Yii::$app->db->createCommand('UPDATE {{%money_blocking}} SET amount=amount-:money WHERE id=:id')
+                        ->bindValues([':id' => $_b['id'], ':money' => $amount])
+                        ->execute();
+                else
+                    $command->delete('{{%money_blocking}}', 'id=:id', [':id' => $_b['id']])->execute();
+            }
+        }
     }
 }

@@ -23,6 +23,16 @@ class Indexes extends Model
 
     public function checkIndexes()
     {
+        /*
+         * Добавление на баланс пользователя (в заблакированые)
+         *
+         * Сумма, Ид пользователя, типа валюты, типа операций, Ид заказа
+         */
+        //Operation::put(1, 1, 'purse', 'indexesCheck', 1);
+        //Operation::unlockMoney(1, 1, 'purse', 'indexesCheck', 1);
+        /* Разблокирование средств пользователю за удачное проверку */
+        //Operation::unlockMoney(1, 1, 0, 1, 6);
+        die();
         if($this->getTasks() !== false) {
 
             $yandex = new Yandex(Yii::$app->params['yandex']['user'], Yii::$app->params['yandex']['key']);
@@ -56,9 +66,11 @@ class Indexes extends Model
             try {
                 $t = Yii::$app->db->beginTransaction();
 
-                Operation::put($row['cost'], $order['owner_id'], $order['payment_type'], 6);
+                Operation::unlockMoney($row['cost'], 1, ($order['payment_type'] == 1 ? 'bonus' : 'purse'), 'indexesCheck', $row['pid']);
 
-                $this->updateOrder(true);
+                /* Обновляем заказ */
+                $this->updateOrder(true, $row);
+
                 $t->commit();
             } catch(Exception $e) {
                 $t->rollBack();
@@ -70,16 +82,36 @@ class Indexes extends Model
 
     protected function urlInIndexFail($row)
     {
-        echo 'fail';
+        $order = (new Query)->from('{{%twitter_orders}}')->where(['order_hash' => $row['order_hash']])->one();
+
+        if($order !== false) {
+            try {
+                $t = Yii::$app->db->beginTransaction();
+
+                //Operation::unlockMoney($row['cost'], 1, ($order['payment_type'] == 1 ? 'bonus' : 'purse'), 'indexesCheck', $row['pid']);
+
+                /* Обновляем заказ */
+                //$this->updateOrder(false, $row);
+
+                $t->commit();
+            } catch(Exception $e) {
+                $t->rollBack();
+            }
+
+            echo "Fail\n";
+        }
     }
 
-    public function updateOrder($status)
+    public function updateOrder($status, $row)
     {
-        if($status === true) {
+        $command = Yii::$app->db->createCommand();
 
-        } else {
+        if($status === true)
+            $status = 2;
+        else
+            $status = 3;
 
-        }
+        $command->update('{{%twitter_ordersPerform}}', ['status' => $status], ['id' => $row['pid']]);
     }
 
     public function getTasks()
@@ -101,7 +133,7 @@ class Indexes extends Model
             else
                 $inIds = '';
 
-            $this->_tasks = (new Query())->select('u.id, p.order_hash, p.url, p.cost, p.return_amount')->from('{{%twitter_urlCheck}} u')->innerJoin('{{%twitter_ordersPerform}} p', 'u.orderPerform_id=p.id')->where('u.date_check<:date' . $inIds, [':date' => date('Y-m-d H:i:s')])->all();
+            $this->_tasks = (new Query())->select('u.id, p.id as pid, p.order_hash, p.url, p.cost, p.return_amount')->from('{{%twitter_urlCheck}} u')->innerJoin('{{%twitter_ordersPerform}} p', 'u.orderPerform_id=p.id')->where('u.date_check<:date' . $inIds, [':date' => date('Y-m-d H:i:s')])->all();
         }
 
         return empty($this->_tasks) || $this->_tasks === null ? false : $this->_tasks;

@@ -48,6 +48,9 @@ return array(
     '_accommodation_tweets_started_checking_removal'=>'Размещение твита - началась проверка на удаление: {account}',
     '_checking_tweets_deletion_successfully'=>'Проверка твита на удаление - успешно: {account}',
     '_checking_tweets_delete_unsuccessfully'=>'Проверка твита на удаление - неудачно: {account}',
+    '_checking_indexes_delete_successfully' => 'Размещение твита "быстрая индексация"',
+    '_checking_indexes_delete' => 'Проверка твита "быстрая индексация" на удаление - успешно',
+
     /* Рекламодатель */
     '_сreateOrder_providing_collateral'=>'Создан заказ - обеспечение залога для: id {id} ',
     '_order_executed_successful_completion'=>'Заказ выполнен - успешное завершение заказа: id {id} ',

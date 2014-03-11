@@ -12,8 +12,7 @@ class Yandex extends \console\components\Yandex
     public function urlInIndex($url)
     {
         $this->query('url:' . urlencode($url))->request();
-        echo $url."\n";
-        echo $this->total()."\n";
+
         return $this->total() > 0 ? true : false;
     }
 } 
