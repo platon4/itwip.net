@@ -5,6 +5,8 @@
                             2=>array(Yii::t('breadcrumbs','_tw_accounts_add'),'/twitter/accounts/add')
                           );
 ?>
+<div class="line_info alert" style="margin-bottom: 20px;">Добавление аккаунтов временно не доступно. Приносим извенения за неудобства.</div>
+
 <div class="block twitterAccountAdd">
 <?php echo Html::beginForm(); ?>
     <div class="block_title"><div class="block_title_inset"><i class="fa fa-twitter"></i> <h5><?php echo Yii::t('twitterModule.accounts', '_twitterAccountAdd_title'); ?></h5></div></div>

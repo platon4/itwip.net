@@ -79,8 +79,11 @@ trait OrdersTrait
             $this->taskCount = (new Query())->from('{{%twitter_tweeting}}')->count();
         }
 
-        $daemon = round($this->taskCount / 5000);
+        if($this->taskCount > 0)
+            $daemon = round($this->taskCount / 5000);
+        else
+            $daemon = 0;
 
-        return $daemon == 0 ? 0 : $daemon;
+        return $daemon == 0 ? 1 : $daemon;
     }
 }

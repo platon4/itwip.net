@@ -45,6 +45,8 @@ class Indexes extends Model
                     echo $log;
                     Logger::log($log, 2);
                 }
+
+                $this->removeTweet($task);
             }
         } else {
             echo "Not tasks\n";
@@ -61,12 +63,12 @@ class Indexes extends Model
             /* Обновляем заказ */
             $this->updateOrder(true, $row);
 
+            echo "Success\n";
             $t->commit();
         } catch(Exception $e) {
+            echo "Success Error\n";
             $t->rollBack();
         }
-
-        echo "Success\n";
     }
 
     protected function urlInIndexFail($row)
@@ -124,5 +126,10 @@ class Indexes extends Model
         }
 
         return empty($this->_tasks) || $this->_tasks === null ? false : $this->_tasks;
+    }
+
+    protected function removeTweet($row)
+    {
+
     }
 }

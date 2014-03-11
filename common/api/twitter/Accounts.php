@@ -4,19 +4,24 @@ namespace common\components\twitter;
 
 class Accounts
 {
-	/*
-	 * Выбор аккаунтов по индексам
-	 */
-	public function where($condition, $params = [])
-	{
+    public function __constrcut()
+    {
+        return $this;
+    }
 
-	}
+    /*
+     * Выбор аккаунтов по индексам
+     */
+    public function where($condition, $params = [])
+    {
 
-	/*
-	 * Обновление данных аккаунтов
-	 */
-	public function update($condition, $params = [])
-	{
+    }
 
-	}
+    /*
+     * Обновление данных аккаунтов
+     */
+    public function update($condition, $params = [])
+    {
+
+    }
 }

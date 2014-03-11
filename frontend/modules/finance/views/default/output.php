@@ -27,6 +27,8 @@ $this->breadcrumbs[]  =array(
         });
     });
 </script>
+<div class="line_info alert" style="margin-bottom: 20px;">Выплаты временно не доступны. Приносим извенения за неудобства.</div>
+
 <div id="output">
     <div class="table">
         <div class="td">

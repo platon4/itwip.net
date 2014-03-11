@@ -13,6 +13,6 @@ class Tweeting
 
     protected function init($task)
     {
-
+        print_r($task);
     }
 }

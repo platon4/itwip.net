@@ -19,6 +19,12 @@ class TweetingController extends \console\components\Controller
 
     public function actionIndex($daemon)
     {
+        $task = (new Query())->from('{{%twitter_tweeting}}')->where(['daemon' => $this->daemon])->one();
+
+        $tweeting = new Tweeting();
+        $tweeting->process($task);
+        die();
+
         $this->daemon = $daemon;
 
         /* проверяем если домен не запущен уже */

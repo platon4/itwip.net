@@ -15,6 +15,8 @@ class Indexes implements OrdersInterface
     public function make()
     {
         $this->setTasks();
+
+        $this->_update['order'][$this->get('id')]['is_process'] = 1;
     }
 
     public function processTask($task)
