@@ -22,21 +22,27 @@ class DefaultController extends \console\components\Controller
      */
     protected function launchTweetingDaemons()
     {
+        Yii::$app->redis->set('console:twitter:tweeting', 'true');
+        Yii::$app->redis->expire('console:twitter:tweeting', 30);
+
+        sleep(rand(35, 60));
+
         $rows = (new Query())->select('daemon')->from('{{%twitter_tweeting}}')->groupBy(['daemon'])->all();
 
         if(!empty($rows)) {
             $path = realpath(Yii::$app->getBasePath() . '/..');
+            $runtime = Yii::$app->getRuntimePath() . "/daemon";
 
-            if(!is_dir(Yii::$app->getRuntimePath() . "/daemon")) {
-                @mkdir(Yii::$app->getRuntimePath() . "/daemon", 0777);
-                @chmod(Yii::$app->getRuntimePath() . "/daemon", 0777);
+            if(!is_dir($runtime)) {
+                @mkdir($runtime, 0777);
+                @chmod($runtime, 0777);
             }
 
             foreach($rows as $row) {
                 $daemon = $row['daemon'];
-                $log = Yii::$app->getRuntimePath() . "/daemon/daemon_log_" . $daemon . ".txt";
+                $log = $runtime . "/daemon_log_" . $daemon . ".txt";
 
-                exec("php $path/cmd twitter/tweeting " . $daemon . " > $log 2>&1 &");
+                exec("nohup php $path/cmd twitter/tweeting " . $daemon . " > $log 2>&1 &");
             }
         }
     }

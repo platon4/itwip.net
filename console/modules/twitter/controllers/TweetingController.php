@@ -46,6 +46,7 @@ class TweetingController extends \console\components\Controller
                             echo "Daemon wait 5 sec.\n";
                             sleep(5);
                         }
+                        die();
                     } else {
                         echo "Daemon won't start, error set process\n";
                         exit(0);
