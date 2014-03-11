@@ -48,8 +48,9 @@ return array(
     '_accommodation_tweets_started_checking_removal'=>'Размещение твита - началась проверка на удаление: {account}',
     '_checking_tweets_deletion_successfully'=>'Проверка твита на удаление - успешно: {account}',
     '_checking_tweets_delete_unsuccessfully'=>'Проверка твита на удаление - неудачно: {account}',
-    '_checking_indexes_delete_successfully' => 'Размещение твита "быстрая индексация"',
-    '_checking_indexes_delete' => 'Проверка твита "быстрая индексация" на удаление - успешно',
+    '_checking_indexes_delete_successfully' => 'Проверка твита "быстрая индексация" - успешно',
+    '_checking_indexes_delete' => 'Размещение твита "быстрая индексация"',
+
 
     /* Рекламодатель */
     '_сreateOrder_providing_collateral'=>'Создан заказ - обеспечение залога для: id {id} ',
@@ -126,13 +127,17 @@ return array(
     'income_log_form_tw_tweets'=>'Получение оплаты за размещение твита в аккаунте: {account}',
     'twitter_money_return_tweet'=>'Возврат не израсходованных средств с заказа (ID {id}), Отмена твита в аккаунт: {account}',
     'insufficient_funds'=>'No Money',
-    
+
     '_promo_action_is_over'=>'Срок действия промо-кодов закончен',
-    
+
     '_out_money'=>'Вывод средств из сервиса на WebMoney',
-    
+
     '_shop_ref_buy'=>'Покупка реферала: {ref}',
 
     'twitter_removeFromTransfer_tweet' => 'Возврат средств с заказа ID: {id}, не удалось разместить твит, или блогер отклонил твит.',
     'twitter_removeFromTransfer' => 'Возврат средств с заказа ID: {id}',
+
+    '_tweet_indexes_checkFail' => 'Заказ ID: {order}, проверка ссылки на индексацию - неудачно',
+    '_tweets_indexes_payFromLock' => 'Оплата за проиндексированную ссылку в заказе ID: {order}',
+    '_tweet_indexes_checkFailBloger' => 'Ссылка не проиндексирована, деньги возвращены рекламодателю.'
 );

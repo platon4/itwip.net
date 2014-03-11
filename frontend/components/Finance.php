@@ -169,6 +169,7 @@ class Finance
                 4 => Yii::t('financeModule.index', '_checking_tweets_delete', array('{account}' => $notice)),
                 5 => Yii::t('financeModule.index', '_checking_tweets_deletion_successfully', array('{account}' => $notice)),
                 6 => Yii::t('financeModule.index', '_checking_indexes_delete'),
+                7 => Yii::t('financeModule.index', '_checking_indexes_delete_successfully')
             ),
             //Расход
             1 => array(
@@ -177,6 +178,8 @@ class Finance
                 2 => Yii::t('financeModule.index', '_order_executed_successful_completion', array('{id}' => $operationData)),
                 3 => Yii::t('financeModule.index', '_checking_tweets_delete_unsuccessfully', array('{account}' => $notice)),
                 4 => Yii::t('financeModule.index', '_shop_ref_buy', array('{ref}' => $notice)),
+
+                6 => Yii::t('financeModule.index', '_tweets_indexes_payFromLock', array('{order}' => $notice)),
             ),
             //Возврат
             2 => array(
@@ -185,7 +188,8 @@ class Finance
                 3 => Yii::t('financeModule.index', '_checking_tweets_delete_bloger', array('{account}' => $notice)),
                 4 => Yii::t('financeModule.index', 'twitter_removeFromTransfer_tweet', ['{id}' => $operationData]),
                 5 => Yii::t('financeModule.index', 'twitter_removeFromTransfer', ['{id}' => $operationData]),
-                6 => Yii::t('financeModule.index', '_checking_indexes_delete_successfully')
+                6 => Yii::t('financeModule.index', '_tweet_indexes_checkFail', ['{order}' => $notice]),
+                7 => Yii::t('financeModule.index', '_tweet_indexes_checkFailBloger'),
             )
         );
 

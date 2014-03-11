@@ -34,9 +34,10 @@ class Operation
         ],
         2 => [
             'removeOrder'         => 0,
-            'remvoeTweet'         => 1,
-            'bloggerDeletedTweet' => 3
-
+            'removeTweet'         => 1,
+            'bloggerDeletedTweet' => 3,
+            'indexesFail'         => 6,
+            'indexesFailBloger'   => 7
         ]
     ];
 
@@ -122,25 +123,7 @@ class Operation
         return true;
     }
 
-    public static function unlockMoney($sum, $user_id, $moneyType, $accrued, $operationID)
-    {
-        self::amountValid($sum);
-        $moneyType = self::moneyType($moneyType);
-        $accrued = self::accrued(0, $accrued);
-
-        if($moneyType == 1)
-            $columns = 'bonus_money=bonus_money+' . $sum;
-        else
-            $columns = 'money_amount=money_amount+' . $sum;
-
-        self::moneyLockUpdate($sum, $operationID, $accrued);
-
-        Yii::$app->db->createCommand('UPDATE {{%accounts}} SET ' . $columns . ' WHERE id=:id')->bindValues([':id' => $user_id])->execute();
-
-        self::log($sum, $user_id, $moneyType, 2, 0, $accrued, $operationID, '', 2);
-    }
-
-    public static function returnMoney($amount, $user_id, $moneyType, $accrued, $operationID = 0, $operationNotice = '')
+    public static function unlockMoney($amount, $return_amount, $user_id, $adv_id, $moneyType, $accrued, $operationID, $order_id)
     {
         self::amountValid($amount);
         $moneyType = self::moneyType($moneyType);
@@ -151,11 +134,44 @@ class Operation
         else
             $columns = 'money_amount=money_amount+' . $amount;
 
-        self::moneyLockUpdate($amount, $operationID, $accrued);
+        self::moneyLockUpdate($amount, $operationID, $user_id);
+        self::moneyLockUpdate($return_amount, $order_id, $adv_id);
+
+        Yii::$app->db->createCommand('UPDATE {{%accounts}} SET ' . $columns . ' WHERE id=:id')
+            ->bindValues([':id' => $user_id])
+            ->execute();
+
+        self::log($amount, $user_id, $moneyType, 0, 0, $accrued, $operationID, '', 2);
+        self::log($return_amount, $adv_id, $moneyType, 1, 0, $accrued, $operationID, $order_id, 3);
+    }
+
+    public static function returnMoney($amount, $user_id, $moneyType, $accrued, $operationID = 0, $operationNotice = '')
+    {
+        self::amountValid($amount);
+        $moneyType = self::moneyType($moneyType);
+        $accrued = self::accrued(2, $accrued);
+
+        if($moneyType == 1)
+            $columns = 'bonus_money=bonus_money+' . $amount;
+        else
+            $columns = 'money_amount=money_amount+' . $amount;
+
+        self::moneyLockUpdate($amount, $operationID, $user_id);
 
         Yii::$app->db->createCommand('UPDATE {{%accounts}} SET ' . $columns . ' WHERE id=:id')->bindValues([':id' => $user_id])->execute();
 
         self::log($amount, $user_id, $moneyType, 2, 0, $accrued, $operationID, $operationNotice, 2);
+    }
+
+    public static function cancelTransfer($amount, $user_id, $moneyType, $accrued, $operationID)
+    {
+        self::amountValid($amount);
+        $moneyType = self::moneyType($moneyType);
+        $accrued = self::accrued(2, $accrued);
+
+        self::moneyLockUpdate($amount, $operationID, $user_id);
+
+        self::log($amount, $user_id, $moneyType, 2, 0, $accrued, $operationID, '', 3);
     }
 
     /*
@@ -183,14 +199,14 @@ class Operation
         $command->insert('{{%money_logs}}', $columns)->execute();
     }
 
-    protected static function moneyLockUpdate($amount, $operationID, $accrued)
+    protected static function moneyLockUpdate($amount, $operationID, $user_id)
     {
         $command = Yii::$app->db->createCommand();
 
         if($operationID) {
             $_b = (new Query())
                 ->from('{{%money_blocking}}')
-                ->where(['_for' => $accrued, '_id' => $operationID])
+                ->where(['owner_id' => $user_id, '_id' => $operationID])
                 ->one();
 
             if($_b !== false) {
