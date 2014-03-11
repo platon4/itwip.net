@@ -2,6 +2,8 @@
 
 namespace console\modules\twitter\models;
 
+use yii\db\Query;
+
 trait OrdersTrait
 {
     protected $_data;
@@ -10,6 +12,7 @@ trait OrdersTrait
     protected $_task = [];
     protected $_interval;
     protected $_processDate;
+    protected $taskCount;
 
     /*
      * Обработка заказа
@@ -69,4 +72,15 @@ trait OrdersTrait
         $this->_task;
         $this->_processDate = null;
     }
-} 
+
+    public function getDaemon()
+    {
+        if($this->taskCount === 0) {
+            $this->taskCount = (new Query())->from('{{%twitter_tweeting}}')->count();
+        }
+
+        $daemon = round($this->taskCount / 5000);
+
+        return $daemon == 0 ? 0 : $daemon;
+    }
+}

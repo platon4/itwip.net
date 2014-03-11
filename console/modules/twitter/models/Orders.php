@@ -145,7 +145,7 @@ class Orders extends Model
     public function getOrders($key = '')
     {
         if($key == 'columns')
-            return ['order_id', 'sbuorder_id', 'orderType', 'tweet_hash', 'url_hash', 'process_time', 'params'];
+            return ['order_id', 'sbuorder_id', 'orderType', 'tweet_hash', 'url_hash', 'process_time', 'params', 'daemon'];
         else
             return $this->_orders;
     }

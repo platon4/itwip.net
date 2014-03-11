@@ -26,7 +26,8 @@ class Indexes implements OrdersInterface
             'tweet_hash'   => $task['hash'],
             'url_hash'     => $task['url_hash'],
             'process_time' => date('H:i:s'),
-            'params'       => $this->getTaskParams($task)
+            'params'       => $this->getTaskParams($task),
+            'daemon'       => $this->getDaemon()
         ];
 
         $this->_update['task'][$task['id']]['is_process'] = 1;
@@ -36,11 +37,10 @@ class Indexes implements OrdersInterface
     {
         return json_encode([
             'tweet'         => $this->_getTaskParams('tweet'),
-            'account'       => $this->_getTaskParams('account'),
             'order_owner'   => $this->get('owner_id'),
             'amount'        => $data['cost'],
             'return_amount' => $data['return_amount'],
-            'interval'      => 0
+            'interval'      => 0,
         ]);
     }
 

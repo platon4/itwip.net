@@ -115,7 +115,8 @@ class Manual implements OrdersInterface
             'tweet_hash'   => $task['hash'],
             'url_hash'     => $task['url_hash'],
             'process_time' => $this->getTaskProcessTime($task),
-            'params'       => $this->getTaskParams($task)
+            'params'       => $this->getTaskParams($task),
+            'daemon'       => $this->getDaemon()
         ];
 
         $this->_update['task'][$task['id']]['is_process'] = 1;
