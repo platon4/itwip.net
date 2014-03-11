@@ -46,7 +46,12 @@ class TweetingController extends \console\components\Controller
 
                         if(!empty($tasks)) {
                             foreach($tasks as $task) {
+                                Yii::$app->redis->set('orders:in_process:0:' . $task['order_id']);
+                                Yii::$app->redis->set('orders:in_process:1:' . $task['sbuorder_id']);
+
                                 $tweeting->process($task);
+
+                                Yii::$app->redis->delete(['orders:in_process:0:' . $task['order_id'], 'orders:in_process:1:' . $task['sbuorder_id']]);
                             }
                         } else {
                             echo "Daemon wait 5 sec.\n";
