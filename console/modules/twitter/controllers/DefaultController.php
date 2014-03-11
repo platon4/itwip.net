@@ -7,12 +7,11 @@ use yii\db\Query;
 use common\helpers\String;
 
 /*
- * php /var/www/itwip/cmd twitter (Interval 10 min)
+ * php /var/www/itwip/cmd twitter (Interval 5 min)
  */
 
 class DefaultController extends \console\components\Controller
 {
-
     public function actionIndex()
     {
         $this->launchTweetingDaemons();
@@ -23,7 +22,7 @@ class DefaultController extends \console\components\Controller
      */
     protected function launchTweetingDaemons()
     {
-        $rows = (new Query())->select('daemon')->from('{{%twitter_apps}}')->where(['is_active' => 1])->groupBy(['daemon'])->all();
+        $rows = (new Query())->select('daemon')->from('{{%twitter_tweeting}}')->groupBy(['daemon'])->all();
 
         if(!empty($rows)) {
             $path = realpath(Yii::$app->getBasePath() . '/..');

@@ -6,6 +6,7 @@ use Yii;
 use yii\db\Command;
 use yii\db\Query;
 use console\components\Daemon;
+use console\modules\twitter\components\Tweeting;
 
 /*
  * php cmd twitter/tweeting
@@ -18,12 +19,15 @@ class TweetingController extends \console\components\Controller
 
     public function actionIndex($daemon)
     {
+        $this->daemon = $daemon;
+
         /* проверяем если домен не запущен уже */
         if(!Daemon::isRunning('tweeting_' . $this->daemon)) {
-            $this->daemon = $daemon;
             $redis = Yii::$app->redis;
 
             Daemon::setProcess('tweeting_' . $this->daemon);
+
+            $tweeting = new Tweeting();
 
             /* Запускаем демона */
             while(true) {
@@ -32,13 +36,14 @@ class TweetingController extends \console\components\Controller
                     if(Daemon::isSetProcess('tweeting_' . $this->daemon)) {
                         $this->reloadApps();
 
-                        $tasks = (new Query())->from('{{%twitter_tweeting}}')->limit(10)->all();
+                        $tasks = (new Query())->from('{{%twitter_tweeting}}')->where(['daemon' => $this->daemon])->limit(10)->all();
 
                         if(!empty($tasks)) {
                             foreach($tasks as $task) {
-
+                                $tweeting->process($task);
                             }
                         } else {
+                            echo "Daemon wait 5 sec.\n";
                             sleep(5);
                         }
                     } else {
