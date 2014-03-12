@@ -129,6 +129,10 @@ class PayController extends Controller
             $common_string = $lmi_payee_purse . $lmi_payment_amount . $lmi_payment_no . $lmi_mode . $lmi_sys_invs_no . $lmi_sys_trans_no . $lmi_sys_trans_date . $secret_key . $lmi_payer_purse . $lmi_payer_wm;
             $hash = strtoupper(md5($common_string));
 
+            $f = @fopen(Yii::app()->getModule("finance")->getBasePath() . "/logs/test.txt", "a+") or die("error");
+            fputs($f, var_export($_POST));
+            fclose($f);
+
             if(isset($_POST['LMI_HASH']) AND $hash == $_POST['LMI_HASH']) {
                 $form = Replenishment::model()->findByPk($pay_id);
                 $tm = getdate(time() + 9 * 3600);
