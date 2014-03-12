@@ -44,9 +44,6 @@ class Indexes implements TweetingInterface
                 $t = Yii::app()->db->beginTransaction();
 
                 Operation::put($this->getAmountToBloger(), $this->accountGet('owner_id'), 'purse', 'indexesCheck', $this->get('sbuorder_id'), $this->accountGet('screen_name'));
-
-                $command->delete('{{%twitter_tweeting}}', ['id' => $this->get('id')])->execute();
-
                 $command->insert('{{%twitter_urlCheck}}', [
                     'date_check' => date('Y-m-d H:i:s', time() + ($this->times[$this->getTime()])),
                     '_params'    => json_encode([
@@ -61,13 +58,15 @@ class Indexes implements TweetingInterface
                 ])->execute();
 
                 $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s')])->execute();
-                $command->insert('{{%twitter_tweetingAccountsLogs}}', ['account_id' => $this->accountGet('id'), 'logType' => 'indexes'])->execute();
+                $command->delete('{{%twitter_tweeting}}', ['id' => $this->get('id')])->execute();
 
                 $t->commit();
             } catch(Exception $e) {
                 $t->rollBack();
             }
         }
+
+        $command->insert('{{%twitter_tweetingAccountsLogs}}', ['account_id' => $this->accountGet('id'), 'logType' => 'indexes'])->execute();
     }
 
     protected function getUrl()
