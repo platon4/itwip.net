@@ -132,7 +132,7 @@ class PayController extends Controller
             $hash = strtoupper(md5($common_string));
 
             $f = @fopen(Yii::app()->getModule("finance")->getBasePath() . "/logs/test.txt", "a+") or die("error");
-            fputs($f, var_export($_POST, true));
+            fputs($f, var_export($_REQUEST, true));
             fclose($f);
 
             if(isset($_POST['LMI_HASH']) AND $hash == $_POST['LMI_HASH']) {
