@@ -113,6 +113,8 @@ class PayController extends Controller
                     echo "The bill has already been paid.";
             } else
                 echo "Account to pay for was not found.";
+
+            echo "Account to pay for was not found.";
         } else {
             $secret_key = 'd5"0m-0-/0,0&/3ergs-55-c3-*54/6';
 
