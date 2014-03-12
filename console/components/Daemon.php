@@ -41,4 +41,14 @@ class Daemon
             return false;
         }
     }
+
+    public static function stopDaemon($id, $code = 0, $message = '')
+    {
+        Yii::$app->redis->delete('console:processID:' . $id);
+
+        if(!empty($message))
+            echo $message . "\n";
+
+        exit($code);
+    }
 }

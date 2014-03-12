@@ -16,93 +16,85 @@ class TweetingController extends \console\components\Controller
 {
     protected $apps;
     protected $daemon;
+    protected $_dname;
 
     public function actionIndex($daemon)
     {
-        $task = (new Query())->from('{{%twitter_tweeting}}')->where(['daemon' => $this->daemon])->one();
-
-        $tweeting = new Tweeting();
-        $tweeting->process($task);
-        die();
-
         $this->daemon = $daemon;
 
         /* проверяем если домен не запущен уже */
-        if(!Daemon::isRunning('tweeting_' . $this->daemon)) {
+        if(!Daemon::isRunning($this->getDaemoName())) {
             $redis = Yii::$app->redis;
 
-            Daemon::setProcess('tweeting_' . $this->daemon);
+            Daemon::setProcess($this->getDaemoName());
 
             $tweeting = new Tweeting();
 
             /* Запускаем демона */
             while(true) {
+                $this->message('Demonion start of the cycle');
+
                 /* проверяем если твиттинг не остановлен */
                 if($redis->exists('console:twitter:tweeting') === false) {
-                    if(Daemon::isSetProcess('tweeting_' . $this->daemon)) {
-                        $this->reloadApps();
+                    if(Daemon::isSetProcess($this->getDaemoName())) {
+                        $where = ['and', 'daemon=:daemon', 'process_time>=:time','id=1']; // Изменить <
+                        $rids = Yii::$app->redis->mGet(Yii::$app->redis->keys('console:twitter:tweeting:tasks:id:*'));
 
-                        $tasks = (new Query())->from('{{%twitter_tweeting}}')->where(['daemon' => $this->daemon])->limit(10)->all();
+                        if($rids !== false) {
+                            $ids = [];
+                            foreach($rids as $id) {
+                                if($id !== false)
+                                    $ids[] = $id;
+                            }
+
+                            if(!empty($ids))
+                                $where[] = ['not in', 'id', [1, 2]];
+                        }
+
+                        $tasks = (new Query())->from('{{%twitter_tweeting}}')->where($where, [':daemon' => $this->daemon, ':time' => date('H:i:s')])->limit(10)->all();
 
                         if(!empty($tasks)) {
                             foreach($tasks as $task) {
-                                Yii::$app->redis->set('orders:in_process:0:' . $task['order_id']);
-                                Yii::$app->redis->set('orders:in_process:1:' . $task['sbuorder_id']);
+                                Yii::$app->redis->set('orders:in_process:0:' . $task['order_id'], $task['order_id']);
+                                Yii::$app->redis->set('orders:in_process:1:' . $task['sbuorder_id'], $task['order_id']);
 
-                                $tweeting->process($task);
+                                $tweeting->processTask($task);
 
                                 Yii::$app->redis->delete(['orders:in_process:0:' . $task['order_id'], 'orders:in_process:1:' . $task['sbuorder_id']]);
                             }
                         } else {
-                            echo "Daemon wait 5 sec.\n";
+                            $this->message('Daemon timeout 5 sec.');
                             sleep(5);
                         }
                     } else {
-                        echo "Daemon won't start, error set process\n";
-                        exit(0);
+                        Daemon::stopDaemon($this->daemon, 0, 'Daemon won\'t start, error set process');
                     }
                 } else {
-                    echo "Deaemon is stopped\n";
-                    exit(0);
+                    Daemon::stopDaemon($this->daemon, 0, 'Deaemon is stopped');
                 }
+
+                $timeout = rand(5, 10);
+                $this->message('Demonion end of the cycle, timeout: ' . $timeout);
+
                 /* делаем перерыв на 1 секунду */
-                sleep(rand(1, 5));
+                sleep($timeout);
+                exit(0); // УБРАТЬ НА ПРОДАКШЕНЕ
             }
         } else {
-            echo "Daemon is already running\n";
-            exit(-1);
+            Daemon::stopDaemon($this->daemon, 0, 'Daemon is already running');
         }
     }
 
-    /**
-     * Перезагружаем приложения
-     */
-    protected function reloadApps()
+    protected function message($message)
     {
-        if(Yii::$app->redis->exists('console:twitter:tweeting:reload') === true) {
-            $this->apps = null;
-            Yii::$app->redis->delete('console:twitter:tweeting:reload');
-        }
+        echo $message . PHP_EOL;
     }
 
-    /**
-     * Получаем список приложений для запущенного демона
-     *
-     * @param $key
-     * @return bool
-     */
-    protected function appGet($key)
+    protected function getDaemoName()
     {
-        if($this->apps === null) {
-            $rows = (new Query())->from('{{%twitter_apps}}')->where(['daemon' => $this->daemon])->all();
+        if($this->_dname === null)
+            $this->_dname = md5(get_called_class()) . '_' . $this->daemon;
 
-            if(!empty($rows)) {
-                foreach($rows as $row) {
-                    $this->apps[$row['id']] = $row;
-                }
-            }
-        }
-
-        return isset($this->apps[$key]) ? $this->apps[$key] : false;
+        return $this->_dname;
     }
 }

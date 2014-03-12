@@ -1,12 +1,10 @@
 <?php
-    $this->breadcrumbs[]=array(
-                            0=>array(Yii::t('breadcrumbs','_twitter'),'/twitter'),
-                            1=>array(Yii::t('breadcrumbs','_tw_accounts'),'/twitter/accounts'),
-                            2=>array(Yii::t('breadcrumbs','_tw_accounts_add'),'/twitter/accounts/add')
-                          );
+    $this->breadcrumbs[] = array(
+        0 => array(Yii::t('breadcrumbs', '_twitter'), '/twitter'),
+        1 => array(Yii::t('breadcrumbs', '_tw_accounts'), '/twitter/accounts'),
+        2 => array(Yii::t('breadcrumbs', '_tw_accounts_add'), '/twitter/accounts/add')
+    );
 ?>
-<div class="line_info alert" style="margin-bottom: 20px;">Добавление аккаунтов временно не доступно. Приносим извенения за неудобства.</div>
-
 <div class="block twitterAccountAdd">
 <?php echo Html::beginForm(); ?>
     <div class="block_title"><div class="block_title_inset"><i class="fa fa-twitter"></i> <h5><?php echo Yii::t('twitterModule.accounts', '_twitterAccountAdd_title'); ?></h5></div></div>
@@ -21,13 +19,11 @@
 		<?php echo Html::activeCheckBox($model, 'agreed', array('class' => 'styler')); ?> <?php echo Yii::t('twitterModule.accounts', '_twitterAccountAdd_text4'); ?>
 		<?php if(count($model->getErrors())) { ?>
 			<div style="margin-top: 10px;">
-				<div class="line_info alert">		
-				<?php echo Html::errorSummary($model); ?>
-				</div>
+			     <?php echo Html::error($model,'agreed'); ?>
 			</div>
-		<?php } ?>		
+		<?php } ?>
 		</div>
          <button class="button btn_blue" type="submit"><?php echo Yii::t('twitterModule.accounts', '_twitterAccountAdd_button'); ?></button>
     </div>
-<?php echo Html::endForm(); ?>	
+<?php echo Html::endForm(); ?>
 </div>

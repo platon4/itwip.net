@@ -2,7 +2,7 @@
 
 namespace console\modules\twitter\components;
 
-class Yandex extends \console\components\Yandex
+class Yandex extends \common\components\Yandex
 {
     public function hasErrors()
     {
