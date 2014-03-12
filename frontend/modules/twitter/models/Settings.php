@@ -18,7 +18,7 @@ class Settings extends CActiveRecord
     {
         return [
             ['_gender, working_in, fast_posting, allow_retweet, allow_following, _age, _filter, _status, _stop,_allow_bonus_pay,in_indexses', 'safe'],
-            ['_price', 'numerical', 'integerOnly' => false, 'min' => CMoney::_c(0.5), 'max' => CMoney::_c(100000), 'tooSmall' => Yii::t('twitterModule.accounts', '_price_is_small', array('{price}' => CMoney::_c(0.5, true))), 'tooBig' => Yii::t('twitterModule.accounts', '_price_is_big', array('{price}' => CMoney::_c(100000, true)))],
+            ['_price', 'numerical', 'integerOnly' => false, 'min' => CMoney::_c(1), 'max' => CMoney::_c(100000), 'tooSmall' => Yii::t('twitterModule.accounts', '_price_is_small', array('{price}' => CMoney::_c(1, true))), 'tooBig' => Yii::t('twitterModule.accounts', '_price_is_big', array('{price}' => CMoney::_c(100000, true)))],
             ['_timeout', 'numerical', 'integerOnly' => true, 'min' => Yii::app()->params['twitter']['posting_timeout'], 'max' => Yii::app()->params['twitter']['posting_timeout_max'], 'tooSmall' => Yii::t('twitterModule.accounts', '_timeout_is_small', array('{time}' => Yii::app()->params['twitter']['posting_timeout'])), 'tooBig' => Yii::t('twitterModule.accounts', '_timeout_is_big', array('{time}' => Yii::app()->params['twitter']['posting_timeout_max']))],
             ['_filter', 'length', 'allowEmpty' => false, 'min' => 2, 'max' => 2000, 'on' => 'filter'],
         ];

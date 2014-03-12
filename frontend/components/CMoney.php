@@ -96,7 +96,7 @@ class CMoney
             }
         }
 
-        return $_itr;
+        return $_itr < 1 ? 1 : $_itr;
     }
 
     protected static function getData()

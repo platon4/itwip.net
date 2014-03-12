@@ -130,7 +130,7 @@ class Twitter extends \FormModel
             ['gender', 'in', 'range' => [0, 1, 2], 'on' => 'get'],
 
             ['fbw', 'in', 'range' => ['black', 'white'], 'on' => 'get'],
-            ['_q', 'length', 'max' => 2, 'on' => 'get'],
+            ['_q', 'length', 'max' => 55, 'on' => 'get'],
 
             /* Сценари добавление в черно белый список пользователя */
             ['id', 'numerical', 'integerOnly' => TRUE, 'allowEmpty' => FALSE, 'message' => 'Неправильно указан идентификатор запроса.', 'on' => 'bw'],
