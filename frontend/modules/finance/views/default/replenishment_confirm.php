@@ -1,8 +1,6 @@
 <?php
 if(!Yii::app()->user->isGuest)
-{
     $this->layout='//layouts/info';
-}
 ?>
 <div id="info">
     <div id="info_inset">
@@ -35,7 +33,7 @@ if(!Yii::app()->user->isGuest)
                             <input type="hidden" name="LMI_PAYMENT_AMOUNT" value="<?php echo $form->amount; ?>"> 
                             <input type="hidden" name="LMI_PAYMENT_DESC" value="<?php echo Html::encode(Yii::t('financeModule.index','_balance_add_user',array(
                             '{login}'=>Yii::app()->user->_get('email'),'{user}'=>Yii::app()->user->_get('name')))); ?>"> 
-                            <input type="hidden" name="LMI_PAYMENT_NO" value="<?php echo $_id; ?>"> 
+                            <input type="hidden" name="LMI_PAYMENT_NO" value="<?= $_id; ?>">
                             <input type="hidden" name="LMI_PAYEE_PURSE" value="R398233796434"> 
                             <input type="hidden" name="TTS_PAY" value="<?php echo $_id; ?>"> </p> 
                         </form>			

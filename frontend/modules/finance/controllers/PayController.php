@@ -138,6 +138,8 @@ class PayController extends Controller
                 $tm = getdate(time() + 9 * 3600);
                 $date = "$tm[year]-$tm[mon]-$tm[mday] $tm[hours]:$tm[minutes]:$tm[seconds]";
 
+                echo 'Test';
+                die();
                 if(count($form)) {
                     if(!$form->is_pay) {
                         if($form->amount == trim($_POST['LMI_PAYMENT_AMOUNT'])) {
