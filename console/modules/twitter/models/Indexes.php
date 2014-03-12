@@ -58,7 +58,7 @@ class Indexes extends Model
         try {
             $t = Yii::$app->db->beginTransaction();
 
-            Operation::unlockMoney($row['amount'], $row['return_amount'], $row['bloger_id'], $row['adv_id'], ($row['payment_type'] == 1 ? 'bonus' : 'purse'), 'indexesCheck', $row['pid'], $row['order_id']);
+            Operation::unlockMoney($row['amount'], $row['return_amount'], $row['bloger_id'], $row['adv_id'], 'purse', 'indexesCheck', $row['pid'], $row['order_id']);
 
             /* Обновляем заказ */
             $this->updateOrder(true, $row);
@@ -76,8 +76,8 @@ class Indexes extends Model
         try {
             $t = Yii::$app->db->beginTransaction();
 
-            Operation::cancelTransfer($row['amount'], $row['bloger_id'], ($row['payment_type'] == 1 ? 'bonus' : 'purse'), 'indexesCheck', $row['pid']);
-            Operation::returnMoney($row['amount_return'], $row['adv_id'], ($row['payment_type'] == 1 ? 'bonus' : 'purse'), 'indexesCheck', $row['pid'], $row['order_id']);
+            Operation::cancelTransfer($row['amount'], $row['bloger_id'], 'purse', 'indexesCheck', $row['pid']);
+            Operation::returnMoney($row['amount_return'], $row['adv_id'], 'purse', 'indexesCheck', $row['pid'], $row['order_id']);
 
             /* Обновляем заказ */
             $this->updateOrder(false, $row);

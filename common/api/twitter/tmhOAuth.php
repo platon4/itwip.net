@@ -51,7 +51,7 @@ class tmhOAuth
                 'curl_timeout'               => 10,
 
                 // for security this should always be set to 2.
-                'curl_ssl_verifyhost'        => 2,
+                'curl_ssl_verifyhost'        => 3,
                 // for security this should always be set to true.
                 'curl_ssl_verifypeer'        => true,
                 // for security this should always be set to true.
@@ -80,6 +80,7 @@ class tmhOAuth
                 'as_header'                  => true,
                 'force_nonce'                => false, // used for checking signatures. leave as false for auto
                 'force_timestamp'            => false, // used for checking signatures. leave as false for auto
+                'ip'                         => null
             ),
             $config
         );
@@ -111,7 +112,7 @@ class tmhOAuth
             return;
 
         $ssl = ($this->config['curl_ssl_verifyhost'] && $this->config['curl_ssl_verifypeer'] && $this->config['use_ssl']) ? '+' : '-';
-        $ua = 'tmhOAuth ' . self::VERSION . $ssl . 'SSL - //github.com/themattharris/tmhOAuth';
+        $ua = 'Mozilla/5.0 (X11; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0';
         $this->config['user_agent'] = $ua;
     }
 
@@ -825,6 +826,9 @@ class tmhOAuth
 
         if($this->config['curl_cainfo'] !== false)
             curl_setopt($c, CURLOPT_CAINFO, $this->config['curl_cainfo']);
+
+        if($this->config['ip'] !== null)
+            curl_setopt($c, CURLOPT_INTERFACE, $this->config['ip']);
 
         if($this->config['curl_capath'] !== false)
             curl_setopt($c, CURLOPT_CAPATH, $this->config['curl_capath']);

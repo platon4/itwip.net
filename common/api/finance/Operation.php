@@ -84,7 +84,7 @@ class Operation
             throw new Exception('Invalid amount.');
     }
 
-    public static function put($amount, $user_id, $moneyType, $accrued, $operationData = 0, $moneyLog = true)
+    public static function put($amount, $user_id, $moneyType, $accrued, $operationData = 0, $notice = '', $moneyLog = true)
     {
         self::amountValid($amount);
         $moneyType = self::moneyType($moneyType);
@@ -118,7 +118,7 @@ class Operation
             Yii::$app->db->createCommand("UPDATE {{%accounts}} SET " . implode(", ", $upd) . " WHERE id=:id")->bindValues([':id' => $user_id])->execute();
 
         if($moneyLog)
-            self::log($amount, $user_id, $moneyType, 0, $is_blocked, $accrued, $operationData);
+            self::log($amount, $user_id, $moneyType, 0, $is_blocked, $accrued, $operationData, $notice);
 
         return true;
     }

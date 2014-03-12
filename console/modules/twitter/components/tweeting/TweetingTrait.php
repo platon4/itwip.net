@@ -51,6 +51,21 @@ trait TweetingTrait
         return isset($this->task[$key]) ? $this->task[$key] : null;
     }
 
+    protected function getOwner()
+    {
+        return $this->getParams('order_owner');
+    }
+
+    protected function getAmountToBloger()
+    {
+        return $this->getParams('amount');
+    }
+
+    protected function getAmountToAdv()
+    {
+        return $this->getParams('return_amount');
+    }
+
     protected function getParams($key)
     {
         if($this->_params === null) {

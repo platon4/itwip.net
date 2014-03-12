@@ -1,9 +1,10 @@
 <?php
 
-namespace common\components\twitter;
+namespace common\api\twitter;
 
 use Yii;
 use yii\base\Exception;
+use yii\db\Query;
 
 class Apps
 {
@@ -11,21 +12,29 @@ class Apps
 
     public static function get($id, $key)
     {
-        echo 1;
-        die();
         if(self::$apps === null || self::$apps[$id] === null) {
-            $app = Yii::$app->redis->get('twitter:apps:' . $id);
+            self::$apps[$id] = self::_get($id, $key);
 
-            if($app !== false)
-                self::$apps[$id] = json_decode($app, true);
-            else
-                throw new Exception('App id is not found.');
+            if(self::$apps[$id] === false) {
+                self::reloadCache();
+                self::$apps[$id] = self::_get($id, $key);
+            }
         }
 
         return isset(self::$apps[$id][$key]) ? self::$apps[$id][$key] : false;
     }
 
-    public static function clearCache()
+    public static function _get($id, $key)
+    {
+        $app = Yii::$app->redis->get('twitter:apps:' . $id);
+
+        if($app !== false)
+            $app = json_decode($app, true);
+
+        return $app;
+    }
+
+    public static function reloadCache()
     {
         Yii::$app->redis->delete(Yii::$app->redis->keys('twitter:apps:*'));
 

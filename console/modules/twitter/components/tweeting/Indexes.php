@@ -2,6 +2,7 @@
 
 namespace console\modules\twitter\components\tweeting;
 
+use common\api\finance\Operation;
 use Yii;
 use yii\base\Exception;
 use common\api\twitter\Accounts;
@@ -15,6 +16,13 @@ class Indexes implements TweetingInterface
     use TweetingTrait;
 
     protected $_account;
+    public $times = [
+        5  => 12,
+        10 => 9,
+        20 => 6,
+        40 => 3,
+        65 => 1,
+    ];
 
     public function process($task)
     {
@@ -30,17 +38,46 @@ class Indexes implements TweetingInterface
     {
         if($this->postTweet() === true) {
 
-            echo 'test';
-            die();
+            $command = Yii::$app->db->createCommand();
+
             try {
                 $t = Yii::app()->db->beginTransaction();
 
-                Yii::$app->db->createCommand()->insert('{{%twitter_tweetingAccountsLogs}}', ['account_id' => $this->accountGet('id'), 'logType' => 'indexes'])->execute();
+                Operation::put($this->getAmountToBloger(), $this->accountGet('owner_id'), 'purse', 'indexesCheck', $this->get('sbuorder_id'), $this->accountGet('screen_name'));
+
+                $command->delete('{{%twitter_tweeting}}', ['id' => $this->get('id')])->execute();
+
+                $command->insert('{{%twitter_urlCheck}}', [
+                    'date_check' => date('Y-m-d H:i:s', time() + ($this->times[$this->getTime()])),
+                    '_params'    => json_encode([
+                        'order_id'      => $this->get('order_id'),
+                        'pid'           => $this->get('sbuorder_id'),
+                        'bloger_id'     => $this->accountGet('owner_id'),
+                        'url'           => $this->getUrl(),
+                        'adv_id'        => $this->getOwner(),
+                        'amount'        => $this->getAmountToBloger(),
+                        'amount_return' => $this->getAmountToAdv()
+                    ])
+                ])->execute();
+
+                $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s')])->execute();
+                $command->insert('{{%twitter_tweetingAccountsLogs}}', ['account_id' => $this->accountGet('id'), 'logType' => 'indexes'])->execute();
+
                 $t->commit();
             } catch(Exception $e) {
                 $t->rollBack();
             }
         }
+    }
+
+    protected function getUrl()
+    {
+        return $this->getParams('url');
+    }
+
+    protected function getTime()
+    {
+        return $this->getParams('time');
     }
 
     protected function postTweet()
@@ -59,24 +96,34 @@ class Indexes implements TweetingInterface
             if($tw->getCode() === 200) {
                 return true;
             } else {
-                new TweetingErrors($this->getTask(), $tw);
+                new TweetingErrors($this->getTask(), $tw, $this);
                 return false;
             }
         } else {
-            new TweetingErrors($this->getTask(), 'notAccount');
+            new TweetingErrors($this->getTask(), 'notAccount', $this);
         }
     }
 
-    protected function accountGet($key)
+    protected function accountGet($key, $all = false)
     {
         if($this->_account === null) {
-            $this->_account = (new Accounts())->where(['and', 'in_indexses=1', 'in_yandex=1', ['not exists', (new Query())->select('id')->from('{{%twitter_tweetingAccountsLogs}}')->where(['logType' => 'indexes', 'account_id' => 'a.id'])]])->one();
+            $this->_account = $this->getAccount();
 
-            if($this->_account === false)
-                $this->_account = (new Accounts())->where(['and', 'in_indexses=1', 'in_yandex=1'])->one();
+            if($this->_account === false) {
+                Yii::$app->db->createCommand()->delete('{{%twitter_tweetingAccountsLogs}}', ['logType' => 'indexes'])->execute();
+                $this->_account = $this->getAccount();
+            }
         }
 
-        return isset($this->_account[$key]) ? $this->_account[$key] : false;
+        if($all === true)
+            return $this->_account;
+        else
+            return isset($this->_account[$key]) ? $this->_account[$key] : false;
+    }
+
+    protected function getAccount()
+    {
+        return (new Accounts())->where(['and', 'in_indexses=1', 'in_yandex=1', ['not exists', (new Query())->select('id')->from('{{%twitter_tweetingAccountsLogs}}')->where(['logType' => 'indexes', 'account_id' => 'a.id'])]])->one();
     }
 
     /**

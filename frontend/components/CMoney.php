@@ -128,7 +128,7 @@ class CMoney {
         return self::$_data;
     }
 
-    public function CalcOutSumm($summ)
+    public static function CalcOutSumm($summ)
     {
         $request=CHelper::_getURL('https://merchant.roboxchange.com/WebService/Service.asmx/CalcOutSumm?MerchantLogin=itwip&IncCurrLabel=WMRM&IncSum='.$summ);
 
@@ -143,7 +143,7 @@ class CMoney {
         return 0;
     }
 
-    public function _extractPrecent($amount,$m,$uid=0)
+    public static function _extractPrecent($amount,$m,$uid=0)
     {
         if(intval($uid))
             $id=$uid;
@@ -154,7 +154,7 @@ class CMoney {
         return array('precent'=>$precent,'amount'=>$amount);
     }
 
-    public function _outStatus($s)
+    public static function _outStatus($s)
     {
         return '';
     }

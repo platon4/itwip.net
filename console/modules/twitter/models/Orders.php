@@ -73,10 +73,10 @@ class Orders extends Model
             $orders = $query
                 ->select('id,owner_id,type_order,order_hash,payment_type,_params')
                 ->from('{{%twitter_orders}}')
-                ->where(['and', 'status=:status', 'process_date<=:date', 'is_process=0'], [':status' => 1, ':date' => date('Y-m-d')])
+                ->where(['and', 'status=:status', 'process_date<=:date', 'is_process=0', 'owner_id=1'], [':status' => 1, ':date' => date('Y-m-d')])
                 ->orderBy(['id' => SORT_ASC])
                 ->limit(10)
-                ->all(); //, 'type_order=:index'  ':index'=>'indexes',
+                ->all();
 
             /** Если заказы есть обрабатаваем дальше */
             if(!empty($orders)) {

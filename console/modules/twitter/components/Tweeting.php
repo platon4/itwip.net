@@ -48,6 +48,7 @@ class Tweeting
             'consumer_secret' => $data['app_secret'],
             'user_token'      => $data['user_key'],
             'user_secret'     => $data['user_secret'],
+            'ip'              => $data['ip']
         ));
 
         return $this;

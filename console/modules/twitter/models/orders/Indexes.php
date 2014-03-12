@@ -42,6 +42,8 @@ class Indexes implements OrdersInterface
             'order_owner'   => $this->get('owner_id'),
             'amount'        => $data['cost'],
             'return_amount' => $data['return_amount'],
+            'url'           => $data['url'],
+            'time'          => $this->_getTaskParams('time'),
             'interval'      => 0,
         ]);
     }
@@ -68,6 +70,8 @@ class Indexes implements OrdersInterface
                 $this->_setTaskParams($task);
                 $this->processTask($task);
             }
+        } else {
+            $this->_update['order'][$this->get('id')]['status'] = 2;
         }
     }
 }
