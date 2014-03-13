@@ -48,7 +48,7 @@ class AccountsController extends Controller
             $params[':query'] = '%' . $_POST['_query'] . '%';
         }
 
-        $all_accounts = Yii::app()->db->createCommand("SELECT COUNT(*) as count,_status FROM {{tw_accounts}} WHERE owner_id=:owner_id GROUP BY _status")->queryAll(TRUE, array(
+        $all_accounts = Yii::app()->db->createCommand("SELECT COUNT(*) as count,_status FROM {{tw_accounts}} WHERE owner_id=:owner_id GROUP BY _status")->queryAll(true, array(
             ':owner_id' => Yii::app()->user->id));
 
         $all_acc_count = 0;
@@ -67,11 +67,12 @@ class AccountsController extends Controller
         }
 
         $dataList = array();
+        $pages = null;
 
         if($all_acc_count) {
             $orderArr = array('posted' => 'fulfilled', 'order' => 'orders', 'itr' => 'itr',
                               'status' => '_status', 'last' => 'date_add');
-            $order = NULL;
+            $order = null;
 
             $orderType = (isset($_POST['_oType']) AND $_POST['_oType'] == "ASC") ? ' ASC' : ' DESC';
 
@@ -94,7 +95,7 @@ class AccountsController extends Controller
             $pages = new CPagination(Yii::app()->db->createCommand("SELECT COUNT(*) FROM {{tw_accounts}} WHERE " . implode(" AND ", $crt))->queryScalar($params));
             $pages->pageSize = $limit;
 
-            $orderData = Yii::app()->db->createCommand("SELECT COUNT(tt.id) as count,tt._tw_account FROM {{tweets_to_twitter}} tt INNER JOIN {{tw_accounts}} a ON tt._tw_account=a.id WHERE tt.approved=0 AND tt.status=0 AND a.owner_id=:owner GROUP BY tt._tw_account")->queryAll(TRUE, array(
+            $orderData = Yii::app()->db->createCommand("SELECT COUNT(tt.id) as count,tt._tw_account FROM {{tweets_to_twitter}} tt INNER JOIN {{tw_accounts}} a ON tt._tw_account=a.id WHERE tt.approved=0 AND tt.status=0 AND a.owner_id=:owner GROUP BY tt._tw_account")->queryAll(true, array(
                 ':owner' => Yii::app()->user->id));
 
             $requests = array();
@@ -102,7 +103,7 @@ class AccountsController extends Controller
                 $requests[$ord['_tw_account']] = $ord['count'];
             }
 
-            $list = Yii::app()->db->createCommand("SELECT id,screen_name,name,avatar,itr,_status,in_yandex,(SELECT COUNT(*) FROM {{tweets_to_twitter}} WHERE approved=1 AND _tw_account=a.id AND status=0) as orders, (SELECT COUNT(*) FROM {{tw_tweets}} WHERE tid=a.id) as fulfilled, (SELECT SUM(amount) FROM {{tw_accounts_income}} WHERE tid=a.id AND _date='" . date('Y-m-d') . "') as amount_today, (SELECT SUM(amount) FROM {{tw_accounts_income}} WHERE tid=a.id AND _date='" . date('Y-m-d', time() - 86400) . "') as amount_yeasterday, (SELECT SUM(amount) FROM {{tw_accounts_income}} WHERE tid=a.id) as amount_all FROM {{tw_accounts}} a WHERE " . implode(" AND ", $crt) . " ORDER BY {$order} LIMIT " . $pages->getOffset() . ", " . $pages->getLimit())->queryAll(TRUE, $params);
+            $list = Yii::app()->db->createCommand("SELECT id,screen_name,name,avatar,itr,_status,in_yandex,(SELECT COUNT(*) FROM {{tweets_to_twitter}} WHERE approved=1 AND _tw_account=a.id AND status=0) as orders, (SELECT COUNT(*) FROM {{tw_tweets}} WHERE tid=a.id) as fulfilled, (SELECT SUM(amount) FROM {{tw_accounts_income}} WHERE tid=a.id AND _date='" . date('Y-m-d') . "') as amount_today, (SELECT SUM(amount) FROM {{tw_accounts_income}} WHERE tid=a.id AND _date='" . date('Y-m-d', time() - 86400) . "') as amount_yeasterday, (SELECT SUM(amount) FROM {{tw_accounts_income}} WHERE tid=a.id) as amount_all FROM {{tw_accounts}} a WHERE " . implode(" AND ", $crt) . " ORDER BY {$order} LIMIT " . $pages->getOffset() . ", " . $pages->getLimit())->queryAll(true, $params);
 
             foreach($list as $data) {
                 $data['order_count'] = isset($requests[$data['id']]) ? $requests[$data['id']] : 0;
@@ -112,8 +113,8 @@ class AccountsController extends Controller
 
         if(Yii::app()->request->isAjaxRequest) {
             JSON::encode([
-                'list'  => $this->renderPartial('_indexList', ['list' => $dataList, '_count' => $all_acc_count], TRUE),
-                'pages' => $this->renderPartial('_pages', ['pages' => $pages], TRUE)
+                'list'  => $this->renderPartial('_indexList', ['list' => $dataList, '_count' => $all_acc_count], true),
+                'pages' => $this->renderPartial('_pages', ['pages' => $pages], true)
             ]);
             Yii::app()->end();
         } else {
@@ -133,7 +134,7 @@ class AccountsController extends Controller
      */
     public function actionAdd($id = '', $_e = '', $_k = '')
     {
-        $_code = (CHelper::int($_e)) ? CHelper::int($_e) : FALSE;
+        $_code = (CHelper::int($_e)) ? CHelper::int($_e) : false;
 
         if($_code) {
             if($_code == 200 AND CHelper::int($id) AND trim($_k) == md5(CHelper::_getIP() . $id . Yii::app()->params['twitter']['salt'])) {
@@ -149,7 +150,7 @@ class AccountsController extends Controller
                         $errorData[0]['link']);
                 }
 
-                $this->render("application.views.main.info", array('is_html' => TRUE,
+                $this->render("application.views.main.info", array('is_html' => true,
                                                                    'title'   => $info_data[0], 'message' => $info_data[1], 'link' => $info_data[2]));
             }
         } else {
@@ -201,7 +202,7 @@ class AccountsController extends Controller
                     }
 
                     if($remove == 1) {
-                        $this->removeAccounts($model, TRUE);
+                        $this->removeAccounts($model, true);
                     } else {
                         if(isset($_POST['Settings'])) {
                             $settings->attributes = $_POST['Settings'];
@@ -286,7 +287,7 @@ class AccountsController extends Controller
                             foreach($_subjects as $_id) {
                                 $_subject_html .= $this->renderPartial('application.modules.twitter.views.default._subjectsDropDownList', array(
                                     'remove'   => (!$i) ? 0 : 1, 'selected' => $_id, 'bid' => '_subjects_0',
-                                    'subjects' => $subjects), TRUE);
+                                    'subjects' => $subjects), true);
 
                                 foreach($subjects as $zs3q => $a3q2z) {
                                     if($zs3q == $_id) {
@@ -308,7 +309,7 @@ class AccountsController extends Controller
                             }
                         } else {
                             $_subject_html = $this->renderPartial('application.modules.twitter.views.default._subjectsDropDownList', array(
-                                'selected' => 0, 'bid' => '_subjects_0', 'subjects' => $subjects), TRUE);
+                                'selected' => 0, 'bid' => '_subjects_0', 'subjects' => $subjects), true);
                         }
 
                         $settings->_price = round($settings->_price, 2);
@@ -335,7 +336,7 @@ class AccountsController extends Controller
                     '/twitter/accounts');
             }
 
-            $this->render("application.views.main.info", array('is_html' => TRUE,
+            $this->render("application.views.main.info", array('is_html' => true,
                                                                'title'   => $info_data[0], 'message' => $info_data[1], 'link' => '/twitter/accounts'));
         } else
             throw new CHttpException(403, Yii::t('twitterModule.accounts', '_error_accounts_query'));
@@ -364,10 +365,10 @@ class AccountsController extends Controller
     protected function reAuthorize($tid)
     {
         if(CHelper::int($tid)) {
-            $row = Yii::app()->db->createCommand("SELECT a.id,a._url,t._status FROM {{tw_accounts}} t INNER JOIN {{tw_application}} a ON t.app=a.id WHERE t.id=:id")->queryRow(TRUE, array(
+            $row = Yii::app()->db->createCommand("SELECT a.id,a._url,t._status FROM {{tw_accounts}} t INNER JOIN {{tw_application}} a ON t.app=a.id WHERE t.id=:id")->queryRow(true, array(
                 ':id' => $tid));
 
-            if($row !== FALSE) {
+            if($row !== false) {
                 if(($row['_status'] == 4 OR $row['_status'] == 6) OR Yii::app()->user->checkAccess('admin')) {
                     $this->redirect($row['_url'] . '/twitter/oAuth/reAuthorize?id=' . $tid . '&_k=' . md5(CHelper::_getIP() . $row['id'] . $tid . Yii::app()->params['twitter']['salt']));
                     Yii::app()->end();
@@ -396,7 +397,7 @@ class AccountsController extends Controller
     }
 
     //Functions
-    protected function removeAccounts($obj, $show = FALSE)
+    protected function removeAccounts($obj, $show = false)
     {
         TwitterApp::model()->updateCounters(array('tw_accounts' => -1), "id=:id", array(
             ':id' => $obj->app));
