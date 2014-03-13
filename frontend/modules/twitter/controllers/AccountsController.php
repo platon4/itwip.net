@@ -402,7 +402,6 @@ class AccountsController extends Controller
             ':id' => $obj->app));
         Accounts::model()->deleteByPk($obj->id);
         Settings::model()->deleteByPk($obj->id);
-        Yii::app()->db->createCommand("DELETE FROM {{tw_update}} WHERE tw_id=" . $obj->id)->execute();
         Yii::app()->db->createCommand("DELETE FROM {{tw_accounts_stats}} WHERE tw_id=" . $obj->id)->execute();
 
         Logs::save("tw-list", "Date: " . date('d.m.Y H:i:s') . "; ID:" . $obj->id . "; Login:" . $obj->screen_name . "; Owner:" . $obj->owner_id . "\n", 'remove_tw', 'a+');

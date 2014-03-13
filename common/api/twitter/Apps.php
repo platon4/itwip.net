@@ -9,6 +9,7 @@ use yii\db\Query;
 class Apps
 {
     private static $apps;
+    private static $_ids;
 
     public static function get($id, $key)
     {
@@ -48,6 +49,14 @@ class Apps
 
             if(!empty($cache))
                 Yii::$app->redis->mSet($cache);
+        }
+    }
+
+    public static function getAppID($value, $key = 'ip')
+    {
+        if()
+        {
+            $apps = (new Query())->from('{{%twitter_apps}}')->all();
         }
     }
 } 
