@@ -1,53 +1,43 @@
 <?php
 
+$rootDir = __DIR__ . '/../..';
+
 $params = array_merge(
-	require(__DIR__ . '/params.php'),
-	require(__DIR__ . '/params-local.php')
+    require($rootDir . '/common/config/params.php'),
+    require($rootDir . '/common/config/params-local.php'),
+    require(__DIR__ . '/params.php'),
+    require(__DIR__ . '/params-local.php')
 );
 
 return [
-	'basePath' => dirname(__DIR__),
-	'name' => 'iTwip - Applications',
-	'sourceLanguage' => 'en_US',
-	'language' => 'ru',
-	'charset' => 'UTF-8',
-	'import' => [
-		'application.models.*',
-		'application.components.*',
-	],
-	'defaultController' => 'index',
-	'modules' => [
-		'twitter',
-	],
-	'components' => [
-		'cache' => [
-			'class' => 'system.caching.CFileCache',
-		],
-		'redis' => [
-			'class' => 'application.extensions.redis.extRedis',
-			'server' => [
-				'host' => '127.0.0.1',
-				'port' => 6379,
-			],
-		],
-		'authManager' => [
-			'class' => 'PhpAuthManager',
-			'defaultRoles' => ['guest'],
-		],
-		'errorHandler' => [
-			'errorAction' => 'main/error',
-		],
-		'urlManager' => [
-			'urlFormat' => 'path',
-			'rules' => [
-				'/' => 'main/index',
-			],
-			'showScriptName' => false,
-		],
-		'log' => [
-			'class' => 'CLogRouter',
-			'routes' => [],
-		],
-	],
-	'params' => $params,
+    'id' => 'applications',
+    'basePath' => dirname(__DIR__),
+    'timeZone' => 'Europe/Moscow',
+    'defaultRoute' => 'default',
+    'modules' => [
+        'twitter' => 'app\modules\twitter\Twitter',
+    ],
+    'components' => [
+        'db' => $params['components.db'],
+        'cache' => $params['components.cache'],
+        'mail' => $params['components.mail'],
+        'redis' => $params['components.redis'],
+        'log' => [
+            'targets' => [
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error', 'warning'],
+                ],
+            ],
+        ],
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'rules' => [
+                '/' => 'default',
+                '<_m:\w+>/<_c:\w+>/<_a:\w+>' => '<_m>/<_c>/<_a>',
+            ]
+        ]
+    ],
+    'params' => $params,
 ];
