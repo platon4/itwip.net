@@ -66,6 +66,8 @@ class AccountsController extends Controller
             $all_acc_count += $all_count['count'];
         }
 
+        $dataList = array();
+
         if($all_acc_count) {
             $orderArr = array('posted' => 'fulfilled', 'order' => 'orders', 'itr' => 'itr',
                               'status' => '_status', 'last' => 'date_add');
@@ -101,8 +103,6 @@ class AccountsController extends Controller
             }
 
             $list = Yii::app()->db->createCommand("SELECT id,screen_name,name,avatar,itr,_status,in_yandex,(SELECT COUNT(*) FROM {{tweets_to_twitter}} WHERE approved=1 AND _tw_account=a.id AND status=0) as orders, (SELECT COUNT(*) FROM {{tw_tweets}} WHERE tid=a.id) as fulfilled, (SELECT SUM(amount) FROM {{tw_accounts_income}} WHERE tid=a.id AND _date='" . date('Y-m-d') . "') as amount_today, (SELECT SUM(amount) FROM {{tw_accounts_income}} WHERE tid=a.id AND _date='" . date('Y-m-d', time() - 86400) . "') as amount_yeasterday, (SELECT SUM(amount) FROM {{tw_accounts_income}} WHERE tid=a.id) as amount_all FROM {{tw_accounts}} a WHERE " . implode(" AND ", $crt) . " ORDER BY {$order} LIMIT " . $pages->getOffset() . ", " . $pages->getLimit())->queryAll(TRUE, $params);
-
-            $dataList = array();
 
             foreach($list as $data) {
                 $data['order_count'] = isset($requests[$data['id']]) ? $requests[$data['id']] : 0;

@@ -54,9 +54,8 @@ class Apps
 
     public static function getAppID($value, $key = 'ip')
     {
-        if()
-        {
+
             $apps = (new Query())->from('{{%twitter_apps}}')->all();
-        }
+
     }
 } 
