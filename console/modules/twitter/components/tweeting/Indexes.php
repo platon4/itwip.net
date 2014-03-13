@@ -16,6 +16,8 @@ class Indexes implements TweetingInterface
     use TweetingTrait;
 
     protected $_account;
+    protected $_str_id;
+
     public $times = [
         5  => 12,
         10 => 9,
@@ -36,10 +38,9 @@ class Indexes implements TweetingInterface
 
     protected function execute()
     {
+        $command = Yii::$app->db->createCommand();
+
         if($this->postTweet() === true) {
-
-            $command = Yii::$app->db->createCommand();
-
             try {
                 $t = Yii::app()->db->beginTransaction();
 
@@ -53,7 +54,8 @@ class Indexes implements TweetingInterface
                         'url'           => $this->getUrl(),
                         'adv_id'        => $this->getOwner(),
                         'amount'        => $this->getAmountToBloger(),
-                        'amount_return' => $this->getAmountToAdv()
+                        'amount_return' => $this->getAmountToAdv(),
+                        'tw_str_id'     => $this->getTweetID()
                     ])
                 ])->execute();
 
@@ -74,6 +76,11 @@ class Indexes implements TweetingInterface
         return $this->getParams('url');
     }
 
+    protected function getTweetID()
+    {
+        return $this->_str_id;
+    }
+
     protected function getTime()
     {
         return $this->getParams('time');
@@ -88,11 +95,13 @@ class Indexes implements TweetingInterface
                 'app_key'     => Apps::get($this->accountGet('app'), '_key'),
                 'app_secret'  => Apps::get($this->accountGet('app'), '_secret'),
                 'user_key'    => $this->accountGet('_key'),
-                'user_secret' => $this->accountGet('_secret')
+                'user_secret' => $this->accountGet('_secret'),
+                'ip'          => Apps::get($this->accountGet('app'), 'ip'),
             ])
                 ->post($this->getTweet());
 
             if($tw->getCode() === 200) {
+                $this->_str_id = $tw->getTweetID();
                 return true;
             } else {
                 new TweetingErrors($this->getTask(), $tw, $this);
@@ -122,7 +131,9 @@ class Indexes implements TweetingInterface
 
     protected function getAccount()
     {
-        return (new Accounts())->where(['and', 'in_indexses=1', 'in_yandex=1', ['not exists', (new Query())->select('id')->from('{{%twitter_tweetingAccountsLogs}}')->where(['logType' => 'indexes', 'account_id' => 'a.id'])]])->one();
+        $account = (new Accounts())->where(['and', 'a._status=1', 's.in_indexses=1', ['not exists', (new Query())->select('id')->from('{{%twitter_tweetingAccountsLogs}}')->where(['and', 'logType=\'indexes\'', 'account_id=a.id'])]])->one();
+
+        return $account;
     }
 
     /**

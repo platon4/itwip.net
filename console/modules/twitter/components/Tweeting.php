@@ -48,7 +48,7 @@ class Tweeting
             'consumer_secret' => $data['app_secret'],
             'user_token'      => $data['user_key'],
             'user_secret'     => $data['user_secret'],
-            'ip'              => $data['ip']
+            //'ip'              => $data['ip']
         ));
 
         return $this;
@@ -76,5 +76,10 @@ class Tweeting
     public function getResult()
     {
         return $this->_result;
+    }
+
+    public function geTweetID()
+    {
+        return $this->get('id_str');
     }
 }
