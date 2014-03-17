@@ -9,7 +9,9 @@ class oAuth extends \common\api\twitter\libraries\tmhOAuth
         if(!isset($config['ip']))
             $config['ip'] = null;
 
-        parent::__construct($config);
+        parent::__construct(array_merge($config, [
+            'curl_ssl_verifyhost' => 3
+        ]));
     }
 
     public function auth_request($callBack)

@@ -51,7 +51,7 @@ class tmhOAuth
                 'curl_timeout'               => 10,
 
                 // for security this should always be set to 2.
-                'curl_ssl_verifyhost'        => 3,
+                'curl_ssl_verifyhost'        => 2,
                 // for security this should always be set to true.
                 'curl_ssl_verifypeer'        => true,
                 // for security this should always be set to true.
