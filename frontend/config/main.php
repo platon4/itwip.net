@@ -131,6 +131,7 @@ return [
 				'support' => 'accounts/default/support',
 
 				'ajax/<action:\w+>' => 'ajax/<action>',
+                'twitter/accounts/ajax/<action:\w+>' => 'twitter/ajaxAccounts/<action>',
 				'test/<action:\w+>' => 'test/<action>',
 				'<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
 				'<module:\w+>' => '<module>',

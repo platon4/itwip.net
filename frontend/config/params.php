@@ -5,7 +5,7 @@ return [
 	'robot_email' => 'robot@itwip.net',
 	'allowNewAccounts' => 'yes', //открыта ли регистрация или нет default: yes
 	'twitter' => [
-		'tw_count_in_app' => 500,
+        'accountsInApp' => 1000, //Аккаунтов в одном приложение
 		'methods' => array(
 			'fast' => array(
 				'prices' => array(

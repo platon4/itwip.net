@@ -1,14 +1,28 @@
 <?php
-$this->pageTitle      =Yii::app()->name.' - '.Yii::t('main','_twitterList_Title');
-$this->metaDescription=Yii::t('main','_twitterList_Description');
+$this->pageTitle = Yii::app()->name . ' - ' . Yii::t('main', '_twitterList_Title');
+$this->metaDescription = Yii::t('main', '_twitterList_Description');
 
-$this->breadcrumbs[]=array(
-    0=>array(Yii::t('breadcrumbs','_twitter'),'/twitter'),
-    1=>array(Yii::t('breadcrumbs','_tw_accounts'),'/twitter/accounts')
+$this->breadcrumbs[] = array(
+    0 => array(Yii::t('breadcrumbs', '_twitter'), '/twitter'),
+    1 => array(Yii::t('breadcrumbs', '_tw_accounts'), '/twitter/accounts')
 );
 
-$_count=count($list);
+$_count = count($list);
 ?>
+<?php if(Yii::app()->user->hasFlash('accountsMessages')) { ?>
+    <div id="_flashDialog" style="margin-bottom: 15px;">
+        <div class="line_info alert">
+            <div class="errorMessage"><?= Yii::app()->user->getFlash('accountsMessages'); ?></div>
+        </div>
+    </div>
+    <script>
+        setTimeout(function ction() {
+                $('#_flashDialog').fadeOut();
+            }
+            , 4000);
+
+    </script>
+<?php } ?>
 <div class="block twitterAccountList">
     <div class="block_title"><div class="block_title_inset"><i class="fa fa-twitter"></i> <h5><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_title'); ?></h5></div></div>
     <div class="block_content">

@@ -3,7 +3,7 @@
 namespace console\modules\twitter\components;
 
 use Yii;
-use common\api\twitter\tmhOAuth;
+use common\api\twitter\oAuth;
 use console\components\Logger;
 use yii\base\Exception;
 
@@ -43,13 +43,13 @@ class Tweeting
         if(!is_array($data) || empty($data))
             throw new Exception('Invalid tweeting set params.');
 
-        $this->tmh = new tmhOAuth(array(
+        $this->tmh = new oAuth([
             'consumer_key'    => $data['app_key'],
             'consumer_secret' => $data['app_secret'],
             'user_token'      => $data['user_key'],
             'user_secret'     => $data['user_secret'],
-            //'ip'              => $data['ip']
-        ));
+            'ip'              => $data['ip']
+        ]);
 
         return $this;
     }

@@ -4,6 +4,9 @@ if(!isset($options))
 
 if(!isset($remove))
 	$remove = false;
+
+if(!isset($selected))
+    $selected = 0;
 ?>
 <div style="margin-bottom: 5px;">
 	<?php echo Html::GroupDropDownList('subject[]', $selected, $subjects, array('options' => $options, 'classes' => array('h_list', 'list'), 'empty' => array(0 => Yii::t('twitterModule.accounts', '_topicAny')), 'id' => $bid, 'class' => 'styler')); ?>
@@ -12,4 +15,4 @@ if(!isset($remove))
 	<?php } else { ?>
 		<button type="button" class="button icon" onclick="Subjects._removeSubject(this); return false;"><i class="fa fa-minus"></i></button>
 	<?php } ?>
-</div> 
+</div>

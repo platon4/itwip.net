@@ -1,5 +1,7 @@
 <?php
 
+use \twitter\models\accounts\Accounts;
+
 class AccountsController extends Controller
 {
     public $activeMenu = 'tw_exe';
@@ -132,285 +134,44 @@ class AccountsController extends Controller
     /**
      * Форма добавление твиттер аккаунта
      */
-    public function actionAdd($id = '', $_e = '', $_k = '')
+    public function actionAdd()
     {
-        $_code = (CHelper::int($_e)) ? CHelper::int($_e) : false;
+        $model = new Accounts();
+        $model->setScenario('add');
 
-        if($_code) {
-            if($_code == 200 AND CHelper::int($id) AND trim($_k) == md5(CHelper::_getIP() . $id . Yii::app()->params['twitter']['salt'])) {
-                $this->render("_succes_add", array('id' => $id));
-            } else {
-                $errorData = require Yii::app()->getModulePath() . '/twitter/data/error.db.php';
-
-                if(isset($errorData[$_code])) {
-                    $info_data = array($errorData[$_code]['title'], $errorData[$_code]['message'],
-                        $errorData[$_code]['link']);
-                } else {
-                    $info_data = array($errorData[0]['title'], $errorData[0]['message'],
-                        $errorData[0]['link']);
-                }
-
-                $this->render("application.views.main.info", array('is_html' => true,
-                                                                   'title'   => $info_data[0], 'message' => $info_data[1], 'link' => $info_data[2]));
-            }
-        } else {
-            $this->pageTitle = Yii::app()->name . ' - ' . Yii::t('main', '_twitterAccountAdd_Title');
-            $this->metaDescription = Yii::t('main', '_twitterAccountAdd_Description');
-
-            $form = new addAccounts;
-
-            if(isset($_POST['addAccounts'])) {
-                /*
-                 * Форма получена
-                 */
-                $form->attributes = $_POST['addAccounts'];
-
-                /*
-                 * Валидация данных
-                 */
-                if($form->validate()) {
-                    $twApp = Yii::app()->db->createCommand("SELECT * FROM {{tw_application}} WHERE tw_accounts < 1000 AND _is_active=1 ORDER BY RAND()")->queryRow();
-
-                    if($twApp['id']) {
-                        $this->redirect($twApp['_url'] . "/twitter/oAuth/authorize?id=" . Yii::app()->user->id . "&_k=" . md5($_SERVER['REMOTE_ADDR'] . $twApp['id'] . Yii::app()->user->id . Yii::app()->params['twitter']['salt']));
-                        Yii::app()->end();
-                    } else {
-                        $form->addError('_error', Yii::t('twitterModule.accounts', '_app_not_found'));
-                    }
-                }
-            }
-
-            $this->render('add', array('model' => $form));
+        if($model->load($_POST) && $model->validate()) {
+            if($model->authorize())
+                $this->redirect($model->getRedirectUrl());
+            else
+                $model->addError('agreed', 'В данный момент свободных приложений нету, попробуйте позже.');
         }
+
+        $this->render('add', array('model' => $model));
     }
 
     /**
      * Настройки аккаунта
      */
-    public function actionSettings($tid = 0, $remove = 0, $_e = 0, $_u = 0)
+    public function actionSettings($act = '')
     {
-        if(CHelper::int($tid) AND !$_e) {
-            $settings = Settings::model()->with('accounts')->findByPk($tid);
-            $model = $settings->accounts;
-            if($model->id) {
-                if($model->owner_id == Yii::app()->user->id) {
-                    if($_u == 1)
-                        Yii::app()->user->setFlash("_settings_save_success", Yii::t('twitterModule.accounts', '_flash_key_update'));
+        $model = new Accounts();
 
-                    if(!$settings->_timeout OR $settings->_timeout < Yii::app()->params['twitter']['posting_timeout']) {
-                        $settings->_timeout = Yii::app()->params['twitter']['posting_timeout'];
-                    }
+        if(isset($_POST['Settings']) && $act == '')
+            $act = 'save';
 
-                    if($remove == 1) {
-                        $this->removeAccounts($model, true);
-                    } else {
-                        if(isset($_POST['Settings'])) {
-                            $settings->attributes = $_POST['Settings'];
-                            $filterParams = array();
-                            $sbj = (isset($_POST['subject']) AND is_array($_POST['subject'])) ? $_POST['subject'] : array();
+        if(($act != '' && strlen($act) < 30))
+            $model->setScenario($act);
 
-                            if(isset($_POST['Filter'])) {
-                                foreach(Yii::app()->params['twitter']['filters'] as $k => $v) {
-                                    foreach($_POST['Filter'] as $key => $value) {
-                                        if($key == $v AND $value == 1) {
-                                            $filterParams[] = $k;
-                                        }
-                                    }
-                                }
-                            }
-
-                            if(in_array(3, $filterParams)) {
-                                $settings->scenario = 'filter';
-                            }
-
-                            $settings->_stop = implode(",", $filterParams);
-
-                            $ids = array();
-
-                            foreach($sbj as $_k) {
-                                if(in_array($_k, $ids)) {
-                                    $settings->_addError('_subject', Yii::t('twitterModule.accounts', '_subject_add_dublicat'));
-                                }
-
-                                $ids[] = $_k;
-                            }
-
-                            if(count($ids) > 1 AND in_array(0, $ids)) {
-                                $settings->_addError('_subject', Yii::t('twitterModule.accounts', '_subject_add_need_select'));
-                            }
-
-                            $settings->_subjects = implode(",", $ids);
-
-                            if($settings->validate()) {
-                                if(Yii::app()->user->_setting('_preferred_currency')) {
-                                    $settings->_price = CMoney::convert($settings->_price);
-                                }
-
-                                if($settings->save())
-                                    Yii::app()->user->setFlash("_settings_save_success", Yii::t('main', '_flash_settings_update'));
-                            }
-
-                            if($settings->_price <= 0) {
-                                $settings->_price = ($model->in_yandex) ? CMoney::_c(CMoney::itrCost($model->itr) + 2) : CMoney::_c(CMoney::itrCost($model->itr));
-                            }
-                        }
-
-                        if(Yii::app()->user->_setting('_preferred_currency')) {
-                            $settings->_price = CMoney::_c($settings->_price);
-                        }
-
-                        $last_update = array('yandex_rank' => 0, 'in_yandex' => 0, 'in_google' => 0,
-                                             'google_pr'   => 0);
-
-                        $last_row = Yii::app()->redis->hGetAll('twitter:accounts:statsUpdate:' . $model->id);
-
-                        if(count($last_row)) {
-                            foreach($last_row as $_row) {
-                                if($_row['last_update'] > (time() - (Yii::app()->params['twitter']['update_interval'][$_row['_type']] * 60))) {
-                                    if(isset($last_update[$_row['_type']])) {
-                                        $last_update[$_row['_type']] = 1;
-                                    }
-                                }
-                            }
-                        }
-
-                        $ageData = require Yii::app()->getModulePath() . '/twitter/data/_age.php';
-                        $subjects = Html::groupByKey(Subjects::model()->_getAll(array(
-                            'order' => 'sort')), 'id', '_key', 'parrent');
-
-                        $_subjects = explode(",", $settings->_subjects);
-                        $_subject_html = "";
-
-                        if(count($_subjects)) {
-                            $i = 0;
-
-                            foreach($_subjects as $_id) {
-                                $_subject_html .= $this->renderPartial('application.modules.twitter.views.default._subjectsDropDownList', array(
-                                    'remove'   => (!$i) ? 0 : 1, 'selected' => $_id, 'bid' => '_subjects_0',
-                                    'subjects' => $subjects), true);
-
-                                foreach($subjects as $zs3q => $a3q2z) {
-                                    if($zs3q == $_id) {
-                                        unset($subjects[$zs3q]);
-                                    } else {
-                                        if(is_array($a3q2z)) {
-                                            foreach($a3q2z as $u3n6 => $bb3q) {
-                                                foreach($bb3q as $ak => $av) {
-                                                    if($ak == $_id) {
-                                                        unset($subjects[$zs3q][$u3n6][$ak]);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-
-                                $i++;
-                            }
-                        } else {
-                            $_subject_html = $this->renderPartial('application.modules.twitter.views.default._subjectsDropDownList', array(
-                                'selected' => 0, 'bid' => '_subjects_0', 'subjects' => $subjects), true);
-                        }
-
-                        $settings->_price = round($settings->_price, 2);
-
-                        Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/tw-settings-core.js');
-                        $this->render('settings', array('settings' => $settings, '_subject_html' => $_subject_html,
-                                                        'filter'   => $this->_filters($settings->_stop), 'ageData' => $ageData,
-                                                        'model'    => $model, 'last_update' => $last_update));
-                    }
-                } else {
-                    throw new CHttpException(403, Yii::t('twitterModule.accounts', '_error_accounts_owner'));
-                }
+        if($model->load($_GET, true) && $model->validate()) {
+            if(Yii::app()->request->isAjaxRequest) {
+                Html::json(['code' => $model->getCode(), 'message' => $model->getMessage(), 'url' => $model->getRedirectUrl()]);
             } else {
-                throw new CHttpException(404, Yii::t('twitterModule.accounts', '_error_no_accounts'));
+                Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/tw-ac3Q2l-core.js');
+
+                $this->render('settings', ['model' => $model]);
             }
-        } else if($_e) {
-            $errorData = require Yii::app()->getModulePath() . '/twitter/data/error.db.php';
-
-            if(isset($errorData[$_e])) {
-                $info_data = array($errorData[$_e]['title'], $errorData[$_e]['message'],
-                    '/twitter/accounts');
-            } else {
-                $info_data = array($errorData[0]['title'], $errorData[0]['message'],
-                    '/twitter/accounts');
-            }
-
-            $this->render("application.views.main.info", array('is_html' => true,
-                                                               'title'   => $info_data[0], 'message' => $info_data[1], 'link' => '/twitter/accounts'));
-        } else
-            throw new CHttpException(403, Yii::t('twitterModule.accounts', '_error_accounts_query'));
-    }
-
-    public function actionReAuth($tid)
-    {
-        $this->reAuthorize($tid);
-    }
-
-    public function actionReCheck($tid)
-    {
-        $c = new reCheck;
-
-        $c->attributes = array('id' => $tid);
-
-        if($c->validate())
-            Yii::app()->user->setFlash('tw_settings_message', array('text' => Yii::t('twitterModule.accounts', '_accounts_succes_recheck'), 'type' => 'success'));
-        else
-            Yii::app()->user->setFlash('tw_settings_message', array('text' => $c->getError(), 'type' => 'error'));
-
-        $this->redirect('/twitter/accounts/settings?tid=' . $c->id);
-        Yii::app()->end();
-    }
-
-    protected function reAuthorize($tid)
-    {
-        if(CHelper::int($tid)) {
-            $row = Yii::app()->db->createCommand("SELECT a.id,a._url,t._status FROM {{tw_accounts}} t INNER JOIN {{tw_application}} a ON t.app=a.id WHERE t.id=:id")->queryRow(true, array(
-                ':id' => $tid));
-
-            if($row !== false) {
-                if(($row['_status'] == 4 OR $row['_status'] == 6) OR Yii::app()->user->checkAccess('admin')) {
-                    $this->redirect($row['_url'] . '/twitter/oAuth/reAuthorize?id=' . $tid . '&_k=' . md5(CHelper::_getIP() . $row['id'] . $tid . Yii::app()->params['twitter']['salt']));
-                    Yii::app()->end();
-                } else {
-                    throw new CHttpException(501, Yii::t('twitterModule.accounts', '_error_reauth_not_condition'));
-                }
-            } else
-                throw new CHttpException(500, Yii::t('twitterModule.accounts', '_error_reauth_not_found'));
-        }
-    }
-
-    protected function _filters($data)
-    {
-        $return = array();
-        $dArr = explode(",", $data);
-
-        foreach(Yii::app()->params['twitter']['filters'] as $k => $v) {
-            if(in_array($k, $dArr)) {
-                $return[$v] = 1;
-            } else {
-                $return[$v] = 0;
-            }
-        }
-
-        return CHelper::tObject($return, 'Filter');
-    }
-
-    //Functions
-    protected function removeAccounts($obj, $show = false)
-    {
-        TwitterApp::model()->updateCounters(array('tw_accounts' => -1), "id=:id", array(
-            ':id' => $obj->app));
-        Accounts::model()->deleteByPk($obj->id);
-        Settings::model()->deleteByPk($obj->id);
-        Yii::app()->db->createCommand("DELETE FROM {{tw_accounts_stats}} WHERE tw_id=" . $obj->id)->execute();
-
-        Logs::save("tw-list", "Date: " . date('d.m.Y H:i:s') . "; ID:" . $obj->id . "; Login:" . $obj->screen_name . "; Owner:" . $obj->owner_id . "\n", 'remove_tw', 'a+');
-
-        if($show) {
-            $this->render("application.views.main.info", array('title'   => Yii::t('twitterModule.accounts', '_account_is_delete_title'),
-                                                               'message' => Yii::t('twitterModule.accounts', '_account_is_delete_text'),
-                                                               'link'    => '/twitter/accounts/', 'link_screen' => Yii::t('twitterModule.accounts', '_to_accounts_list')));
+        } else {
+            $this->_message($model->getError(), Yii::t('main', '_error'), '/twitter/accounts');
         }
     }
 }

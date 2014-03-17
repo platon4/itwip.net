@@ -7,7 +7,7 @@
 
 date_default_timezone_set('Europe/Moscow');
 
-define('YII_DEBUG', false);
+define('YII_DEBUG', true);
 
 require_once(dirname(__DIR__) . '/framework/yii.php');
 require_once(dirname(__DIR__) . '/config/aliases.php');

@@ -52,6 +52,13 @@ class Apps
         }
     }
 
+    /**
+     * Получить ID приложения по критерию
+     *
+     * @param $value
+     * @param string $key
+     * @return string
+     */
     public static function getAppID($value, $key = 'ip')
     {
 

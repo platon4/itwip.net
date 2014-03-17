@@ -1,6 +1,6 @@
 <?php
 
-namespace common\api\twitter;
+namespace common\api\twitter\libraries;
 
 defined('__DIR__') or define('__DIR__', dirname(__FILE__));
 
@@ -13,7 +13,7 @@ class tmhOAuth
      * Creates a new tmhOAuth object
      *
      * @param array|string $config , the configuration to use for this request
-     * @return \common\api\twitter\tmhOAuth
+     * @return \common\api\twitter\libraries\tmhOAuth
      */
     public function __construct($config = array())
     {
@@ -80,7 +80,6 @@ class tmhOAuth
                 'as_header'                  => true,
                 'force_nonce'                => false, // used for checking signatures. leave as false for auto
                 'force_timestamp'            => false, // used for checking signatures. leave as false for auto
-                'ip'                         => null
             ),
             $config
         );
