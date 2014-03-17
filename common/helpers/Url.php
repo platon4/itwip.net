@@ -31,14 +31,9 @@ class Url
         if(self::$_hostInfo  === null) {
             $secure = Yii::$app->request->getIsSecureConnection();
             $http = $secure ? 'https' : 'http';
-            if(isset($_SERVER['HTTP_HOST'])) {
-                self::$_hostInfo = $http . '://' . $_SERVER['HTTP_HOST'];
-            } else {
-                self::$_hostInfo = $http . '://' . $_SERVER['SERVER_NAME'];
-                $port = $secure ? Yii::$app->request->getSecurePort() : Yii::$app->request->getPort();
-                if(($port !== 80 && !$secure) || ($port !== 443 && $secure)) {
-                    self::$_hostInfo .= ':' . $port;
-                }
+
+            if(isset($_SERVER['APP-IP'])) {
+                self::$_hostInfo = $http . '://' . $_SERVER['APP-IP'];
             }
         }
 
