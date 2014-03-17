@@ -2,6 +2,8 @@
 
 namespace common\api\twitter;
 
+use Yii;
+
 class oAuth extends \common\api\twitter\libraries\tmhOAuth
 {
     public function __construct($config = [])
