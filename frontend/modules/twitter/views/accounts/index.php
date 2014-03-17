@@ -9,6 +9,20 @@ $this->breadcrumbs[] = array(
 
 $_count = count($list);
 ?>
+<?php if(Yii::app()->user->hasFlash('accountsMessagesSuccess')) { ?>
+    <div id="_flashDialog" style="margin-bottom: 15px;">
+        <div class="line_info ok">
+            <div class="errorMessage"><?= Yii::app()->user->getFlash('accountsMessagesSuccess'); ?></div>
+        </div>
+    </div>
+    <script>
+        setTimeout(function ction() {
+                $('#_flashDialog').fadeOut();
+            }
+            , 5000);
+
+    </script>
+<?php } ?>
 <?php if(Yii::app()->user->hasFlash('accountsMessages')) { ?>
     <div id="_flashDialog" style="margin-bottom: 15px;">
         <div class="line_info alert">

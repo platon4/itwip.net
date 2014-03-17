@@ -36,8 +36,17 @@ class AccountsController extends Controller
         ];
     }
 
-    public function actionIndex()
+    public function actionIndex($act = '')
     {
+        if($act = 'new') {
+            $message = Yii::app()->redis->get('userFlash:twitter:accounts:' . Yii::app()->user->id);
+
+            if($message !== false) {
+                Yii::app()->user->setFlash('accountsMessagesSuccess', $message);
+                Yii::app()->redis->delete('userFlash:twitter:accounts:' . Yii::app()->user->id);
+            }
+        }
+
         $list = array();
         $crt = array();
         $params = array();
