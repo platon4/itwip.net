@@ -28,7 +28,7 @@ class Url
 
     public static function getHostUrl()
     {
-        if(self::$_hostInfo  === null) {
+        if(self::$_hostInfo === null) {
             $secure = Yii::$app->request->getIsSecureConnection();
             $http = $secure ? 'https' : 'http';
 
@@ -38,5 +38,10 @@ class Url
         }
 
         return self::$_hostInfo;
+    }
+
+    public static function homeUrl()
+    {
+        return rtrim(Yii::$app->homeUrl, '/');
     }
 } 
