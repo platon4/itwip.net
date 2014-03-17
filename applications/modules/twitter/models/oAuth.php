@@ -3,20 +3,25 @@
 namespace app\modules\twitter\models;
 
 use Yii;
+use common\helpers\Url;
 
 class oAuth extends \app\components\Model
 {
     public $token;
     protected $_returnUrl;
+    public $oauth_verifier;
     protected $pattern = "/^[a-zA-Z0-9_-]{5,20}+$/";
     protected $_data;
 
     public function rules()
     {
         return [
-            ['token', 'dataValidate', 'on' => ['update', 'auth']],
-            [['token'], 'update', 'on' => ['update']],
-            [['token'], 'auth', 'on' => ['auth']],
+            ['token', 'required', 'on' => ['update', 'auth', 'add']],
+            ['token', 'dataValidate', 'on' => ['update', 'auth', 'add']],
+            ['token', 'update', 'on' => ['update']],
+            ['token', 'auth', 'on' => ['auth']],
+            ['oauth_verifier', 'required', 'on' => ['add']],
+            ['token', 'addAccount', 'on' => 'add']
         ];
     }
 
@@ -37,6 +42,28 @@ class oAuth extends \app\components\Model
         }
     }
 
+    public function addAccount()
+    {
+        $request = (new \common\api\twitter\oAuth([
+            'consumer_key' => $this->_data['app_key'],
+            'consumer_secret' => $this->_data['app_secret'],
+            'ip' => $this->_data['app_ip']
+        ]))->auth_credentials($this->oauth_verifier, $this->_data['owner_id']);
+
+        if ($request instanceof \common\api\twitter\oAuth) {
+            $this->addError('twitter', 'Не удалось получить данные с твиттера, пожалуйста, попробуйте еще раз.');
+        } else {
+            $model = new Account();
+            $model->load($request, '');
+
+            if ($model->validate()) {
+                Yii::$app->getResponse()->redirect(Url::homeUrl() . '/twitter/accounts?act=new');
+            } else {
+                $this->addError('token', $model->getError());
+            }
+        }
+    }
+
     public function update()
     {
         //$this->authProcess($data);
@@ -44,7 +71,15 @@ class oAuth extends \app\components\Model
 
     public function auth()
     {
-        //$this->authProcess($data);
+        $request = (new \common\api\twitter\oAuth([
+            'consumer_key' => $this->_data['app_key'],
+            'consumer_secret' => $this->_data['app_secret'],
+            'ip' => $this->_data['app_ip']
+        ]))->auth_request(Url::getHostUrl() . '/twitter/oauth/process?token=' . $this->token, $this->_data['owner_id']);
+
+        if ($request instanceof \common\api\twitter\oAuth) {
+            $this->addError('twitter', 'Не удалось подключится к твиттеру, пожалуйста, попробуйте позже.');
+        }
     }
 
     public function getErrorName()
@@ -67,19 +102,5 @@ class oAuth extends \app\components\Model
             return $this->_returnUrl;
         else
             return Yii::$app->homeUrl;
-    }
-
-    protected function authProcess()
-    {
-        $request = (new \common\api\twitter\oAuth([
-            'user_key' => $data['user_key'],
-            'user_secret' => $data['user_key'],
-            'consumer_key' => $data['app_key'],
-            'consumer_secret' => $data['app_secret']
-        ]))->auth_request();
-
-        if ($request instanceof \common\api\twitter\oAuth) {
-
-        }
     }
 }

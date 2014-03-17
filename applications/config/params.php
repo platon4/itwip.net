@@ -1,5 +1,9 @@
 <?php
 
 return [
-	'languages' => ['ru', 'en']
+    'languages' => ['ru', 'en'],
+    'twitter' => [
+        'minimuFollowers' => 500,
+        'minimuRegistrationDays' => 30
+    ],
 ];
