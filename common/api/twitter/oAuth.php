@@ -25,6 +25,7 @@ class oAuth extends \common\api\twitter\libraries\tmhOAuth
         if($code === 200) {
             $params = $this->extract_params($this->response['response']);
             Yii::$app->redis->set('twitter:accounts:auth:token:' . $owner_id, json_encode($params));
+            Yii::$app->redis->expire('twitter:accounts:auth:token:' . $owner_id, 24 * 60 * 60);
             Yii::$app->getResponse()->redirect($this->url("oauth/authorize", '') . "?oauth_token=" . $params['oauth_token']);
         } else {
             return $this;
