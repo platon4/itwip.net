@@ -29,10 +29,20 @@ class OauthController extends \app\components\Controller
             Error::e($model->getErrorName(), $model->getError(), $model->getReturnUrl());
     }
 
-    public function actionProcess()
+    public function actionAuthProcess()
     {
         $model = new oAuth();
-        $model->setScenario('add');
+        $model->setScenario('auth-process');
+        $model->load($_GET, '');
+
+        if (!$model->validate())
+            Error::e($model->getErrorName(), $model->getError(), $model->getReturnUrl());
+    }
+
+    public function actionUpdateProcess()
+    {
+        $model = new oAuth();
+        $model->setScenario('update-process');
         $model->load($_GET, '');
 
         if (!$model->validate())

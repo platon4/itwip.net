@@ -11,7 +11,6 @@ $params = array_merge(
 
 return [
     'id' => 'applications',
-    'homeUrl'    => 'https://www.itwip.net/',
     'basePath' => dirname(__DIR__),
     'timeZone' => 'Europe/Moscow',
     'defaultRoute' => 'default',

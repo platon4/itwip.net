@@ -16,12 +16,16 @@ class oAuth extends \app\components\Model
     public function rules()
     {
         return [
-            ['token', 'required', 'on' => ['update', 'auth', 'add']],
-            ['token', 'dataValidate', 'on' => ['update', 'auth', 'add']],
+            ['token', 'required', 'on' => ['update', 'auth', 'auth-process', 'update-process']],
+            ['token', 'dataValidate', 'on' => ['update', 'auth', 'auth-process', 'update-process']],
+
             ['token', 'update', 'on' => ['update']],
             ['token', 'auth', 'on' => ['auth']],
-            ['oauth_verifier', 'required', 'on' => ['add']],
-            ['token', 'addAccount', 'on' => 'add']
+
+            ['oauth_verifier', 'required', 'on' => ['auth-process', 'update-process']],
+
+            ['token', 'addAccount', 'on' => 'auth-process'],
+            ['token', 'updateAccount', 'on' => 'update-process']
         ];
     }
 
@@ -34,12 +38,12 @@ class oAuth extends \app\components\Model
                 $this->_data = $data;
             } else {
                 $this->addError('token', Yii::t('yii', 'Некорректный запрос, попробуйте повторить процедуру заново.'));
-                $this->_returnUrl = rtrim(Yii::$app->homeUrl, '/') . '/twitter/accounts';
             }
         } else {
             $this->addError('token', Yii::t('yii', 'Некорректный запрос, попробуйте повторить процедуру заново.'));
-            $this->_returnUrl = rtrim(Yii::$app->homeUrl, '/') . '/twitter/accounts';
         }
+
+        $this->_returnUrl = rtrim(Yii::$app->homeUrl, '/') . '/twitter/accounts';
     }
 
     public function addAccount()
@@ -54,7 +58,10 @@ class oAuth extends \app\components\Model
             $this->addError('twitter', 'Не удалось получить данные с твиттера, пожалуйста, попробуйте еще раз.');
         } else {
             $model = new Account();
-            $model->load($request, '');
+            $model->load(array_merge([
+                'owner_id' => $this->_data['owner_id'],
+                'app' => $this->_data['app']
+            ], $request), '');
 
             if ($model->validate()) {
                 Yii::$app->getResponse()->redirect(Url::homeUrl() . '/twitter/accounts?act=new');
@@ -62,6 +69,13 @@ class oAuth extends \app\components\Model
                 $this->addError('token', $model->getError());
             }
         }
+
+        $this->_returnUrl = Url::homeUrl() . '/twitter/accounts/add';
+    }
+
+    public function updateAccount()
+    {
+
     }
 
     public function update()
@@ -75,7 +89,7 @@ class oAuth extends \app\components\Model
             'consumer_key' => $this->_data['app_key'],
             'consumer_secret' => $this->_data['app_secret'],
             'ip' => $this->_data['app_ip']
-        ]))->auth_request(Url::getHostUrl() . '/twitter/oauth/process?token=' . $this->token, $this->_data['owner_id']);
+        ]))->auth_request(Url::getHostUrl() . '/twitter/oauth/auth-process?token=' . $this->token, $this->_data['owner_id']);
 
         if ($request instanceof \common\api\twitter\oAuth) {
             $this->addError('twitter', 'Не удалось подключится к твиттеру, пожалуйста, попробуйте позже.');
@@ -85,15 +99,6 @@ class oAuth extends \app\components\Model
     public function getErrorName()
     {
         return 'Ошибка';
-    }
-
-    public function getError()
-    {
-        if (parent::hasErrors()) {
-            return current(current(parent::getErrors()));
-        } else {
-            return '';
-        }
     }
 
     public function getReturnUrl()
