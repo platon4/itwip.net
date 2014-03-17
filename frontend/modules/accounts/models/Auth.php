@@ -184,7 +184,7 @@ class Auth extends FormModel
             if(substr($params['next'], 0, 1) == '/')
                 $params['next'] = substr($params['next'], 1);
 
-            return 'http://' . $params['host'] . '.' . str_replace(['http://', 'https://'], '', Yii::app()->homeUrl) . $params['next'];
+            return 'http://' . $params['host'] . '.' . str_replace(['http://', 'www.', 'https://'], '', Yii::app()->homeUrl) . $params['next'];
         } else {
             return Yii::app()->user->returnUrl;
         }
