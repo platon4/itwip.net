@@ -12,8 +12,17 @@ class oAuth extends \common\api\twitter\libraries\tmhOAuth
         parent::__construct($config);
     }
 
-    public static function auth_request($data)
+    public function auth_request($callBack)
     {
+        $code = $this->request('POST', $this->url('oauth/request_token', ''), array(
+            'oauth_callback' => $callBack
+        ));
 
+        if($code === 200) {
+            Yii::$app->session->set('oAtuh', $this->extract_params($this->response['response']));
+            $this->redirect($this->url("oauth/authorize", '') . "?oauth_token=" . Yii::$app->session->get('oAuth')['oauth_token']);
+        } else {
+            return $this;
+        }
     }
 } 

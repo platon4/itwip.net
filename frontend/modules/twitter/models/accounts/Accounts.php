@@ -57,7 +57,7 @@ class Accounts extends \ActiveRecord
             'record' => 'updateRecord',
             'save'   => 'saveSettings',
             'remove' => 'removeAccount',
-            'status' => 'changeStatus'
+            'status' => 'changeStatus',
         ];
 
         if(isset($methods[$this->getScenario()]) && method_exists($this, $methods[$this->getScenario()])) {
