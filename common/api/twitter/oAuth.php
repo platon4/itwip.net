@@ -35,39 +35,37 @@ class oAuth extends \common\api\twitter\libraries\tmhOAuth
         }
     }
 
-    public function auth_credentials()
+    public function auth_credentials($oauth_verifier, $user_id)
     {
-        $this->config['user_token'] = $this->get('oauth_token');
-        $this->config['user_secret'] = $this->get('oauth_token_secret');
+        $this->config['user_token'] = $this->get('oauth', $user_id, 'oauth_token');
+        $this->config['user_secret'] = $this->get('oauth', $user_id, 'oauth_token_secret');
 
         $code = $this->request('POST', $this->url('oauth/access_token', ''), array(
-            'oauth_verifier' => $this->oauth_verifier,
+            'oauth_verifier' => $oauth_verifier,
         ));
 
         if($code == 200) {
-            Yii::app()->session['access_token'] = $tmh->extract_params($tmh->response['response']);
-            unset(Yii::app()->session['oAuth']);
+            $this->set('access_token', $user_id, $this->extract_params($this->response['response']));
+            $this->remove('oauth', $user_id);
 
-            $tmh->config['user_token'] = Yii::app()->session['access_token']['oauth_token'];
-            $tmh->config['user_secret'] = Yii::app()->session['access_token']['oauth_token_secret'];
+            $this->config['user_token'] = $this->get('access_token', $user_id, 'oauth_token');
+            $this->config['user_secret'] = $this->get('access_token', $user_id, 'oauth_token_secret');
 
-            $_code = $tmh->request('GET', $tmh->url('1.1/account/verify_credentials.json?skip_status=false'));
+            $_code = $this->request('GET', $this->url('1.1/account/verify_credentials.json?skip_status=false'));
 
             if($_code == 200)
-                return $this->credentials = json_decode($tmh->response['response']);
-            else {
-                $this->error_code = $code;
-                $this->addError('tmh', Yii::t('twitterModule.index', '_invalid_tmh'));
-            }
-        } else {
-            $this->error_code = $code;
-            $this->addError('tmh', Yii::t('twitterModule.index', '_invalid_tmh'));
+                return json_decode($this->response['response'], true);
         }
+
+        return $this;
     }
 
     public function set($key, $user_id, $value)
     {
-        Yii::$app->redis->set('twitter:accounts:auth:token:' . $key . ':' . $user_id, json_encode($value));
+        if(is_array($value))
+            $value = json_encode($value);
+
+        Yii::$app->redis->set('twitter:accounts:auth:token:' . $key . ':' . $user_id, $value);
         Yii::$app->redis->expire('twitter:accounts:auth:token:' . $key . ':' . $user_id, 24 * 60 * 60);
     }
 
@@ -83,5 +81,10 @@ class oAuth extends \common\api\twitter\libraries\tmhOAuth
         }
 
         return isset($this->_data[$key][$field]) ? $this->_data[$key][$field] : false;
+    }
+
+    public function remove($key, $user_id)
+    {
+        Yii::$app->redis->delete('twitter:accounts:auth:token:' . $key . ':' . $user_id);
     }
 } 
