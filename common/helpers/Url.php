@@ -32,8 +32,8 @@ class Url
             $secure = Yii::$app->request->getIsSecureConnection();
             $http = $secure ? 'https' : 'http';
 
-            if(isset($_SERVER['APP-IP'])) {
-                self::$_hostInfo = $http . '://' . $_SERVER['APP-IP'];
+            if(isset($_SERVER['HTTP_APP_IP'])) {
+                self::$_hostInfo = $http . '://' . $_SERVER['HTTP_APP_IP'];
             }
         }
 
