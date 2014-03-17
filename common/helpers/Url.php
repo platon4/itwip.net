@@ -2,6 +2,8 @@
 
 namespace common\helpers;
 
+use Yii;
+
 class Url
 {
     public static function getDomen($url)
