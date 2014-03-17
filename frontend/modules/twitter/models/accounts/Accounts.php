@@ -110,7 +110,7 @@ class Accounts extends \ActiveRecord
     {
         $subjects = \Html::groupByKey(\Subjects::model()->_getAll(['order' => 'sort']), 'id', '_key', 'parrent');
 
-        $_subjects = explode(",", $this->get('_subjects','settings'));
+        $_subjects = explode(",", $this->get('_subjects', 'settings'));
         $_subject_html = "";
 
         if(count($_subjects)) {
@@ -294,6 +294,7 @@ class Accounts extends \ActiveRecord
                 'user_secret' => $this->get('_secret'),
                 'app_key'     => $app['_key'],
                 'app_secret'  => $app['_secret'],
+                'app_ip'      => $app['ip']
             ]));
 
             Yii::app()->redis->expire('twitter:accounts:auth:' . $token, 10 * 60);
