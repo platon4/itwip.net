@@ -31,9 +31,13 @@ class Redis extends \yii\base\Component
         }
     }
 
-    public function set($key, $value)
+    public function set($key, $value, $ttl = 0)
     {
         $this->redis->set($key, $value);
+
+        if($ttl > 0)
+            $this->expire($key, $ttl);
+
         return $this;
     }
 
