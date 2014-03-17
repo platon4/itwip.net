@@ -6,6 +6,8 @@ use Yii;
 
 class Url
 {
+    public static $_hostInfo;
+
     public static function getDomen($url)
     {
         if($url == '')
