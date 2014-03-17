@@ -60,13 +60,10 @@ class DefaultController extends Controller
         if (!Yii::app()->user->isGuest)
         {
             if (in_array($_h, $auth->hArr))
-            {
                 $this->redirect($auth->getReturnUrl());
-            }
             else
-            {
                 $this->_message(Yii::t('accountsModule.accounts', 'you_alearted_auth'), Yii::t('main', '_error'), '/');
-            }
+
         }
 
         if (isset($_POST['Auth']))
