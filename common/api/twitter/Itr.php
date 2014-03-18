@@ -51,6 +51,6 @@ class Itr
             }
         }
 
-        return $_itr;
+        return $_itr < 1 ? 1 : $_itr;
     }
 }
