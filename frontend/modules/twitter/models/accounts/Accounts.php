@@ -69,6 +69,8 @@ class Accounts extends \ActiveRecord
     {
         if($this->get('id') === null) {
             $this->addError('tid', 'Аккаунта не найден, возможно он был удален, или у вас недостаточно прав.');
+        } else if($this->get('owner_id') != Yii::app()->user->id) {
+            $this->addError('tid', 'Вы не являетесь владельцем данного аккаунта, доступ запрещен.');
         }
     }
 
