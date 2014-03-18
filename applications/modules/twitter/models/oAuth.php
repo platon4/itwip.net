@@ -58,6 +58,7 @@ class oAuth extends \app\components\Model
             $this->addError('twitter', 'Не удалось получить данные с твиттера, пожалуйста, попробуйте еще раз.');
         } else {
             $model = new Account();
+            $model->setScenario('new');
 
             $model->load(array_merge([
                 'owner_id' => $this->_data['owner_id'],
@@ -89,7 +90,8 @@ class oAuth extends \app\components\Model
 
             $model->load(array_merge([
                 'owner_id' => $this->_data['owner_id'],
-                'app' => $this->_data['app']
+                'app' => $this->_data['app'],
+                'process_id' => $this->_data['account_id']
             ], $request), '');
 
             if ($model->validate()) {
