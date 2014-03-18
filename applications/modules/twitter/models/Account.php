@@ -22,15 +22,25 @@ class Account extends \app\components\Model
     public $listed_count;
     public $profile_image_url;
 
+    public $process_id;
+
     public function rules()
     {
         return [
             ['id_str', 'integer'],
             ['owner_id', 'integer'],
-            [['app', 'created_at', 'favourites_count', 'listed_count', 'screen_name', 'name', 'lang', 'profile_image_url', 'statuses_count', 'friends_count'], 'safe'],
-            ['followers_count', 'compare', 'operator' => '>=', 'compareValue' => Yii::$app->params['twitter']['minimuFollowers'], 'message' => 'Для участия в системе на вашем аккаунте не достаточно фолловеров (минимум ' . Yii::$app->params['twitter']['minimuFollowers'] . '). <p>Рекомендуем воспользоватся софтом для увелечения числа подписчиков - <a href="http://twidium.com">twidium.com</a></p>'],
-            ['created_at', 'registrationDays']
+            [['process_id', 'app', 'created_at', 'favourites_count', 'listed_count', 'screen_name', 'name', 'lang', 'profile_image_url', 'statuses_count', 'friends_count'], 'safe'],
+            ['followers_count', 'compare', 'operator' => '<=', 'compareValue' => Yii::$app->params['twitter']['minimuFollowers'], 'message' => 'Для участия в системе на вашем аккаунте не достаточно фолловеров (минимум ' . Yii::$app->params['twitter']['minimuFollowers'] . '). <p>Рекомендуем воспользоватся софтом для увелечения числа подписчиков - <a href="http://twidium.com">twidium.com</a></p>'],
+            ['created_at', 'registrationDays'],
         ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['new'] = isset($scenarios['default']) ? $scenarios['default'] : [];
+
+        return $scenarios;
     }
 
     public function afterValidate()
@@ -42,12 +52,27 @@ class Account extends \app\components\Model
 
     public function run()
     {
-        $count = (new Query())->from('{{%tw_accounts}}')->where(['id' => $this->id_str])->count();
+        $row = (new Query())->from('{{%tw_accounts}}')->where(['id' => $this->id_str])->one();
 
-        if ($count)
-            $this->updateAccount();
-        else
-            $this->newAccount();
+        if ($row !== false) {
+            if ($row['owner_id'] == $this->owner_id) {
+                if ($this->getScenario() == 'new') {
+                    $this->addError('error', 'Аккаунт "' . $this->screen_name . '" уже находится в системе, пожалуйста авторизуйтесь под аккаунтом который вы хотите добавить, и повторите действие.');
+                } elseif ($this->id_str == $this->process_id) {
+                    $this->updateAccount();
+                } else {
+                    $this->addError('error', 'Обновление невозможно, вы авторизованы под другтим аккаунтам.');
+                }
+            } else {
+                $this->addError('error', 'Вы не можете обновить данные данного аккаунта, так как он привязан к другой учетной записи. Если Вы считаете, что это ошибка, обратитесь в службу поддержки с указанием логина твиттер аккаунта.');
+            }
+        } else {
+            if ($this->getScenario() == 'new') {
+                $this->newAccount();
+            } else {
+                $this->addError('error', 'Обновление невозможно, вы авторизованы под другтим аккаунтам.');
+            }
+        }
     }
 
     protected function newAccount()
@@ -85,7 +110,7 @@ class Account extends \app\components\Model
                 ->execute();
 
             Yii::$app->redis->set('userFlash:twitter:accounts:' . $this->owner_id, 'Ваш аккаунт "@' . $this->screen_name . '" успешно добавлен в систему.', 60);
-            Yii::$app->redis->set('twitter:accounts:twitter:is_update:' . $this->owner_id, time());
+            Yii::$app->redis->set('twitter:accounts:twitter:is_update:' . $this->owner_id . ':' . $this->id_str, time());
 
             $t->commit();
         } catch (\Exception $e) {
@@ -133,4 +158,4 @@ class Account extends \app\components\Model
         if (ceil((time() - strtotime($this->created_at)) / 86400) < Yii::$app->params['twitter']['minimuRegistrationDays'])
             $this->addError($attribute, 'Для участия в системе, срок регистраций вашего аккаунта должен быть старше 1 месяца.');
     }
-} 
+}
