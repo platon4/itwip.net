@@ -28,7 +28,7 @@ class Account extends \app\components\Model
             ['id_str', 'integer'],
             ['owner_id', 'integer'],
             [['app', 'created_at', 'favourites_count', 'listed_count', 'screen_name', 'name', 'lang', 'profile_image_url', 'statuses_count', 'friends_count'], 'safe'],
-            ['followers_count', 'compare', 'operator' => '<=', 'compareValue' => Yii::$app->params['twitter']['minimuFollowers'], 'message' => 'Для участия в системе на вашем аккаунте не достаточно фолловеров (минимум ' . Yii::$app->params['twitter']['minimuFollowers'] . '). <p>Рекомендуем воспользоватся софтом для увелечения числа подписчиков - <a href="http://twidium.com">twidium.com</a></p>'],
+            ['followers_count', 'compare', 'operator' => '>=', 'compareValue' => Yii::$app->params['twitter']['minimuFollowers'], 'message' => 'Для участия в системе на вашем аккаунте не достаточно фолловеров (минимум ' . Yii::$app->params['twitter']['minimuFollowers'] . '). <p>Рекомендуем воспользоватся софтом для увелечения числа подписчиков - <a href="http://twidium.com">twidium.com</a></p>'],
             ['created_at', 'registrationDays']
         ];
     }
@@ -55,10 +55,8 @@ class Account extends \app\components\Model
         try {
             $oauth = new \common\api\twitter\oAuth();
             $t = Yii::$app->db->beginTransaction();
+
             /* Добавление аккаунта */
-
-            $itr = 0;
-
             Yii::$app->db->createCommand()
                 ->insert('{{%tw_accounts}}', [
                     'id' => $this->id_str,
@@ -69,7 +67,6 @@ class Account extends \app\components\Model
                     'name' => $this->name,
                     'created_at' => strtotime($this->created_at),
                     'avatar' => $this->profile_image_url,
-                    'itr' => $itr,
                     'app' => $this->app,
                     'date_add' => time(),
                     'tweets' => $this->statuses_count,
@@ -88,6 +85,7 @@ class Account extends \app\components\Model
                 ->execute();
 
             Yii::$app->redis->set('userFlash:twitter:accounts:' . $this->owner_id, 'Ваш аккаунт "@' . $this->screen_name . '" успешно добавлен в систему.', 60);
+            Yii::$app->redis->set('twitter:accounts:twitter:is_update:' . $this->owner_id, time());
 
             $t->commit();
         } catch (\Exception $e) {
@@ -103,8 +101,6 @@ class Account extends \app\components\Model
 
             $t = Yii::$app->db->beginTransaction();
 
-            $itr = 0;
-
             Yii::$app->db->createCommand()
                 ->update('{{%tw_accounts}}', [
                     '_key' => $oauth->get('access_token', $this->owner_id, 'oauth_token'),
@@ -112,7 +108,6 @@ class Account extends \app\components\Model
                     'screen_name' => $this->screen_name,
                     'name' => $this->name,
                     'avatar' => $this->profile_image_url,
-                    'itr' => $itr,
                     'app' => $this->app,
                     'date_add' => time(),
                     'tweets' => $this->statuses_count,

@@ -93,7 +93,7 @@ class oAuth extends \app\components\Model
             ], $request), '');
 
             if ($model->validate()) {
-                Yii::$app->getResponse()->redirect(Url::homeUrl() . '/twitter/accounts/settings?tid=' . $this->_data['account_id']);
+                Yii::$app->getResponse()->redirect(Url::homeUrl() . '/twitter/accounts/settings?tid=' . $this->_data['account_id'] . '&update=success');
             } else {
                 $this->addError('token', $model->getError());
             }
