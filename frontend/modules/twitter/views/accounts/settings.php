@@ -318,7 +318,7 @@ if(Yii::app()->user->hasFlash('tw_settings_message')) {
 
 <?php if($model->updateProcess()) { ?>
     <div class="load_sec">
-        <div style="padding-top: 100px;">Происходит сбор данных, это может занять некоторое время (до 2 минут).<br>По завершению операции Вы сможете настроить аккаунт для работы в системе.<br><br>
+        <div style="padding-top: 100px;">Происходит сбор данных, это может занять некоторое время.<br>По завершению операции Вы сможете настроить аккаунт для работы в системе.<br><br>
         </div>
         <div><img src="/i/loading_11.gif" alt=""/></div>
     </div>
