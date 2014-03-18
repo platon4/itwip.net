@@ -182,7 +182,7 @@
 /*========== Настройки твиттер аккаунта ==========*/
 .twitterAccountSetting { width:100%; }
 
-.twitterAccountSetting #block_1 { display: table; width: 100%;}
+.twitterAccountSetting #block_1 { display: table; width: 100%; position: relative;}
 .twitterAccountSetting #block_1_1 { display: table-cell ; vertical-align: top; width: 50%; padding: 15px 10px; }
 .twitterAccountSetting #block_1_1 #block_1_1_1 { display: table-cell; position: relative; vertical-align: top; width: 80px; height: 80px; overflow: hidden;}
 .twitterAccountSetting #block_1_1 #block_1_1_1 img { width: 80px; }

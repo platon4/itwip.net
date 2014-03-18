@@ -305,4 +305,15 @@ class Accounts extends \ActiveRecord
             return false;
         }
     }
+
+    /**
+     * @return bool
+     */
+    public function updateProcess()
+    {
+        if(Yii::app()->redis->exists('twitter:accounts:twitter:is_update:' . Yii::app()->user->id))
+            return true;
+        else
+            return false;
+    }
 }

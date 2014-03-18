@@ -161,7 +161,7 @@ class AccountsController extends Controller
     /**
      * Настройки аккаунта
      */
-    public function actionSettings($act = '')
+    public function actionSettings($act = '', $update = '')
     {
         $model = new Accounts();
 
@@ -176,6 +176,15 @@ class AccountsController extends Controller
                 Html::json(['code' => $model->getCode(), 'message' => $model->getMessage(), 'url' => $model->getRedirectUrl()]);
             } else {
                 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/tw-ac3Q2l-core.js');
+
+                if($update == 'success') {
+                    $message = Yii::app()->redis->get('userFlash:twitter:accounts:' . Yii::app()->user->id);
+
+                    if($message !== false) {
+                        Yii::app()->user->setFlash('tw_settings_message', ['type' => 'success', 'text' => $message]);
+                        Yii::app()->redis->delete('userFlash:twitter:accounts:' . Yii::app()->user->id);
+                    }
+                }
 
                 $this->render('settings', ['model' => $model]);
             }

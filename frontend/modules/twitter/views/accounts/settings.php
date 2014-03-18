@@ -315,6 +315,14 @@ if(Yii::app()->user->hasFlash('tw_settings_message')) {
     <button type="submit" class="button btn_green">Сохранить настройки</button>
 </div>
 <?php echo Html::endForm(); ?>
+
+<?php if($model->updateProcess()) { ?>
+    <div class="load_sec">
+        <div style="padding-top: 100px;">Происходит сбор данных, это может занять некоторое время (до 2 минут).<br>По завершению операции Вы сможете настроить аккаунт для работы в системе.<br><br>
+        </div>
+        <div><img src="/i/loading_11.gif" alt=""/></div>
+    </div>
+<?php } ?>
 </div>
 </div>
 <div id="dialog-message" title="<?php echo Yii::t('twitterModule.accounts', '_twitterAccountSetting_deleteModalTitle'); ?>" style="display: none;">
