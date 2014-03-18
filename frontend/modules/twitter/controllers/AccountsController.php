@@ -149,7 +149,10 @@ class AccountsController extends Controller
         $model->setScenario('add');
 
         if($model->load($_POST) && $model->validate()) {
-            $this->redirect($model->getRedirectUrl());
+            if($model->authorize())
+                $this->redirect($model->getRedirectUrl());
+            else
+                $model->addError('agreed', 'В данный момент свободных приложений нету, попробуйте позже.');
         }
 
         $this->render('add', array('model' => $model));
