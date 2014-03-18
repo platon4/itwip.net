@@ -311,7 +311,7 @@ class Accounts extends \ActiveRecord
      */
     public function updateProcess()
     {
-        if(Yii::app()->redis->exists('twitter:accounts:twitter:is_update:' . Yii::app()->user->id))
+        if(Yii::app()->redis->exists('twitter:accounts:twitter:is_update:' . Yii::app()->user->id . ':' . $this->get('id')))
             return true;
         else
             return false;
