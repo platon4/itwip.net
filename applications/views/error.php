@@ -58,7 +58,7 @@ use yii\helpers\Html;
 <body>
 <h1><?= Html::encode($name) ?></h1>
 
-<h2><?= nl2br(Html::encode($message)) ?></h2>
+<h2><?= nl2br($message) ?></h2>
 <?php if ($url !== null) { ?>
     <p>
         <a href="<?= $url; ?>"><?= $urlName !== null ? $urlName : 'Вернутся назад'; ?></a>

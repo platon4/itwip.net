@@ -58,6 +58,7 @@ class oAuth extends \app\components\Model
             $this->addError('twitter', 'Не удалось получить данные с твиттера, пожалуйста, попробуйте еще раз.');
         } else {
             $model = new Account();
+
             $model->load(array_merge([
                 'owner_id' => $this->_data['owner_id'],
                 'app' => $this->_data['app']
@@ -75,12 +76,41 @@ class oAuth extends \app\components\Model
 
     public function updateAccount()
     {
+        $request = (new \common\api\twitter\oAuth([
+            'consumer_key' => $this->_data['app_key'],
+            'consumer_secret' => $this->_data['app_secret'],
+            'ip' => $this->_data['app_ip']
+        ]))->auth_credentials($this->oauth_verifier, $this->_data['owner_id']);
 
+        if ($request instanceof \common\api\twitter\oAuth) {
+            $this->addError('twitter', 'Не удалось получить данные с твиттера, пожалуйста, попробуйте еще раз.');
+        } else {
+            $model = new Account();
+
+            $model->load(array_merge([
+                'owner_id' => $this->_data['owner_id'],
+                'app' => $this->_data['app']
+            ], $request), '');
+
+            if ($model->validate()) {
+                Yii::$app->getResponse()->redirect(Url::homeUrl() . '/twitter/accounts/settings?tid=' . $this->_data['account_id']);
+            } else {
+                $this->addError('token', $model->getError());
+            }
+        }
+
+        $this->_returnUrl = Url::homeUrl() . '/twitter/accounts/settings?tid=' . $this->_data['account_id'];
     }
 
     public function update()
     {
-        //$this->authProcess($data);
+        $request = (new \common\api\twitter\oAuth([
+            'consumer_key' => $this->_data['app_key'],
+            'consumer_secret' => $this->_data['app_secret'],
+            'ip' => $this->_data['app_ip']
+        ]))->auth_request(Url::getHostUrl() . '/twitter/oauth/update-process?token=' . $this->token, $this->_data['owner_id']);
+
+        $this->errorRequest($request);
     }
 
     public function auth()
@@ -91,6 +121,11 @@ class oAuth extends \app\components\Model
             'ip' => $this->_data['app_ip']
         ]))->auth_request(Url::getHostUrl() . '/twitter/oauth/auth-process?token=' . $this->token, $this->_data['owner_id']);
 
+        $this->errorRequest($request);
+    }
+
+    protected function errorRequest($request)
+    {
         if ($request instanceof \common\api\twitter\oAuth) {
             $this->addError('twitter', 'Не удалось подключится к твиттеру, пожалуйста, попробуйте позже.');
         }
