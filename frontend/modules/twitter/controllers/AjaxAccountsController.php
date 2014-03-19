@@ -16,7 +16,7 @@ class AjaxAccountsController extends Controller
     {
         return [
             ['allow',
-                'actions' => ['status'],
+                'actions' => ['status', 'data'],
                 'roles'   => ['user'],
             ],
             ['deny', // deny all users
@@ -32,6 +32,18 @@ class AjaxAccountsController extends Controller
 
         if($model->load($_POST, true) && $model->validate())
             Html::json(['code' => 200, 'html' => $model->status()]);
+        else
+            Html::json(['code' => 0, 'message' => $model->getError()]);
+    }
+
+    public function actionData()
+    {
+        $model = new Accounts();
+        $model->setScenario('data');
+        $model->load($_POST, true);
+
+        if($model->validate())
+            Html::json(['code' => 200, 'html' => $this->renderPartial('/accounts/settingsContent', ['model' => $model], true)]);
         else
             Html::json(['code' => 0, 'message' => $model->getError()]);
     }

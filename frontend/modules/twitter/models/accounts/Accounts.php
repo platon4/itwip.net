@@ -53,11 +53,13 @@ class Accounts extends \ActiveRecord
 
     public function afterValidate()
     {
+        Yii::app()->redis->set('twitter:accounts:twitter:is_update:' . Yii::app()->user->id . ':' . $this->get('id'), 'true');
         $methods = [
             'record' => 'updateRecord',
             'save'   => 'saveSettings',
             'remove' => 'removeAccount',
             'status' => 'changeStatus',
+            'data'   => 'dataCollection'
         ];
 
         if(isset($methods[$this->getScenario()]) && method_exists($this, $methods[$this->getScenario()])) {
@@ -308,14 +310,43 @@ class Accounts extends \ActiveRecord
         }
     }
 
+    protected function dataCollection()
+    {
+        $token = \CHelper::_gString(8, 15);
+
+        Yii::app()->redis->set('twitter:accounts:data:' . $token, json_encode([
+            'owner_id'   => Yii::app()->user->id,
+            'hash'       => md5(\CHelper::_getIP() . Yii::app()->user->id . $this->tid . $token),
+            'account_id' => $this->tid
+        ]));
+
+        $request = \CHelper::_getURL('http://195.242.161.92/twitter/accounts/get?token=' . $token . '&act=data&_c[]=yandexRank&_c[]=yandexRobot&_c[]=googlePR');
+
+        if($request['code'] == 200) {
+            $response = json_decode($request['response'], true);
+
+            if($response['code'] == 200) {
+                $this->addError('tid', $request['response']);
+            } else {
+                $this->addError('tid', $response['message']);
+            }
+        } else {
+            $this->addError('tid', 'Не удалось получить ответ сервера, попробуйте перезагрузить страницу, если ошибка повторится, обратитесь в службу поддержки.');
+        }
+    }
+
     /**
      * @return bool
      */
     public function updateProcess()
     {
-        if(Yii::app()->redis->exists('twitter:accounts:twitter:is_update:' . Yii::app()->user->id . ':' . $this->get('id')))
+        if(Yii::app()->redis->exists('twitter:accounts:twitter:is_update:' . Yii::app()->user->id . ':' . $this->get('id'))) {
+
+            Yii::app()->redis->delete('twitter:accounts:twitter:is_update:' . Yii::app()->user->id . ':' . $this->get('id'));
+
             return true;
-        else
+        } else {
             return false;
+        }
     }
 }

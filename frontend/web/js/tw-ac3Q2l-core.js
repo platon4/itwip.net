@@ -144,5 +144,22 @@ var Accounts = {
                 }
             });
         }
+    },
+    data: {
+        update: function (tid) {
+            _ajax({
+                data: {"tid": tid},
+                url: "/twitter/accounts/ajax/data",
+                dateType: "POST",
+                success: function (obj) {
+                    if (obj['code'] == 200) {
+                        $("#dataContent").html(obj['html']);
+                        $('#loadFade').hide();
+                    } else {
+                        $("#fade-content").html(obj['message']);
+                    }
+                }
+            });
+        }
     }
 }

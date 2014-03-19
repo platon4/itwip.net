@@ -334,7 +334,7 @@ h3.top_title { background: none repeat scroll 0 0 #F0F0F0; color: #0086AE; displ
 
 
 /*========== Подождите идёт загрузка ==========*/
-.load_sec { position:absolute; width: 100%; height: 100%; background: #ffffff; left: 0; top:0; opacity: 0.8; z-index: 1000; text-align: center; font-size: 18px; }
+.load_sec { position:absolute; width: 100%; height: 100%; background: #ffffff; left: 0; top:0; opacity: 0.9; z-index: 1000; text-align: center; font-size: 18px; }
 
 
 
