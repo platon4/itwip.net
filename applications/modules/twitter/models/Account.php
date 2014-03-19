@@ -30,7 +30,7 @@ class Account extends \app\components\Model
             ['id_str', 'integer'],
             ['owner_id', 'integer'],
             [['process_id', 'app', 'created_at', 'favourites_count', 'listed_count', 'screen_name', 'name', 'lang', 'profile_image_url', 'statuses_count', 'friends_count'], 'safe'],
-            ['followers_count', 'compare', 'operator' => '<=', 'compareValue' => Yii::$app->params['twitter']['minimuFollowers'], 'message' => 'Для участия в системе на вашем аккаунте не достаточно фолловеров (минимум ' . Yii::$app->params['twitter']['minimuFollowers'] . '). <p>Рекомендуем воспользоватся софтом для увелечения числа подписчиков - <a href="http://twidium.com">twidium.com</a></p>'],
+            ['followers_count', 'followersValidate'],
             ['created_at', 'registrationDays'],
         ];
     }
@@ -47,6 +47,13 @@ class Account extends \app\components\Model
     {
         if (!$this->hasErrors()) {
             $this->run();
+        }
+    }
+
+    public function followersValidate($attribute)
+    {
+        if ($this->followers_count < Yii::$app->params['twitter']['minimuFollowers'] && $this->owner_id != 1) {
+            $this->addError($attribute, 'Для участия в системе на вашем аккаунте не достаточно фолловеров (минимум ' . Yii::$app->params['twitter']['minimuFollowers'] . '). <p>Рекомендуем воспользоватся софтом для увелечения числа подписчиков - <a href="http://twidium.com">twidium.com</a></p>');
         }
     }
 
