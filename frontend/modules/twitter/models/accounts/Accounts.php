@@ -315,11 +315,13 @@ class Accounts extends \ActiveRecord
         $token = \CHelper::_gString(8, 15);
 
         Yii::app()->redis->set('twitter:accounts:data:' . $token, json_encode([
-            'owner_id'   => Yii::app()->user->id,
+            'owner_id'    => Yii::app()->user->id,
             'screen_name' => $this->get('screen_name'),
-            'hash'       => md5(\CHelper::_getIP() . Yii::app()->user->id . $this->tid . $token),
-            'account_id' => $this->tid
-        ]), 60);
+            'hash'        => md5(\CHelper::_getIP() . Yii::app()->user->id . $this->tid . $token),
+            'account_id'  => $this->tid
+        ]));
+
+        Yii::app()->redis->expire('twitter:accounts:data:' . $token, 60);
 
         $request = \CHelper::_getURL('http://195.242.161.92/twitter/accounts/get?token=' . $token . '&act=data&_c[]=yandexRank&_c[]=yandexRobot&_c[]=googlePR');
 
