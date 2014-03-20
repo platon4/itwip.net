@@ -38,15 +38,6 @@ class AccountsController extends Controller
 
     public function actionIndex($act = '')
     {
-        if($act = 'new') {
-            $message = Yii::app()->redis->get('userFlash:twitter:accounts:' . Yii::app()->user->id);
-
-            if($message !== false) {
-                Yii::app()->user->setFlash('accountsMessagesSuccess', $message);
-                Yii::app()->redis->delete('userFlash:twitter:accounts:' . Yii::app()->user->id);
-            }
-        }
-
         $list = array();
         $crt = array();
         $params = array();
@@ -161,7 +152,7 @@ class AccountsController extends Controller
     /**
      * Настройки аккаунта
      */
-    public function actionSettings($act = '', $update = '')
+    public function actionSettings($act = '')
     {
         $model = new Accounts();
 
@@ -177,13 +168,11 @@ class AccountsController extends Controller
             } else {
                 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/tw-ac3Q2l-core.js');
 
-                if($update == 'success') {
-                    $message = Yii::app()->redis->get('userFlash:twitter:accounts:' . Yii::app()->user->id);
+                $message = Yii::app()->redis->get('userFlash:twitter:accounts:' . Yii::app()->user->id . ':' . $model->tid);
 
-                    if($message !== false) {
-                        Yii::app()->user->setFlash('tw_settings_message', ['type' => 'success', 'text' => $message]);
-                        Yii::app()->redis->delete('userFlash:twitter:accounts:' . Yii::app()->user->id);
-                    }
+                if($message !== false) {
+                    Yii::app()->user->setFlash('tw_settings_message', ['type' => 'success', 'text' => $message]);
+                    Yii::app()->redis->delete('userFlash:twitter:accounts:' . Yii::app()->user->id . ':' . $model->tid);
                 }
 
                 $this->render('settings', ['model' => $model]);
