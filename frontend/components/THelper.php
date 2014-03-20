@@ -78,7 +78,7 @@ class THelper
 			}
 		}
 
-		return $_itr;
+		return $_itr < 1 ? 1 : $itr;
 	}
 
 	public static function setParams($list, $options)
