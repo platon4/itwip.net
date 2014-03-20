@@ -327,14 +327,28 @@ class Accounts extends \ActiveRecord
 
         if($request['code'] == 200) {
             $response = json_decode($request['response'], true);
-
             if($response['code'] == 200) {
-                $this->addError('tid', $request['response']);
+                $stats = [
+                    'yandexRank'  => 'yandex_rank',
+                    'googlePR'    => 'google_pr',
+                    'yandexRobot' => 'in_yandex'
+                ];
+
+                foreach($stats as $k => $s) {
+                    if(isset($response[$k]) && $response[$k] !== false)
+                        $this->get()->$s = $response[$k];
+                }
+
+                $this->get()->itr = \THelper::itr($this->get('tweets'), $this->get('followers'), date("d.m.Y H:i:s", $this->get('created_at')), $this->get('listed_count'), $this->get('yandex_rank'), $this->get('google_pr'), $this->get('_mdr'));
+                $this->get('', 'settings')->_price = \THelper::itrCost($this->get('itr'));
+
+                $this->get()->save();
+                $this->get('', 'settings')->save();
             } else {
                 $this->addError('tid', $response['message']);
             }
         } else {
-            $this->addError('tid', 'Не удалось получить ответ сервера, попробуйте перезагрузить страницу, если ошибка повторится, обратитесь в службу поддержки. ' . $token);
+            $this->addError('tid', 'Не удалось получить ответ сервера, попробуйте перезагрузить страницу, если ошибка повторится, обратитесь в службу поддержки . ' . $token);
         }
     }
 
