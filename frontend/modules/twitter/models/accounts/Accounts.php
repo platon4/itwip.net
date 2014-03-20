@@ -53,7 +53,6 @@ class Accounts extends \ActiveRecord
 
     public function afterValidate()
     {
-        Yii::app()->redis->set('twitter:accounts:twitter:is_update:' . Yii::app()->user->id . ':' . $this->get('id'), 'true');
         $methods = [
             'record' => 'updateRecord',
             'save'   => 'saveSettings',
