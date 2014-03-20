@@ -340,9 +340,10 @@ class Accounts extends \ActiveRecord
 
                 $this->get()->itr = \THelper::itr($this->get('tweets'), $this->get('followers'), date("d.m.Y H:i:s", $this->get('created_at')), $this->get('listed_count'), $this->get('yandex_rank'), $this->get('google_pr'), $this->get('_mdr'));
                 $this->get('', 'settings')->_price = \THelper::itrCost($this->get('itr'));
+                $this->get('', 'settings')->_timeout = rand(20, 30);
 
-                $this->get()->save();
-                $this->get('', 'settings')->save();
+                $this->get()->save(false);
+                $this->get('', 'settings')->save(false);
             } else {
                 $this->addError('tid', $response['message']);
             }
