@@ -11,10 +11,10 @@ class AccountsData extends Model
     public $_c;
     private $_response = [];
     private $_d = [
-        'yandexRank' => ['app\modules\twitter\components\information\Yandex', 'getRank'],
-        'yandexRobot' => ['app\modules\twitter\components\information\Yandex', 'getRobot'],
-        'googlePR' => ['app\modules\twitter\components\information\Google', 'twitterGetPR'],
-        'twitter' => ['app\modules\twitter\components\information\Twitter', 'get']
+        'yandexRank' => ['applications\modules\twitter\components\information\Yandex', 'getRank'],
+        'yandexRobot' => ['applications\modules\twitter\components\information\Yandex', 'getRobot'],
+        'googlePR' => ['applications\modules\twitter\components\information\Google', 'twitterGetPR'],
+        'twitter' => ['applications\modules\twitter\components\information\Twitter', 'get']
     ];
 
     private $_data;

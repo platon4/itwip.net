@@ -1,9 +1,10 @@
 <?php
 
-namespace app\modules\twitter\components\information;
+namespace applications\modules\twitter\components\information;
 
 use Yii;
 use common\helpers\Url;
+use common\components\Rss;
 
 class Yandex
 {
@@ -16,20 +17,38 @@ class Yandex
 
         if (is_object($html) AND count($html->find('.name-container', 0))) {
             if (count($html->find('.found', 0)) AND strtolower(trim($html->find('.found', 0)->id)) == strtolower(trim($login)))
-                $yandex_rank = intval($html->find('.found', 0)->find('.int', 0)->plaintext);
+                $response = intval($html->find('.found', 0)->find('.int', 0)->plaintext);
+            else
+                $response = 0;
 
-            $response = $yandex_rank;
             $html->clear();
         } else
             $response = false;
 
         unset($html);
 
-        return $response;
+        return isset($response) ? $response : false;
     }
 
-    public static function getRobot()
+    public static function getRobot($login)
     {
+        $rss = new Rss();
+
+        if ($_code = $rss->load('http://blogs.yandex.ru/search.rss?journal=' . urlencode('https://twitter.com/' . trim($login))) == 200) {
+            $rssArr = $rss->getItems();
+
+            foreach ($rssArr as $item) {
+                if (isset($item['author'])) {
+                    $time = strtotime($item['pubDate']);
+
+                    if ($time >= (time() - (7 * 86400)))
+                        return 1;
+                }
+            }
+
+            return 0;
+        }
+
         return false;
     }
 } 

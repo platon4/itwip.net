@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\twitter\components\information;
+namespace applications\modules\twitter\components\information;
 
 use Yii;
 use common\helpers\Url;

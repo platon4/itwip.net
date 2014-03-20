@@ -105,6 +105,7 @@ class Account extends \app\components\Model
                     'following' => $this->friends_count,
                     'followers' => $this->followers_count,
                     'listed_count' => $this->listed_count,
+                    '_mdr' => '5',
                     '_lang' => $this->lang
                 ])
                 ->execute();
@@ -116,7 +117,7 @@ class Account extends \app\components\Model
                 ])
                 ->execute();
 
-            Yii::$app->redis->set('userFlash:twitter:accounts:' . $this->owner_id, 'Ваш аккаунт "@' . $this->screen_name . '" успешно добавлен в систему.', 60);
+            Yii::$app->redis->set('userFlash:twitter:accounts:' . $this->owner_id . ':' . $this->id_str, 'Ваш аккаунт "@' . $this->screen_name . '" успешно добавлен в систему.', 60);
             Yii::$app->redis->set('twitter:accounts:twitter:is_update:' . $this->owner_id . ':' . $this->id_str, time());
 
             $t->commit();
@@ -151,7 +152,7 @@ class Account extends \app\components\Model
                 ->execute();
 
             Yii::$app->redis->set('twitter:accounts:add:timeout:' . $this->id_str, time(), 60 * 60);
-            Yii::$app->redis->set('userFlash:twitter:accounts:' . $this->owner_id, 'Данные аккаунта успешно обновлены.', 60);
+            Yii::$app->redis->set('userFlash:twitter:accounts:' . $this->owner_id . ':' . $this->id_str, 'Данные аккаунта успешно обновлены.', 60);
 
             $t->commit();
         } catch (\Exception $e) {
