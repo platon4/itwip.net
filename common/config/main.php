@@ -9,7 +9,6 @@ $params = array_merge(
 );
 
 return [
-    'homeUrl'    => 'http://www.itwip.net/',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'extensions' => require(__DIR__ . '/../../vendor/yiisoft/extensions.php'),
     'components' => [
