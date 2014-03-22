@@ -76,8 +76,13 @@ class Url
                 @chmod(Yii::$app->getRuntimePath() . '/cookie', 0777);
             }
 
-            curl_setopt($curl, CURLOPT_COOKIEJAR, Yii::$app->getRuntimePath() . '/cookie/' . md5(self::getDomen($url) . Yii::$app->request->getUserIP()) . '.txt'); //сохранить куки в файл
-            curl_setopt($curl, CURLOPT_COOKIEFILE, Yii::$app->getRuntimePath() . '/cookie/' . md5(self::getDomen($url) . Yii::$app->request->getUserIP()) . '.txt'); //считать куки из файла
+            if(isset(Yii::$app->request) && method_exists(Yii::$app->request, 'getUserIP'))
+                $userIP = Yii::$app->request->getUserIP();
+            else
+                $userIP = '';
+
+            curl_setopt($curl, CURLOPT_COOKIEJAR, Yii::$app->getRuntimePath() . '/cookie/' . md5(self::getDomen($url) . $userIP) . '.txt'); //сохранить куки в файл
+            curl_setopt($curl, CURLOPT_COOKIEFILE, Yii::$app->getRuntimePath() . '/cookie/' . md5(self::getDomen($url) . $userIP) . '.txt'); //считать куки из файла
         }
 
         //устанавливаем наш вариат клиента (браузера) и вид ОС

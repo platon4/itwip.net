@@ -7,7 +7,6 @@ use Yii;
 use yii\base\Exception;
 use common\api\twitter\Accounts;
 use common\api\twitter\Apps;
-use console\modules\twitter\actions\TweetingErrors;
 use console\modules\twitter\components\Tweeting;
 use yii\db\Query;
 
@@ -44,13 +43,13 @@ class Indexes implements TweetingInterface
             try {
                 $t = Yii::app()->db->beginTransaction();
 
-                Operation::put($this->getAmountToBloger(), $this->accountGet('owner_id'), 'purse', 'indexesCheck', $this->get('sbuorder_id'), $this->accountGet('screen_name'));
+                Operation::put($this->getAmountToBloger(), $this->getAccount('owner_id'), 'purse', 'indexesCheck', $this->get('sbuorder_id'), $this->getAccount('screen_name'));
                 $command->insert('{{%twitter_urlCheck}}', [
                     'date_check' => date('Y-m-d H:i:s', time() + ($this->times[$this->getTime()])),
                     '_params'    => json_encode([
                         'order_id'      => $this->get('order_id'),
                         'pid'           => $this->get('sbuorder_id'),
-                        'bloger_id'     => $this->accountGet('owner_id'),
+                        'bloger_id'     => $this->getAccount('owner_id'),
                         'url'           => $this->getUrl(),
                         'adv_id'        => $this->getOwner(),
                         'amount'        => $this->getAmountToBloger(),
@@ -89,37 +88,37 @@ class Indexes implements TweetingInterface
     protected function postTweet()
     {
         if($this->accountGet('id') !== false) {
-            $tw = new Tweeting();
+            $tweeting = new Tweeting();
 
-            $tw->set([
-                'app_key'     => Apps::get($this->accountGet('app'), '_key'),
-                'app_secret'  => Apps::get($this->accountGet('app'), '_secret'),
-                'user_key'    => $this->accountGet('_key'),
-                'user_secret' => $this->accountGet('_secret'),
-                'ip'          => Apps::get($this->accountGet('app'), 'ip'),
+            $tweeting->set([
+                'app_key'     => Apps::get($this->getAccount('app'), '_key'),
+                'app_secret'  => Apps::get($this->getAccount('app'), '_secret'),
+                'user_key'    => $this->getAccount('_key'),
+                'user_secret' => $this->getAccount('_secret'),
+                'ip'          => Apps::get($this->getAccount('app'), 'ip'),
             ])
                 ->post($this->getTweet());
 
-            if($tw->getCode() === 200) {
-                $this->_str_id = $tw->getTweetID();
+            if($tweeting->getCode() === 200) {
+                $this->_str_id = $tweeting->getTweetID();
                 return true;
             } else {
-                new TweetingErrors($this->getTask(), $tw, $this);
+                new Errors($this, $tweeting);
                 return false;
             }
         } else {
-            new TweetingErrors($this->getTask(), 'notAccount', $this);
+            new Errors($this);
         }
     }
 
-    protected function accountGet($key, $all = false)
+    protected function getAccount($key, $all = false)
     {
         if($this->_account === null) {
-            $this->_account = $this->getAccount();
+            $this->_account = $this->getAccountQuery();
 
             if($this->_account === false) {
                 Yii::$app->db->createCommand()->delete('{{%twitter_tweetingAccountsLogs}}', ['logType' => 'indexes'])->execute();
-                $this->_account = $this->getAccount();
+                $this->_account = $this->getAccountQuery();
             }
         }
 
@@ -129,7 +128,7 @@ class Indexes implements TweetingInterface
             return isset($this->_account[$key]) ? $this->_account[$key] : false;
     }
 
-    protected function getAccount()
+    protected function getAccountQuery()
     {
         $account = (new Accounts())->where(['and', 'a._status=1', 's.in_indexses=1', ['not exists', (new Query())->select('id')->from('{{%twitter_tweetingAccountsLogs}}')->where(['and', 'logType=\'indexes\'', 'account_id=a.id'])]])->one();
 
