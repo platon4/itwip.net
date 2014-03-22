@@ -38,6 +38,13 @@ class Tweeting
         }
     }
 
+    /**
+     * Устанавливаем настройки для api твиттера
+     *
+     * @param $data
+     * @return $this
+     * @throws \yii\base\Exception
+     */
     public function set($data)
     {
         if(!is_array($data) || empty($data))
@@ -54,6 +61,11 @@ class Tweeting
         return $this;
     }
 
+    /**
+     * Отправляем твит в твиттер
+     *
+     * @param $tweet
+     */
     public function send($tweet)
     {
         $this->_code = $this->tmh->request('POST', $this->tmh->url('1.1/statuses/update'), array(
@@ -63,6 +75,11 @@ class Tweeting
         $this->_result = json_decode($this->tmh->response['response'], true);
     }
 
+    /**
+     * Получаем код ответа твиттера
+     *
+     * @return int
+     */
     public function getCode()
     {
         return $this->_code;
@@ -73,11 +90,21 @@ class Tweeting
         return isset($this->_result[$key]) ? $this->_result[$key] : false;
     }
 
+    /**
+     * Получаем ответ твиттера
+     *
+     * @return mixed
+     */
     public function getResult()
     {
         return $this->_result;
     }
 
+    /**
+     * Получаем ID твита
+     *
+     * @return bool
+     */
     public function getStrId()
     {
         return $this->get('id_str');
