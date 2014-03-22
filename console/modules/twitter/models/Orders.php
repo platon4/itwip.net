@@ -33,8 +33,7 @@ class Orders extends Model
      */
     public function registerRun()
     {
-        Yii::$app->redis->set('console:run:twitter:orders:create', true);
-        Yii::$app->redis->expire('console:run:twitter:orders:create', 120);
+        Yii::$app->redis->set('console:run:twitter:orders:create', true, 120);
     }
 
     public function isRun()

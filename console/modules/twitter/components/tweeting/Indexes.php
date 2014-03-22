@@ -67,6 +67,7 @@ class Indexes implements TweetingInterface
                     '_params'    => json_encode([
                         'order_id'      => $this->get('order_id'),
                         'pid'           => $this->get('sbuorder_id'),
+                        'order_hash'    => $this->get('order_hash'),
                         'bloger_id'     => $this->getAccount('owner_id'),
                         'url'           => $this->getUrl(),
                         'adv_id'        => $this->getOwner(),
@@ -79,6 +80,8 @@ class Indexes implements TweetingInterface
 
                 $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => 1])->execute();
                 $command->delete('{{%twitter_tweeting}}', ['id' => $this->get('id')])->execute();
+
+                $this->updateOrder($this->get('order_hash'), $this->get('order_id'));
 
                 $t->commit();
             } catch(Exception $e) {
@@ -182,6 +185,19 @@ class Indexes implements TweetingInterface
         $account = (new Accounts())->where(['and', 'a._status=1', 's.in_indexses=1', ['not exists', (new Query())->select('id')->from('{{%twitter_tweetingAccountsLogs}}')->where(['and', 'logType=\'indexes\'', 'account_id=a.id'])]])->one();
 
         return $account;
+    }
+
+    /**
+     * Обновляем статус
+     */
+    protected function updateOrder($hash, $id)
+    {
+        if(!empty($hash)) {
+            $count = (new Query())->from('{{%twitter_ordersPerform}}')->where(['and', 'order_hash=:hash', ['or', 'status=0'], [':order_hash' => $hash]])->count();
+
+            if($count == 0)
+                Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => 2], ['id' => $id])->execute();
+        }
     }
 
     /**

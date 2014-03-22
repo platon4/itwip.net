@@ -68,18 +68,26 @@ class Tweeting
      */
     public function send($tweet)
     {
-        $this->_code = $this->tmh->request('POST', $this->tmh->url('1.1/statuses/update'), array(
+        $this->_code = $this->tmh->request('POST', $this->tmh->url('1.1/statuses/update'), [
             'status' => $tweet
-        ));
+        ]);
 
         $this->_result = json_decode($this->tmh->response['response'], true);
+
+        if($this->getCode() != 200) {
+            Logger::error($this->_result, [], 'daemons/api', 'sendError');
+        }
     }
 
     public function destroy($str_id)
     {
-        $this->_code = $this->tmh->request('POST', $this->tmh->url('1.1/statuses/destroy'), array(
+        $this->_code = $this->tmh->request('POST', $this->tmh->url('1.1/statuses/destroy'), [
             'id' => $str_id
-        ));
+        ]);
+
+        if($this->getCode() != 200) {
+            Logger::error(json_decode($this->tmh->response['response'], true), [], 'daemons/api', 'destroyError');
+        }
     }
 
     /**
