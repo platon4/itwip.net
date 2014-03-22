@@ -2,6 +2,7 @@
 
 namespace console\modules\twitter\models;
 
+use common\api\twitter\Apps;
 use console\modules\twitter\components\Tweeting;
 use Yii;
 use yii\base\Exception;
