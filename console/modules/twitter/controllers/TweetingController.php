@@ -38,7 +38,7 @@ class TweetingController extends \console\components\Controller
                 /* проверяем если твиттинг не остановлен */
                 if($redis->exists('console:twitter:tweeting') === false) {
                     if(Daemon::isSetProcess($this->getDaemoName())) {
-                        $where = ['and', 'daemon=:daemon', 'process_time>=:time']; // Изменить <
+                        $where = ['and', 'daemon=:daemon', 'process_time<=:time']; // Изменить <
                         $rids = Yii::$app->redis->mGet(Yii::$app->redis->keys('console:twitter:tweeting:tasks:id:*'));
 
                         if($rids !== false) {
