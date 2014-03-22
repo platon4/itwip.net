@@ -27,6 +27,8 @@
         });
     });
 </script>
+<div style="margin-bottom: 20px;" class="line_info alert">Пополнение временно не доступно. Приносим извенения за неудобства.</div>
+
 <div id="replenishment">
     <div class="table">
         <div class="td">
