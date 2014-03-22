@@ -56,7 +56,7 @@ class Indexes implements TweetingInterface
 
         if($this->postTweet() === true) {
             try {
-                $t = Yii::app()->db->beginTransaction();
+                $t = Yii::$app->db->beginTransaction();
 
                 /** Начисляем деньги на баланс пользователя */
                 Operation::put($this->getAmountToBloger(), $this->getAccount('owner_id'), 'purse', 'indexesCheck', $this->get('sbuorder_id'), $this->getAccount('screen_name'));
