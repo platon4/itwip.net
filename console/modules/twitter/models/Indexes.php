@@ -101,6 +101,7 @@ class Indexes extends Model
         else
             $status = 3;
 
+        Yii::$app->db->createCommand()->delete('{{%twitter_urlCheck}}', ['id' => $row['id']]);
         Yii::$app->db->createCommand()->update('{{%twitter_ordersPerform}}', ['status' => $status], ['id' => $row['pid']]);
     }
 
