@@ -16,6 +16,7 @@ return array(
     '_twitter'=>'Twitter',
     '_tw_advertiser'=>'Рекламодателю',
     '_tw_quickPosts'=>'Размещение твитов',
+    '_tw_following'=>'Покупка фолловеров',
     '_tw_quickPosts_collection'=>'Создание твитов',
     '_tw_quickPosts_edit'=>'Редактирование твитов',
     '_tw_quickPosts_save'=>'Размещение твитов',
