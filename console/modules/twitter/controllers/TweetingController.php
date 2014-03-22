@@ -7,6 +7,7 @@ use yii\db\Command;
 use yii\db\Query;
 use console\components\Daemon;
 use console\modules\twitter\components\Tweeting;
+use console\components\Logger;
 
 /*
  * php cmd twitter/tweeting
@@ -88,6 +89,7 @@ class TweetingController extends \console\components\Controller
     protected function message($message)
     {
         echo $message . PHP_EOL;
+        Logger::log($message, 'daemons/tweeting', 'daemon-' . $this->daemon);
     }
 
     protected function getDaemoName()

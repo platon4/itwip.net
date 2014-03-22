@@ -54,7 +54,7 @@ class Tweeting
         return $this;
     }
 
-    public function post($tweet)
+    public function send($tweet)
     {
         $this->_code = $this->tmh->request('POST', $this->tmh->url('1.1/statuses/update'), array(
             'status' => $tweet

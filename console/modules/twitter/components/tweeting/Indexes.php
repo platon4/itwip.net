@@ -2,12 +2,14 @@
 
 namespace console\modules\twitter\components\tweeting;
 
-use common\api\finance\Operation;
 use Yii;
 use yii\base\Exception;
+use console\components\Logger;
 use common\api\twitter\Accounts;
 use common\api\twitter\Apps;
 use console\modules\twitter\components\Tweeting;
+use common\api\finance\Operation;
+use console\modules\twitter\components\Errors;
 use yii\db\Query;
 
 class Indexes implements TweetingInterface
@@ -63,11 +65,12 @@ class Indexes implements TweetingInterface
 
                 $t->commit();
             } catch(Exception $e) {
+                Logger::error($e, [], 'tweeting');
                 $t->rollBack();
             }
         }
 
-        $command->insert('{{%twitter_tweetingAccountsLogs}}', ['account_id' => $this->accountGet('id'), 'logType' => 'indexes'])->execute();
+        $command->insert('{{%twitter_tweetingAccountsLogs}}', ['account_id' => $this->getAccount('id'), 'logType' => 'indexes'])->execute();
     }
 
     protected function getUrl()
@@ -87,7 +90,7 @@ class Indexes implements TweetingInterface
 
     protected function postTweet()
     {
-        if($this->accountGet('id') !== false) {
+        if($this->getAccount('id') !== false) {
             $tweeting = new Tweeting();
 
             $tweeting->set([
@@ -97,17 +100,17 @@ class Indexes implements TweetingInterface
                 'user_secret' => $this->getAccount('_secret'),
                 'ip'          => Apps::get($this->getAccount('app'), 'ip'),
             ])
-                ->post($this->getTweet());
+                ->send($this->getTweet());
 
             if($tweeting->getCode() === 200) {
                 $this->_str_id = $tweeting->getTweetID();
                 return true;
             } else {
-                new Errors($this, $tweeting);
+                (new Errors())->errorTweetPost($this, $tweeting);
                 return false;
             }
         } else {
-            new Errors($this);
+            (new Errors())->accountNotFound($this);
         }
     }
 
