@@ -73,11 +73,6 @@ class DefaultController extends Controller
                 $form->attributes = $_POST['Replenishment'];
 
                 if($form->validate()) {
-                    //if(in_array($form->_system,array(1)))
-                    //{
-                    //$form->addError('tesdt',Yii::t('financeModule.index','_error_pay_system_is_disabled'));
-                    //} else
-                    //{
                     $form->owner_id = Yii::app()->user->id;
                     $form->_date = date("Y-m-d");
                     $form->_time = date("H:i:s");
@@ -91,7 +86,6 @@ class DefaultController extends Controller
                         Yii::app()->request->redirect('?_id=' . $form->getPrimaryKey());
                         Yii::app()->end();
                     }
-                    //}
                 }
             }
 

@@ -58,19 +58,17 @@
                             <tr><td><?php echo Yii::t('financeModule.index','_credit_account'); ?> </td><td><input id="_pb" type="text" onkeyup="this.value = this.value.replace(/[^\d\.]/g, '')" name="Replenishment[_pb]" value="" /> р.</td></tr>
                             <tr><td  style="width: 280px;"><?php echo Yii::t('financeModule.index','_your_balance'); ?> </td><td><input id="_cb" type="text" onkeyup="this.value = this.value.replace(/[^\d\.]/g, '')" name="Replenishment[_cb]" value="<?php echo Yii::app()->user->_get('money_amount'); ?>" placeholder="<?php echo Yii::app()->user->_get('money_amount'); ?>" /> р.</td></tr>
                         </table>
-                            <?php if(count($form->getErrors()))
-                            {
-                                ?>
+                        <?php if(count($form->getErrors())) { ?>
                             <div class="line_info alert">
-    <?php echo CHtml::errorSummary($form); ?>
+                                <?php echo Html::errorSummary($form,''); ?>
                             </div>
-<?php } ?>
+                        <?php } ?>
                     </div>
                     <div class="block_bottom">
-                        <button id="_submitPay" type="submit" class="button btn_green"><?php echo Yii::t('financeModule.index','_top-up_b'); ?></button>
+                        <button id="_submitPay" type="submit" class="button btn_green"><?php echo Yii::t('financeModule.index', '_top-up_b'); ?></button>
                     </div>
                 </div>
-<?php echo Html::endForm(); ?>
+                <?php echo Html::endForm(); ?>
             </div>
         </div>
         <div class="td">
@@ -120,11 +118,11 @@
                     <tr class="title">
                         <td class="_loading no_border" style="width:77%; text-align:left;" id="_pages">
 <?php $this->renderPartial('application.views.main._pages',array(
-    'ajax_query'=>'Finance._getPage','pages'=>$pages)); ?>	
+    'ajax_query'=>'Finance._getPage','pages'=>$pages)); ?>
                         </td>
                         <td style="text-align:right; width: 80px;"><?php echo Yii::t('financeModule.index','_total'); ?></td>
                         <td style="text-align:right; width: 75px;" class="no_border _loading" id="_allAmount"><?php echo CMoney::_c($total_amount,true); ?></td>
-                    </tr>		
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -136,7 +134,7 @@
     $(function() {
         $('#_amount').on("keyup", function() {
             if(trim($(this).val())=='') return false;
-            
+
             _r = parseFloat($(this).val());
             _pc = round((_r * _p) / 100, 2);
 
@@ -146,7 +144,7 @@
 
         $('#_pb').on("keyup", function() {
             if(trim($(this).val())=='') return false;
-            
+
             _r = parseFloat($(this).val());
             _pc = round((_r * _p) / 100, 2);
 
@@ -156,7 +154,7 @@
 
         $('#_cb').on("keyup", function() {
             if(trim($(this).val())=='') return false;
-            
+
             _r = parseFloat($(this).val());
             _pr = _r - _c;
 
