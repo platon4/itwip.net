@@ -58,7 +58,10 @@ class Indexes implements TweetingInterface
             try {
                 $t = Yii::app()->db->beginTransaction();
 
+                /** Начисляем деньги на баланс пользователя */
                 Operation::put($this->getAmountToBloger(), $this->getAccount('owner_id'), 'purse', 'indexesCheck', $this->get('sbuorder_id'), $this->getAccount('screen_name'));
+
+                /** Добавляем в список ссылок для проверки */
                 $command->insert('{{%twitter_urlCheck}}', [
                     'date_check' => date('Y-m-d H:i:s', time() + ($this->times[$this->getTime()])),
                     '_params'    => json_encode([
@@ -86,6 +89,11 @@ class Indexes implements TweetingInterface
         $command->insert('{{%twitter_tweetingAccountsLogs}}', ['account_id' => $this->getAccount('id'), 'logType' => 'indexes'])->execute();
     }
 
+    /**
+     * Получаем ссылку для размещение
+     *
+     * @return null
+     */
     protected function getUrl()
     {
         return $this->getParams('url');
