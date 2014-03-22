@@ -78,7 +78,7 @@ class Tweeting
         return $this->_result;
     }
 
-    public function geTweetID()
+    public function getStrId()
     {
         return $this->get('id_str');
     }

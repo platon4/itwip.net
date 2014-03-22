@@ -65,7 +65,7 @@ class Indexes implements TweetingInterface
 
                 $t->commit();
             } catch(Exception $e) {
-                Logger::error($e, [], 'tweeting');
+                Logger::error($e, [], 'daemons/tweeting/error', 'errorOrderProcess');
                 $t->rollBack();
             }
         }
@@ -103,7 +103,7 @@ class Indexes implements TweetingInterface
                 ->send($this->getTweet());
 
             if($tweeting->getCode() === 200) {
-                $this->_str_id = $tweeting->getTweetID();
+                $this->_str_id = $tweeting->getStrId();
                 return true;
             } else {
                 (new Errors())->errorTweetPost($this, $tweeting);
