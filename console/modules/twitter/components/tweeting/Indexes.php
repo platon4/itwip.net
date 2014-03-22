@@ -72,6 +72,7 @@ class Indexes implements TweetingInterface
                         'adv_id'        => $this->getOwner(),
                         'amount'        => $this->getAmountToBloger(),
                         'amount_return' => $this->getAmountToAdv(),
+                        'account_id'    => $this->getAccount('id'),
                         'tw_str_id'     => $this->getStrId()
                     ])
                 ])->execute();

@@ -2,6 +2,7 @@
 
 namespace console\modules\twitter\models;
 
+use console\modules\twitter\components\Tweeting;
 use Yii;
 use yii\base\Exception;
 use yii\base\Model;
@@ -13,6 +14,7 @@ use common\api\finance\Operation;
 class Indexes extends Model
 {
     protected $_tasks;
+    protected $_account;
 
     public function rules()
     {
@@ -43,7 +45,7 @@ class Indexes extends Model
                     Yii::$app->redis->expire('console:twitter:urlcheck:' . $row['id'], 5 * 60);
                     $log = "Yandex Error: " . $yandex->error . "\n";
                     echo $log;
-                    Logger::log($log, 2);
+                    Logger::error($log, [], 'daemons/tweeting/yandex', 'error');
                 }
 
                 $this->removeTweet($task);
@@ -67,6 +69,7 @@ class Indexes extends Model
             $t->commit();
         } catch(Exception $e) {
             echo "Success Error\n";
+            Logger::error($e, $row, 'daemons/tweeting/yandex', 'urlInIndexSuccess-error');
             $t->rollBack();
         }
     }
@@ -84,10 +87,10 @@ class Indexes extends Model
 
             $t->commit();
         } catch(Exception $e) {
+            echo "Fail Error\n";
+            Logger::error($e, $row, 'daemons/tweeting/yandex', 'urlInIndexFail-error');
             $t->rollBack();
         }
-
-        echo "Fail\n";
     }
 
     public function updateOrder($status, $row)
@@ -130,6 +133,25 @@ class Indexes extends Model
 
     protected function removeTweet($row)
     {
+        $tweeting = new Tweeting();
 
+        $tweeting->set([
+            'app_key'     => Apps::get($this->getAccount('app', $row['account_id']), '_key'),
+            'app_secret'  => Apps::get($this->getAccount('app', $row['account_id']), '_secret'),
+            'user_key'    => $this->getAccount('_key', $row['account_id']),
+            'user_secret' => $this->getAccount('_secret', $row['account_id']),
+            'ip'          => Apps::get($this->getAccount('app', $row['account_id']), 'ip'),
+        ])
+            ->destroy($row['tw_str_id']);
+
+        $this->_account = null;
+    }
+
+    protected function getAccount($key, $id)
+    {
+        if($this->_account === null)
+            $this->_account = (new Query())->from('{{%tw_accounts}}')->where(['id' => $id])->one();
+
+        return isset($this->_account[$key]) ? $this->_account[$key] : false;
     }
 }

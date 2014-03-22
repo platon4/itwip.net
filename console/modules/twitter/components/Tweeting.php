@@ -75,6 +75,13 @@ class Tweeting
         $this->_result = json_decode($this->tmh->response['response'], true);
     }
 
+    public function destroy($str_id)
+    {
+        $this->_code = $this->tmh->request('POST', $this->tmh->url('1.1/statuses/destroy'), array(
+            'id' => $str_id
+        ));
+    }
+
     /**
      * Получаем код ответа твиттера
      *

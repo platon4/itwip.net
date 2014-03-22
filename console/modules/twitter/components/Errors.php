@@ -12,6 +12,11 @@ class Errors
 
     public function errorTweetPost($model, $tweeting)
     {
+        if(isset($this->_errors[$this->getErrorCode($tweeting)]) && method_exists($this, $this->_errors[$this->getErrorCode($tweeting)])) {
+            $this->_errors[$this->getErrorCode($tweeting)]($model, $tweeting);
+        } else {
+            $this->unknownError($model, $tweeting);
+        }
 
         Logger::error($tweeting->getResult(), $model->getTask(), 'daemon/tweeting/tweets', 'errorPostTweet');
     }
@@ -22,6 +27,11 @@ class Errors
     }
 
     public function getErrorMessage()
+    {
+
+    }
+
+    protected function removeTask()
     {
 
     }
