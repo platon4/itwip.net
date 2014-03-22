@@ -1,6 +1,6 @@
 <?php
 
-namespace console\components;
+namespace common\components;
 
 class Yandex
 {
