@@ -48,8 +48,13 @@ class Logger
         if(!is_string($params))
             $params = !empty($params) ? var_export($params, true) : '';
 
+        $hr = '';
+        for($i = 0 ; $i <= 15 ; $i++) {
+            $hr .= '-';
+        }
+
         $fp = fopen($file . '.log', 'a+');
-        fwrite($fp, self::message($message) . PHP_EOL . $params . PHP_EOL . PHP_EOL);
+        fwrite($fp, self::message($message) . PHP_EOL . $params . PHP_EOL . $hr . PHP_EOL);
         fclose($fp);
     }
 }

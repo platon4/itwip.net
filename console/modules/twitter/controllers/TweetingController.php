@@ -90,7 +90,7 @@ class TweetingController extends \console\components\Controller
     {
         $message = date('d.m.Y H:i:s') . ': ' . $message;
         echo $message . PHP_EOL;
-        Logger::log($message, 'daemons/tweeting', 'daemon-' . $this->daemon);
+        Logger::log($message, 'daemonsx/tweeting', 'daemon-' . $this->daemon);
     }
 
     protected function getDaemoName()

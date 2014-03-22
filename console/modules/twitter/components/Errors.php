@@ -18,7 +18,7 @@ class Errors
             $this->unknownError($model, $tweeting);
         }
 
-        Logger::error($tweeting->getResult(), $model->getTask(), 'daemon/tweeting/tweets', 'errorPostTweet');
+        Logger::error($tweeting->getResult(), $model->getTask(), 'daemons/tweeting/tweets', 'errorPostTweet');
     }
 
     public function getErrorCode()
@@ -28,11 +28,16 @@ class Errors
 
     public function getErrorMessage()
     {
-
+        return 0;
     }
 
     protected function removeTask()
     {
 
     }
-} 
+
+    protected function unknownError($model, $tweeting)
+    {
+
+    }
+}

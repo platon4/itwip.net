@@ -60,7 +60,7 @@ class Indexes extends Model
         try {
             $t = Yii::$app->db->beginTransaction();
 
-            Operation::unlockMoney($row['amount'], $row['return_amount'], $row['bloger_id'], $row['adv_id'], 'purse', 'indexesCheck', $row['pid'], $row['order_id']);
+            Operation::unlockMoney($row['amount'], $row['amount_return'], $row['bloger_id'], $row['adv_id'], 'purse', 'indexesCheck', $row['pid'], $row['order_id']);
 
             /* Обновляем заказ */
             $this->updateOrder(true, $row);
