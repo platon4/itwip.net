@@ -92,6 +92,12 @@ class Tweeting
         return $this->_code;
     }
 
+    /**
+     * Получаем значение по ключу, с твиттера
+     *
+     * @param $key
+     * @return bool
+     */
     public function get($key)
     {
         return isset($this->_result[$key]) ? $this->_result[$key] : false;
