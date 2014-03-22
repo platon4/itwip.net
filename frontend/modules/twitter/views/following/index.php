@@ -38,11 +38,11 @@
             <h3 class="top_title">Выберите подходящий для Вас способ отбора фолловеров</h3>
             <div id="select_activity">
                 <div style="padding-bottom: 10px;" class="activity">
-                    <div class="select"><input type="radio" name="PlacementMethod" value="1" style="position: absolute; left: -9999px;" onchange="Tweets.PlacementMethod('manual', 'YP9f7e6ac','',this);" id="PlacementMethod_manual"><span style="display: inline-block" class="radio styler" onclick="_radioBox(this); return false;"><span></span></span></div>
+                    <div class="select"><?php echo Html::radioButton('test','1'); ?></div>
                     <div class="text"><strong>Самостоятельный выбор аккаунтов и твитов для размещения</strong> -  По заданным Вами параметрам, будет выведен список подходящих аккаунтов, к каждому аккаунту Вы сможете прикрепить твит или несколько из подготовленного ранее списка, или он добавится автоматически при выборе аккаунта. После создания заказа, твиты разместятся автоматически.</div>
                 </div>
                 <div class="activity">
-                    <div class="select"><input type="radio" name="PlacementMethod" value="1" style="position: absolute; left: -9999px;" onchange="Tweets.PlacementMethod('fast', 'YP9f7e6ac','',this);" id="PlacementMethod_fast"><span style="display: inline-block" class="radio styler" onclick="_radioBox(this); return false;"><span></span></span></div>
+                    <div class="select"><?php echo Html::radioButton('test','2'); ?></div>
                     <div class="text"><b>Быстрая индексация страниц сайта в Яндекс, с гарантией</b> - Оптимальный выбор если Вы хотите проиндексировать свой сайт быстро и с гарантией, затратив на это минимум сил и времени. По окончании заданного времени происходит проверка всех ссылок на индексацию, если страницы не попадают в индекс яндекса, потраченные средства за них вернутся на Ваш личный счёт.</div>
                 </div>
             </div>
