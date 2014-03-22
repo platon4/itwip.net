@@ -7,6 +7,7 @@ use yii\db\Command;
 use yii\db\Query;
 use console\components\Daemon;
 use console\modules\twitter\components\Tweeting;
+use console\components\Logger;
 
 /*
  * php cmd twitter/tweeting
@@ -37,7 +38,7 @@ class TweetingController extends \console\components\Controller
                 /* проверяем если твиттинг не остановлен */
                 if($redis->exists('console:twitter:tweeting') === false) {
                     if(Daemon::isSetProcess($this->getDaemoName())) {
-                        $where = ['and', 'daemon=:daemon', 'process_time>=:time']; // Изменить <
+                        $where = ['and', 'daemon=:daemon', 'process_time<=:time']; // Изменить <
                         $rids = Yii::$app->redis->mGet(Yii::$app->redis->keys('console:twitter:tweeting:tasks:id:*'));
 
                         if($rids !== false) {
@@ -55,8 +56,8 @@ class TweetingController extends \console\components\Controller
 
                         if(!empty($tasks)) {
                             foreach($tasks as $task) {
-                                Yii::$app->redis->set('orders:in_process:0:' . $task['order_id'], $task['order_id']);
-                                Yii::$app->redis->set('orders:in_process:1:' . $task['sbuorder_id'], $task['order_id']);
+                                Yii::$app->redis->set('orders:in_process:0:' . $task['order_id'], $task['order_id'], 5 * 60);
+                                Yii::$app->redis->set('orders:in_process:1:' . $task['sbuorder_id'], $task['order_id'], 5 * 60);
 
                                 $tweeting->processTask($task);
 
@@ -87,7 +88,9 @@ class TweetingController extends \console\components\Controller
 
     protected function message($message)
     {
+        $message = date('d.m.Y H:i:s') . ': ' . $message;
         echo $message . PHP_EOL;
+        Logger::log($message, 'daemonsx/tweeting', 'daemon-' . $this->daemon);
     }
 
     protected function getDaemoName()

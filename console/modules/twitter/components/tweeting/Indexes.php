@@ -2,12 +2,14 @@
 
 namespace console\modules\twitter\components\tweeting;
 
-use common\api\finance\Operation;
 use Yii;
 use yii\base\Exception;
+use console\components\Logger;
 use common\api\twitter\Accounts;
 use common\api\twitter\Apps;
 use console\modules\twitter\components\Tweeting;
+use common\api\finance\Operation;
+use console\modules\twitter\components\Errors;
 use yii\db\Query;
 
 class Indexes implements TweetingInterface
@@ -17,6 +19,11 @@ class Indexes implements TweetingInterface
     protected $_account;
     protected $_str_id;
 
+    /**
+     * Список цен, и соответствующее время индексаци
+     *
+     * @var array
+     */
     public $times = [
         5  => 12,
         10 => 9,
@@ -25,6 +32,11 @@ class Indexes implements TweetingInterface
         65 => 1,
     ];
 
+    /**
+     * Устанавливаем валидаторы, и инициализируем заказ
+     *
+     * @param $task
+     */
     public function process($task)
     {
         $this->setValidators([
@@ -35,15 +47,21 @@ class Indexes implements TweetingInterface
         $this->init($task);
     }
 
+    /**
+     * Выполняем размещение твиттера и денежные операций, после успешной валидации
+     */
     protected function execute()
     {
         $command = Yii::$app->db->createCommand();
 
         if($this->postTweet() === true) {
             try {
-                $t = Yii::app()->db->beginTransaction();
+                $t = Yii::$app->db->beginTransaction();
 
+                /** Начисляем деньги на баланс пользователя */
                 Operation::put($this->getAmountToBloger(), $this->getAccount('owner_id'), 'purse', 'indexesCheck', $this->get('sbuorder_id'), $this->getAccount('screen_name'));
+
+                /** Добавляем в список ссылок для проверки */
                 $command->insert('{{%twitter_urlCheck}}', [
                     'date_check' => date('Y-m-d H:i:s', time() + ($this->times[$this->getTime()])),
                     '_params'    => json_encode([
@@ -54,28 +72,40 @@ class Indexes implements TweetingInterface
                         'adv_id'        => $this->getOwner(),
                         'amount'        => $this->getAmountToBloger(),
                         'amount_return' => $this->getAmountToAdv(),
-                        'tw_str_id'     => $this->getTweetID()
+                        'account_id'    => $this->getAccount('id'),
+                        'tw_str_id'     => $this->getStrId()
                     ])
                 ])->execute();
 
-                $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s')])->execute();
+                $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => 1])->execute();
                 $command->delete('{{%twitter_tweeting}}', ['id' => $this->get('id')])->execute();
 
                 $t->commit();
             } catch(Exception $e) {
+                Logger::error($e, [], 'daemons/tweeting/error', 'errorOrderProcess');
                 $t->rollBack();
             }
         }
 
-        $command->insert('{{%twitter_tweetingAccountsLogs}}', ['account_id' => $this->accountGet('id'), 'logType' => 'indexes'])->execute();
+        $command->insert('{{%twitter_tweetingAccountsLogs}}', ['account_id' => $this->getAccount('id'), 'logType' => 'indexes'])->execute();
     }
 
+    /**
+     * Получаем ссылку для размещение
+     *
+     * @return null
+     */
     protected function getUrl()
     {
         return $this->getParams('url');
     }
 
-    protected function getTweetID()
+    /**
+     * Получаем ID размещеного твита
+     *
+     * @return mixed
+     */
+    protected function getStrId()
     {
         return $this->_str_id;
     }
@@ -85,11 +115,17 @@ class Indexes implements TweetingInterface
         return $this->getParams('time');
     }
 
+    /**
+     * Размещаем твит
+     *
+     * @return bool
+     */
     protected function postTweet()
     {
-        if($this->accountGet('id') !== false) {
+        if($this->getAccount('id') !== false) {
             $tweeting = new Tweeting();
 
+            /** Устанавливаем ключи доступа к приложению, и к аккаунту, и отсылаем твит в твиттер */
             $tweeting->set([
                 'app_key'     => Apps::get($this->getAccount('app'), '_key'),
                 'app_secret'  => Apps::get($this->getAccount('app'), '_secret'),
@@ -97,20 +133,28 @@ class Indexes implements TweetingInterface
                 'user_secret' => $this->getAccount('_secret'),
                 'ip'          => Apps::get($this->getAccount('app'), 'ip'),
             ])
-                ->post($this->getTweet());
+                ->send($this->getTweet());
 
+            /** Успешное размещение */
             if($tweeting->getCode() === 200) {
-                $this->_str_id = $tweeting->getTweetID();
+                $this->_str_id = $tweeting->getStrId();
                 return true;
             } else {
-                new Errors($this, $tweeting);
+                (new Errors())->errorTweetPost($this, $tweeting);
                 return false;
             }
         } else {
-            new Errors($this);
+            (new Errors())->accountNotFound($this);
         }
     }
 
+    /**
+     * Получаем аккаунт для размещение твита, аккаунты берутся по очереди, если первый раз аккаунт не найден, начинаем список заного.
+     *
+     * @param $key
+     * @param bool $all
+     * @return array|bool
+     */
     protected function getAccount($key, $all = false)
     {
         if($this->_account === null) {
@@ -128,6 +172,11 @@ class Indexes implements TweetingInterface
             return isset($this->_account[$key]) ? $this->_account[$key] : false;
     }
 
+    /**
+     * Запрос для получение аккаунта
+     *
+     * @return array|bool
+     */
     protected function getAccountQuery()
     {
         $account = (new Accounts())->where(['and', 'a._status=1', 's.in_indexses=1', ['not exists', (new Query())->select('id')->from('{{%twitter_tweetingAccountsLogs}}')->where(['and', 'logType=\'indexes\'', 'account_id=a.id'])]])->one();
