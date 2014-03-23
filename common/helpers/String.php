@@ -28,11 +28,11 @@ class String
     public static function varExport($variable, $return = false)
     {
         if($variable instanceof stdClass) {
-            $result = '(object) ' . self::improved_var_export(get_object_vars($variable), true);
+            $result = '(object) ' . self::varExport(get_object_vars($variable), true);
         } else if(is_array($variable)) {
             $array = array();
             foreach($variable as $key => $value) {
-                $array[] = var_export($key, true) . ' => ' . self::improved_var_export($value, true);
+                $array[] = var_export($key, true) . ' => ' . self::varExport($value, true);
             }
             $result = 'array (' . implode(', ', $array) . ')';
         } else if(is_string($variable)) {
