@@ -52,7 +52,11 @@ class TweetingController extends \console\components\Controller
                                 $where[] = ['not in', 'id', $ids];
                         }
 
-                        $tasks = (new Query())->from('{{%twitter_tweeting}}')->where($where, [':daemon' => $this->daemon, ':time' => date('H:i:s')])->limit(10)->all();
+                        $tasks = (new Query())
+                            ->from('{{%twitter_tweeting}}')
+                            ->where($where, [':daemon' => $this->daemon, ':time' => date('H:i:s')])
+                            ->limit(10)
+                            ->all();
 
                         if(!empty($tasks)) {
                             foreach($tasks as $task) {
