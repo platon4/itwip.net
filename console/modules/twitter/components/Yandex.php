@@ -4,9 +4,9 @@ namespace console\modules\twitter\components;
 
 class Yandex extends \common\components\Yandex
 {
-    public function hasErrors()
+    public function hasError()
     {
-        return !empty($this->error) ? true : false;
+        return !empty($this->error) && $this->_code != 15 ? true : false;
     }
 
     public function urlInIndex($url)

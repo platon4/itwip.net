@@ -186,6 +186,8 @@ class Yandex
      */
     public $error = null;
 
+    public $_code = 0;
+
     /**
      * Errors in response
      *
@@ -676,6 +678,7 @@ class Yandex
                 $error = (int) $this->response->error->attributes()->code[0];
                 if(isset($this->errors[$error])) {
                     $this->error = $this->errors[$error];
+                    $this->_code = $error;
                 } else {
                     $this->error = $this->response->error;
                 }

@@ -37,7 +37,7 @@ class Indexes extends Model
 
                     $search = $yandex->urlInIndex($task['url']);
 
-                    if(!$yandex->hasErrors()) {
+                    if(!$yandex->hasError()) {
                         if($search === true)
                             $this->urlInIndexSuccess($task);
                         else
