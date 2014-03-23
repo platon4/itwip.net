@@ -32,30 +32,40 @@ class Indexes extends Model
 
             foreach($this->getTasks() as $row) {
                 $task = json_decode($row['_params'], true);
-                $task['id'] = $row['id'];
+                if($task !== null) {
+                    $task['id'] = $row['id'];
 
-                $search = $yandex->urlInIndex($task['url']);
+                    $search = $yandex->urlInIndex($task['url']);
 
-                if(!$yandex->hasErrors()) {
-                    if($search === true)
-                        $this->urlInIndexSuccess($task);
-                    else
-                        $this->urlInIndexFail($task);
+                    if(!$yandex->hasErrors()) {
+                        if($search === true)
+                            $this->urlInIndexSuccess($task);
+                        else
+                            $this->urlInIndexFail($task);
+                    } else {
+                        Yii::$app->redis->set('console:twitter:urlcheck:' . $row['id'], $row['id']);
+                        Yii::$app->redis->expire('console:twitter:urlcheck:' . $row['id'], 5 * 60);
+                        $log = "Yandex Error: " . $yandex->error . "\n";
+                        echo $log;
+                        Logger::error($log, [], 'daemons/tweeting/yandex', 'error');
+                    }
+
+                    $this->removeTweet($task);
                 } else {
-                    Yii::$app->redis->set('console:twitter:urlcheck:' . $row['id'], $row['id']);
-                    Yii::$app->redis->expire('console:twitter:urlcheck:' . $row['id'], 5 * 60);
-                    $log = "Yandex Error: " . $yandex->error . "\n";
-                    echo $log;
-                    Logger::error($log, [], 'daemons/tweeting/yandex', 'error');
+                    Yii::$app->db->createCommand()->update('{{%twitter_urlCheck}}', ['skip' => 1], ['id' => $row['id']])->execute();
+                    Logger::error('json_decode return null', $row, 'daemons/tweeting/errors', 'jsonDecodeError');
                 }
-
-                $this->removeTweet($task);
             }
         } else {
             echo "Not tasks\n";
         }
     }
 
+    /**
+     * Если ссылка проиндексирована
+     *
+     * @param $row
+     */
     protected function urlInIndexSuccess($row)
     {
         try {
@@ -75,6 +85,11 @@ class Indexes extends Model
         }
     }
 
+    /**
+     * Если ссылка не проиндексирована
+     *
+     * @param $row
+     */
     protected function urlInIndexFail($row)
     {
         try {
@@ -133,7 +148,7 @@ class Indexes extends Model
 
             $this->_tasks = (new Query())
                 ->from('{{%twitter_urlCheck}}')
-                ->where('date_check<:date' . $inIds, [':date' => date('Y-m-d H:i:s')])
+                ->where('skip=0 AND date_check<:date' . $inIds, [':date' => date('Y-m-d H:i:s')])
                 ->all();
         }
 
