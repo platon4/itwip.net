@@ -38,6 +38,7 @@ class Operation
             'bloggerDeletedTweet' => 3,
             'indexesFail'         => 6,
             'indexesFailBloger'   => 7,
+            'errorPostTweet'      => 8,
         ]
     ];
 

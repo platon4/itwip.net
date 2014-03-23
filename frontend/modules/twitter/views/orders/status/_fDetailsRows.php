@@ -23,6 +23,9 @@
                     case 3:
                         echo '<span class="fail" title="К сожалению Ваша ссылка не была проиндексированна Яндексом, деньги будут возвращены на Ваш счёт.">Не проиндексирована</span>';
                         break;
+                    case 4:
+                        echo '<span class="fail" title="' . Html::encode($row['message']) . '">Ошибка</span>';
+                        break;
                 }
                 ?>
             </td>
