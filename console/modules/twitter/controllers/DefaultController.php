@@ -22,12 +22,15 @@ class DefaultController extends \console\components\Controller
      */
     protected function launchTweetingDaemons()
     {
-        Yii::$app->redis->set('console:twitter:tweeting', 'true');
-        Yii::$app->redis->expire('console:twitter:tweeting', 30);
+        Yii::$app->redis->set('console:twitter:tweeting', 'true', 30);
 
         sleep(rand(35, 60));
 
-        $rows = (new Query())->select('daemon')->from('{{%twitter_tweeting}}')->groupBy(['daemon'])->all();
+        $rows = (new Query())
+            ->select('daemon')
+            ->from('{{%twitter_tweeting}}')
+            ->groupBy(['daemon'])
+            ->all();
 
         if(!empty($rows)) {
             $path = realpath(Yii::$app->getBasePath() . '/..');
