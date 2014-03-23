@@ -63,7 +63,7 @@ class Indexes implements TweetingInterface
 
                 /** Добавляем в список ссылок для проверки */
                 $command->insert('{{%twitter_urlCheck}}', [
-                    'date_check' => date('Y-m-d H:i:s', time() + ($this->times[$this->getTime()])),
+                    'date_check' => date('Y-m-d H:i:s', time() + ($this->times[$this->getTime()] * 60 * 60)),
                     '_params'    => json_encode([
                         'order_id'      => $this->get('order_id'),
                         'pid'           => $this->get('sbuorder_id'),
