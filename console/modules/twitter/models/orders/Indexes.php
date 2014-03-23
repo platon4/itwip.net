@@ -23,6 +23,7 @@ class Indexes implements OrdersInterface
     {
         $this->_task[] = [
             'order_id'     => $this->get('id'),
+            'order_hash'   => $this->get('order_hash'),
             'sbuorder_id'  => $task['id'],
             'orderType'    => 'indexes',
             'tweet_hash'   => $task['hash'],
