@@ -81,7 +81,7 @@ return array(
     '_twitterFulfilled_Title'=>'Выполненые заказы',
     '_twitterFulfilled_Description'=>'',
     /* Быстрое размещение постов */
-    '_twitterFollowing_Title'=>'Покупка фолловеров',
+    '_twitterFollowing_Title'=>'Покупка читателей',
     '_twitterFollowing_Description'=>'',
     /* Быстрое размещение постов */
     '_twitterPostingQuick_Title'=>'Создание твитов',

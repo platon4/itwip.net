@@ -305,9 +305,7 @@ a.active {font-size: 13px; text-decoration: none; color: #4F4F4F; cursor: defaul
 #fulfilled .acconts_list table .icons a.details:hover { color: #016D91 }
 
 /*========== Заказ фолловеров ==========*/
-#following {
-
-}
+#following {}
 #following #block_1 { border-bottom: 1px solid #E1E1E1;}
 #following #block_1 textarea { width: 533px; height: 150px; resize: vertical}
 #following #block_1_1 { display: table-cell; width: 550px; padding: 20px 0px 30px 20px; }
@@ -315,6 +313,17 @@ a.active {font-size: 13px; text-decoration: none; color: #4F4F4F; cursor: defaul
 #following #block_1_2 { display: table-cell; vertical-align: top; padding: 20px 20px 30px 30px; min-width: 260px }
 #following #block_1_2 h5 { color: #0086AE; font-weight: normal; font-size: 12px; margin-bottom: 10px; }
 #following #block_1_2 li { list-style: none; font-size: 11px; color: #595959;padding-bottom: 5px; }
+
+#following #block_2 #select_activity {padding: 15px;}
+#following #block_2 #select_activity.activity {font-size: 11px;}
+#following #block_2 #select_activity .activity .select { display: table-cell; vertical-align: middle; width: 25px }
+#following #block_2 #select_activity .activity .text { display: table-cell; }
+
+#following #block_3 #block_auto { display: table; width: 100%; border-top: 1px solid #E1E1E1;}
+#following #block_3 #block_auto .top_title {border-top: 1px solid #FFFFFF;}
+#following #block_3 #block_auto #block_auto_1 {display: table-cell; width:50%}
+#following #block_3 #block_auto #block_auto_line {display: table-cell;width: 1px;background: none repeat scroll 0 0 #E1E1E1;border-right: 1px solid #FFFFFF;}
+#following #block_3 #block_auto #block_auto_2 {display: table-cell; }
 
 /*========== Быстрое размещение постов ==========*/
 .postingQuick { width: auto; display: block}
