@@ -80,7 +80,7 @@ class Indexes extends Model
             $t->commit();
         } catch(Exception $e) {
             echo "Success Error\n";
-            Logger::error($e, $row, 'daemons/tweeting/yandex', 'urlInIndexSuccess-error');
+            Logger::error($e, $row, 'daemons/tweeting/errors', 'urlInIndexSuccess-error');
             $t->rollBack();
         }
     }
@@ -105,7 +105,7 @@ class Indexes extends Model
         } catch(Exception $e) {
             echo "Fail Error\n";
             echo $e;
-            Logger::error($e, $row, 'daemons/tweeting/yandex', 'urlInIndexFail-error');
+            Logger::error($e, $row, 'daemons/tweeting/errors', 'urlInIndexFail-error');
             $t->rollBack();
         }
     }
@@ -121,7 +121,7 @@ class Indexes extends Model
         Yii::$app->db->createCommand()->update('{{%twitter_ordersPerform}}', ['status' => $status], ['id' => $row['pid']])->execute();
 
         if(isset($row['order_hash']) && !empty($row['order_hash'])) {
-            $count = (new Query())->from('{{%twitter_ordersPerform}}')->where(['and', 'order_hash=:hash', ['or', 'status=0', 'status=1'], [':order_hash' => $row['order_hash']]])->count();
+            $count = (new Query())->from('{{%twitter_ordersPerform}}')->where(['and', 'order_hash=:hash', ['or', 'status=0', 'status=1']], [':order_hash' => $row['order_hash']])->count();
 
             if($count == 0)
                 Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => 3], ['id' => $row['id']])->execute();

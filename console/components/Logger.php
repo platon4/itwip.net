@@ -2,6 +2,7 @@
 
 namespace console\components;
 
+use common\helpers\String;
 use Yii;
 
 class Logger
@@ -21,9 +22,7 @@ class Logger
         if(is_string($message)) {
             return (string) $message;
         } else {
-            var_dump($message);
-            die();
-            return var_export($message, true);
+            return String::varExport($message, true);
         }
     }
 

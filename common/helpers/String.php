@@ -24,4 +24,26 @@ class String
 
         return $hash;
     }
+
+    public static function varExport($variable, $return = false)
+    {
+        if($variable instanceof stdClass) {
+            $result = '(object) ' . self::improved_var_export(get_object_vars($variable), true);
+        } else if(is_array($variable)) {
+            $array = array();
+            foreach($variable as $key => $value) {
+                $array[] = var_export($key, true) . ' => ' . self::improved_var_export($value, true);
+            }
+            $result = 'array (' . implode(', ', $array) . ')';
+        } else {
+            $result = var_export($variable, true);
+        }
+
+        if(!$return) {
+            print $result;
+            return null;
+        } else {
+            return $result;
+        }
+    }
 } 
