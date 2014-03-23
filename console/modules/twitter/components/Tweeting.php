@@ -81,12 +81,10 @@ class Tweeting
 
     public function destroy($str_id)
     {
-        $this->_code = $this->tmh->request('POST', $this->tmh->url('1.1/statuses/destroy'), [
-            'id' => $str_id
-        ]);
+        $this->_code = $this->tmh->request('POST', $this->tmh->url('1.1/statuses/destroy/' . $str_id));
 
         if($this->getCode() != 200) {
-            Logger::error(json_decode($this->tmh->response['response'], true), [], 'daemons/api', 'destroyError');
+            Logger::error(json_decode($this->tmh->response['response'], true), ['str_id' => $str_id], 'daemons/api', 'destroyError');
         }
     }
 

@@ -121,7 +121,10 @@ class Indexes extends Model
         Yii::$app->db->createCommand()->update('{{%twitter_ordersPerform}}', ['status' => $status], ['id' => $row['pid']])->execute();
 
         if(isset($row['order_hash']) && !empty($row['order_hash'])) {
-            $count = (new Query())->from('{{%twitter_ordersPerform}}')->where(['and', 'order_hash=:hash', ['or', 'status=0', 'status=1']], [':order_hash' => $row['order_hash']])->count();
+            $count = (new Query())
+                ->from('{{%twitter_ordersPerform}}')
+                ->where(['and', 'order_hash=:hash', ['or', 'status=0', 'status=1']], [':hash' => $row['order_hash']])
+                ->count();
 
             if($count == 0)
                 Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => 3], ['id' => $row['id']])->execute();
