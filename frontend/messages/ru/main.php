@@ -81,6 +81,9 @@ return array(
     '_twitterFulfilled_Title'=>'Выполненые заказы',
     '_twitterFulfilled_Description'=>'',
     /* Быстрое размещение постов */
+    '_twitterFollowing_Title'=>'Покупка читателей',
+    '_twitterFollowing_Description'=>'',
+    /* Быстрое размещение постов */
     '_twitterPostingQuick_Title'=>'Создание твитов',
     '_twitterPostingQuick_Description'=>'Размещение твитов, для тех у кого нет времени настраивать свои проекты, для длительной работы.',
     /* Быстрое размещение постов (редактирование) */
