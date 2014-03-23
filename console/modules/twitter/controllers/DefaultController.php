@@ -18,6 +18,11 @@ class DefaultController extends \console\components\Controller
         $this->launchTweetingDaemons();
     }
 
+    public function actionStopDaemons()
+    {
+        Yii::$app->redis->set('console:twitter:tweeting', 'true', 30);
+    }
+
     /**
      * Берем список приложений, и запускаем демоног под них
      */
