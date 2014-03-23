@@ -7,6 +7,8 @@ $this->breadcrumbs[] = array(
     2 => array(Yii::t('breadcrumbs', '_tw_quickPosts_collection'), '')
 );
 ?>
+<div style="margin-bottom: 20px;" class="line_info alert">Размещение временно не доступно. Приносим извенения за неудобства.</div>
+
 <?php if(Yii::app()->user->hasFlash('TWEETS_MESSAGE')) { ?>
 <div id="_messageBox" class="line_info alert" style="margin-bottom: 13px;">
     <?php echo Yii::app()->user->getFlash('TWEETS_MESSAGE'); ?>
