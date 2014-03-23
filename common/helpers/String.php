@@ -35,8 +35,10 @@ class String
                 $array[] = var_export($key, true) . ' => ' . self::improved_var_export($value, true);
             }
             $result = 'array (' . implode(', ', $array) . ')';
+        } else if(is_string($variable)) {
+            $result = $variable;
         } else {
-            $result = var_export($variable, true);
+            $result = (string) $variable;
         }
 
         if(!$return) {
