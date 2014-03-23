@@ -66,10 +66,11 @@ class TweetingController extends \console\components\Controller
                                 $tweeting->processTask($task);
 
                                 Yii::$app->redis->delete(['orders:in_process:0:' . $task['order_id'], 'orders:in_process:1:' . $task['sbuorder_id']]);
+                                sleep(rand(5,10));
                             }
                         } else {
                             $this->message('Daemon timeout 5 sec.');
-                            sleep(5);
+                            sleep(rand(5,10));
                         }
                     } else {
                         Daemon::stopDaemon($this->daemon, 0, 'Daemon won\'t start, error set process');
