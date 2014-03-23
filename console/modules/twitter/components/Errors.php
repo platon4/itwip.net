@@ -20,7 +20,8 @@ class Errors
         $this->processResponse($tweeting->getResult());
 
         if(isset($this->_errors[$this->getErrorCode()]) && method_exists($this, $this->_errors[$this->getErrorCode()])) {
-            $this->_errors[$this->getErrorCode()]($model);
+            $method = $this->_errors[$this->getErrorCode()];
+            $this->$method($model);
         } else {
             $this->unknownError($model);
         }
