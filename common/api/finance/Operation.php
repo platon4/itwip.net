@@ -37,7 +37,7 @@ class Operation
             'removeTweet'         => 1,
             'bloggerDeletedTweet' => 3,
             'indexesFail'         => 6,
-            'indexesFailBloger'   => 7
+            'indexesFailBloger'   => 7,
         ]
     ];
 

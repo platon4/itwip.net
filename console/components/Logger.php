@@ -16,16 +16,16 @@ class Logger
         self::save($name, $message, $params, $category);
     }
 
-    protected static function message($message)
+    public static function message($message)
     {
         if(is_string($message)) {
-            return $message;
+            return (string) $message;
         } else {
-            return var_export($message, true);
+            return (string) var_export($message, true);
         }
     }
 
-    protected static function save($name, $message, $params, $category)
+    public static function save($name, $message, $params, $category)
     {
         $category = 'logs/' . ltrim($category, '/');
 

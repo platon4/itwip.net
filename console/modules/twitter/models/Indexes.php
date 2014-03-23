@@ -95,8 +95,8 @@ class Indexes extends Model
         try {
             $t = Yii::$app->db->beginTransaction();
 
-            Operation::cancelTransfer($row['amount'], $row['bloger_id'], 'purse', 'indexesCheck', $row['pid']);
-            Operation::returnMoney($row['amount_return'], $row['adv_id'], 'purse', 'indexesCheck', $row['pid'], $row['order_id']);
+            Operation::cancelTransfer($row['amount'], $row['bloger_id'], 'purse', 'indexesFailBloger', $row['pid']);
+            Operation::returnMoney($row['amount_return'], $row['adv_id'], 'purse', 'indexesFail', $row['pid'], $row['order_id']);
 
             /* Обновляем заказ */
             $this->updateOrder(false, $row);
