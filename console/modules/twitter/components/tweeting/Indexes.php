@@ -193,7 +193,10 @@ class Indexes implements TweetingInterface
     protected function updateOrder($hash, $id)
     {
         if(!empty($hash)) {
-            $count = (new Query())->from('{{%twitter_ordersPerform}}')->where(['and', 'order_hash=:hash', ['or', 'status=0'], [':order_hash' => $hash]])->count();
+            $count = (new Query())
+                ->from('{{%twitter_ordersPerform}}')
+                ->where(['and', 'order_hash=:hash', ['or', 'status=0']], [':hash' => $hash])
+                ->count();
 
             if($count == 0)
                 Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => 2], ['id' => $id])->execute();
