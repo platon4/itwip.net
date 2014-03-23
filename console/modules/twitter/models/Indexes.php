@@ -96,7 +96,7 @@ class Indexes extends Model
             $t = Yii::$app->db->beginTransaction();
 
             Operation::cancelTransfer($row['amount'], $row['bloger_id'], 'purse', 'indexesFailBloger', $row['pid']);
-            Operation::returnMoney($row['amount_return'], $row['adv_id'], 'purse', 'indexesFail', $row['pid'], $row['order_id']);
+            Operation::returnMoney($row['amount_return'], $row['adv_id'], 'purse', 'indexesFail', $row['order_id'], $row['order_id']);
 
             /* Обновляем заказ */
             $this->updateOrder(false, $row);
@@ -104,7 +104,6 @@ class Indexes extends Model
             $t->commit();
         } catch(Exception $e) {
             echo "Fail Error\n";
-            echo $e;
             Logger::error($e, $row, 'daemons/tweeting/errors', 'urlInIndexFail-error');
             $t->rollBack();
         }

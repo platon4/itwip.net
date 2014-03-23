@@ -201,9 +201,9 @@ class Operation
 
     protected static function moneyLockUpdate($amount, $operationID, $user_id)
     {
-        $command = Yii::$app->db->createCommand();
-
         if($operationID) {
+            $command = Yii::$app->db->createCommand();
+
             $_b = (new Query())
                 ->from('{{%money_blocking}}')
                 ->where(['owner_id' => $user_id, '_id' => $operationID])
