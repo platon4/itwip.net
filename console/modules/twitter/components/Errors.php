@@ -9,7 +9,9 @@ class Errors
     use ErrorsTreit;
 
     private $_errors = [
-        188 => 'removeMalwareTweet'
+        188 => 'removeMalwareTweet',
+        89  => 'InvalidExpiredToken',
+        64  => 'accountIsSuspended',
     ];
 
     private $_code = 0;
