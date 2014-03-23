@@ -104,6 +104,7 @@ class Indexes extends Model
             $t->commit();
         } catch(Exception $e) {
             echo "Fail Error\n";
+            echo $e;
             Logger::error($e, $row, 'daemons/tweeting/yandex', 'urlInIndexFail-error');
             $t->rollBack();
         }
