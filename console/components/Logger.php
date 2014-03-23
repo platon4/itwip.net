@@ -49,7 +49,7 @@ class Logger
             $params = !empty($params) ? var_export($params, true) : '';
 
         $hr = '';
-        for($i = 0 ; $i <= 15 ; $i++) {
+        for($i = 0 ; $i <= 30 ; $i++) {
             $hr .= '-';
         }
 

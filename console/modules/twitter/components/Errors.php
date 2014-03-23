@@ -6,16 +6,23 @@ use console\components\Logger;
 
 class Errors
 {
-    private $_errors = [
+    use ErrorsTreit;
 
+    private $_errors = [
+        188 => 'removeMalwareTweet'
     ];
+
+    private $_code = 0;
+    private $_error;
 
     public function errorTweetPost($model, $tweeting)
     {
-        if(isset($this->_errors[$this->getErrorCode($tweeting)]) && method_exists($this, $this->_errors[$this->getErrorCode($tweeting)])) {
-            $this->_errors[$this->getErrorCode($tweeting)]($model, $tweeting);
+        $this->processResponse($tweeting->getResult());
+
+        if(isset($this->_errors[$this->getErrorCode()]) && method_exists($this, $this->_errors[$this->getErrorCode()])) {
+            $this->_errors[$this->getErrorCode()]($model);
         } else {
-            $this->unknownError($model, $tweeting);
+            $this->unknownError($model);
         }
 
         Logger::error($tweeting->getResult(), $model->getTask(), 'daemons/tweeting/tweets', 'errorPostTweet');
@@ -23,21 +30,24 @@ class Errors
 
     public function getErrorCode()
     {
-
+        return $this->_code;
     }
 
     public function getErrorMessage()
     {
-        return 0;
+        return $this->_error;
     }
 
-    protected function removeTask()
+    public function processResponse($response)
     {
+        if(isset($response['errors'][0])) {
+            if(isset($response['errors'][0]['code']))
+                $this->_code = $response['errors'][0]['code'];
 
-    }
-
-    protected function unknownError($model, $tweeting)
-    {
-
+            if(isset($response['errors'][0]['code']))
+                $this->_error = $response['errors'][0]['message'];
+            else
+                $this->_error = 'Unknown response from twitter';
+        }
     }
 }

@@ -13,7 +13,7 @@ class Apps
 
     public static function get($id, $key)
     {
-        if(self::$apps === null || self::$apps[$id] === null) {
+        if(self::$apps === null || (!isset(self::$apps[$id]) || self::$apps[$id] === null)) {
             self::$apps[$id] = self::_get($id, $key);
 
             if(self::$apps[$id] === false) {

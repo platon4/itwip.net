@@ -79,7 +79,6 @@ class TweetingController extends \console\components\Controller
 
                 /* делаем перерыв на 1 секунду */
                 sleep($timeout);
-                exit(0); // УБРАТЬ НА ПРОДАКШЕНЕ
             }
         } else {
             Daemon::stopDaemon($this->daemon, 0, 'Daemon is already running');
