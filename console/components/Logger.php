@@ -21,7 +21,7 @@ class Logger
         if(is_string($message)) {
             return (string) $message;
         } else {
-            return (string) var_export($message, true);
+            return var_export($message, true);
         }
     }
 
