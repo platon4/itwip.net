@@ -41,7 +41,7 @@ $_count = count($list);
     <div class="block_title"><div class="block_title_inset"><i class="fa fa-twitter"></i> <h5><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_title'); ?></h5></div></div>
     <div class="block_content">
         <div id="block_1">
-            <div id="block_1_1">
+            <!--<div id="block_1_1">
                 <span class="block"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_totalAccount'); ?> <?php echo $all_accounts_count; ?></span>
                 <span class="block"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_in_work'); ?> <?php echo $all_accounts_in_work; ?></span>
                 <span class="block"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_moderation'); ?> <?php echo $all_accounts_moderation; ?></span>
@@ -49,6 +49,16 @@ $_count = count($list);
             <div id="block_1_2">
                 <span class="block"><a href="/twitter/accounts/add" class="button btn_blue"><?php echo Yii::t('twitterModule.accounts','_twitterAccountList_accountAdd'); ?></a></span>
                 <span class="block group_input search"><input id="setQuery" type="text" placeholder="<?php echo Yii::t('twitterModule.accounts','_twitterAccountList_accountSearch'); ?>" onkeyup="Accounts._getFromQuery('setQuery', '_searchButton');" /><button class="button icon" onclick="Accounts._getFromQuery('setQuery', '_searchButton');"><i id="_searchButton" class="fa fa-search"></i></button></span>
+            </div>-->
+            <div class="line_title_noopen no_border_bottom">
+                <span id="_stats">
+                <b>Всего:</b> <a href="" class="here "><?php echo $all_accounts_count; ?></a> |
+                <a href="" class="here">в работе: <?php echo $all_accounts_in_work; ?></a> /
+                <a href="" class="here">отключены: <?php echo $all_accounts_moderation; ?></a> /
+                <a href="" class="here select">на модерации: <?php echo $all_accounts_moderation; ?></a> /
+                <a href="" class="here">требуют обновления ключа: <?php echo $all_accounts_moderation; ?></a>
+                </span>
+                <span style="float: right; margin-top: -8px; margin-right: 5px;" class="block group_input search"><input id="setQuery" type="text" placeholder="<?php echo Yii::t('twitterModule.accounts','_twitterAccountList_accountSearch'); ?>" onkeyup="Accounts._getFromQuery('setQuery', '_searchButton');" /><button class="button icon" onclick="Accounts._getFromQuery('setQuery', '_searchButton');"><i id="_searchButton" class="fa fa-search"></i></button></span>
             </div>
         </div>
         <div id="block_2">
@@ -82,7 +92,8 @@ $_count = count($list);
                                     </tr>
                                 </table>
                             </td>
-                            <td class="no_border icons"></td>
+                            <td class="icons"></td>
+                            <td class="select"><?php echo Html::checkBox('inset'); ?></td>
                         </tr>
                     </table>
                 </div>
@@ -93,7 +104,7 @@ $_count = count($list);
                 <div class="table_bottom_inside">
                     <div class="page_nav_page">
                         <div id="pagesList" class="_cHide">
-<?php $this->renderPartial("_pages",array('pages'=>$pages)); ?>
+                            <?php $this->renderPartial("_pages",array('pages'=>$pages)); ?>
                         </div>
                         <div class="_loading" style="display: none;"><img src="/i/loads.gif"></div>
                     </div>
@@ -117,8 +128,9 @@ $_count = count($list);
                                     ?>
                         <?php } ?>
                             </select>
+                            <button class="button icon"><i class="fa fa-wrench"></i></button>
                         </div>
-<?php } ?>
+                        <?php } ?>
                 </div>
             </div>
         </div>

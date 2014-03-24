@@ -20,6 +20,7 @@
                 <td class="last"><?php echo Finance::money(round($row['amount_yeasterday'],2),0,true); ?></td>
                 <td class="no_border only"><?php echo Finance::money(round($row['amount_all'],2),0,true); ?></td>
                 <td class="no_border icons"><a href="/twitter/accounts/settings?tid=<?php echo $row['id']; ?>" class="button icon_small" target="_blank"><i class="fa fa-cog"></i></a></td>
+                <td class="select"><?php echo Html::checkBox('inset'); ?></td>
             </tr>
     <?php endforeach; ?>
     </table>

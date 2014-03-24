@@ -229,6 +229,8 @@
 /*========== Мои аккаунты Twitter ==========*/
 .twitterAccountList { width:100%; }
 
+.twitterAccountList .line_title_noopen  { }
+
 .twitterAccountList #block_1 { display: table; width: 100%;}
 .twitterAccountList #block_1_1 { display: table-cell ; vertical-align: top; min-width: 350px; width: 50%; padding: 15px 10px; }
 .twitterAccountList #block_1_1 .block { margin-bottom: 10px; }
@@ -239,32 +241,37 @@
 .twitterAccountList #block_2 {  }
 .twitterAccountList #block_2 .table_head .earned { border-bottom: 1px solid #F7F7F7; border-right: none }
 
-.twitterAccountList #block_2 .table_head table .account { min-width: 177px; width: 19.65%;  }
-.twitterAccountList #block_2 .table_head table .status { min-width: 89px; width: 10.16%; }
-.twitterAccountList #block_2 .table_head table .level { min-width: 30px; width: 3.43%; }
-.twitterAccountList #block_2 .table_head table .index { min-width: 50px; width: 5.71%; }
-.twitterAccountList #block_2 .table_head table .application { min-width: 55px; width: 6.28%;}
-.twitterAccountList #block_2 .table_head table .posted { min-width: 80px; width: 9.14%;}
-.twitterAccountList #block_2 .table_head table .earneds {  min-width: 230px; width: 26.4%; }
-.twitterAccountList #block_2 .table_head table .today { min-width: 62px; width: 36%; }
-.twitterAccountList #block_2 .table_head table .last { min-width: 53px; width: 32%; }
-.twitterAccountList #block_2 .table_head table .only { min-width: 54px; width: 32%; }
+.twitterAccountList #block_2 .table_head table .select { width: 15px; max-width: 20px; padding-left: 15px; padding-right: 12px; }
+.twitterAccountList #block_2 .table_head table .account { min-width: 177px; width: auto;  }
+.twitterAccountList #block_2 .table_head table .status { min-width: 89px; width: 89px; }
+.twitterAccountList #block_2 .table_head table .level { min-width: 30px; width: 30px; }
+.twitterAccountList #block_2 .table_head table .index { min-width: 50px; width: 50px; }
+.twitterAccountList #block_2 .table_head table .application { min-width: 55px; width: 55px;}
+.twitterAccountList #block_2 .table_head table .posted { min-width: 80px; width: 80px;}
+.twitterAccountList #block_2 .table_head table .earneds {  min-width: 230px; width: 230px; }
+.twitterAccountList #block_2 .table_head table .today { min-width: 62px; width: 62px; }
+.twitterAccountList #block_2 .table_head table .last { min-width: 53px; width: 53px; }
+.twitterAccountList #block_2 .table_head table .only { min-width: 54px; width: 54px; }
 .twitterAccountList #block_2 .table_head table .icons { width: 27px; padding-left:6px; padding-right:6px;}
 
-.twitterAccountList #block_2 .acconts_list .account { min-width: 179px; width: 19.65%;}
-.twitterAccountList #block_2 .acconts_list .status { min-width: 90px; width: 10.16%; text-align: center; font-size: 11px;}
+.twitterAccountList #block_2 .acconts_list .select { width: 15px; max-width: 20px; padding-left: 17px; padding-right: 14px; }
+.twitterAccountList #block_2 .acconts_list .account { min-width: 179px; width: auto;}
+.twitterAccountList #block_2 .acconts_list .status { min-width: 90px; width: 90px; text-align: center; font-size: 11px;}
 span.ok { color: #1D9D00; }
 span.off { color: #F71113; }
 span.all { color: #890ECA; }
-.twitterAccountList #block_2 .acconts_list .level { min-width: 31px;  width: 3.43%; text-align: center; color: #4F4F4F; font-size: 11px;}
-.twitterAccountList #block_2 .acconts_list .index { min-width: 51px; width: 5.71%; text-align: center; }
+.twitterAccountList #block_2 .acconts_list .level { min-width: 31px;  width: 31px; text-align: center; color: #4F4F4F; font-size: 11px;}
+.twitterAccountList #block_2 .acconts_list .index { min-width: 51px; width: 51px; text-align: center; }
 .twitterAccountList #block_2 .acconts_list .index img{ width: 20px;height: 20px; }
-.twitterAccountList #block_2 .acconts_list .application { min-width: 56px; width: 6.28%; text-align: center; font-size: 11px;}
-.twitterAccountList #block_2 .acconts_list .posted { min-width: 81px; width: 9.14%; text-align: center; font-size: 11px;}
-.twitterAccountList #block_2 .acconts_list .today { min-width: 63px; width: 9.50%; text-align: center; font-size: 11px;}
-.twitterAccountList #block_2 .acconts_list .last { min-width: 54px; width: 8.44%; text-align: center; font-size: 11px;}
-.twitterAccountList #block_2 .acconts_list .only { min-width: 53px; width: 8.44%; text-align: center; font-size: 11px;}
+.twitterAccountList #block_2 .acconts_list .application { min-width: 56px; width: 56px; text-align: center; font-size: 11px;}
+.twitterAccountList #block_2 .acconts_list .posted { min-width: 81px; width: 81px; text-align: center; font-size: 11px;}
+.twitterAccountList #block_2 .acconts_list .today { min-width: 63px; width: 63px; text-align: center; font-size: 11px;}
+.twitterAccountList #block_2 .acconts_list .last { min-width: 54px; width: 54px; text-align: center; font-size: 11px;}
+.twitterAccountList #block_2 .acconts_list .only { min-width: 53px; width: 53px; text-align: center; font-size: 11px;}
 .twitterAccountList #block_2 .acconts_list .icons { padding-left:6px; padding-right:6px; width: 27px; max-width: 27px; text-align: center;}
+
+.twitterAccountList .table_bottom_inside .page_nav_how { width:285px; padding-right: 3px;}
+.twitterAccountList .table_bottom_inside .page_nav_how .button { margin-left: 17px; }
 
 a.active {font-size: 13px; text-decoration: none; color: #4F4F4F; cursor: default}
 .hidden {display: none;}

@@ -30,6 +30,7 @@ a { color: #0086B0; text-decoration: underline }
 a:active { color: #0086B0; text-decoration: none }
 a:hover { color: #0086B0; text-decoration: none; cursor: pointer }
 a.here { text-decoration: none; border-bottom: 1px dotted #0086B0; }
+a.here.select { font-weight: bold; text-decoration: none; border-bottom: 0px; }
 a.here:hover { text-decoration: none; border-bottom: none }
 a.select { text-decoration: none; border-bottom: none; font-weight: bold }
 i { cursor: default;}
