@@ -5,6 +5,7 @@ namespace console\modules\twitter\components;
 use Yii;
 use console\components\Logger;
 use common\api\finance\Operation;
+use yii\db\Query;
 
 class Errors
 {
