@@ -8,7 +8,7 @@
                 </div>
                 <div class="account_NameLogin">
                     <span class="account_Name block"><?php echo Html::encode($row['name']); ?></span>
-                    <span class="account_Login block"><a href="https://twitter.com/<?php echo Html::encode($row['screen_name']); ?>" target="_blank">@<?php echo Html::encode($row['screen_name']); ?></a></span>
+                    <span class="account_Login block"><?php if($row['screen_name']) { ?><a href="https://twitter.com/<?php echo Html::encode($row['screen_name']); ?>" target="_blank">@<?php echo Html::encode($row['screen_name']); ?></a><?php } ?></span>
                 </div>
             </td>
             <td class="tweet"><?php echo Html::encode($row['tweet']); ?></td>

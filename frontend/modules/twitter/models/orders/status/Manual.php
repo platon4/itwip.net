@@ -79,7 +79,12 @@ class Manual extends \FormModel
             $accounts = Twitter::accounts($ids)->getAll(); //Загружаем данные выбраных аккаунтов
 
             foreach($orders as $order) {
-                $account = $accounts[$order['tw_account']];
+                $account = isset($accounts[$order['tw_account']]) ? $accounts[$order['tw_account']] : [
+                    'avatar'      => '/i/_default.png',
+                    'name'        => 'account is deleted',
+                    'screen_name' => ''
+                ];
+
                 $rows[] = [
                     'avatar'       => $account['avatar'],
                     'name'         => $account['name'],
