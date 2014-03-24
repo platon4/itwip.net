@@ -88,7 +88,6 @@ class Errors
         try {
             $t = Yii::$app->db->beginTransaction();
             $this->processTask($model, 'Не удалось обработать задание, неопределенная ошибка.');
-            $this->flush($model);
 
             $t->commit();
         } catch(Exception $e) {
@@ -108,7 +107,6 @@ class Errors
             $t = Yii::$app->db->beginTransaction();
 
             $this->processTask($model, $this->getErrorMessage());
-            $this->flush($model);
 
             $t->commit();
         } catch(Exception $e) {
@@ -161,6 +159,6 @@ class Errors
 
     public function flush($model)
     {
-        Yii::app()->redis->hDel('twitterAccounts', $model->getgetAccount('id'));
+        Yii::$app->redis->hDel('twitterAccounts', $model->getgetAccount('id'));
     }
 }
