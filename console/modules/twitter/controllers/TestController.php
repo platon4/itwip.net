@@ -12,6 +12,66 @@ class TestController extends Controller
 {
     public function actionIndex()
     {
+        $ordersNew = (new Query())->from('{{%twitter_ordersPerform}}')
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+
+        foreach($ordersNew as $zla) {
+            echo "Task update: " . $zla['id'] . PHP_EOL;
+            $params = json_decode($zla['_params'], true);
+
+            if(!empty($params)) {
+
+                if(isset($params['tweet'])) {
+                    $tweet = $params['tweet'];
+                    $bloger_id = isset($params['account']) ? (new Query())->select('owner_id')->from('{{%tw_accounts}}')->where(['id' => $params['account']])->scalar() : 0;
+                    $tw_account = isset($params['account']) ? $params['account'] : 0;
+
+                    if(isset($params['tweet']))
+                        unset($params['tweet']);
+
+                    if(isset($params['account']))
+                        unset($params['account']);
+
+                    $par = !empty($params) ? json_encode($params) : '';
+
+                    Yii::$app->db->createCommand()
+                        ->update('{{%twitter_ordersPerform}}', ['tweet' => $tweet, 'bloger_id' => $bloger_id, 'tw_account' => $tw_account, '_params' => $par], ['id' => $zla['id']])
+                        ->execute();
+                } else {
+                    echo "undefinited index: tweet: " . $zla['id'] . PHP_EOL;
+                }
+            }
+        }
+
+    }
+
+    public function processOrders()
+    {
+        $command = Yii::$app->db->createCommand();
+        $orders = (new Query())->from('{{%twitter_orders}}')->where(['type_order' => 'indexes'])->all();
+
+        foreach($orders as $order) {
+            $command->update('{{%twitter_orders}}', ['status' => 1, 'is_process' => 0], ['id' => $order['id']])->execute();
+            $command->update('{{%twitter_ordersPerform}}', ['status' => 0, 'is_process' => 0], ['order_hash' => $order['order_hash']])->execute();
+        }
+    }
+
+    protected function extractUrls($tweet)
+    {
+        preg_match_all("#(?:(https?|http)://)?(?:www\\.)?([a-z0-9-]+\.(com|ru|net|org|mil|edu|arpa|gov|biz|info|aero|inc|name|tv|mobi|com.ua|am|me|md|kg|kiev.ua|com.ua|in.ua|com.ua|org.ua|[a-z_-]{2,12}))(([^ \"'>\r\n\t]*)?)?#i", strtolower($tweet), $urls);
+
+        if(!empty($urls[0])) {
+            $count = count($urls[0]);
+
+            if($count)
+                foreach($urls[0] as $url)
+                    return trim($url);
+        }
+    }
+
+    protected function actionOrderMigration()
+    {
         $rows = (new Query())->from('{{%tw_orders}} o')->where(
             ['exists', (new Query())->select('id')->from('{{%twitter_orders}} no')->where('no.id=o.id')]
         )
@@ -119,58 +179,5 @@ class TestController extends Controller
                 $t->rollBack();
             }
         }
-
-        $ordersNew = (new Query())->from('{{%twitter_ordersPerform}}')
-            ->orderBy(['id' => SORT_DESC])
-            ->all();
-
-        foreach($ordersNew as $zla) {
-            echo "Task update: " . $row['id'] . PHP_EOL;
-            $params = json_decode($zla['_params'], true);
-
-            if(!empty($params)) {
-                $tweet = $params['tweet'];
-                $bloger_id = isset($params['account']) ? (new Query())->select('owner_id')->from('{{%tw_accounts}}')->where(['id' => $params['account']])->scalar() : 0;
-                $tw_account = isset($params['account']) ? $params['account'] : 0;
-
-                if(isset($params['tweet']))
-                    unset($params['tweet']);
-
-                if(isset($params['account']))
-                    unset($params['account']);
-
-                $par = !empty($params) ? json_encode($params) : '';
-
-                Yii::$app->db->createCommand()
-                    ->update('{{%twitter_ordersPerform}}', ['tweet' => $tweet, 'bloger_id' => $bloger_id, 'tw_account' => $tw_account, '_params' => $par], ['id' => $zla['id']])
-                    ->execute();
-            }
-        }
-
     }
-
-    public function processOrders()
-    {
-        $command = Yii::$app->db->createCommand();
-        $orders = (new Query())->from('{{%twitter_orders}}')->where(['type_order' => 'indexes'])->all();
-
-        foreach($orders as $order) {
-            $command->update('{{%twitter_orders}}', ['status' => 1, 'is_process' => 0], ['id' => $order['id']])->execute();
-            $command->update('{{%twitter_ordersPerform}}', ['status' => 0, 'is_process' => 0], ['order_hash' => $order['order_hash']])->execute();
-        }
-    }
-
-    protected function extractUrls($tweet)
-    {
-        preg_match_all("#(?:(https?|http)://)?(?:www\\.)?([a-z0-9-]+\.(com|ru|net|org|mil|edu|arpa|gov|biz|info|aero|inc|name|tv|mobi|com.ua|am|me|md|kg|kiev.ua|com.ua|in.ua|com.ua|org.ua|[a-z_-]{2,12}))(([^ \"'>\r\n\t]*)?)?#i", strtolower($tweet), $urls);
-
-        if(!empty($urls[0])) {
-            $count = count($urls[0]);
-
-            if($count)
-                foreach($urls[0] as $url)
-                    return trim($url);
-        }
-    }
-
 } 
