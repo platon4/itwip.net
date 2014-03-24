@@ -12,15 +12,14 @@ class TestController extends Controller
 {
     public function actionIndex()
     {
-        $query = new Query();
-
-        $rows = $query->from('{{%tw_orders}} o')->where(
+        $rows = (new Query())->from('{{%tw_orders}} o')->where(
             ['exists', (new Query())->select('id')->from('{{%twitter_orders}} no')->where('no.id=o.id')]
         )
             //->limit(1)
             ->all();
 
         foreach($rows as $row) {
+            echo 'Order process: ' . $row['id'] . PHP_EOL;
             $hash = String::generateHash();
             $status = $row['_status'];
             $payment_type = $row['_type_payment'];
@@ -33,7 +32,7 @@ class TestController extends Controller
                 $inserts = [];
                 $tc = 0;
                 foreach($tasks as $task) {
-
+                    echo "\t\tTask process: " . $row['id'] . PHP_EOL;
                     $norder = (new Query())->from('{{%twitter_orders}}')->where(['id' => $row['id']])->one();
                     $order_hash = $norder['order_hash'];
 
@@ -45,13 +44,19 @@ class TestController extends Controller
                     $url = $this->extractUrls($task['_tweet']);
 
                     $tweet_hash = md5($task['_tweet']);
-                    $params = json_encode([
-                        'tweet'    => $task['_tweet'],
-                        'account'  => $task['_tw_account'],
-                        'tweet_id' => $task['str_id']
-                    ]);
+
+                    if($task_status == 3) {
+                        $params = json_encode([
+                            'tweet_id' => $task['str_id']
+                        ]);
+                    } else {
+                        $params = '';
+                    }
 
                     $price = $task['_tweet_price'];
+                    $post_date = $task['_placed_date'];
+
+                    $bloger_id = (new Query())->select('owner_id')->from('{{%tw_accounts}}')->where(['id' => $task['_tw_account']])->scalar();
 
                     $inserts[] = [
                         $task['id'],
@@ -61,8 +66,12 @@ class TestController extends Controller
                         md5($url),
                         $price,
                         ($row['_ping'] == 1 ? $price + 0.50 : $price),
+                        $post_date,
                         $task_status,
-                        $params
+                        $params,
+                        $task['_tweet'],
+                        $bloger_id,
+                        $task['_tw_account']
                     ];
 
                     if($row['_status'] != 0 && ($task_status == 0 || $task_status == 1))
@@ -78,7 +87,21 @@ class TestController extends Controller
                 //print_r((new Query())->from('{{%twitter_ordersPerform}}')->where(['order_hash' => $order_hash])->one());
 
                 Yii::$app->db->createCommand()->delete('{{%twitter_ordersPerform}}', ['order_hash' => $order_hash])->execute();
-                Yii::$app->db->createCommand()->batchInsert('{{%twitter_ordersPerform}}', ['id', 'order_hash', 'hash', 'url', 'url_hash', 'cost', 'return_amount', 'status', '_params'], $inserts)->execute();
+                Yii::$app->db->createCommand()->batchInsert('{{%twitter_ordersPerform}}', [
+                    'id',
+                    'order_hash',
+                    'hash',
+                    'url',
+                    'url_hash',
+                    'cost',
+                    'return_amount',
+                    'posted_date',
+                    'status',
+                    '_params',
+                    'tweet',
+                    'bloger_id',
+                    'tw_account'
+                ], $inserts)->execute();
 
                 Yii::$app->db->createCommand()->update('{{%twitter_orders}}', [
                     'owner_id'     => $row['owner_id'],
@@ -96,6 +119,34 @@ class TestController extends Controller
                 $t->rollBack();
             }
         }
+
+        $ordersNew = (new Query())->from('{{%twitter_ordersPerform}}')
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+
+        foreach($ordersNew as $zla) {
+            echo "Task update: " . $row['id'] . PHP_EOL;
+            $params = json_decode($zla['_params'], true);
+
+            if(!empty($params)) {
+                $tweet = $params['tweet'];
+                $bloger_id = isset($params['account']) ? (new Query())->select('owner_id')->from('{{%tw_accounts}}')->where(['id' => $params['account']])->scalar() : 0;
+                $tw_account = isset($params['account']) ? $params['account'] : 0;
+
+                if(isset($params['tweet']))
+                    unset($params['tweet']);
+
+                if(isset($params['account']))
+                    unset($params['account']);
+
+                $par = !empty($params) ? json_encode($params) : '';
+
+                Yii::$app->db->createCommand()
+                    ->update('{{%twitter_ordersPerform}}', ['tweet' => $tweet, 'bloger_id' => $bloger_id, 'tw_account' => $tw_account, '_params' => $par], ['id' => $zla['id']])
+                    ->execute();
+            }
+        }
+
     }
 
     public function processOrders()
@@ -109,8 +160,7 @@ class TestController extends Controller
         }
     }
 
-    protected
-    function extractUrls($tweet)
+    protected function extractUrls($tweet)
     {
         preg_match_all("#(?:(https?|http)://)?(?:www\\.)?([a-z0-9-]+\.(com|ru|net|org|mil|edu|arpa|gov|biz|info|aero|inc|name|tv|mobi|com.ua|am|me|md|kg|kiev.ua|com.ua|in.ua|com.ua|org.ua|[a-z_-]{2,12}))(([^ \"'>\r\n\t]*)?)?#i", strtolower($tweet), $urls);
 
