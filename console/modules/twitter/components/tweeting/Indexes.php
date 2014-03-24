@@ -2,6 +2,7 @@
 
 namespace console\modules\twitter\components\tweeting;
 
+use common\helpers\Url;
 use Yii;
 use yii\base\Exception;
 use console\components\Logger;
@@ -40,8 +41,7 @@ class Indexes implements TweetingInterface
     public function process($task)
     {
         $this->setValidators([
-            'account-time-out',
-            'tweet-time-out'
+            'url-time-out'
         ]);
 
         $this->init($task);
@@ -141,7 +141,11 @@ class Indexes implements TweetingInterface
             /** Успешное размещение */
             if($tweeting->getCode() == 200) {
                 $this->_str_id = $tweeting->getStrId();
+
                 if($this->_str_id > 0) {
+                    Yii::$app->redis->set('twitter:twitting:timeout:accounts:' . $this->getAccount('id'), $this->getAccount('id'), $this->getAccount('_timeout') * 60);
+                    Yii::$app->redis->set('twitter:tweeting:timeout:urls:' . md5(Url::getDomen($this->getUrl())), time(), rand(60, (5 * 60)));
+
                     return true;
                 } else {
                     (new Errors())->errorTweetPost($this, $tweeting);
@@ -187,7 +191,27 @@ class Indexes implements TweetingInterface
      */
     protected function getAccountQuery()
     {
-        $account = (new Accounts())->where(['and', 'a._status=1', 's.in_indexses=1', ['not exists', (new Query())->select('id')->from('{{%twitter_tweetingAccountsLogs}}')->where(['and', 'logType=\'indexes\'', 'account_id=a.id'])]])->one();
+        $other = [];
+
+        if($idsList = Yii::$app->redis->mGet(Yii::$app->redis->keys('twitter:twitting:timeout:accounts:*'))) {
+            $ids = [];
+            foreach($idsList as $id) {
+                if($id !== false)
+                    $ids[] = $id;
+            }
+
+            if(!empty($ids))
+                $other[] = ['not in', 'id', $ids];
+        }
+
+        $account = (new Accounts())
+            ->where(array_merge([
+                'and',
+                'a._status=1',
+                's.in_indexses=1',
+                ['not exists', (new Query())->select('id')->from('{{%twitter_tweetingAccountsLogs}}')->where(['and', 'logType=\'indexes\'', 'account_id=a.id'])]
+            ], $other))
+            ->one();
 
         return $account;
     }
@@ -209,20 +233,19 @@ class Indexes implements TweetingInterface
     }
 
     /**
-     * Проверяем время последнего поста в аккаунт, если интервал меньше чем указана в настройках аккаунта, пропускаем задание
-     * @return boolean
-     */
-    protected function validateAccountTimeOut()
-    {
-        return true;
-    }
-
-    /**
      * Проверяем время последнего размещеного идентичного поста, если интервал слишком маленький, пропускаем задание
      * @return boolean
      */
-    protected function validateTweetTimeOut()
+    protected function validateUrlTimeOut()
     {
-        return true;
+        $domen = Url::getDomen($this->getUrl());
+        if($timeout = Yii::$app->redis->get('twitter:tweeting:timeout:urls:' . md5($domen))) {
+            $timeout = time() - $timeout;
+
+            Yii::$app->redis->set('console:twitter:tweeting:tasks:id:' . $this->get('id'), $this->get('id'), $timeout);
+            return false;
+        } else {
+            return false;
+        }
     }
 }
