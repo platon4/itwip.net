@@ -85,7 +85,6 @@ class Manual extends \FormModel
                     'name'         => $account['name'],
                     'screen_name'  => $account['screen_name'],
                     'tweet'        => $params[$order['id']]['tweet'],
-                    'tweet_id'     => 0,
                     'message'      => $order['message'],
                     'id'           => $order['id'],
                     'status'       => $order['status'],
@@ -93,8 +92,7 @@ class Manual extends \FormModel
                     'payment_type' => '',
                     'placed_date'  => date('d.m.Y H:i', strtotime($order['posted_date'])),
                     'params'       => $params[$order['id']],
-                    'message'      => $order['message'],
-                    'approved'     => 0
+                    'message'      => $order['message']
                 ];
             }
 
