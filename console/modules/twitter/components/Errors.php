@@ -86,6 +86,7 @@ class Errors
         try {
             $t = Yii::$app->db->beginTransaction();
             $this->processTask($model, 'Не удалось обработать задание, неопределенная ошибка.');
+            $this->flush($model);
 
             $t->commit();
         } catch(Exception $e) {
@@ -105,6 +106,7 @@ class Errors
             $t = Yii::$app->db->beginTransaction();
 
             $this->processTask($model, $this->getErrorMessage());
+            $this->flush($model);
 
             $t->commit();
         } catch(Exception $e) {
@@ -123,7 +125,9 @@ class Errors
         try {
             $t = Yii::$app->db->beginTransaction();
 
+            $command->update('{{%tw_accounts}}', ['status' => 4], ['id' => $model->getgetAccount('id')])->execute();
             $this->processTask($model, $this->getErrorMessage());
+            $this->flush($model);
 
             $t->commit();
         } catch(Exception $e) {
@@ -142,12 +146,19 @@ class Errors
         try {
             $t = Yii::$app->db->beginTransaction();
 
+            $command->update('{{%tw_accounts}}', ['status' => 3], ['id' => $model->getgetAccount('id')])->execute();
             $this->processTask($model, $this->getErrorMessage());
+            $this->flush($model);
 
             $t->commit();
         } catch(Exception $e) {
             Logger::error($e, [], 'daemons/tweeting/errors', 'Errors-accountIsSuspended');
             $t->rollBack();
         }
+    }
+
+    public function flush($model)
+    {
+        Yii::app()->redis->hDel('twitterAccounts', $model->getgetAccount('id'));
     }
 }

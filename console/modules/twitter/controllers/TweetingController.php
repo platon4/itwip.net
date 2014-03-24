@@ -57,9 +57,11 @@ class TweetingController extends \console\components\Controller
                             ->where($where, [':daemon' => $this->daemon, ':time' => date('H:i:s')])
                             ->limit(10)
                             ->all();
+
                         print_r($rids);
                         print_r($tasks);
                         die();
+
                         if(!empty($tasks)) {
                             foreach($tasks as $task) {
                                 Yii::$app->redis->set('orders:in_process:0:' . $task['order_id'], $task['order_id'], 5 * 60);
