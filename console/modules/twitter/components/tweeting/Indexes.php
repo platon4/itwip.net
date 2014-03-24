@@ -98,7 +98,7 @@ class Indexes implements TweetingInterface
      *
      * @return null
      */
-    protected function getUrl()
+    public function getUrl()
     {
         return $this->getParams('url');
     }
@@ -108,12 +108,12 @@ class Indexes implements TweetingInterface
      *
      * @return mixed
      */
-    protected function getStrId()
+    public function getStrId()
     {
         return $this->_str_id;
     }
 
-    protected function getTime()
+    public function getTime()
     {
         return $this->getParams('time');
     }
@@ -163,7 +163,7 @@ class Indexes implements TweetingInterface
      * @param bool $all
      * @return array|bool
      */
-    protected function getAccount($key, $all = false)
+    public function getAccount($key, $all = false)
     {
         if($this->_account === null) {
             $this->_account = $this->getAccountQuery();

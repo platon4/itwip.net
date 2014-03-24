@@ -46,27 +46,27 @@ trait TweetingTrait
         return $this->task;
     }
 
-    protected function get($key)
+    public function get($key)
     {
         return isset($this->task[$key]) ? $this->task[$key] : null;
     }
 
-    protected function getOwner()
+    public function getOwner()
     {
         return $this->getParams('order_owner');
     }
 
-    protected function getAmountToBloger()
+    public function getAmountToBloger()
     {
         return $this->getParams('amount');
     }
 
-    protected function getAmountToAdv()
+    public function getAmountToAdv()
     {
         return $this->getParams('return_amount');
     }
 
-    protected function getParams($key)
+    public function getParams($key)
     {
         if($this->_params === null) {
             $this->_params = json_decode($this->get('params'), true);
@@ -75,7 +75,7 @@ trait TweetingTrait
         return isset($this->_params[$key]) ? $this->_params[$key] : null;
     }
 
-    protected function getTweet()
+    public function getTweet()
     {
         return $this->getParams('tweet');
     }
