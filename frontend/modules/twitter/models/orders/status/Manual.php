@@ -86,6 +86,7 @@ class Manual extends \FormModel
                     'screen_name'  => $account['screen_name'],
                     'tweet'        => $params[$order['id']]['tweet'],
                     'tweet_id'     => 0,
+                    'message'      => $order['message'],
                     'id'           => $order['id'],
                     'status'       => $order['status'],
                     'amount'       => $order['return_amount'],

@@ -139,9 +139,9 @@ class Indexes implements TweetingInterface
                 ->send($this->getTweet());
 
             /** Успешное размещение */
-            if($tweeting->getCode() === 200) {
+            if($tweeting->getCode() == 200) {
+                $this->_str_id = $tweeting->getStrId();
                 if($this->_str_id > 0) {
-                    $this->_str_id = $tweeting->getStrId();
                     return true;
                 } else {
                     (new Errors())->errorTweetPost($this, $tweeting);

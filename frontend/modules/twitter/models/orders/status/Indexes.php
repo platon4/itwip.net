@@ -52,7 +52,7 @@ class Indexes extends \FormModel
     public function getRows()
     {
         if($this->_rows === null) {
-            $orders = Yii::app()->db->createCommand("SELECT id,url,cost,return_amount,status,_params,message,posted_date FROM {{twitter_ordersPerform}} WHERE order_hash=:hash LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())->queryAll(true, [':hash' => $this->h]);
+            $orders = Yii::app()->db->createCommand("SELECT id,url,cost,return_amount,status,_params,message,posted_date,message FROM {{twitter_ordersPerform}} WHERE order_hash=:hash LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())->queryAll(true, [':hash' => $this->h]);
             $rows = [];
 
             foreach($orders as $order) {
@@ -62,6 +62,7 @@ class Indexes extends \FormModel
                 $rows[] = [
                     'id'          => $order['id'],
                     'url'         => $order['url'],
+                    'message'     => $order['message'],
                     'posted_date' => ($order['posted_date'] == '0000-00-00 00:00:00' ? '-' : date('d.m.Y H:i', $post_date)),
                     'check_date'  => ($order['posted_date'] == '0000-00-00 00:00:00' ? '-' : date('d.m.Y H:i', $post_date + $this->times[$params['time']])),
                     'status'      => $order['status'],
