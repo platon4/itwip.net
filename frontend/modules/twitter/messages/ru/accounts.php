@@ -40,7 +40,7 @@ return array(
 
 	'_twitterAccountList_tablePosted' => 'Выполнено',
 
-	'_twitterAccountList_tableEarneds' => 'Заработал',
+	'_twitterAccountList_tableEarneds' => 'Заработал за период',
 
 	'_twitterAccountList_tableToday' => 'Сегодня',
 

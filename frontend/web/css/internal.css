@@ -229,15 +229,6 @@
 /*========== Мои аккаунты Twitter ==========*/
 .twitterAccountList { width:100%; }
 
-.twitterAccountList .line_title_noopen  { }
-
-.twitterAccountList #block_1 { display: table; width: 100%;}
-.twitterAccountList #block_1_1 { display: table-cell ; vertical-align: top; min-width: 350px; width: 50%; padding: 15px 10px; }
-.twitterAccountList #block_1_1 .block { margin-bottom: 10px; }
-.twitterAccountList #block_1_2 { display: table-cell ; vertical-align: top; width: 50%; padding: 15px 10px; text-align: right; }
-.twitterAccountList #block_1_2 .block.search input { width: 200px; }
-.twitterAccountList #block_1_2 .block.search { min-width: 240px; margin-top: 13px; }
-
 .twitterAccountList #block_2 {  }
 .twitterAccountList #block_2 .table_head .earned { border-bottom: 1px solid #F7F7F7; border-right: none }
 
