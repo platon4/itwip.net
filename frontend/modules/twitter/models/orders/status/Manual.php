@@ -81,7 +81,7 @@ class Manual extends \FormModel
             foreach($orders as $order) {
                 $account = isset($accounts[$order['tw_account']]) ? $accounts[$order['tw_account']] : [
                     'avatar'      => '/i/_default.png',
-                    'name'        => 'account is deleted',
+                    'name'        => 'Account was deleted',
                     'screen_name' => ''
                 ];
 
