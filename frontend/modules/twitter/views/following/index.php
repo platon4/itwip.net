@@ -67,8 +67,8 @@
                             </tr>
                             <tr>
                               <td class="info" colspan="2">
-                                  <div>
-                                      <span><b>Примерные параметры аккаунтов для этой цены:</b></span>
+                                  <div style="padding-left: 10px;">
+                                      <span><b>Примерные параметры аккаунтов для выбранной цены:</b></span>
                                       <span>Читателей: от 500 до 1000</span>
                                       <span>iTR: от 1 до 3</span>
                                   </div>
@@ -88,28 +88,28 @@
                             <tr><td class="info_param">Возраст блогера </td> <td class="param input">значение</td></tr>
                             <tr><td class="info_param">Пол блогера </td> <td class="param input">значение</td></tr>
                         </table>
-                    <h3 class="top_title">Личная фильтрация аккаунтов</h3>
-                    <table>
-                      <tr>
-                          <td class="info_param">Черно-белый список</td>
-                          <td class="param">
-                              <select id="Twitter_bw" name="Twitter[bw]">
-                                <option value="0">Не важно</option>
-                                <option value="1">Показать только из белого списка</option>
-                                <option value="2">Не показывать из чёрного списка</option>
-                              </select>
-                          </td>
-                      </tr>
-                    </table>
                 </div>
                 <div id="block_auto_line"></div>
                 <div id="block_auto_2">
                     <h3 class="top_title">Параметры подписки читателей</h3>
                         <table>
-                            <tr><td class="info_param">Необходимо читателей на аккаунт</td><td class="param input">значение</td></tr>
-                            <tr><td class="info_param">Подписовать с интервалом в</td><td class="param input">значение</td></tr>
-                            <tr><td class="info_param">Но не больше N в день</td><td class="param input">значение</td></tr>
+                            <tr><td class="info_param">Необходимо читателей на аккаунт</td><td class="param input"><input type="text" id="" name="" class="posting_select_input"></td></tr>
+                            <tr><td class="info_param">Подписовать с интервалом в</td><td class="param input"><input type="text" id="" name="" class="posting_select_input"> минут</td></tr>
+                            <tr><td class="info_param">В день не более</td><td class="param input"><input type="text" id="" name="" class="posting_select_input"> подписчиков</td></tr>
                         </table>
+                    <h3 class="top_title">Личная фильтрация аккаунтов</h3>
+                      <table>
+                        <tr>
+                            <td class="info_param">Черно-белый список</td>
+                            <td class="param">
+                                <select id="Twitter_bw" name="Twitter[bw]">
+                                  <option value="0">Не важно</option>
+                                  <option value="1">Подписовать только из белого списка</option>
+                                  <option value="2">Не подписовать из чёрного списка</option>
+                                </select>
+                            </td>
+                        </tr>
+                      </table>
                 </div>
             </div>
         </div>
