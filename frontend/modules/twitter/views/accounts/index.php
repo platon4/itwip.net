@@ -119,7 +119,23 @@ $_count = count($list);
                                     ?>
                         <?php } ?>
                             </select>
-                            <button class="button icon" onclick="Dialog.open('test',{'content':'nlabla'})"><i class="fa fa-wrench"></i></button>
+                            <button class="button icon" onclick="Dialog.open('Массовая настройка аккаунтов',{'content':$('#nu').html()})"><i class="fa fa-wrench"></i></button>
+                            <div style="display:none;" id="nu">
+                              <table>
+                                  <tr><td>Стоимость одного твита:</td><td><input type="text" value="" id="Settings__price" name="Settings[_price]" placeholder="введите цену, цифрами в рублях."></td></tr>
+                                  <tr><td>Работа в режиме:</td><td><?php echo Html::radioButton('название','значение'); ?>Ручном <?php echo Html::radioButton('название','значение'); ?> Автоматическом</td></tr>
+                                  <tr><td>Интервал времени, при выполнении заявок: </td><td><input type="text" value="19" id="Settings__timeout" name="Settings[_timeout]" placeholder="введите время, цифрами в минутах"></td></tr>
+                                  <tr><td>Участвовать в быстрой индексации:</td><td><?php echo Html::radioButton('название','значение'); ?>Да <?php echo Html::radioButton('название','значение'); ?> Нет</td></tr>
+                                  <tr><td>Разрешать рекламу за бонусные деньги: </td><td><?php echo Html::radioButton('название','значение'); ?>Да <?php echo Html::radioButton('название','значение'); ?> Нет</td></tr>
+                                  <tr><td style="vertical-align: top">Ограничить приём заявок, по стоп словам:</td>
+                                    <td>
+                                      <span style="margin-top: 7px; margin-bottom: 7px;" class="block"><?php echo Html::checkBox('inset'); ?> Политика</span>
+                                      <span style="margin-bottom: 7px;" class="block"><?php echo Html::checkBox('inset'); ?> Использовать мои фильтры</span>
+                                      <span class="block"><textarea id="Settings_words" name="Settings[words]" disabled="disabled" placeholder="Настройте свои - стоп слова, для этого аккаунта, записав их через запятую." class="no_resize"></textarea></span>
+                                    </td>
+                                  </tr>
+                              </table>
+                            </div>
                         </div>
                         <?php } ?>
                 </div>
