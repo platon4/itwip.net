@@ -119,7 +119,7 @@ $_count = count($list);
                                     ?>
                         <?php } ?>
                             </select>
-                            <button class="button icon"><i class="fa fa-wrench"></i></button>
+                            <button class="button icon" onclick="Dialog.open('test',{'content':'nlabla'})"><i class="fa fa-wrench"></i></button>
                         </div>
                         <?php } ?>
                 </div>
