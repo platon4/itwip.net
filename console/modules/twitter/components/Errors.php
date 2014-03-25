@@ -80,7 +80,7 @@ class Errors
                 $command->update('{{%twitter_orders}}', ['status' => 3], ['id' => $model->get('order_id')])->execute();
         }
 
-        Logger::error($model, ['id' => $model->get('id'),'message' => $message, 'status' => $status, 'sub_id' => $model->get('sbuorder_id')], 'daemons/tweeting/logs', 'process');
+        Logger::error('', ['id' => $model->get('id'),'message' => $message, 'status' => $status, 'sub_id' => $model->get('sbuorder_id')], 'daemons/tweeting/logs', 'process');
     }
 
     public function unknownError($model)
