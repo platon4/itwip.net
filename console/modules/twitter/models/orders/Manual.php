@@ -116,6 +116,7 @@ class Manual implements OrdersInterface
             'tweet_hash'   => $task['hash'],
             'url_hash'     => $task['url_hash'],
             'process_time' => $this->getTaskProcessTime($task),
+            'payment_type' => $this->get('payment_type'),
             'params'       => $this->getTaskParams($task),
             'daemon'       => $this->getDaemon()
         ];
@@ -152,7 +153,6 @@ class Manual implements OrdersInterface
             'tweet'         => $data['tweet'],
             'account'       => $data['tw_account'],
             'order_owner'   => $this->get('owner_id'),
-            'pay_type'      => $this->get('payment_type'),
             'amount'        => $data['cost'],
             'return_amount' => $data['return_amount'],
             'interval'      => $this->getInterval()

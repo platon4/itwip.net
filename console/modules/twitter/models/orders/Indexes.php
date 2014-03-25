@@ -29,6 +29,7 @@ class Indexes implements OrdersInterface
             'tweet_hash'   => $task['hash'],
             'url_hash'     => $task['url_hash'],
             'process_time' => date('H:i:s'),
+            'payment_type' => $this->get('payment_type'),
             'params'       => $this->getTaskParams($task),
             'daemon'       => $this->getDaemon()
         ];

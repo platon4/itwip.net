@@ -79,11 +79,8 @@ class TestController extends Controller
         }
     }
 
-    protected function actionOrderMigration()
+    public function actionOrderMigration()
     {
-        echo 'Error';
-        die();
-
         $rows = (new Query())->from('{{%tw_orders}} o')->where(
             ['exists', (new Query())->select('id')->from('{{%twitter_orders}} no')->where('no.id=o.id')]
         )
@@ -117,14 +114,6 @@ class TestController extends Controller
 
                     $tweet_hash = md5($task['_tweet']);
 
-                    if($task_status == 3) {
-                        $params = json_encode([
-                            'tweet_id' => $task['str_id']
-                        ]);
-                    } else {
-                        $params = '';
-                    }
-
                     $price = $task['_tweet_price'];
                     $post_date = $task['_placed_date'];
 
@@ -140,10 +129,10 @@ class TestController extends Controller
                         ($row['_ping'] == 1 ? $price + 0.50 : $price),
                         $post_date,
                         $task_status,
-                        $params,
                         $task['_tweet'],
                         $bloger_id,
-                        $task['_tw_account']
+                        $task['_tw_account'],
+                        $task['str_id']
                     ];
 
                     if($row['_status'] != 0 && ($task_status == 0 || $task_status == 1))
@@ -154,9 +143,6 @@ class TestController extends Controller
                     $status = 1;
                 elseif($row['_status'] != 0 && $tc === 0)
                     $status = 2;
-
-                //print_r((new Query())->from('{{%tweets_to_twitter}}')->where(['_order' => $row['id']])->one());
-                //print_r((new Query())->from('{{%twitter_ordersPerform}}')->where(['order_hash' => $order_hash])->one());
 
                 Yii::$app->db->createCommand()->delete('{{%twitter_ordersPerform}}', ['order_hash' => $order_hash])->execute();
                 Yii::$app->db->createCommand()->batchInsert('{{%twitter_ordersPerform}}', [
@@ -169,10 +155,10 @@ class TestController extends Controller
                     'return_amount',
                     'posted_date',
                     'status',
-                    '_params',
                     'tweet',
                     'bloger_id',
-                    'tw_account'
+                    'tw_account',
+                    'tweet_id'
                 ], $inserts)->execute();
 
                 Yii::$app->db->createCommand()->update('{{%twitter_orders}}', [
@@ -180,7 +166,7 @@ class TestController extends Controller
                     'type_order'   => 'manual',
                     'order_hash'   => $hash,
                     'create_date'  => $row['_date'],
-                    'status'       => $status,
+                    'status'       => (string) $status,
                     'payment_type' => $payment_type,
                     '_params'      => '{"targeting":{"interval":30,"t":"all"},"ping":"0"}'
                 ], ['id' => $row['id']])->execute();

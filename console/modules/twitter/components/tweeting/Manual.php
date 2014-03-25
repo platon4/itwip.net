@@ -63,7 +63,7 @@ class Manual implements TweetingInterface
                     'date'           => date('Y-m-d H:i:s'),
                     'tweet_cost'     => $this->getAmountToBloger(),
                     'return_amount'  => $this->getAmountToBloger(),
-                    'payment_method' => $this->getParams('pay_type'),
+                    'payment_method' => $this->get('payment_type'),
                 ])->execute();
 
                 $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => '3', 'tweet_id' => $this->getStrId()], ['id' => $this->get('sbuorder_id')])->execute();

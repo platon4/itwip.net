@@ -59,7 +59,9 @@ class Errors
     {
         $command = Yii::$app->db->createCommand();
 
-        Operation::returnMoney($model->getAmountToAdv(), $model->getOwner(), 'purse', 'errorPostTweet', $model->get('order_id'), $model->get('sbuorder_id'));
+        $pay_type = $model->get('payment_type') == 0 ? 'purse' : 'bonus';
+
+        Operation::returnMoney($model->getAmountToAdv(), $model->getOwner(), $pay_type, 'errorPostTweet', $model->get('order_id'), $model->get('sbuorder_id'));
 
         if($model->get('orderType') == 'indexes' || $model->get('orderType') == 'manual') {
             $status = '4';
