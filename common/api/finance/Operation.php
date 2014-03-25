@@ -30,15 +30,18 @@ class Operation
             'moneyOut'                 => 1,
             'orderSuccessfulExecuted'  => 2,
             'tweetCheckUnsuccessfully' => 3,
-            'buyReferral'              => 4
+            'tweetsCheckSuccess'       => 7,
+            'buyReferral'              => 4,
+            // - 6
         ],
         2 => [
-            'removeOrder'         => 0,
-            'removeTweet'         => 1,
-            'bloggerDeletedTweet' => 3,
-            'indexesFail'         => 6,
-            'indexesFailBloger'   => 7,
-            'errorPostTweet'      => 8,
+            'removeOrder'              => 0,
+            'removeTweet'              => 1,
+            'bloggerDeletedTweet'      => 3,
+            'indexesFail'              => 6,
+            'indexesFailBloger'        => 7,
+            'errorPostTweet'           => 8,
+            'tweetCheckUnsuccessfully' => 9,
         ]
     ];
 
@@ -128,7 +131,6 @@ class Operation
     {
         self::amountValid($amount);
         $moneyType = self::moneyType($moneyType);
-        $accrued = self::accrued(0, $accrued);
 
         if($moneyType == 1)
             $columns = 'bonus_money=bonus_money+' . $amount;
@@ -142,8 +144,8 @@ class Operation
             ->bindValues([':id' => $user_id])
             ->execute();
 
-        self::log($amount, $user_id, $moneyType, 0, 0, $accrued, $operationID, '', 2);
-        self::log($return_amount, $adv_id, $moneyType, 1, 0, $accrued, $operationID, $order_id, 3);
+        self::log($amount, $user_id, $moneyType, 0, 0, self::accrued(0, $accrued), $operationID, '', 2);
+        self::log($return_amount, $adv_id, $moneyType, 1, 0, self::accrued(1, $accrued), $order_id, '', 3);
     }
 
     public static function returnMoney($amount, $user_id, $moneyType, $accrued, $operationID = 0, $operationNotice = '')
@@ -164,7 +166,7 @@ class Operation
         self::log($amount, $user_id, $moneyType, 2, 0, $accrued, $operationID, $operationNotice, 2);
     }
 
-    public static function cancelTransfer($amount, $user_id, $moneyType, $accrued, $operationID)
+    public static function cancelTransfer($amount, $user_id, $moneyType, $accrued, $operationID, $notice = '')
     {
         self::amountValid($amount);
         $moneyType = self::moneyType($moneyType);
@@ -172,7 +174,7 @@ class Operation
 
         self::moneyLockUpdate($amount, $operationID, $user_id);
 
-        self::log($amount, $user_id, $moneyType, 2, 0, $accrued, $operationID, '', 3);
+        self::log($amount, $user_id, $moneyType, 2, 0, $accrued, $operationID, $notice, 3);
     }
 
     /*
