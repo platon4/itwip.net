@@ -146,7 +146,7 @@ class Errors
         try {
             $t = Yii::$app->db->beginTransaction();
 
-            $command->update('{{%tw_accounts}}', ['status' => 3], ['id' => $model->getAccount('id')])->execute();
+            $command->update('{{%tw_accounts}}', ['_status' => 3], ['id' => $model->getAccount('id')])->execute();
             $this->processTask($model, $this->getErrorMessage());
             $this->flush($model);
 
