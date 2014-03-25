@@ -152,6 +152,7 @@ class Manual implements OrdersInterface
             'tweet'         => $data['tweet'],
             'account'       => $data['tw_account'],
             'order_owner'   => $this->get('owner_id'),
+            'pay_type'      => $this->get('payment_type'),
             'amount'        => $data['cost'],
             'return_amount' => $data['return_amount'],
             'interval'      => $this->getInterval()

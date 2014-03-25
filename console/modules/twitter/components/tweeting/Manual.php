@@ -45,23 +45,22 @@ class Manual implements TweetingInterface
                 $t = Yii::$app->db->beginTransaction();
 
                 /** Начисляем деньги на баланс пользователя */
-                Operation::put($this->getAmountToBloger(), $this->getAccount('owner_id'), 'purse', 'indexesCheck', $this->get('sbuorder_id'), $this->getAccount('screen_name'));
+                Operation::put($this->getAmountToBloger(), $this->getAccount('owner_id'), $this->getPayType(), 'tweetsCheck', $this->getStrId(), $this->getAccount('screen_name'));
 
                 /** Добавляем в список ссылок для проверки */
                 $command->insert('{{%twitter_tweets}}', [
-                    'date_check' => date('Y-m-d H:i:s', time() + ($this->times[$this->getTime()] * 60 * 60)),
-                    '_params'    => json_encode([
-                        'order_id'      => $this->get('order_id'),
-                        'pid'           => $this->get('sbuorder_id'),
-                        'order_hash'    => $this->get('order_hash'),
-                        'bloger_id'     => $this->getAccount('owner_id'),
-                        'url'           => $this->getUrl(),
-                        'adv_id'        => $this->getOwner(),
-                        'amount'        => $this->getAmountToBloger(),
-                        'amount_return' => $this->getAmountToAdv(),
-                        'account_id'    => $this->getAccount('id'),
-                        'tw_str_id'     => $this->getStrId()
-                    ])
+                    'order_hash'     => $this->get('order_hash'),
+                    'order_type'     => 'manual',
+                    'adv_id'         => $this->getOwner(),
+                    'bloger_id'      => $this->getAccount('owner_id'),
+                    'tweet_hash'     => md5($this->getParams('tweet')),
+                    'tweet'          => $this->getParams('tweet'),
+                    'tweet_id'       => $this->getStrId(),
+                    'tw_account'     => $this->getAccount('id'),
+                    'date'           => date('Y-m-d H:i:s'),
+                    'tweet_cost'     => $this->getAmountToBloger(),
+                    'return_amount'  => $this->getAmountToBloger(),
+                    'payment_method' => $this->getParams('pay_type'),
                 ])->execute();
 
                 $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => 2])->execute();
@@ -165,6 +164,11 @@ class Manual implements TweetingInterface
                 Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => 2, 'finish_date' => date('Y-m-d H:i:s')], ['id' => $id])->execute();
             }
         }
+    }
+
+    protected function getPayType()
+    {
+        return $this->getParams('pay_type') == 0 ? 'purse' : 'bonus';
     }
 
     /**
