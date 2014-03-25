@@ -12,7 +12,6 @@ class TestController extends Controller
 {
     public function actionIndex()
     {
-        die();
         $tweets = (new Query())->from('{{%tw_tweets}}')->orderBy(['id' => SORT_DESC])->all();
 
         $i = 0;
