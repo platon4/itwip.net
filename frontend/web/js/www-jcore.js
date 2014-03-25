@@ -198,7 +198,7 @@ Dialog = {
         $('#_dialog-message').remove();
         $('body').append('<div id="_dialog-message" title="' + title + '" style="display: none;"><div class="ui-dialog-content-text">' + params.content + '</div></div>');
 
-        $("#dialog-message").dialog({
+        $("#_dialog-message").dialog({
             resizable: false,
             modal: true,
             buttons: params.buttons,
@@ -207,8 +207,8 @@ Dialog = {
     },
     close: function()
     {
-        $('#dialog-message').dialog('close');
-        $('#dialog-message').remove();
+        $('#_dialog-message').dialog('close');
+        $('#_dialog-message').remove();
     },
     confirm: function(message, title, callback)
     {
