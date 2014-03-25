@@ -61,7 +61,7 @@ class Errors
 
         Operation::returnMoney($model->getAmountToAdv(), $model->getOwner(), 'purse', 'errorPostTweet', $model->get('order_id'), $model->get('sbuorder_id'));
 
-        if($model->get('orderType') == 'indexes') {
+        if($model->get('orderType') == 'indexes' || $model->get('orderType') == 'manual') {
             $status = 4;
         } else {
             $status = 99;
