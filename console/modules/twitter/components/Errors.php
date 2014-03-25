@@ -77,7 +77,7 @@ class Errors
                 ->count();
 
             if($count == 0)
-                $command->update('{{%twitter_orders}}', ['status' => 3], ['id' => $model->get('order_id')])->execute();
+                $command->update('{{%twitter_orders}}', ['status' => '3'], ['id' => $model->get('order_id')])->execute();
         }
 
         Logger::error('', ['id' => $model->get('id'), 'message' => $message, 'status' => $status, 'sub_id' => $model->get('sbuorder_id')], 'daemons/tweeting/logs', 'process');
@@ -127,7 +127,7 @@ class Errors
         try {
             $t = Yii::$app->db->beginTransaction();
 
-            $command->update('{{%tw_accounts}}', ['_status' => 4], ['id' => $model->getAccount('id')])->execute();
+            $command->update('{{%tw_accounts}}', ['_status' => '4'], ['id' => $model->getAccount('id')])->execute();
             $this->processTask($model, $this->getErrorMessage());
             $this->flush($model);
 
@@ -148,7 +148,7 @@ class Errors
         try {
             $t = Yii::$app->db->beginTransaction();
 
-            $command->update('{{%tw_accounts}}', ['_status' => 3], ['id' => $model->getAccount('id')])->execute();
+            $command->update('{{%tw_accounts}}', ['_status' => '3'], ['id' => $model->getAccount('id')])->execute();
             $this->processTask($model, $this->getErrorMessage());
             $this->flush($model);
 

@@ -78,7 +78,7 @@ class Indexes implements TweetingInterface
                     ])
                 ])->execute();
 
-                $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => 1])->execute();
+                $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => '1'])->execute();
                 $command->delete('{{%twitter_tweeting}}', ['id' => $this->get('id')])->execute();
 
                 $this->updateOrder($this->get('order_hash'), $this->get('order_id'));
@@ -228,7 +228,7 @@ class Indexes implements TweetingInterface
                 ->count();
 
             if($count == 0)
-                Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => 2, 'finish_date' => date('Y-m-d H:i:s')], ['id' => $id])->execute();
+                Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => '2', 'finish_date' => date('Y-m-d H:i:s')], ['id' => $id])->execute();
         }
     }
 
@@ -247,5 +247,10 @@ class Indexes implements TweetingInterface
         } else {
             return true;
         }
+    }
+
+    public function flush()
+    {
+
     }
 }

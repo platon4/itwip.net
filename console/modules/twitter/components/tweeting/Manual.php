@@ -40,6 +40,8 @@ class Manual implements TweetingInterface
     {
         $command = Yii::$app->db->createCommand();
 
+        echo "Post Order " . $this->get('id') . " - Account: " . $this->getAccount('id') . PHP_EOL;
+
         if($this->postTweet() === true) {
             try {
                 $t = Yii::$app->db->beginTransaction();
@@ -63,7 +65,7 @@ class Manual implements TweetingInterface
                     'payment_method' => $this->getParams('pay_type'),
                 ])->execute();
 
-                $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => 3])->execute();
+                $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => '3'])->execute();
                 $command->delete('{{%twitter_tweeting}}', ['id' => $this->get('id')])->execute();
 
                 $this->updateOrder($this->get('order_hash'), $this->get('order_id'));
@@ -163,7 +165,7 @@ class Manual implements TweetingInterface
                 ->count();
 
             if($count == 0) {
-                Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => 2, 'finish_date' => date('Y-m-d H:i:s')], ['id' => $id])->execute();
+                Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => '2', 'finish_date' => date('Y-m-d H:i:s')], ['id' => $id])->execute();
             }
         }
     }
@@ -189,4 +191,9 @@ class Manual implements TweetingInterface
         }
     }
 
+    public function flush()
+    {
+        $this->_account = null;
+        $this->_str_id = null;
+    }
 }
