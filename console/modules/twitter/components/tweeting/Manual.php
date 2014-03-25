@@ -63,7 +63,7 @@ class Manual implements TweetingInterface
                     'payment_method' => $this->getParams('pay_type'),
                 ])->execute();
 
-                $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => 2])->execute();
+                $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => 3])->execute();
                 $command->delete('{{%twitter_tweeting}}', ['id' => $this->get('id')])->execute();
 
                 $this->updateOrder($this->get('order_hash'), $this->get('order_id'));
