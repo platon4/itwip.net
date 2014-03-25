@@ -12,7 +12,7 @@ class TestController extends Controller
 {
     public function actionIndex()
     {
-        $tweets = (new Query())->from('{{%tw_tweets}}')->orderBy(['id' => SORT_DESC])->limit(10)->all();
+        $tweets = (new Query())->from('{{%tw_tweets}}')->orderBy(['id' => SORT_DESC])->all();
 
         $i = 0;
         foreach($tweets as $tweet) {
@@ -41,6 +41,8 @@ class TestController extends Controller
                     'return_amount'  => $tweet['_cost'],
                     'payment_method' => $tweet['pay_type'],
                 ];
+
+                Yii::$app->db->createCommand()->insert('{{%twitter_tweets}}', $insert)->execute();
 
                 echo "Process: " . $i . PHP_EOL;
                 $t->rollBack();
