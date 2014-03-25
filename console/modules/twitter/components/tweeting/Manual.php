@@ -27,7 +27,8 @@ class Manual implements TweetingInterface
     public function process($task)
     {
         $this->setValidators([
-            'tweet-time-out'
+            'tweet-time-out',
+            'url-time-out'
         ]);
 
         $this->init($task);
@@ -65,7 +66,7 @@ class Manual implements TweetingInterface
                     'payment_method' => $this->getParams('pay_type'),
                 ])->execute();
 
-                $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => '3'])->execute();
+                $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => '3'], ['id' => $this->get('sbuorder_id')])->execute();
                 $command->delete('{{%twitter_tweeting}}', ['id' => $this->get('id')])->execute();
 
                 $this->updateOrder($this->get('order_hash'), $this->get('order_id'));
@@ -117,8 +118,10 @@ class Manual implements TweetingInterface
                 if($this->_str_id > 0) {
                     Yii::$app->redis->set('twitter:twitting:timeout:accounts:' . $this->getAccount('id'), $this->getAccount('id'), $this->getAccount('_timeout') * 60);
 
-                    if($this->get('tweet') !== null || $this->get('tweet') != '')
+                    if($this->get('tweet') !== null || $this->get('tweet') != '') {
                         Yii::$app->redis->set('twitter:tweeting:timeout:tweets:' . md5($this->get('tweet')), time(), rand(60, (5 * 60)));
+                        Yii::$app->redis->set('twitter:tweeting:timeout:urls:' . md5(Url::getDomen($this->getUrl())), time(), rand(60, (5 * 60)));
+                    }
 
                     return true;
                 } else {
@@ -182,6 +185,23 @@ class Manual implements TweetingInterface
     protected function validateTweetTimeOut()
     {
         if($timeout = Yii::$app->redis->get('twitter:tweeting:timeout:tweets:' . md5($this->get('tweet')))) {
+            $timeout = time() - $timeout;
+
+            Yii::$app->redis->set('console:twitter:tweeting:tasks:id:' . $this->get('id'), $this->get('id'), $timeout);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Проверяем время последнего размещеного идентичного поста, если интервал слишком маленький, пропускаем задание
+     * @return boolean
+     */
+    protected function validateUrlTimeOut()
+    {
+        $domen = Url::getDomen($this->getUrl());
+        if($timeout = Yii::$app->redis->get('twitter:tweeting:timeout:urls:' . md5($domen))) {
             $timeout = time() - $timeout;
 
             Yii::$app->redis->set('console:twitter:tweeting:tasks:id:' . $this->get('id'), $this->get('id'), $timeout);
