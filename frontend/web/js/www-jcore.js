@@ -195,14 +195,14 @@ Dialog = {
                     closeText: 'X',
                 }, options);
 
-        $('#dialog-message').remove();
-        $('body').append('<div id="dialog-message" title="' + title + '" style="display: none;"><div class="ui-dialog-content-text">' + params.content + '</div></div>');
+        $('#_dialog-message').remove();
+        $('body').append('<div id="_dialog-message" title="' + title + '" style="display: none;"><div class="ui-dialog-content-text">' + params.content + '</div></div>');
 
         $("#dialog-message").dialog({
             resizable: false,
             modal: true,
             buttons: params.buttons,
-            closeText: params.closeText,
+            closeText: params.closeText
         });
     },
     close: function()
