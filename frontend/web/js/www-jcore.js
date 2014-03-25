@@ -203,12 +203,7 @@ Dialog = {
             resizable: false,
             modal: true,
             buttons: params.buttons,
-            closeText: params.closeText,
-            position: {                // Ensure the titlebar is always visible
-                using: function( pos ) {
-
-                }
-            }
+            closeText: params.closeText
         });
     },
     close: function()
