@@ -186,6 +186,7 @@ function _radioBox(_e)
 Dialog = {
     open: function(title, options)
     {
+        this.close();
         var params = $.extend(
                 {
                     buttons: [{text: _close, click: function() {
