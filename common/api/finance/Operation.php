@@ -127,7 +127,7 @@ class Operation
         return true;
     }
 
-    public static function unlockMoney($amount, $return_amount, $user_id, $adv_id, $moneyType, $accrued, $operationID, $order_id)
+    public static function unlockMoney($amount, $return_amount, $user_id, $adv_id, $moneyType, $accrued, $operationID, $order_id, $notice = '')
     {
         self::amountValid($amount);
         $moneyType = self::moneyType($moneyType);
@@ -144,7 +144,7 @@ class Operation
             ->bindValues([':id' => $user_id])
             ->execute();
 
-        self::log($amount, $user_id, $moneyType, 0, 0, self::accrued(0, $accrued), $operationID, '', 2);
+        self::log($amount, $user_id, $moneyType, 0, 0, self::accrued(0, $accrued), $operationID, $notice, 2);
         self::log($return_amount, $adv_id, $moneyType, 1, 0, self::accrued(1, $accrued), $order_id, '', 3);
     }
 
