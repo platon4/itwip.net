@@ -159,6 +159,6 @@ class Errors
 
     public function flush($model)
     {
-        Yii::$app->redis->hDel('twitterAccounts', $model->getgetAccount('id'));
+        Yii::$app->redis->hDel('twitterAccounts', $model->getAccount('id'));
     }
 }
