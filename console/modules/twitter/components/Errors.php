@@ -67,7 +67,7 @@ class Errors
             $status = 9;
         }
 
-        echo $status;
+        echo $model->get('sbuorder_id');
         die();
 
         $command->delete('{{%twitter_tweeting}}', ['id' => $model->get('id')])->execute();
