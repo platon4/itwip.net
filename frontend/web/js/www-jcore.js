@@ -204,19 +204,11 @@ Dialog = {
             modal: true,
             buttons: params.buttons,
             closeText: params.closeText,
-            position: {
-                my: "top",
-                at: "top",
-                of: window,
-                collision: "fit",
-                // Ensure the titlebar is always visible
+            position: {                // Ensure the titlebar is always visible
                 using: function( pos ) {
-                    var topOffset = $( this ).css( pos ).offset().top;
-                    if ( topOffset < 0 ) {
-                        $( this ).css( "top", pos.top - topOffset );
-                    }
+
                 }
-            },
+            }
         });
     },
     close: function()
