@@ -32,8 +32,10 @@ class Manual extends Model
                 $status = $this->tweetStatus($row['tweet_id']);
 
                 if($status != 3) {
-                    $order_id = !empty($row['order_hash']) ? (new Query())->select('id')->from('{{%twitter_orders}}')->where(['order_hash' => $row['order_hash']])->scalar() : 0;
+                    echo $row['order_hash'].PHP_EOL;
 
+                    $order_id = trim($row['order_hash']) != '' ? (new Query())->select('id')->from('{{%twitter_orders}}')->where(['order_hash' => $row['order_hash']])->scalar() : 0;
+echo $order_id.PHP_EOL;
                     $pay_type = $row['payment_method'] == 1 ? 'bonus' : 'purse';
 
                     if(empty($row['screen_name']))
@@ -43,7 +45,7 @@ class Manual extends Model
                         $t = Yii::$app->db->beginTransaction();
 
                         if($status === 0) {
-                            Operation::unlockMoney($row['tweet_cost'], $row['return_amount'], $row['bloger_id'], $row['adv_id'], $pay_type, 'tweetsCheckSuccess', $row['tweet_id'], $order_id);
+                            Operation::unlockMoney($row['tweet_cost'], $row['return_amount'], $row['bloger_id'], $row['adv_id'], $pay_type, 'tweetsCheckSuccess', $row['tweet_id'], $order_id, $row['screen_name']);
 
                             $command->update('{{%twitter_tweets}}', ['status' => 1], ['id' => $row['id']])->execute();
 
@@ -93,7 +95,7 @@ class Manual extends Model
                 ->select('t.*,a.screen_name')
                 ->from('{{%twitter_tweets}} t')
                 ->leftJoin('{{%tw_accounts}} a', 't.tw_account=a.id')
-                ->where(['and', 't.status=0', 't.date<:date'], [':date' => date("Y-m-d H:i:s", time() - (3 * 86400))])
+                ->where(['and', 't.status=0', 't.date<:date', 't.id=5684'], [':date' => date("Y-m-d H:i:s", time() - (3 * 86400))])
                 ->orderBy(['t.date' => SORT_ASC])
                 ->limit(1)
                 ->all();
