@@ -53,7 +53,7 @@ class Indexes extends Model
                     $this->removeTweet($task);
                 } else {
                     Yii::$app->db->createCommand()->update('{{%twitter_urlCheck}}', ['skip' => 1], ['id' => $row['id']])->execute();
-                    Logger::error('json_decode return null', $row, 'daemons/tweeting/errors', 'jsonDecodeError');
+                    Logger::error('json_decode return null', $row, 'daemons/tweeting/errors', 'checkIndexes-jsonDecodeError');
                 }
             }
         } else {

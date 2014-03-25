@@ -12,6 +12,7 @@ class TestController extends Controller
 {
     public function actionIndex()
     {
+        die();
         $tweets = (new Query())->from('{{%tw_tweets}}')->orderBy(['id' => SORT_DESC])->all();
 
         $i = 0;
@@ -40,6 +41,7 @@ class TestController extends Controller
                     'tweet_cost'     => $tweet['_cost'],
                     'return_amount'  => $tweet['_cost'],
                     'payment_method' => $tweet['pay_type'],
+                    'status'         => $tweet['_status']
                 ];
 
                 Yii::$app->db->createCommand()->insert('{{%twitter_tweets}}', $insert)->execute();
