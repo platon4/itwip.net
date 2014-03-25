@@ -68,7 +68,7 @@ class Errors
         }
 
         $command->delete('{{%twitter_tweeting}}', ['id' => $model->get('id')])->execute();
-        $command->update('{{%twitter_ordersPerform}}', ['message' => $message, 'status' => $status], ['id' => $model->get('sbuorder_id')])->execute();
+        $command->update('{{%twitter_ordersPerform1}}', ['message' => $message, 'status' => $status], ['id' => $model->get('sbuorder_id')])->execute();
 
         if($model->get('order_hash') !== null) {
             $count = (new Query())
@@ -79,6 +79,8 @@ class Errors
             if($count == 0)
                 $command->update('{{%twitter_orders}}', ['status' => 3], ['id' => $model->get('order_id')])->execute();
         }
+
+        Logger::error($model, ['id' => $model->get('id'),'message' => $message, 'status' => $status, 'sub_id' => $model->get('sbuorder_id')], 'daemons/tweeting/logs', 'process');
     }
 
     public function unknownError($model)

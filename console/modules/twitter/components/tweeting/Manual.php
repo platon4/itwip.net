@@ -106,6 +106,8 @@ class Manual implements TweetingInterface
             ])
                 ->send($this->getTweet());
 
+            Logger::error($this, ['acc' => $this->getAccount('id')], 'daemons/tweeting/logs', 'post');
+
             /** Успешное размещение */
             if($tweeting->getCode() == 200) {
                 $this->_str_id = $tweeting->getStrId();
