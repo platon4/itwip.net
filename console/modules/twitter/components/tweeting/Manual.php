@@ -27,7 +27,7 @@ class Manual implements TweetingInterface
     public function process($task)
     {
         $this->setValidators([
-            'url-time-out'
+            'tweet-time-out'
         ]);
 
         $this->init($task);
