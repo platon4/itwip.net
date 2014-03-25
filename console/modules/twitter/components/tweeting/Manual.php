@@ -113,7 +113,7 @@ class Manual implements TweetingInterface
                 if($this->_str_id > 0) {
                     Yii::$app->redis->set('twitter:twitting:timeout:accounts:' . $this->getAccount('id'), $this->getAccount('id'), $this->getAccount('_timeout') * 60);
 
-                    if($this->getUrl() !== null || $this->getUrl() != '')
+                    if($this->get('tweet') !== null || $this->get('tweet') != '')
                         Yii::$app->redis->set('twitter:tweeting:timeout:tweets:' . md5($this->get('tweet')), time(), rand(60, (5 * 60)));
 
                     return true;

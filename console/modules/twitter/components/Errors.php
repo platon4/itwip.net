@@ -64,10 +64,13 @@ class Errors
         if($model->get('orderType') == 'indexes' || $model->get('orderType') == 'manual') {
             $status = 4;
         } else {
-            $status = 99;
+            $status = 9;
         }
 
-        $command->delete('{{%twitter_tweeting}}', ['id' => $model->get('id')]);
+        echo $status;
+        die();
+
+        $command->delete('{{%twitter_tweeting}}', ['id' => $model->get('id')])->execute();
         $command->update('{{%twitter_ordersPerform}}', ['message' => $message, 'status' => $status], ['id' => $model->get('sbuorder_id')])->execute();
 
         if($model->get('order_hash') !== null) {
