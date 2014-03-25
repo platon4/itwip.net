@@ -32,8 +32,12 @@ class Manual extends Model
                 $status = $this->tweetStatus($row['tweet_id']);
 
                 if($status != 3) {
-                    $order_id = 0;
+                    $order_id = !empty($row['order_hash']) ? (new Query())->select('id')->from('{{%twitter_orders}}')->where(['order_hash' => $row['order_hash']])->scalar() : 0;
+
                     $pay_type = $row['payment_method'] == 1 ? 'bonus' : 'purse';
+
+                    if(empty($row['screen_name']))
+                        $row['screen_name'] = 'Account was deleted from the system';
 
                     try {
                         $t = Yii::$app->db->beginTransaction();

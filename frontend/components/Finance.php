@@ -180,7 +180,7 @@ class Finance
                 4 => Yii::t('financeModule.index', '_shop_ref_buy', array('{ref}' => $notice)),
 
                 6 => Yii::t('financeModule.index', '_tweets_indexes_payFromLock', array('{order}' => $notice)),
-                7 => Yii::t('financeModule.index', '_checking_tweets_deletion_successfully')
+                7 => Yii::t('financeModule.index', '_checking_tweets_deletion_successfully_order', array('{id}' => $notice))
             ),
             //Возврат
             2 => array(

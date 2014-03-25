@@ -51,6 +51,7 @@ return array(
     '_checking_indexes_delete_successfully' => 'Проверка твита "быстрая индексация" - успешно',
     '_checking_indexes_delete' => 'Размещение твита "быстрая индексация"',
 
+    '_checking_tweets_deletion_successfully_order' => 'Проверка твита на удаление - успешно, ID заказа: {id}',
 
     /* Рекламодатель */
     '_сreateOrder_providing_collateral'=>'Создан заказ - обеспечение залога для: id {id} ',
