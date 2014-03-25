@@ -45,7 +45,7 @@ class TestController extends Controller
                 Yii::$app->db->createCommand()->insert('{{%twitter_tweets}}', $insert)->execute();
 
                 echo "Process: " . $i . PHP_EOL;
-                $t->rollBack();
+                $t->commit();
             } catch(Exception $e) {
                 echo $e;
                 $t->rollBack();
