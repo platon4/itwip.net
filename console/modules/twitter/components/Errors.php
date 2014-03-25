@@ -140,6 +140,23 @@ class Errors
         }
     }
 
+    public function accountNotFound($model)
+    {
+        $command = Yii::$app->db->createCommand();
+
+        try {
+            $t = Yii::$app->db->beginTransaction();
+
+            $this->processTask($model, 'Account was deleted from the system');
+            $this->flush($model);
+
+            $t->commit();
+        } catch(Exception $e) {
+            Logger::error($e, [], 'daemons/tweeting/errors', 'Errors-accountNotFound');
+            $t->rollBack();
+        }
+    }
+
     /**
      * Выполняем при ошибки с кодом 64 (Учетная запись временно приостановлена)
      */
