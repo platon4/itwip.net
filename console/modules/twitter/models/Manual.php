@@ -15,7 +15,6 @@ use common\api\finance\Operation;
 class Manual extends Model
 {
     protected $_tasks;
-    protected $_account;
 
     public function rules()
     {
@@ -26,17 +25,9 @@ class Manual extends Model
 
     public function checkTweets()
     {
-        print_r($this->getTasks());
-        die();
         if($this->getTasks() !== false) {
             foreach($this->getTasks() as $row) {
-                $task = json_decode($row['_params'], true);
-                if($task !== null) {
-                    $task['id'] = $row['id'];
-
-                } else {
-                    Logger::error('json_decode return null', $row, 'daemons/tweeting/errors', 'checkTweets-jsonDecodeError');
-                }
+                print_r($row);
             }
         } else {
             echo "Not tasks\n";
@@ -45,13 +36,17 @@ class Manual extends Model
 
     protected function getTasks()
     {
-        $tweets = (new Query())
-            ->select('t.*,a.screen_name')
-            ->from('{{%twitter_tweets}} t')
-            ->leftJoin('{{%tw_accounts}} a', 't.tw_account=a.id')
-            ->where(['and', 't.status=0', 't.date<:date'], [':date' => date("Y-m-d H:i:s", time() - (3 * 86400))])
-            ->orderBy(['t.date' => SORT_ASC])
-            ->limit(50)
-            ->all();
+        if($this->_tasks === null) {
+            $this->_tasks = (new Query())
+                ->select('t.*,a.screen_name')
+                ->from('{{%twitter_tweets}} t')
+                ->leftJoin('{{%tw_accounts}} a', 't.tw_account=a.id')
+                ->where(['and', 't.status=0', 't.date<:date'], [':date' => date("Y-m-d H:i:s", time() - (3 * 86400))])
+                ->orderBy(['t.date' => SORT_ASC])
+                ->limit(1)
+                ->all();
+        }
+
+        return $this->_tasks;
     }
 }

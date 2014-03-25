@@ -35,6 +35,7 @@ class TestController extends Controller
                     'bloger_id'      => $tweet['owner_id'],
                     'tweet_hash'     => md5($tweet['_text']),
                     'tweet'          => $tweet['_text'],
+                    'tweet_id'       => $tweet['tw_id'],
                     'tw_account'     => $tweet['tid'],
                     'date'           => $tweet['_date'],
                     'tweet_cost'     => $tweet['_cost'],
