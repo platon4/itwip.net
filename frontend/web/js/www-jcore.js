@@ -207,6 +207,7 @@ Dialog = {
             position: {               // Ensure the titlebar is always visible
                 using: function( pos ) {
                     $(this).css("top", 250);
+                    $(this).css("left", 'auto');
                 }
             }
         });
