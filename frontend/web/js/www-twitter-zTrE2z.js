@@ -1321,8 +1321,8 @@ var Twitter = {
             confirm: function () {
                 var pay_text = this.p.payment == 1 ? this.s.to_pay + ' руб.Б.' : this.s.to_pay + ' руб.';
                 Dialog.open('Подтверждение заказа', {
-                    content: '<div style="padding: 7px 15px 0;" id="_orderProcessing"><strong>Подтвердение заказа на сумму:</strong> ' + pay_text + '</div>',
-                    buttons: [
+                    "content": "<div style=\"padding: 7px 15px 0;\" id=\"_orderProcessing\"><strong>Подтвердение заказа на сумму:</strong> " + (pay_text) + "</div>",
+                    "buttons": [
                         {
                             text: _cancel, click: function () {
                             $(this).dialog("close");
