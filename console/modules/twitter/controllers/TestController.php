@@ -12,40 +12,43 @@ class TestController extends Controller
 {
     public function actionIndex()
     {
-        echo 'Error';
-        die();
-        $ordersNew = (new Query())->from('{{%twitter_ordersPerform}}')
-            ->orderBy(['id' => SORT_DESC])
-            ->all();
+        $tweets = (new Query())->from('{{%tw_tweets}}')->orderBy(['id' => SORT_DESC])->limit(10)->all();
 
-        foreach($ordersNew as $zla) {
-            echo "Task update: " . $zla['id'] . PHP_EOL;
-            $params = json_decode($zla['_params'], true);
+        $i = 0;
+        foreach($tweets as $tweet) {
+            try {
+                $i++;
+                $t = Yii::$app->db->beginTransaction();
 
-            if(!empty($params)) {
+                $order_id = (new Query())->select('_order')->from('{{%tweets_to_twitter}}')->where(['str_id' => $tweet['tw_id']])->scalar();
+                $hash = '';
 
-                if(isset($params['tweet'])) {
-                    $tweet = $params['tweet'];
-                    $bloger_id = isset($params['account']) ? (new Query())->select('owner_id')->from('{{%tw_accounts}}')->where(['id' => $params['account']])->scalar() : 0;
-                    $tw_account = isset($params['account']) ? $params['account'] : 0;
-
-                    if(isset($params['tweet']))
-                        unset($params['tweet']);
-
-                    if(isset($params['account']))
-                        unset($params['account']);
-
-                    $par = !empty($params) ? json_encode($params) : '';
-
-                    Yii::$app->db->createCommand()
-                        ->update('{{%twitter_ordersPerform}}', ['tweet' => $tweet, 'bloger_id' => $bloger_id, 'tw_account' => $tw_account, '_params' => $par], ['id' => $zla['id']])
-                        ->execute();
-                } else {
-                    echo "undefinited index: tweet: " . $zla['id'] . PHP_EOL;
+                if(trim($order_id) != '') {
+                    $hash = (new Query())->select('order_hash')->from('{{%twitter_orders}}')->where(['id' => $order_id])->scalar();
                 }
+
+                $insert = [
+                    'id'             => $tweet['id'],
+                    'order_hash'     => '',
+                    'order_type'     => 'manual',
+                    'adv_id'         => $tweet['ot_id'],
+                    'bloger_id'      => $tweet['owner_id'],
+                    'tweet_hash'     => md5($tweet['_text']),
+                    'tweet'          => $tweet['_text'],
+                    'tw_account'     => $tweet['tid'],
+                    'date'           => $tweet['_date'],
+                    'tweet_cost'     => $tweet['_cost'],
+                    'return_amount'  => $tweet['_cost'],
+                    'payment_method' => $tweet['pay_type'],
+                ];
+
+                echo "Process: " . $i . PHP_EOL;
+                $t->rollBack();
+            } catch(Exception $e) {
+                echo $e;
+                $t->rollBack();
             }
         }
-
     }
 
     public function actionProcessOrders()
@@ -182,6 +185,42 @@ class TestController extends Controller
             } catch(Exception $e) {
                 echo $e;
                 $t->rollBack();
+            }
+        }
+    }
+
+    public function updateTasks()
+    {
+
+        $ordersNew = (new Query())->from('{{%twitter_ordersPerform}}')
+            ->orderBy(['id' => SORT_DESC])
+            ->all();
+
+        foreach($ordersNew as $zla) {
+            echo "Task update: " . $zla['id'] . PHP_EOL;
+            $params = json_decode($zla['_params'], true);
+
+            if(!empty($params)) {
+
+                if(isset($params['tweet'])) {
+                    $tweet = $params['tweet'];
+                    $bloger_id = isset($params['account']) ? (new Query())->select('owner_id')->from('{{%tw_accounts}}')->where(['id' => $params['account']])->scalar() : 0;
+                    $tw_account = isset($params['account']) ? $params['account'] : 0;
+
+                    if(isset($params['tweet']))
+                        unset($params['tweet']);
+
+                    if(isset($params['account']))
+                        unset($params['account']);
+
+                    $par = !empty($params) ? json_encode($params) : '';
+
+                    Yii::$app->db->createCommand()
+                        ->update('{{%twitter_ordersPerform}}', ['tweet' => $tweet, 'bloger_id' => $bloger_id, 'tw_account' => $tw_account, '_params' => $par], ['id' => $zla['id']])
+                        ->execute();
+                } else {
+                    echo "undefinited index: tweet: " . $zla['id'] . PHP_EOL;
+                }
             }
         }
     }
