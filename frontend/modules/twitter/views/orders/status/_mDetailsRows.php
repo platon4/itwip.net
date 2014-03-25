@@ -46,7 +46,7 @@
                 <?php
                 if($row['status'] == 3)
                 {
-                    echo '<a target="_blank" title="Перейти к просмотру твита" href="https://twitter.com/' . (!empty($row['screen_name']) ? Html::encode($row['screen_name']) . '/' : '') . 'statuses/'.$row['params']['tweet_id'].'" class="button icon_small"><i class="fa fa-eye"></i></a>';
+                    echo '<a target="_blank" title="Перейти к просмотру твита" href="https://twitter.com/' . (!empty($row['screen_name']) ? Html::encode($row['screen_name']) . '/' : '') . 'statuses/'.$row['tweet_id'].'" class="button icon_small"><i class="fa fa-eye"></i></a>';
                 }
 
                 	echo '<a title="Удалить твит" href="javascript:void(0);" onclick="Twitter.o.m.remove(\''.$row['id'].'\',this);" class="button icon_small delete"><i class="fa fa-trash-o"></i></a>';

@@ -66,7 +66,7 @@ class Manual extends \FormModel
         if($this->_rows === null) {
             $order = $this->orders[$this->_o] . ' ' . ($this->_a == 'ASC' ? 'ASC' : 'DESC');
 
-            $orders = Yii::app()->db->createCommand("SELECT id,cost,return_amount,tweet, status,posted_date,_params,message,tw_account FROM {{twitter_ordersPerform}} WHERE order_hash=:hash ORDER BY " . $order . " LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())->queryAll(true, [':hash' => $this->h]);
+            $orders = Yii::app()->db->createCommand("SELECT id,cost,return_amount,tweet, status,posted_date,_params,message,tw_account,tweet_id FROM {{twitter_ordersPerform}} WHERE order_hash=:hash ORDER BY " . $order . " LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())->queryAll(true, [':hash' => $this->h]);
             $rows = [];
             $ids = [];
             $params = [];
@@ -93,6 +93,7 @@ class Manual extends \FormModel
                     'message'      => $order['message'],
                     'id'           => $order['id'],
                     'status'       => $order['status'],
+                    'tweet_id'     => $order['tweet_id'],
                     'amount'       => $order['return_amount'],
                     'payment_type' => $this->getOrder()['payment_type'],
                     'placed_date'  => date('d.m.Y H:i', strtotime($order['posted_date'])),

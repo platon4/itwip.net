@@ -66,7 +66,7 @@ class Manual implements TweetingInterface
                     'payment_method' => $this->getParams('pay_type'),
                 ])->execute();
 
-                $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => '3'], ['id' => $this->get('sbuorder_id')])->execute();
+                $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => '3', 'tweet_id' => $this->getStrId()], ['id' => $this->get('sbuorder_id')])->execute();
                 $command->delete('{{%twitter_tweeting}}', ['id' => $this->get('id')])->execute();
 
                 $this->updateOrder($this->get('order_hash'), $this->get('order_id'));
@@ -176,6 +176,21 @@ class Manual implements TweetingInterface
     protected function getPayType()
     {
         return $this->getParams('pay_type') == 0 ? 'purse' : 'bonus';
+    }
+
+    protected function getUrl()
+    {
+        preg_match_all("#(?:(https?|http)://)?(?:www\\.)?([a-z0-9-]+\.(com|ru|net|org|mil|edu|arpa|gov|biz|info|aero|inc|name|tv|mobi|com.ua|am|me|md|kg|kiev.ua|com.ua|in.ua|com.ua|org.ua|[a-z_-]{2,12}))(([^ \"'>\r\n\t]*)?)?#i", strtolower($this->getTweet()), $urls);
+
+        if(!empty($urls[0])) {
+            $count = count($urls[0]);
+
+            if($count)
+                foreach($urls[0] as $url)
+                    return trim($url);
+        }
+
+        return '';
     }
 
     /**
