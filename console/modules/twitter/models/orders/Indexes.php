@@ -39,7 +39,7 @@ class Indexes implements OrdersInterface
     public function getTaskParams($data)
     {
         return json_encode([
-            'tweet'         => $this->_getTaskParams('tweet'),
+            'tweet'         => $data['tweet'],
             'order_owner'   => $this->get('owner_id'),
             'amount'        => $data['cost'],
             'return_amount' => $data['return_amount'],

@@ -228,7 +228,7 @@ class Indexes implements TweetingInterface
                 ->count();
 
             if($count == 0)
-                Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => 2], ['id' => $id])->execute();
+                Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => 2, 'finish_date' => date('Y-m-d H:i:s')], ['id' => $id])->execute();
         }
     }
 
@@ -245,7 +245,7 @@ class Indexes implements TweetingInterface
             Yii::$app->redis->set('console:twitter:tweeting:tasks:id:' . $this->get('id'), $this->get('id'), $timeout);
             return false;
         } else {
-            return false;
+            return true;
         }
     }
 }

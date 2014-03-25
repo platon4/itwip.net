@@ -12,6 +12,8 @@ class TestController extends Controller
 {
     public function actionIndex()
     {
+        echo 'Error';
+        die();
         $ordersNew = (new Query())->from('{{%twitter_ordersPerform}}')
             ->orderBy(['id' => SORT_DESC])
             ->all();
@@ -46,7 +48,7 @@ class TestController extends Controller
 
     }
 
-    public function processOrders()
+    public function actionProcessOrders()
     {
         $command = Yii::$app->db->createCommand();
         $orders = (new Query())->from('{{%twitter_orders}}')->where(['type_order' => 'indexes'])->all();
@@ -72,6 +74,9 @@ class TestController extends Controller
 
     protected function actionOrderMigration()
     {
+        echo 'Error';
+        die();
+
         $rows = (new Query())->from('{{%tw_orders}} o')->where(
             ['exists', (new Query())->select('id')->from('{{%twitter_orders}} no')->where('no.id=o.id')]
         )

@@ -149,8 +149,8 @@ class Manual implements OrdersInterface
     public function getTaskParams($data)
     {
         return json_encode([
-            'tweet'         => $this->_getTaskParams('tweet'),
-            'account'       => $this->_getTaskParams('account'),
+            'tweet'         => $data['tweet'],
+            'account'       => $data['tw_account'],
             'order_owner'   => $this->get('owner_id'),
             'amount'        => $data['cost'],
             'return_amount' => $data['return_amount'],
