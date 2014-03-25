@@ -29,7 +29,7 @@ class TestController extends Controller
 
                 $insert = [
                     'id'             => $tweet['id'],
-                    'order_hash'     => '',
+                    'order_hash'     => $hash,
                     'order_type'     => 'manual',
                     'adv_id'         => $tweet['ot_id'],
                     'bloger_id'      => $tweet['owner_id'],
