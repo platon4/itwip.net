@@ -68,7 +68,7 @@ class Errors
         }
 
         $command->delete('{{%twitter_tweeting}}', ['id' => $model->get('id')])->execute();
-        $command->update('{{%twitter_ordersPerform1}}', ['message' => $message, 'status' => $status], ['id' => $model->get('sbuorder_id')])->execute();
+        $command->update('{{%twitter_ordersPerform}}', ['message' => $message, 'status' => $status], ['id' => $model->get('sbuorder_id')])->execute();
 
         if($model->get('order_hash') !== null) {
             $count = (new Query())
