@@ -62,9 +62,9 @@ class Errors
         Operation::returnMoney($model->getAmountToAdv(), $model->getOwner(), 'purse', 'errorPostTweet', $model->get('order_id'), $model->get('sbuorder_id'));
 
         if($model->get('orderType') == 'indexes' || $model->get('orderType') == 'manual') {
-            $status = 4;
+            $status = '4';
         } else {
-            $status = 9;
+            $status = '9';
         }
 
         $command->delete('{{%twitter_tweeting}}', ['id' => $model->get('id')])->execute();
@@ -80,7 +80,7 @@ class Errors
                 $command->update('{{%twitter_orders}}', ['status' => 3], ['id' => $model->get('order_id')])->execute();
         }
 
-        Logger::error('', ['id' => $model->get('id'),'message' => $message, 'status' => $status, 'sub_id' => $model->get('sbuorder_id')], 'daemons/tweeting/logs', 'process');
+        Logger::error('', ['id' => $model->get('id'), 'message' => $message, 'status' => $status, 'sub_id' => $model->get('sbuorder_id')], 'daemons/tweeting/logs', 'process');
     }
 
     public function unknownError($model)
