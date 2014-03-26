@@ -42,7 +42,7 @@ if(!Yii::app()->user->isGuest)
 
                     case 2:
 
-                        $mrh_login="eolitich";
+                        $mrh_login="itwip.net";
                         $mrh_pass1="mj63%$./adjhlAjf6545%Djhjdada";
                         $inv_id   =$_id;
                         $out_summ =$form->amount;
