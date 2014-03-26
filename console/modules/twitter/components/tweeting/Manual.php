@@ -95,7 +95,7 @@ class Manual implements TweetingInterface
      */
     protected function postTweet()
     {
-        echo "Run manual post - " . $this->getTweet() . PHP_EOL;
+        echo PHP_EOL . "Run manual post - " . $this->getTweet() . PHP_EOL;
         echo "App: " . Apps::get($this->getAccount('app'), 'id') . PHP_EOL;
         echo "Account: " . $this->getAccount('id') . "-" . $this->getAccount('screen_name') . PHP_EOL;
 
@@ -135,7 +135,7 @@ class Manual implements TweetingInterface
             } else {
                 (new Errors())->errorTweetPost($this, $tweeting);
                 $timeout = rand(3, 6);
-                echo "Error Post tweet - " . $tweeting->getError(). PHP_EOL;
+                echo "Error Post tweet - " . $tweeting->getError() . PHP_EOL;
                 sleep($timeout);
                 $response = false;
             }

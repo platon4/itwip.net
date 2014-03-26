@@ -123,7 +123,7 @@ class Indexes implements TweetingInterface
      */
     protected function postTweet()
     {
-        echo "Run manual indexes - tweet: " . $this->getTweet() . "  App: " . Apps::get($this->getAccount('app'), 'id') . " Account: id " . $this->getAccount('id') . "-" . $this->getAccount('screen_name') . PHP_EOL;
+        echo PHP_EOL . "Run manual indexes - tweet: " . $this->getTweet() . "  App: " . Apps::get($this->getAccount('app'), 'id') . " Account: id " . $this->getAccount('id') . "-" . $this->getAccount('screen_name') . PHP_EOL;
 
         if($this->getAccount('id') !== false) {
             $tweeting = new Tweeting();

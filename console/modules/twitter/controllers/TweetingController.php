@@ -59,18 +59,18 @@ class TweetingController extends \console\components\Controller
                             ->groupBy('domen')
                             ->limit(5)
                             ->all();
-                        echo "-------------------------- End Query ---------------------------" . PHP_EOL . PHP_EOL;
+                        echo "-------------------------- End Query ---------------------------" . PHP_EOL;
 
                         if(!empty($tasks)) {
                             foreach($tasks as $task) {
-                                echo PHP_EOL . "-------------------------- Run Task ---------------------------" . PHP_EOL;
+                                echo "-------------------------- Run Task ---------------------------" . PHP_EOL;
                                 Yii::$app->redis->set('orders:in_process:0:' . $task['order_id'], $task['order_id'], 5 * 60);
                                 Yii::$app->redis->set('orders:in_process:1:' . $task['sbuorder_id'], $task['order_id'], 5 * 60);
 
                                 $tweeting->processTask($task);
 
                                 Yii::$app->redis->delete(['orders:in_process:0:' . $task['order_id'], 'orders:in_process:1:' . $task['sbuorder_id']]);
-                                echo "--------------------------- Run timeout task --------------------------" . PHP_EOL . PHP_EOL;
+                                echo "--------------------------- Run timeout task --------------------------" . PHP_EOL;
                                 sleep(rand(7, 15));
                             }
                         } else {
@@ -109,7 +109,7 @@ class TweetingController extends \console\components\Controller
 
             if(!empty($ids)) {
                 $where = ['not in', $field, $ids];
-                echo PHP_EOL . PHP_EOL . $key . " exclude ids: " . count($ids) . " - " . implode(", ", $ids) . PHP_EOL;
+                echo $key . " exclude ids: " . count($ids) . " - " . implode(", ", $ids) . PHP_EOL;
             }
         }
 
