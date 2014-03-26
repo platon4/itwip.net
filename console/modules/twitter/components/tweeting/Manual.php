@@ -18,6 +18,7 @@ class Manual implements TweetingInterface
 
     protected $_account;
     protected $_str_id;
+    protected $_url;
 
     /**
      * Устанавливаем валидаторы, и инициализируем заказ
@@ -41,7 +42,7 @@ class Manual implements TweetingInterface
     {
         $command = Yii::$app->db->createCommand();
 
-        echo "Post Order " . $this->get('order_id') . " - Account: " . $this->getAccount('id') . ' - Tweet: ' . $this->getParams('tweet') . PHP_EOL;
+        echo "Post Order " . $this->get('order_id') . " - Account: " . $this->getAccount('id') . ' - App: ' . Apps::get($this->getAccount('app'), 'id') . ' - Tweet: ' . $this->getParams('tweet') . PHP_EOL;
 
         if($this->postTweet() === true) {
             try {
@@ -120,8 +121,10 @@ class Manual implements TweetingInterface
 
                     if($this->get('tweet') !== null || $this->get('tweet') != '') {
                         Yii::$app->redis->set('twitter:tweeting:timeout:tweets:' . md5($this->get('tweet')), time(), rand(60, (5 * 60)));
-                        Yii::$app->redis->set('twitter:tweeting:timeout:urls:' . md5(Url::getDomen($this->getUrl())), time(), rand(60, (5 * 60)));
                     }
+
+                    if($this->getUrl() !== null)
+                        Yii::$app->redis->set('twitter:tweeting:timeout:urls:' . md5(Url::getDomen($this->getUrl())), time(), rand(60, (5 * 60)));
 
                     return true;
                 } else {
@@ -180,17 +183,22 @@ class Manual implements TweetingInterface
 
     protected function getUrl()
     {
-        preg_match_all("#(?:(https?|http)://)?(?:www\\.)?([a-z0-9-]+\.(com|ru|net|org|mil|edu|arpa|gov|biz|info|aero|inc|name|tv|mobi|com.ua|am|me|md|kg|kiev.ua|com.ua|in.ua|com.ua|org.ua|[a-z_-]{2,12}))(([^ \"'>\r\n\t]*)?)?#i", strtolower($this->getTweet()), $urls);
+        if($this->_url === null) {
+            preg_match_all("#(?:(https?|http)://)?(?:www\\.)?([a-z0-9-]+\.(com|ru|net|org|mil|edu|arpa|gov|biz|info|aero|inc|name|tv|mobi|com.ua|am|me|md|kg|kiev.ua|com.ua|in.ua|com.ua|org.ua|[a-z_-]{2,12}))(([^ \"'>\r\n\t]*)?)?#i", strtolower($this->getTweet()), $urls);
 
-        if(!empty($urls[0])) {
-            $count = count($urls[0]);
+            if(!empty($urls[0])) {
+                $count = count($urls[0]);
 
-            if($count)
-                foreach($urls[0] as $url)
-                    return trim($url);
+                if($count) {
+                    foreach($urls[0] as $url) {
+                        $this->_url = $url;
+                        break;
+                    }
+                }
+            }
         }
 
-        return '';
+        return $this->_url;
     }
 
     /**
@@ -230,5 +238,6 @@ class Manual implements TweetingInterface
     {
         $this->_account = null;
         $this->_str_id = null;
+        $this->_url = null;
     }
 }
