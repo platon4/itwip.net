@@ -97,6 +97,8 @@ class Manual implements TweetingInterface
      */
     protected function postTweet()
     {
+        echo "Run post Tweet manual" . PHP_EOL;
+
         if($this->getAccount('id') !== false) {
             $tweeting = new Tweeting();
 
@@ -114,17 +116,22 @@ class Manual implements TweetingInterface
 
             /** Успешное размещение */
             if($tweeting->getCode() == 200) {
+                echo "post Tweet manual success" . PHP_EOL;
                 $this->_str_id = $tweeting->getStrId();
 
                 if($this->_str_id > 0) {
                     Yii::$app->redis->set('twitter:twitting:timeout:accounts:' . $this->getAccount('id'), $this->getAccount('id'), $this->getAccount('_timeout') * 60);
+                    echo "post Tweet manual: set account timeout" . PHP_EOL;
 
                     if($this->get('tweet') !== null || $this->get('tweet') != '') {
                         Yii::$app->redis->set('twitter:tweeting:timeout:tweets:' . md5($this->get('tweet')), time(), rand(60, (5 * 60)));
+                        echo "post Tweet manual: set tweet timeout" . PHP_EOL;
                     }
 
-                    if($this->getUrl() !== null)
+                    if($this->getUrl() !== null) {
+                        echo "post Tweet manual: set url timeout" . PHP_EOL;
                         Yii::$app->redis->set('twitter:tweeting:timeout:urls:' . md5(Url::getDomen($this->getUrl())), time(), rand(60, (5 * 60)));
+                    }
 
                     return true;
                 } else {
@@ -164,13 +171,18 @@ class Manual implements TweetingInterface
      */
     protected function updateOrder($hash, $id)
     {
+        echo "Run update order" . PHP_EOL;
+
         if(!empty($hash)) {
             $count = (new Query())
                 ->from('{{%twitter_ordersPerform}}')
                 ->where(['and', 'order_hash=:hash', ['or', 'status=0', 'status=1']], [':hash' => $hash])
                 ->count();
 
+            echo "update order count: " . $count . PHP_EOL;
+
             if($count == 0) {
+                echo "update order is success: id " . $id . PHP_EOL;
                 Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => '2', 'finish_date' => date('Y-m-d H:i:s')], ['id' => $id])->execute();
             }
         }
@@ -207,12 +219,15 @@ class Manual implements TweetingInterface
      */
     protected function validateTweetTimeOut()
     {
+        echo "Run validator TweetTimeOut: tweet hash" . md5($this->get('tweet')) . PHP_EOL;
+
         if($timeout = Yii::$app->redis->get('twitter:tweeting:timeout:tweets:' . md5($this->get('tweet')))) {
             $timeout = time() - $timeout;
-
+            echo "validator TweetTimeOut: true" . PHP_EOL;
             Yii::$app->redis->set('console:twitter:tweeting:tasks:id:' . $this->get('id'), $this->get('id'), $timeout);
             return false;
         } else {
+            echo "validator TweetTimeOut: true" . PHP_EOL;
             return true;
         }
     }
@@ -224,12 +239,16 @@ class Manual implements TweetingInterface
     protected function validateUrlTimeOut()
     {
         $domen = Url::getDomen($this->getUrl());
+
+        echo "Run validator UrlTimeOut: domen " . $domen . PHP_EOL;
+
         if($timeout = Yii::$app->redis->get('twitter:tweeting:timeout:urls:' . md5($domen))) {
             $timeout = time() - $timeout;
-
+            echo "validator UrlTimeOut: true" . PHP_EOL;
             Yii::$app->redis->set('console:twitter:tweeting:tasks:id:' . $this->get('id'), $this->get('id'), $timeout);
             return false;
         } else {
+            echo "validator UrlTimeOut: false" . PHP_EOL;
             return true;
         }
     }
@@ -239,5 +258,7 @@ class Manual implements TweetingInterface
         $this->_account = null;
         $this->_str_id = null;
         $this->_url = null;
+
+        echo "Run Manual flush" . PHP_EOL;
     }
 }
