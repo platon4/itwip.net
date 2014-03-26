@@ -39,23 +39,23 @@ class TweetingController extends \console\components\Controller
                 if($redis->exists('console:twitter:tweeting') === false) {
                     if(Daemon::isSetProcess($this->getDaemoName())) {
                         $where = ['and', 'daemon=:daemon', 'process_time<=:time']; // Изменить <
-                        $rids = Yii::$app->redis->mGet(Yii::$app->redis->keys('console:twitter:tweeting:tasks:id:*'));
 
-                        if($rids !== false) {
-                            $ids = [];
-                            foreach($rids as $id) {
-                                if($id !== false)
-                                    $ids[] = $id;
-                            }
+                        if($_task = $this->getExcludes('twitter:twitting:timeout:accounts', 'tw_account'))
+                            $where[] = $_task;
 
-                            if(!empty($ids))
-                                $where[] = ['not in', 'id', $ids];
-                        }
+                        if($_task = $this->getExcludes('console:twitter:tweeting:exclude:tweet', 'tweet_hash'))
+                            $where[] = $_task;
+
+                        if($_task = $this->getExcludes('console:twitter:tweeting:exclude:domen', 'domen'))
+                            $where[] = $_task;
+
+                        if($_task = $this->getExcludes('console:twitter:tweeting:exclude:id', 'order_id'))
+                            $where[] = $_task;
 
                         $tasks = (new Query())
                             ->from('{{%twitter_tweeting}}')
                             ->where($where, [':daemon' => $this->daemon, ':time' => date('H:i:s')])
-                            ->limit(10)
+                            ->limit(1)
                             ->all();
 
                         if(!empty($tasks)) {
@@ -66,11 +66,11 @@ class TweetingController extends \console\components\Controller
                                 $tweeting->processTask($task);
 
                                 Yii::$app->redis->delete(['orders:in_process:0:' . $task['order_id'], 'orders:in_process:1:' . $task['sbuorder_id']]);
-                                sleep(rand(5,10));
+                                sleep(rand(5, 10));
                             }
                         } else {
                             $this->message('Daemon timeout 5 sec.');
-                            sleep(rand(5,10));
+                            sleep(rand(5, 10));
                         }
                     } else {
                         Daemon::stopDaemon($this->daemon, 0, 'Daemon won\'t start, error set process');
@@ -88,6 +88,27 @@ class TweetingController extends \console\components\Controller
         } else {
             Daemon::stopDaemon($this->daemon, 0, 'Daemon is already running');
         }
+    }
+
+    protected function getExcludes($key, $field)
+    {
+        $rids = Yii::$app->redis->mGet(Yii::$app->redis->keys($key . ':*'));
+        $where = null;
+
+        if($rids !== false) {
+            $ids = [];
+            foreach($rids as $id) {
+                if($id !== false)
+                    $ids[] = $id;
+            }
+
+            if(!empty($ids)) {
+                $where = ['not in', $field, $ids];
+                echo $key . " exclude ids: " . count($ids) . " - " . implode(", ", $ids) . PHP_EOL;
+            }
+        }
+
+        return !empty($where) ? $where : false;
     }
 
     protected function message($message)

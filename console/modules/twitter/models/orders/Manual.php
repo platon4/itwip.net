@@ -2,6 +2,8 @@
 
 namespace console\modules\twitter\models\orders;
 
+use common\helpers\twitter\Tweets;
+use common\helpers\Url;
 use Yii;
 use yii\db\Query;
 use console\modules\twitter\models\OrdersInterface;
@@ -114,7 +116,8 @@ class Manual implements OrdersInterface
             'sbuorder_id'  => $task['id'],
             'orderType'    => 'manual',
             'tweet_hash'   => $task['hash'],
-            'url_hash'     => $task['url_hash'],
+            'domen'        => $this->getDomen($task['tweet']),
+            'tw_account'   => $task['tw_account'],
             'process_time' => $this->getTaskProcessTime($task),
             'payment_type' => $this->get('payment_type'),
             'params'       => $this->getTaskParams($task),
@@ -122,6 +125,12 @@ class Manual implements OrdersInterface
         ];
 
         $this->_update['task'][$task['id']]['is_process'] = 1;
+    }
+
+    public function getDomen($tweet)
+    {
+        $domen = Url::getDomen(Tweets::getUrl($tweet));
+        return $domen !== null ? $domen : '';
     }
 
     public function getTaskProcessTime()

@@ -2,7 +2,9 @@
 
 namespace console\modules\twitter\models\orders;
 
+use common\helpers\Url;
 use Yii;
+use common\api\twitter\Accounts;
 use yii\db\Query;
 use console\modules\twitter\models\OrdersInterface;
 
@@ -21,13 +23,16 @@ class Indexes implements OrdersInterface
 
     public function processTask($task)
     {
+        $acc_id = $this->getAccountID();
+
         $this->_task[] = [
             'order_id'     => $this->get('id'),
             'order_hash'   => $this->get('order_hash'),
             'sbuorder_id'  => $task['id'],
             'orderType'    => 'indexes',
             'tweet_hash'   => $task['hash'],
-            'url_hash'     => $task['url_hash'],
+            'domen'        => Url::getDomen($task['url']),
+            'tw_account'   => $acc_id,
             'process_time' => date('H:i:s'),
             'payment_type' => $this->get('payment_type'),
             'params'       => $this->getTaskParams($task),
@@ -35,6 +40,40 @@ class Indexes implements OrdersInterface
         ];
 
         $this->_update['task'][$task['id']]['is_process'] = 1;
+    }
+
+    public function getAccountID()
+    {
+        $account = $this->getAccountQuery();
+
+        if($account === false) {
+            Yii::$app->db->createCommand()->delete('{{%twitter_tweetingAccountsLogs}}', ['logType' => 'indexes'])->execute();
+            $account = $this->getAccountQuery();
+        }
+
+        if(isset($account['id']))
+            Yii::$app->db->createCommand()->insert('{{%twitter_tweetingAccountsLogs}}', ['account_id' => $account['id'], 'logType' => 'indexes'])->execute();
+
+        return isset($account['id']) ? $account['id'] : false;
+    }
+
+    /**
+     * Запрос для получение аккаунта
+     *
+     * @return array|bool
+     */
+    protected function getAccountQuery()
+    {
+        $account = (new Accounts())
+            ->where([
+                'and',
+                'a._status=1',
+                's.in_indexses=1',
+                ['not exists', (new Query())->select('id')->from('{{%twitter_tweetingAccountsLogs}}')->where(['and', 'logType=\'indexes\'', 'account_id=a.id'])]
+            ])
+            ->one();
+
+        return $account;
     }
 
     public function getTaskParams($data)

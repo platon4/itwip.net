@@ -2,7 +2,10 @@
 
 namespace console\modules\twitter\controllers;
 
+use common\api\twitter\Accounts;
 use common\helpers\String;
+use common\helpers\Url;
+
 use Yii;
 use console\components\Controller;
 use yii\base\Exception;
@@ -12,47 +15,60 @@ class TestController extends Controller
 {
     public function actionIndex()
     {
-        $tweets = (new Query())->from('{{%tw_tweets}}')->orderBy(['id' => SORT_DESC])->all();
+        $tasks = (new Query())->from('{{%twitter_tweeting}}')->all();
 
-        $i = 0;
-        foreach($tweets as $tweet) {
-            try {
-                $i++;
-                $t = Yii::$app->db->beginTransaction();
+        foreach($tasks as $task) {
+            $dparams = json_decode($task['params'], true);
 
-                $order_id = (new Query())->select('_order')->from('{{%tweets_to_twitter}}')->where(['str_id' => $tweet['tw_id']])->scalar();
-                $hash = '';
-
-                if(trim($order_id) != '') {
-                    $hash = (new Query())->select('order_hash')->from('{{%twitter_orders}}')->where(['id' => $order_id])->scalar();
-                }
-
-                $insert = [
-                    'id'             => $tweet['id'],
-                    'order_hash'     => $hash,
-                    'order_type'     => 'manual',
-                    'adv_id'         => $tweet['ot_id'],
-                    'bloger_id'      => $tweet['owner_id'],
-                    'tweet_hash'     => md5($tweet['_text']),
-                    'tweet'          => $tweet['_text'],
-                    'tweet_id'       => $tweet['tw_id'],
-                    'tw_account'     => $tweet['tid'],
-                    'date'           => $tweet['_date'],
-                    'tweet_cost'     => $tweet['_cost'],
-                    'return_amount'  => $tweet['_cost'],
-                    'payment_method' => $tweet['pay_type'],
-                    'status'         => $tweet['_status']
-                ];
-
-                Yii::$app->db->createCommand()->insert('{{%twitter_tweets}}', $insert)->execute();
-
-                echo "Process: " . $i . PHP_EOL;
-                $t->commit();
-            } catch(Exception $e) {
-                echo $e;
-                $t->rollBack();
+            if(!isset($dparams['account'])) {
+                $dparams['account'] = $this->getAccount('id');
             }
+
+            $tw_account = $dparams['account'];
+            $params = json_encode($dparams);
+            $domen = Url::getDomen($this->extractUrls($dparams['tweet']));
+
+            echo 'Type ' . $task['orderType'] . PHP_EOL;
+            echo 'Domen ' . $domen . PHP_EOL;
+            echo 'Account ' . $tw_account . PHP_EOL;
+            echo 'Params ' . $params . PHP_EOL . PHP_EOL . PHP_EOL;
+
+            if($task['orderType'] == 'indexes')
+                Yii::$app->db->createCommand()->insert('{{%twitter_tweetingAccountsLogs}}', ['account_id' => $this->getAccount('id'), 'logType' => 'indexes'])->execute();
+
+            Yii::$app->db->createCommand()->update('{{%twitter_tweeting}}', ['params' => $params, 'tw_account' => $tw_account, 'domen' => $domen], ['id' => $task['id']])->execute();
         }
+    }
+
+    public function getAccount($key)
+    {
+        $account = $this->getAccountQuery();
+
+        if($account === false) {
+            Yii::$app->db->createCommand()->delete('{{%twitter_tweetingAccountsLogs}}', ['logType' => 'indexes'])->execute();
+            $account = $this->getAccountQuery();
+        }
+
+        return isset($account[$key]) ? $account[$key] : false;
+    }
+
+    /**
+     * Запрос для получение аккаунта
+     *
+     * @return array|bool
+     */
+    protected function getAccountQuery()
+    {
+        $account = (new Accounts())
+            ->where([
+                'and',
+                'a._status=1',
+                's.in_indexses=1',
+                ['not exists', (new Query())->select('id')->from('{{%twitter_tweetingAccountsLogs}}')->where(['and', 'logType=\'indexes\'', 'account_id=a.id'])]
+            ])
+            ->one();
+
+        return $account;
     }
 
     public function actionProcessOrders()

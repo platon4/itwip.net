@@ -205,7 +205,17 @@ class Fast extends \FormModel
                 }
             }
 
-            \CHelper::batchInsert('twitter_ordersPerform', ['order_hash', 'hash', 'url', 'url_hash', 'cost', 'return_amount', 'status', 'tweet', '_params'], $this->getTaksRows()); // Добавляем список заданий для работа
+            \CHelper::batchInsert('twitter_ordersPerform', [
+                'order_hash',
+                'hash',
+                'url',
+                'url_hash',
+                'cost',
+                'return_amount',
+                'status',
+                'tweet',
+                '_params'
+            ], $this->getTaksRows()); // Добавляем список заданий для работа
 
             $t->commit(); // Завершаем транзакцию
 

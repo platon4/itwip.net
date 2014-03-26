@@ -29,7 +29,7 @@ class Manual implements TweetingInterface
     {
         $this->setValidators([
             'tweet-time-out',
-            'url-time-out'
+            'domen-time-out'
         ]);
 
         $this->init($task);
@@ -124,13 +124,16 @@ class Manual implements TweetingInterface
                     echo "post Tweet manual: set account timeout" . PHP_EOL;
 
                     if($this->get('tweet') !== null || $this->get('tweet') != '') {
-                        Yii::$app->redis->set('twitter:tweeting:timeout:tweets:' . md5($this->get('tweet')), time(), rand(60, (5 * 60)));
+                        $tweet_hash = md5($this->get('tweet'));
+                        Yii::$app->redis->set('console:twitter:tweeting:exclude:tweet:' . $tweet_hash, $tweet_hash, rand(60, (5 * 60)));
                         echo "post Tweet manual: set tweet timeout" . PHP_EOL;
                     }
 
                     if($this->getUrl() !== null) {
                         echo "post Tweet manual: set url timeout" . PHP_EOL;
-                        Yii::$app->redis->set('twitter:tweeting:timeout:urls:' . md5(Url::getDomen($this->getUrl())), time(), rand(60, (5 * 60)));
+                        $domen = Url::getDomen($this->getUrl());
+
+                        Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, rand(60, (5 * 60)));
                     }
 
                     return true;
@@ -221,13 +224,11 @@ class Manual implements TweetingInterface
     {
         echo "Run validator TweetTimeOut: tweet hash" . md5($this->get('tweet')) . PHP_EOL;
 
-        if($timeout = Yii::$app->redis->get('twitter:tweeting:timeout:tweets:' . md5($this->get('tweet')))) {
-            $timeout = time() - $timeout;
+        if($timeout = Yii::$app->redis->get('console:twitter:tweeting:exclude:tweet:' . md5($this->get('tweet')))) {
             echo "validator TweetTimeOut: true" . PHP_EOL;
-            Yii::$app->redis->set('console:twitter:tweeting:tasks:id:' . $this->get('id'), $this->get('id'), $timeout);
             return false;
         } else {
-            echo "validator TweetTimeOut: true" . PHP_EOL;
+            echo "validator TweetTimeOut: false" . PHP_EOL;
             return true;
         }
     }
@@ -236,19 +237,17 @@ class Manual implements TweetingInterface
      * Проверяем время последнего размещеного идентичного поста, если интервал слишком маленький, пропускаем задание
      * @return boolean
      */
-    protected function validateUrlTimeOut()
+    protected function validateDomenTimeOut()
     {
         $domen = Url::getDomen($this->getUrl());
 
-        echo "Run validator UrlTimeOut: domen " . $domen . PHP_EOL;
+        echo "Run validator DomenTimeOut: domen " . $domen . PHP_EOL;
 
-        if($timeout = Yii::$app->redis->get('twitter:tweeting:timeout:urls:' . md5($domen))) {
-            $timeout = time() - $timeout;
-            echo "validator UrlTimeOut: true" . PHP_EOL;
-            Yii::$app->redis->set('console:twitter:tweeting:tasks:id:' . $this->get('id'), $this->get('id'), $timeout);
+        if($timeout = Yii::$app->redis->get('console:twitter:tweeting:exclude:domen:' . md5($domen))) {
+            echo "validator DomenTimeOut: false" . PHP_EOL;
             return false;
         } else {
-            echo "validator UrlTimeOut: false" . PHP_EOL;
+            echo "validator DomenTimeOut: true" . PHP_EOL;
             return true;
         }
     }
