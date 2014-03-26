@@ -28,6 +28,11 @@ class TestController extends Controller
         }
     }
 
+    public function actionClearCache()
+    {
+        Yii::$app->redis->delete('twitterAccounts');
+    }
+
     public function getAccount($key)
     {
         $account = $this->getAccountQuery();
