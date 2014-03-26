@@ -58,6 +58,7 @@ class TweetingController extends \console\components\Controller
                             ->limit(5)
                             ->all();
 
+                        print_r($where);
                         print_r($tasks);
                         die();
 
