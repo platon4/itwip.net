@@ -107,7 +107,7 @@ class TweetingController extends \console\components\Controller
 
             if(!empty($ids)) {
                 $where = ['not in', $field, $ids];
-                echo $key . " exclude ids: " . count($ids) . " - " . implode(", ", $ids) . PHP_EOL;
+                echo PHP_EOL . PHP_EOL . $key . " exclude ids: " . count($ids) . " - " . implode(", ", $ids) . PHP_EOL;
             }
         }
 
