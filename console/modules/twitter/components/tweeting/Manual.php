@@ -242,13 +242,10 @@ class Manual implements TweetingInterface
 
         echo "Run validator DomenTimeOut: domen " . $domen . PHP_EOL;
 
-        if($timeout = Yii::$app->redis->get('console:twitter:tweeting:exclude:domen:' . md5($domen))) {
-            echo "validator DomenTimeOut: false" . PHP_EOL;
+        if($timeout = Yii::$app->redis->get('console:twitter:tweeting:exclude:domen:' . md5($domen)))
             return false;
-        } else {
-            echo "validator DomenTimeOut: true" . PHP_EOL;
+        else
             return true;
-        }
     }
 
     public function flush()
