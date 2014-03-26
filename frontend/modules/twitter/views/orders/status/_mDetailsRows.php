@@ -8,7 +8,7 @@
                 </div>
                 <div class="account_NameLogin">
                     <span class="account_Name block"><?php echo Html::encode($row['name']); ?></span>
-                    <span class="account_Login block"><a href="https://twitter.com/<?php echo Html::encode($row['screen_name']); ?>" target="_blank">@<?php echo Html::encode($row['screen_name']); ?></a></span>
+                    <span class="account_Login block"><?php if($row['screen_name']) { ?><a href="https://twitter.com/<?php echo Html::encode($row['screen_name']); ?>" target="_blank">@<?php echo Html::encode($row['screen_name']); ?></a><?php } ?></span>
                 </div>
             </td>
             <td class="tweet"><?php echo Html::encode($row['tweet']); ?></td>
@@ -46,7 +46,7 @@
                 <?php
                 if($row['status'] == 3)
                 {
-                    echo '<a target="_blank" title="Перейти к просмотру твита" href="https://twitter.com/'.Html::encode($row['screen_name']).'/statuses/'.$row['params']['tweet_id'].'" class="button icon_small"><i class="fa fa-eye"></i></a>';
+                    echo '<a target="_blank" title="Перейти к просмотру твита" href="https://twitter.com/' . (!empty($row['screen_name']) ? Html::encode($row['screen_name']) . '/' : '') . 'statuses/'.$row['tweet_id'].'" class="button icon_small"><i class="fa fa-eye"></i></a>';
                 }
 
                 	echo '<a title="Удалить твит" href="javascript:void(0);" onclick="Twitter.o.m.remove(\''.$row['id'].'\',this);" class="button icon_small delete"><i class="fa fa-trash-o"></i></a>';

@@ -663,7 +663,16 @@ class Manual extends \FormModel
                     if($accounts->get('id', $acc_id) === $acc_id && $tweet !== array()) {
                         $price = $accounts->get('_price', $acc_id);
                         $extract = $this->_ping == 1 ? $price + 0.5 : $price;
-                        $this->taksRows[] = [$this->_tid, $tweet['tweet_hash'], $price, $extract, $accounts->get('working_in', $acc_id), json_encode(['tweet' => $tweet['tweet'], 'account' => $acc_id])];
+                        $this->taksRows[] = [
+                            $this->_tid,
+                            $tweet['tweet_hash'],
+                            $price,
+                            $extract,
+                            $accounts->get('working_in', $acc_id),
+                            $tweet['tweet'],
+                            $accounts->get('owner_id', $acc_id),
+                            $accounts->get('id', $acc_id),
+                        ];
 
                         foreach($tweets['sort'] as $skey => $sort) {
                             if($sort['id'] === $tweet['id'])
@@ -685,11 +694,19 @@ class Manual extends \FormModel
             foreach($rows as $row) {
                 for($i = $c ; $i <= $tweetSortCount ; $i++) {
                     $tweet = isset($tweets['tweets'][$tweets['sort'][$i]['id']]) ? $tweets['tweets'][$tweets['sort'][$i]['id']] : [];
-                    $params = ['tweet' => $tweet['tweet'], 'account' => $row['id']];
 
                     if($tweet !== array()) {
                         $extract = $this->_ping == 1 ? $row['_price'] + 0.5 : $row['_price'];
-                        $this->taksRows[] = [$this->_tid, $tweet['tweet_hash'], $row['_price'], $extract, $row['working_in'], json_encode($params)];
+                        $this->taksRows[] = [
+                            $this->_tid,
+                            $tweet['tweet_hash'],
+                            $row['_price'],
+                            $extract,
+                            $row['working_in'],
+                            $tweet['tweet'],
+                            $row['owner_id'],
+                            $row['id']
+                        ];
 
                         $this->_sum += $row['_price'];
                         $this->_count++;
@@ -752,14 +769,14 @@ class Manual extends \FormModel
              */
             $db->createCommand("INSERT INTO {{twitter_orders}} (owner_id,type_order,order_hash,process_date,create_date,status,payment_type,_params) VALUES (:owner,:type_order,:order_hash,:process_date,:create_date,:status,:payment,:_params)")
                 ->execute([
-                    ':owner'         => Yii::app()->user->id,
-                    ':type_order'    => 'manual',
-                    ':order_hash'    => $this->_tid,
-                    ':process_date'  => $this->getStartDate(),
-                    ':create_date'   => date('Y-m-d H:i:s'),
-                    ':status'        => $this->pay,
-                    ':payment'       => $this->pay_method,
-                    ':_params'       => $this->getOrderParams()
+                    ':owner'        => Yii::app()->user->id,
+                    ':type_order'   => 'manual',
+                    ':order_hash'   => $this->_tid,
+                    ':process_date' => $this->getStartDate(),
+                    ':create_date'  => date('Y-m-d H:i:s'),
+                    ':status'       => $this->pay,
+                    ':payment'      => $this->pay_method,
+                    ':_params'      => $this->getOrderParams()
                 ]);
 
             $order_id = $db->lastInsertId;
@@ -779,7 +796,16 @@ class Manual extends \FormModel
                 }
             }
 
-            \CHelper::batchInsert('twitter_ordersPerform', ['order_hash', 'hash', 'cost', 'return_amount', 'status', '_params'], $this->getTaksRows()); // Добавляем список заданий для работа
+            \CHelper::batchInsert('twitter_ordersPerform', [
+                'order_hash',
+                'hash',
+                'cost',
+                'return_amount',
+                'status',
+                'tweet',
+                'bloger_id',
+                'tw_account'
+            ], $this->getTaksRows()); // Добавляем список заданий для работа
 
             $t->commit(); // Завершаем транзакцию
 

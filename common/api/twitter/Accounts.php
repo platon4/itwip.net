@@ -3,6 +3,7 @@
 namespace common\api\twitter;
 
 use yii\db\Query;
+use Yii;
 
 class Accounts
 {
@@ -39,5 +40,11 @@ class Accounts
     public function update($condition, $params = [])
     {
 
+    }
+
+    public function isSuspended($id)
+    {
+        Yii::$app->db->createCommand()->update('{{%tw_accounts}}', ['_status' => 3], ['id' => $id])->execute();
+        Yii::$app->redis->hDel('twitterAccounts', $id);
     }
 }

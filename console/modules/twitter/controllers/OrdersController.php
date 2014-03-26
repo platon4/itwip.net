@@ -5,6 +5,7 @@ namespace console\modules\twitter\controllers;
 use Yii;
 use console\modules\twitter\models\Orders;
 use console\modules\twitter\models\Indexes;
+use console\modules\twitter\models\Manual;
 use yii\db\Query;
 
 // */2 * * * * php /var/www/itwip/cmd twitter/orders/create
@@ -31,6 +32,14 @@ class OrdersController extends \console\components\Controller
     public function actionCheckIndexes()
     {
         $model = new Indexes();
+        $model->setScenario('check');
+
+        $model->validate();
+    }
+
+    public function actionCheckTweets()
+    {
+        $model = new Manual();
         $model->setScenario('check');
 
         $model->validate();

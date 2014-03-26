@@ -21,11 +21,6 @@ class Replenishment extends CActiveRecord
         );
     }
 
-    public function beforeValidate()
-    {
-        $this->addError('error', 'Пополнение временно недоступно в связи проведением технических работ на стороне сервиса.');
-    }
-
     public function tableName()
     {
         return "{{money_replenishmentit}}";

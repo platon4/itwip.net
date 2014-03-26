@@ -2,6 +2,8 @@
 
 namespace console\modules\twitter\models\orders;
 
+use common\helpers\twitter\Tweets;
+use common\helpers\Url;
 use Yii;
 use yii\db\Query;
 use console\modules\twitter\models\OrdersInterface;
@@ -109,18 +111,28 @@ class Manual implements OrdersInterface
     public function processTask($task)
     {
         $this->_task[] = [
-            'order_id'     => $this->get('id'),
-            'order_hash'   => $this->get('order_hash'),
-            'sbuorder_id'  => $task['id'],
-            'orderType'    => 'manual',
-            'tweet_hash'   => $task['hash'],
-            'url_hash'     => $task['url_hash'],
-            'process_time' => $this->getTaskProcessTime($task),
-            'params'       => $this->getTaskParams($task),
-            'daemon'       => $this->getDaemon()
+            'order_id'      => $this->get('id'),
+            'order_hash'    => $this->get('order_hash'),
+            'sbuorder_id'   => $task['id'],
+            'orderType'     => 'manual',
+            'tweet_hash'    => $task['hash'],
+            'domen'         => $this->getDomen($task['tweet']),
+            'tw_account'    => $task['tw_account'],
+            'process_time'  => $this->getTaskProcessTime($task),
+            'payment_type'  => $this->get('payment_type'),
+            'params'        => $this->getTaskParams($task),
+            'daemon'        => $this->getDaemon(),
+            'bloger_amount' => $task['cost'],
+            'adv_amount'    => $task['return_amount'],
         ];
 
         $this->_update['task'][$task['id']]['is_process'] = 1;
+    }
+
+    public function getDomen($tweet)
+    {
+        $domen = Url::getDomen(Tweets::getUrl($tweet));
+        return $domen !== null ? $domen : '';
     }
 
     public function getTaskProcessTime()
@@ -149,11 +161,8 @@ class Manual implements OrdersInterface
     public function getTaskParams($data)
     {
         return json_encode([
-            'tweet'         => $this->_getTaskParams('tweet'),
-            'account'       => $this->_getTaskParams('account'),
+            'tweet'         => $data['tweet'],
             'order_owner'   => $this->get('owner_id'),
-            'amount'        => $data['cost'],
-            'return_amount' => $data['return_amount'],
             'interval'      => $this->getInterval()
         ]);
     }

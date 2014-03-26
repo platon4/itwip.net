@@ -53,7 +53,7 @@ class Indexes extends Model
                     $this->removeTweet($task);
                 } else {
                     Yii::$app->db->createCommand()->update('{{%twitter_urlCheck}}', ['skip' => 1], ['id' => $row['id']])->execute();
-                    Logger::error('json_decode return null', $row, 'daemons/tweeting/errors', 'jsonDecodeError');
+                    Logger::error('json_decode return null', $row, 'daemons/tweeting/errors', 'checkIndexes-jsonDecodeError');
                 }
             }
         } else {
@@ -71,7 +71,7 @@ class Indexes extends Model
         try {
             $t = Yii::$app->db->beginTransaction();
 
-            Operation::unlockMoney($row['amount'], $row['amount_return'], $row['bloger_id'], $row['adv_id'], 'purse', 'indexesCheck', $row['pid'], $row['order_id']);
+            Operation::unlockMoney($row['amount'], $row['amount_return'], $row['bloger_id'], $row['adv_id'], 'purse', 'indexesCheckSuccess', $row['pid'], $row['order_id']);
 
             /* Обновляем заказ */
             $this->updateOrder(true, $row);
@@ -119,14 +119,16 @@ class Indexes extends Model
         Yii::$app->db->createCommand()->delete('{{%twitter_urlCheck}}', ['id' => $row['id']])->execute();
         Yii::$app->db->createCommand()->update('{{%twitter_ordersPerform}}', ['status' => $status], ['id' => $row['pid']])->execute();
 
-        if(isset($row['order_hash']) && !empty($row['order_hash'])) {
+        if(isset($row['order_hash'])) {
             $count = (new Query())
                 ->from('{{%twitter_ordersPerform}}')
                 ->where(['and', 'order_hash=:hash', ['or', 'status=0', 'status=1']], [':hash' => $row['order_hash']])
                 ->count();
 
             if($count == 0)
-                Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => 3], ['id' => $row['id']])->execute();
+                Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => 3], ['id' => $row['order_id']])->execute();
+        } else {
+            Logger::error('unknown hash', $row, 'daemons/tweeting/errors', 'updateOrder-error');
         }
     }
 
@@ -151,7 +153,7 @@ class Indexes extends Model
 
             $this->_tasks = (new Query())
                 ->from('{{%twitter_urlCheck}}')
-                ->where('skip=0 AND date_check<:date' . $inIds, [':date' => date('Y-m-d H:i:s')])
+                ->where('skip=0 AND date_check<:date' . $inIds, [':date' => date('Y-m-d H:i:s')]) //->where('skip=0 AND date_check<:date' . $inIds, [':date' => date('Y-m-d H:i:s')])
                 ->all();
         }
 

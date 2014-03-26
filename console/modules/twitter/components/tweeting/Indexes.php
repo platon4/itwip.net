@@ -41,7 +41,7 @@ class Indexes implements TweetingInterface
     public function process($task)
     {
         $this->setValidators([
-            'url-time-out'
+            'domen-time-out'
         ]);
 
         $this->init($task);
@@ -59,7 +59,7 @@ class Indexes implements TweetingInterface
                 $t = Yii::$app->db->beginTransaction();
 
                 /** Начисляем деньги на баланс пользователя */
-                Operation::put($this->getAmountToBloger(), $this->getAccount('owner_id'), 'purse', 'indexesCheck', $this->get('sbuorder_id'), $this->getAccount('screen_name'));
+                Operation::put($this->get('bloger_amount'), $this->getAccount('owner_id'), 'purse', 'indexesCheck', $this->get('sbuorder_id'), $this->getAccount('screen_name'));
 
                 /** Добавляем в список ссылок для проверки */
                 $command->insert('{{%twitter_urlCheck}}', [
@@ -71,14 +71,14 @@ class Indexes implements TweetingInterface
                         'bloger_id'     => $this->getAccount('owner_id'),
                         'url'           => $this->getUrl(),
                         'adv_id'        => $this->getOwner(),
-                        'amount'        => $this->getAmountToBloger(),
-                        'amount_return' => $this->getAmountToAdv(),
+                        'amount'        => $this->get('bloger_amount'),
+                        'amount_return' => $this->get('adv_amount'),
                         'account_id'    => $this->getAccount('id'),
                         'tw_str_id'     => $this->getStrId()
                     ])
                 ])->execute();
 
-                $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => 1])->execute();
+                $command->update('{{%twitter_ordersPerform}}', ['posted_date' => date('Y-m-d H:i:s'), 'status' => '1'], ['id' => $this->get('sbuorder_id')])->execute();
                 $command->delete('{{%twitter_tweeting}}', ['id' => $this->get('id')])->execute();
 
                 $this->updateOrder($this->get('order_hash'), $this->get('order_id'));
@@ -89,8 +89,6 @@ class Indexes implements TweetingInterface
                 $t->rollBack();
             }
         }
-
-        $command->insert('{{%twitter_tweetingAccountsLogs}}', ['account_id' => $this->getAccount('id'), 'logType' => 'indexes'])->execute();
     }
 
     /**
@@ -125,7 +123,12 @@ class Indexes implements TweetingInterface
      */
     protected function postTweet()
     {
+        echo PHP_EOL . "Run manual post - " . $this->getTweet() . PHP_EOL;
+
         if($this->getAccount('id') !== false) {
+            echo "App: " . Apps::get($this->getAccount('app'), 'id') . PHP_EOL;
+            echo "Account: " . $this->getAccount('id') . "-" . $this->getAccount('screen_name') . PHP_EOL;
+
             $tweeting = new Tweeting();
 
             /** Устанавливаем ключи доступа к приложению, и к аккаунту, и отсылаем твит в твиттер */
@@ -140,24 +143,33 @@ class Indexes implements TweetingInterface
 
             /** Успешное размещение */
             if($tweeting->getCode() == 200) {
+                echo "post Tweet indexes success" . PHP_EOL;
                 $this->_str_id = $tweeting->getStrId();
 
                 if($this->_str_id > 0) {
+                    echo "post Tweet manual: set account timeout" . PHP_EOL;
                     Yii::$app->redis->set('twitter:twitting:timeout:accounts:' . $this->getAccount('id'), $this->getAccount('id'), $this->getAccount('_timeout') * 60);
-                    Yii::$app->redis->set('twitter:tweeting:timeout:urls:' . md5(Url::getDomen($this->getUrl())), time(), rand(60, (5 * 60)));
 
-                    return true;
+                    $response = true;
                 } else {
                     (new Errors())->errorTweetPost($this, $tweeting);
-                    return false;
+                    $response = false;
                 }
             } else {
                 (new Errors())->errorTweetPost($this, $tweeting);
-                return false;
+                echo "Error Post tweet - " . $tweeting->getError() . PHP_EOL;
+                $response = false;
             }
         } else {
             (new Errors())->accountNotFound($this);
+            $response = false;
         }
+
+        $domen = Url::getDomen($this->getUrl());
+        echo "post Tweet manual: set domen timeout" . PHP_EOL;
+        Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, $this->getTimeoutInterval('domen'));
+
+        return $response;
     }
 
     /**
@@ -170,50 +182,13 @@ class Indexes implements TweetingInterface
     public function getAccount($key, $all = false)
     {
         if($this->_account === null) {
-            $this->_account = $this->getAccountQuery();
-
-            if($this->_account === false) {
-                Yii::$app->db->createCommand()->delete('{{%twitter_tweetingAccountsLogs}}', ['logType' => 'indexes'])->execute();
-                $this->_account = $this->getAccountQuery();
-            }
+            $this->_account = (new Accounts())->where(['id' => $this->get('tw_account')])->one();
         }
 
         if($all === true)
             return $this->_account;
         else
             return isset($this->_account[$key]) ? $this->_account[$key] : false;
-    }
-
-    /**
-     * Запрос для получение аккаунта
-     *
-     * @return array|bool
-     */
-    protected function getAccountQuery()
-    {
-        $other = [];
-
-        if($idsList = Yii::$app->redis->mGet(Yii::$app->redis->keys('twitter:twitting:timeout:accounts:*'))) {
-            $ids = [];
-            foreach($idsList as $id) {
-                if($id !== false)
-                    $ids[] = $id;
-            }
-
-            if(!empty($ids))
-                $other[] = ['not in', 'id', $ids];
-        }
-
-        $account = (new Accounts())
-            ->where(array_merge([
-                'and',
-                'a._status=1',
-                's.in_indexses=1',
-                ['not exists', (new Query())->select('id')->from('{{%twitter_tweetingAccountsLogs}}')->where(['and', 'logType=\'indexes\'', 'account_id=a.id'])]
-            ], $other))
-            ->one();
-
-        return $account;
     }
 
     /**
@@ -228,7 +203,7 @@ class Indexes implements TweetingInterface
                 ->count();
 
             if($count == 0)
-                Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => 2], ['id' => $id])->execute();
+                Yii::$app->db->createCommand()->update('{{%twitter_orders}}', ['status' => '2', 'finish_date' => date('Y-m-d H:i:s')], ['id' => $id])->execute();
         }
     }
 
@@ -236,16 +211,21 @@ class Indexes implements TweetingInterface
      * Проверяем время последнего размещеного идентичного поста, если интервал слишком маленький, пропускаем задание
      * @return boolean
      */
-    protected function validateUrlTimeOut()
+    protected function validateDomenTimeOut()
     {
         $domen = Url::getDomen($this->getUrl());
-        if($timeout = Yii::$app->redis->get('twitter:tweeting:timeout:urls:' . md5($domen))) {
-            $timeout = time() - $timeout;
 
-            Yii::$app->redis->set('console:twitter:tweeting:tasks:id:' . $this->get('id'), $this->get('id'), $timeout);
+        echo "Run validator DomenTimeOut: domen " . $domen . PHP_EOL;
+
+        if($timeout = Yii::$app->redis->get('console:twitter:tweeting:exclude:domen:' . md5($domen)))
             return false;
-        } else {
-            return false;
-        }
+        else
+            return true;
+    }
+
+    public function flush()
+    {
+        $this->_account = null;
+        $this->_str_id = null;
     }
 }

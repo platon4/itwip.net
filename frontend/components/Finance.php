@@ -175,11 +175,12 @@ class Finance
             1 => array(
                 0 => Yii::t('financeModule.index', '_providing_collateral_order', array('{id}' => $operationData)),
                 1 => Yii::t('financeModule.index', '_out_money'),
-                2 => Yii::t('financeModule.index', '_order_executed_successful_completion', array('{id}' => $operationData)),
+                2 => Yii::t('financeModule.index', '_order_executed_successful_completion', array('{id}' => ($operationData == 0 ? 'не определен' : $operationData))),
                 3 => Yii::t('financeModule.index', '_checking_tweets_delete_unsuccessfully', array('{account}' => $notice)),
                 4 => Yii::t('financeModule.index', '_shop_ref_buy', array('{ref}' => $notice)),
 
                 6 => Yii::t('financeModule.index', '_tweets_indexes_payFromLock', array('{order}' => $notice)),
+                7 => Yii::t('financeModule.index', '_checking_tweets_deletion_successfully_order', array('{id}' => ($operationData == 0 ? 'не определен' : $operationData)))
             ),
             //Возврат
             2 => array(
@@ -190,6 +191,8 @@ class Finance
                 5 => Yii::t('financeModule.index', 'twitter_removeFromTransfer', ['{id}' => $operationData]),
                 6 => Yii::t('financeModule.index', '_tweet_indexes_checkFail', ['{order}' => $notice]),
                 7 => Yii::t('financeModule.index', '_tweet_indexes_checkFailBloger'),
+                8 => 'Не удалось обработать задание',
+                9 => Yii::t('financeModule.index', '_checking_tweets_delete_unsuccessfully', array('{account}' => $notice)),
             )
         );
 

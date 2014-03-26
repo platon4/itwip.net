@@ -66,30 +66,36 @@ class Manual extends \FormModel
         if($this->_rows === null) {
             $order = $this->orders[$this->_o] . ' ' . ($this->_a == 'ASC' ? 'ASC' : 'DESC');
 
-            $orders = Yii::app()->db->createCommand("SELECT id,cost,return_amount,status,posted_date,_params,message FROM {{twitter_ordersPerform}} WHERE order_hash=:hash ORDER BY " . $order . " LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())->queryAll(true, [':hash' => $this->h]);
+            $orders = Yii::app()->db->createCommand("SELECT id,cost,return_amount,tweet, status,posted_date,_params,message,tw_account,tweet_id FROM {{twitter_ordersPerform}} WHERE order_hash=:hash ORDER BY " . $order . " LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())->queryAll(true, [':hash' => $this->h]);
             $rows = [];
             $ids = [];
             $params = [];
 
             foreach($orders as $v) {
                 $params[$v['id']] = json_decode($v['_params'], true);
-                $ids[] = $params[$v['id']]['account'];
+                $ids[] = $v['tw_account'];
             }
 
             $accounts = Twitter::accounts($ids)->getAll(); //Загружаем данные выбраных аккаунтов
 
             foreach($orders as $order) {
-                $account = $accounts[$params[$order['id']]['account']];
+                $account = isset($accounts[$order['tw_account']]) ? $accounts[$order['tw_account']] : [
+                    'avatar'      => '/i/_default.png',
+                    'name'        => 'Account was deleted',
+                    'screen_name' => ''
+                ];
+
                 $rows[] = [
                     'avatar'       => $account['avatar'],
                     'name'         => $account['name'],
                     'screen_name'  => $account['screen_name'],
-                    'tweet'        => $params[$order['id']]['tweet'],
+                    'tweet'        => $order['tweet'],
                     'message'      => $order['message'],
                     'id'           => $order['id'],
                     'status'       => $order['status'],
+                    'tweet_id'     => $order['tweet_id'],
                     'amount'       => $order['return_amount'],
-                    'payment_type' => '',
+                    'payment_type' => $this->getOrder()['payment_type'],
                     'placed_date'  => date('d.m.Y H:i', strtotime($order['posted_date'])),
                     'params'       => $params[$order['id']],
                     'message'      => $order['message']

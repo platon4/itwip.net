@@ -72,7 +72,7 @@ class Orders extends Model
             $orders = $query
                 ->select('id,owner_id,type_order,order_hash,payment_type,_params')
                 ->from('{{%twitter_orders}}')
-                ->where(['and', 'status=:status', 'process_date<=:date', 'is_process=0', 'type_order=:type'], [':type' => 'indexes', ':status' => 1, ':date' => date('Y-m-d')])
+                ->where(['and', 'status=:status', 'process_date<=:date', 'is_process=0'], [':status' => 1, ':date' => date('Y-m-d')])
                 ->orderBy(['id' => SORT_ASC])
                 ->limit(10)
                 ->all();
@@ -144,7 +144,7 @@ class Orders extends Model
     public function getOrders($key = '')
     {
         if($key == 'columns')
-            return ['order_id', 'order_hash', 'sbuorder_id', 'orderType', 'tweet_hash', 'url_hash', 'process_time', 'params', 'daemon'];
+            return ['order_id', 'order_hash', 'sbuorder_id', 'orderType', 'tweet_hash', 'domen', 'tw_account', 'process_time', 'payment_type', 'params', 'daemon', 'bloger_amount', 'adv_amount'];
         else
             return $this->_orders;
     }

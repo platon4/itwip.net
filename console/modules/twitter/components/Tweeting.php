@@ -33,8 +33,9 @@ class Tweeting
             $tw = new $this->_methods[$task['orderType']];
 
             $tw->process($task);
+            $tw->flush();
         } else {
-            Logger::log('Error tweeting: invalid order type "' . $task['orderType'] . '"', 3);
+            Logger::error('Error tweeting: invalid order type "' . $task['orderType'] . '"', [], 'daemons/tweeting/logs', 'tweetinginitTask');
         }
     }
 
@@ -96,6 +97,11 @@ class Tweeting
     public function getCode()
     {
         return $this->_code;
+    }
+
+    public function getError()
+    {
+        return isset($this->_result['errors'][0]['message']) ? $this->_result['errors'][0]['message'] : 'Unknown error';
     }
 
     /**
