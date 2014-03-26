@@ -95,7 +95,7 @@ class Manual implements TweetingInterface
      */
     protected function postTweet()
     {
-        echo "Run post Tweet manual tweet: " . $this->getTweet() . PHP_EOL;
+        echo "Run manual post - tweet: " . $this->getTweet() . "  App: " . Apps::get($this->getAccount('app'), 'id') . " Account: id " . $this->getAccount('id') . "-" . $this->getAccount('screen_name') . PHP_EOL;
 
         if($this->getAccount('id') !== false) {
             $tweeting = new Tweeting();
