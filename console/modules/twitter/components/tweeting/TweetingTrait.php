@@ -67,7 +67,7 @@ trait TweetingTrait
 
     public function getTimeoutInterval()
     {
-        return rand((3 * 60), (15 * 60));
+        return rand(3, 15) * 60;
     }
 
     public function getTweet()
