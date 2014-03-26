@@ -215,7 +215,7 @@ class Accounts extends \ActiveRecord
                 Yii::app()->db->createCommand("DELETE FROM {{tw_accounts_stats}} WHERE tw_id=" . $this->tid)->execute();
 
                 Yii::app()->user->setFlash('accountsMessages', 'Аккаунта "' . \Html::encode($this->get('screen_name')) . '" успешно удален.');
-
+                Yii::app()->redis->hDel('twitterAccounts', $this->tid);
                 $this->_code = 301;
                 $t->commit();
             } catch(Exception $e) {
