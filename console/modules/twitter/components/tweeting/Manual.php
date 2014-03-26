@@ -256,7 +256,5 @@ class Manual implements TweetingInterface
         $this->_account = null;
         $this->_str_id = null;
         $this->_url = null;
-
-        echo "Run Manual flush" . PHP_EOL;
     }
 }
