@@ -13,7 +13,7 @@ class Yandex extends \common\components\Yandex
 
     public function urlInIndex($url)
     {
-        $this->query('url:' . urlencode($url))->request();
+        $this->query('url:' . $url)->request();
 
         $count = $this->total();
 
