@@ -41,7 +41,7 @@ class Manual implements TweetingInterface
     {
         $command = Yii::$app->db->createCommand();
 
-        echo "Post Order " . $this->get('id') . " - Account: " . $this->getAccount('id') . PHP_EOL;
+        echo "Post Order " . $this->get('order_id') . " - Account: " . $this->getAccount('id') . ' - Tweet: ' . $this->getParams('tweet') . PHP_EOL;
 
         if($this->postTweet() === true) {
             try {
