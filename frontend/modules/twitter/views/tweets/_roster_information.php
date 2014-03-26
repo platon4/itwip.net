@@ -4,7 +4,7 @@ $rows = [
     'character'    => array('remove_tolltip' => '', 'text' => Yii::t('twitterModule.tweets', '_stats_symbols'), 'allow_delete' => true),
     'censor'       => array('remove_tolltip' => '', 'text' => Yii::t('twitterModule.tweets', '_stats_censor'), 'allow_delete' => true),
     'unique-tweet' => array('remove_tolltip' => '', 'text' => Yii::t('twitterModule.tweets', '_stats_duplikate'), 'allow_delete' => true),
-    'unique-url'   => array('remove_tolltip' => '', 'text' => Yii::t('twitterModule.tweets', '_stats_domen_blocked'), 'allow_delete' => true),
+    'domain'       => array('remove_tolltip' => '', 'text' => Yii::t('twitterModule.tweets', '_stats_domen_blocked'), 'allow_delete' => true),
     'links'        => array('remove_tolltip' => '', 'text' => Yii::t('twitterModule.tweets', '_stats_notUniqueUrl'), 'allow_delete' => true),
     'politics'     => array('remove_tolltip' => '', 'text' => Yii::t('twitterModule.tweets', '_stats_wordsFilter'), 'allow_delete' => true),
     'hash-tags'    => array('remove_tolltip' => '', 'text' => Yii::t('twitterModule.tweets', '_stats_exceededHash'), 'allow_delete' => true),
