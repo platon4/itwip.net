@@ -144,7 +144,7 @@ class Indexes implements TweetingInterface
                     Yii::$app->redis->set('twitter:twitting:timeout:accounts:' . $this->getAccount('id'), $this->getAccount('id'), $this->getAccount('_timeout') * 60);
 
                     $domen = Url::getDomen($this->getUrl());
-                    Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, rand(60, (5 * 60)));
+                    Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, rand(180, (15 * 60)));
 
                     return true;
                 } else {
