@@ -257,6 +257,7 @@ return array(
     '_error_groups_unique-tweet' => 'Твит уже присуствует в списке',
 
 	'_tweet_success_save' => 'Твит успешно сохранен',
+	'_error_groups_domain' => 'Заблокированный домен',
 
 	'_stats_references' => 'Превышено кол-во упомнаний',
     '_error_create_tweets_roster' => 'Не удалось обработать список твитов, пожалуйста попробуйте еще раз.'
