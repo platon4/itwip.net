@@ -182,7 +182,7 @@ class Indexes implements TweetingInterface
     public function getAccount($key, $all = false)
     {
         if($this->_account === null) {
-            $this->_account = (new Accounts())->where(['id' => $this->getParams('account')])->one();
+            $this->_account = (new Accounts())->where(['id' => $this->get('tw_account')])->one();
         }
 
         if($all === true)

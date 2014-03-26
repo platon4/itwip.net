@@ -160,7 +160,6 @@ class Manual implements OrdersInterface
     {
         return json_encode([
             'tweet'         => $data['tweet'],
-            'account'       => $data['tw_account'],
             'order_owner'   => $this->get('owner_id'),
             'amount'        => $data['cost'],
             'return_amount' => $data['return_amount'],
