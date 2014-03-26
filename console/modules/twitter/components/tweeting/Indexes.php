@@ -157,9 +157,7 @@ class Indexes implements TweetingInterface
                 }
             } else {
                 (new Errors())->errorTweetPost($this, $tweeting);
-                $timeout = rand(3, 6);
                 echo "Error Post tweet - " . $tweeting->getError() . PHP_EOL;
-                sleep($timeout);
                 $response = false;
             }
         } else {
@@ -169,7 +167,7 @@ class Indexes implements TweetingInterface
 
         $domen = Url::getDomen($this->getUrl());
         echo "post Tweet manual: set domen timeout" . PHP_EOL;
-        Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, rand(180, (15 * 60)));
+        Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, $this->getTimeoutInterval('domen'));
 
         return $response;
     }

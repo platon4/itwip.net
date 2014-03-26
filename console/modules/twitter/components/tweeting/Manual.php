@@ -124,7 +124,7 @@ class Manual implements TweetingInterface
 
                     if($this->get('tweet') !== null || $this->get('tweet') != '') {
                         $tweet_hash = md5($this->get('tweet'));
-                        Yii::$app->redis->set('console:twitter:tweeting:exclude:tweet:' . $tweet_hash, $tweet_hash, rand(180, (10 * 60)));
+                        Yii::$app->redis->set('console:twitter:tweeting:exclude:tweet:' . $tweet_hash, $tweet_hash, $this->getTimeoutInterval('tweet'));
                         echo "post Tweet manual: set tweet timeout" . PHP_EOL;
                     }
 
@@ -135,9 +135,7 @@ class Manual implements TweetingInterface
                 }
             } else {
                 (new Errors())->errorTweetPost($this, $tweeting);
-                $timeout = rand(3, 6);
                 echo "Error Post tweet - " . $tweeting->getError() . PHP_EOL;
-                sleep($timeout);
                 $response = false;
             }
         } else {
@@ -149,7 +147,7 @@ class Manual implements TweetingInterface
             echo "post Tweet manual: set domen timeout" . PHP_EOL;
             $domen = Url::getDomen($this->getUrl());
 
-            Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, rand(180, (15 * 60)));
+            Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, $this->getTimeoutInterval('domen'));
         }
 
         return $response;

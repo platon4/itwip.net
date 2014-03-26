@@ -75,6 +75,11 @@ trait TweetingTrait
         return isset($this->_params[$key]) ? $this->_params[$key] : null;
     }
 
+    public function getTimeoutInterval()
+    {
+        return rand((3 * 60), (15 * 60));
+    }
+
     public function getTweet()
     {
         return $this->getParams('tweet');
