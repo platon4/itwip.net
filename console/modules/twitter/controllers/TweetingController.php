@@ -58,8 +58,6 @@ class TweetingController extends \console\components\Controller
                             ->limit(5)
                             ->all();
 
-                        print_r($where) . PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL;
-                        sleep(5);
                         if(!empty($tasks)) {
                             foreach($tasks as $task) {
                                 Yii::$app->redis->set('orders:in_process:0:' . $task['order_id'], $task['order_id'], 5 * 60);
