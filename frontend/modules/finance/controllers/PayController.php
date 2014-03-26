@@ -32,7 +32,7 @@ class PayController extends Controller
 
     public function actionRobaresult()
     {
-        $mrh_pass2 = "v5*6-45v65wret45-6*4-564245-6";
+        $mrh_pass2 = "kjjASLje2046.?>4598KADF65OI;94";
 
         //установка текущего времени
         //current date

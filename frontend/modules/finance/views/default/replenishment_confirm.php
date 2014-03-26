@@ -42,8 +42,8 @@ if(!Yii::app()->user->isGuest)
 
                     case 2:
 
-                        $mrh_login="itwip";
-                        $mrh_pass1="+5466+-5sadgfa4674n567346-7*6-7";
+                        $mrh_login="itwip.net";
+                        $mrh_pass1="mj63%$./adjhlAjf6545%Djhjdada";
                         $inv_id   =$_id;
                         $out_summ =$form->amount;
                         $shp_item =$form->owner_id;
