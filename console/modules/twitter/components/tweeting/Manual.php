@@ -96,10 +96,11 @@ class Manual implements TweetingInterface
     protected function postTweet()
     {
         echo PHP_EOL . "Run manual post - " . $this->getTweet() . PHP_EOL;
-        echo "App: " . Apps::get($this->getAccount('app'), 'id') . PHP_EOL;
-        echo "Account: " . $this->getAccount('id') . "-" . $this->getAccount('screen_name') . PHP_EOL;
 
         if($this->getAccount('id') !== false) {
+            echo "App: " . Apps::get($this->getAccount('app'), 'id') . PHP_EOL;
+            echo "Account: " . $this->getAccount('id') . "-" . $this->getAccount('screen_name') . PHP_EOL;
+
             $tweeting = new Tweeting();
 
             /** Устанавливаем ключи доступа к приложению, и к аккаунту, и отсылаем твит в твиттер */
