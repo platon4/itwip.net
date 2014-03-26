@@ -30,7 +30,9 @@ class TestController extends Controller
 
     public function actionDomenBan($d)
     {
-        Yii::$app->redis->hSet('twitter:filters:domain', $d, ' ');
+        Yii::$app->redis->hSet('twitter:filters:domain', $d, $d);
+
+        var_dump(Yii::$app->redis->hGet('twitter:filters:domain', $d));
     }
 
     public function actionClearCache()
