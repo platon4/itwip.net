@@ -33,6 +33,7 @@ class Operation
             'tweetsCheckSuccess'       => 7,
             'buyReferral'              => 4,
             // - 6
+            'indexesCheckSuccess'      => 7
         ],
         2 => [
             'removeOrder'              => 0,
