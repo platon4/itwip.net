@@ -38,6 +38,7 @@ class TweetingController extends \console\components\Controller
                 /* проверяем если твиттинг не остановлен */
                 if($redis->exists('console:twitter:tweeting') === false) {
                     if(Daemon::isSetProcess($this->getDaemoName())) {
+                        echo "-------------------------- Query ---------------------------" . PHP_EOL;
                         $where = ['and', 'daemon=:daemon']; // , 'process_time<=:time'
 
                         if($_task = $this->getExcludes('twitter:twitting:timeout:accounts', 'tw_account'))
@@ -58,6 +59,7 @@ class TweetingController extends \console\components\Controller
                             ->groupBy('domen')
                             ->limit(5)
                             ->all();
+                        echo "-------------------------- End Query ---------------------------" . PHP_EOL . PHP_EOL;
 
                         if(!empty($tasks)) {
                             foreach($tasks as $task) {
