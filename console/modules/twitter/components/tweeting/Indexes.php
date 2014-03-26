@@ -59,7 +59,7 @@ class Indexes implements TweetingInterface
                 $t = Yii::$app->db->beginTransaction();
 
                 /** Начисляем деньги на баланс пользователя */
-                Operation::put($this->getAmountToBloger(), $this->getAccount('owner_id'), 'purse', 'indexesCheck', $this->get('sbuorder_id'), $this->getAccount('screen_name'));
+                Operation::put($this->get('bloger_amount'), $this->getAccount('owner_id'), 'purse', 'indexesCheck', $this->get('sbuorder_id'), $this->getAccount('screen_name'));
 
                 /** Добавляем в список ссылок для проверки */
                 $command->insert('{{%twitter_urlCheck}}', [
@@ -71,8 +71,8 @@ class Indexes implements TweetingInterface
                         'bloger_id'     => $this->getAccount('owner_id'),
                         'url'           => $this->getUrl(),
                         'adv_id'        => $this->getOwner(),
-                        'amount'        => $this->getAmountToBloger(),
-                        'amount_return' => $this->getAmountToAdv(),
+                        'amount'        => $this->get('bloger_amount'),
+                        'amount_return' => $this->get('adv_amount'),
                         'account_id'    => $this->getAccount('id'),
                         'tw_str_id'     => $this->getStrId()
                     ])

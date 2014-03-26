@@ -111,17 +111,19 @@ class Manual implements OrdersInterface
     public function processTask($task)
     {
         $this->_task[] = [
-            'order_id'     => $this->get('id'),
-            'order_hash'   => $this->get('order_hash'),
-            'sbuorder_id'  => $task['id'],
-            'orderType'    => 'manual',
-            'tweet_hash'   => $task['hash'],
-            'domen'        => $this->getDomen($task['tweet']),
-            'tw_account'   => $task['tw_account'],
-            'process_time' => $this->getTaskProcessTime($task),
-            'payment_type' => $this->get('payment_type'),
-            'params'       => $this->getTaskParams($task),
-            'daemon'       => $this->getDaemon()
+            'order_id'      => $this->get('id'),
+            'order_hash'    => $this->get('order_hash'),
+            'sbuorder_id'   => $task['id'],
+            'orderType'     => 'manual',
+            'tweet_hash'    => $task['hash'],
+            'domen'         => $this->getDomen($task['tweet']),
+            'tw_account'    => $task['tw_account'],
+            'process_time'  => $this->getTaskProcessTime($task),
+            'payment_type'  => $this->get('payment_type'),
+            'params'        => $this->getTaskParams($task),
+            'daemon'        => $this->getDaemon(),
+            'bloger_amount' => $task['cost'],
+            'adv_amount'    => $task['return_amount'],
         ];
 
         $this->_update['task'][$task['id']]['is_process'] = 1;
@@ -161,8 +163,6 @@ class Manual implements OrdersInterface
         return json_encode([
             'tweet'         => $data['tweet'],
             'order_owner'   => $this->get('owner_id'),
-            'amount'        => $data['cost'],
-            'return_amount' => $data['return_amount'],
             'interval'      => $this->getInterval()
         ]);
     }

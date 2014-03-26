@@ -15,28 +15,16 @@ class TestController extends Controller
 {
     public function actionIndex()
     {
+        die();
         $tasks = (new Query())->from('{{%twitter_tweeting}}')->all();
 
         foreach($tasks as $task) {
             $dparams = json_decode($task['params'], true);
 
-            if(!isset($dparams['account'])) {
-                $dparams['account'] = $this->getAccount('id');
-            }
+            $bloger_amount = $dparams['amount'];
+            $adv_amount = $dparams['return_amount'];
 
-            $tw_account = $dparams['account'];
-            $params = json_encode($dparams);
-            $domen = Url::getDomen($this->extractUrls($dparams['tweet']));
-
-            echo 'Type ' . $task['orderType'] . PHP_EOL;
-            echo 'Domen ' . $domen . PHP_EOL;
-            echo 'Account ' . $tw_account . PHP_EOL;
-            echo 'Params ' . $params . PHP_EOL . PHP_EOL . PHP_EOL;
-
-            if($task['orderType'] == 'indexes')
-                Yii::$app->db->createCommand()->insert('{{%twitter_tweetingAccountsLogs}}', ['account_id' => $this->getAccount('id'), 'logType' => 'indexes'])->execute();
-
-            Yii::$app->db->createCommand()->update('{{%twitter_tweeting}}', ['params' => $params, 'tw_account' => $tw_account, 'domen' => $domen], ['id' => $task['id']])->execute();
+            Yii::$app->db->createCommand()->update('{{%twitter_tweeting}}', ['bloger_amount' => $bloger_amount, 'adv_amount' => $adv_amount], ['id' => $task['id']])->execute();
         }
     }
 

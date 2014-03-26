@@ -26,17 +26,19 @@ class Indexes implements OrdersInterface
         $acc_id = $this->getAccountID();
 
         $this->_task[] = [
-            'order_id'     => $this->get('id'),
-            'order_hash'   => $this->get('order_hash'),
-            'sbuorder_id'  => $task['id'],
-            'orderType'    => 'indexes',
-            'tweet_hash'   => $task['hash'],
-            'domen'        => Url::getDomen($task['url']),
-            'tw_account'   => $acc_id,
-            'process_time' => date('H:i:s'),
-            'payment_type' => $this->get('payment_type'),
-            'params'       => $this->getTaskParams($task),
-            'daemon'       => $this->getDaemon()
+            'order_id'      => $this->get('id'),
+            'order_hash'    => $this->get('order_hash'),
+            'sbuorder_id'   => $task['id'],
+            'orderType'     => 'indexes',
+            'tweet_hash'    => $task['hash'],
+            'domen'         => Url::getDomen($task['url']),
+            'tw_account'    => $acc_id,
+            'process_time'  => date('H:i:s'),
+            'payment_type'  => $this->get('payment_type'),
+            'params'        => $this->getTaskParams($task),
+            'daemon'        => $this->getDaemon(),
+            'bloger_amount' => $task['cost'],
+            'adv_amount'    => $task['return_amount'],
         ];
 
         $this->_update['task'][$task['id']]['is_process'] = 1;
@@ -81,8 +83,6 @@ class Indexes implements OrdersInterface
         return json_encode([
             'tweet'         => $data['tweet'],
             'order_owner'   => $this->get('owner_id'),
-            'amount'        => $data['cost'],
-            'return_amount' => $data['return_amount'],
             'url'           => $data['url'],
             'time'          => $this->_getTaskParams('time'),
             'interval'      => 0,

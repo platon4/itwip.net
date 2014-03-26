@@ -56,16 +56,6 @@ trait TweetingTrait
         return $this->getParams('order_owner');
     }
 
-    public function getAmountToBloger()
-    {
-        return $this->getParams('amount');
-    }
-
-    public function getAmountToAdv()
-    {
-        return $this->getParams('return_amount');
-    }
-
     public function getParams($key)
     {
         if($this->_params === null) {

@@ -47,7 +47,7 @@ class Manual implements TweetingInterface
                 $t = Yii::$app->db->beginTransaction();
 
                 /** Начисляем деньги на баланс пользователя */
-                Operation::put($this->getAmountToBloger(), $this->getAccount('owner_id'), $this->getPayType(), 'tweetsCheck', $this->getStrId(), $this->getAccount('screen_name'));
+                Operation::put($this->get('bloger_amount'), $this->getAccount('owner_id'), $this->getPayType(), 'tweetsCheck', $this->getStrId(), $this->getAccount('screen_name'));
 
                 /** Добавляем в список ссылок для проверки */
                 $command->insert('{{%twitter_tweets}}', [
@@ -60,8 +60,8 @@ class Manual implements TweetingInterface
                     'tweet_id'       => $this->getStrId(),
                     'tw_account'     => $this->getAccount('id'),
                     'date'           => date('Y-m-d H:i:s'),
-                    'tweet_cost'     => $this->getAmountToBloger(),
-                    'return_amount'  => $this->getAmountToBloger(),
+                    'tweet_cost'     => $this->get('bloger_amount'),
+                    'return_amount'  => $this->get('adv_amount'),
                     'payment_method' => $this->get('payment_type'),
                 ])->execute();
 
