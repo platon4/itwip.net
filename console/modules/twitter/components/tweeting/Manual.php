@@ -117,16 +117,16 @@ class Manual implements TweetingInterface
 
                 if($this->_str_id > 0) {
                     Yii::$app->redis->set('twitter:twitting:timeout:accounts:' . $this->getAccount('id'), $this->getAccount('id'), $this->getAccount('_timeout') * 60);
-                    echo "post Tweet manual: set account timeout" . PHP_EOL.PHP_EOL;
+                    echo "post Tweet manual: set account timeout" . PHP_EOL;
 
                     if($this->get('tweet') !== null || $this->get('tweet') != '') {
                         $tweet_hash = md5($this->get('tweet'));
                         Yii::$app->redis->set('console:twitter:tweeting:exclude:tweet:' . $tweet_hash, $tweet_hash, rand(60, (5 * 60)));
-                        echo "post Tweet manual: set tweet timeout" . PHP_EOL . PHP_EOL;
+                        echo "post Tweet manual: set tweet timeout" . PHP_EOL;
                     }
 
                     if($this->getUrl() !== null) {
-                        echo "post Tweet manual: set url timeout" . PHP_EOL . PHP_EOL;
+                        echo "post Tweet manual: set url timeout" . PHP_EOL;
                         $domen = Url::getDomen($this->getUrl());
 
                         Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, rand(60, (5 * 60)));
@@ -140,7 +140,7 @@ class Manual implements TweetingInterface
             } else {
                 (new Errors())->errorTweetPost($this, $tweeting);
                 $timeout = rand(3, 6);
-                echo "Error Post tweet, run timeout " . $timeout . " sec." . PHP_EOL . PHP_EOL;
+                echo "Error Post tweet, run timeout " . $timeout . " sec." . PHP_EOL;
                 sleep($timeout);
                 return false;
             }
@@ -240,13 +240,13 @@ class Manual implements TweetingInterface
     {
         $domen = Url::getDomen($this->getUrl());
 
-        echo "Run validator DomenTimeOut: domen " . $domen . PHP_EOL . PHP_EOL;
+        echo "Run validator DomenTimeOut: domen " . $domen;
 
         if($timeout = Yii::$app->redis->get('console:twitter:tweeting:exclude:domen:' . md5($domen))) {
-            echo "validator DomenTimeOut: false" . PHP_EOL . PHP_EOL;
+            echo "validator DomenTimeOut: false" . PHP_EOL;
             return false;
         } else {
-            echo "validator DomenTimeOut: true" . PHP_EOL . PHP_EOL;
+            echo "validator DomenTimeOut: true" . PHP_EOL;
             return true;
         }
     }
@@ -257,6 +257,6 @@ class Manual implements TweetingInterface
         $this->_str_id = null;
         $this->_url = null;
 
-        echo "Run Manual flush" . PHP_EOL . PHP_EOL;
+        echo "Run Manual flush" . PHP_EOL;
     }
 }
