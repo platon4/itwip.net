@@ -26,11 +26,11 @@ class Settings extends \ActiveRecord
         return [
             ['_age,filter,_subjects', 'safe'],
             ['working_in, fast_posting, allow_retweet, allow_following,_allow_bonus_pay,in_indexses', 'in', 'range' => [0, 1]],
-            ['_gender', 'in', 'range' => [0, 1, 3]],
+            ['_gender', 'in', 'range' => [0, 1, 2]],
 
             ['_age', 'numerical', 'integerOnly' => true],
             ['_price', 'numerical', 'integerOnly' => false, 'min' => \CMoney::_c(1), 'max' => \CMoney::_c(100000), 'tooSmall' => Yii::t('twitterModule.accounts', '_price_is_small', array('{price}' => \CMoney::_c(1, true))), 'tooBig' => Yii::t('twitterModule.accounts', '_price_is_big', array('{price}' => \CMoney::_c(100000, true)))],
-            ['_timeout', 'numerical', 'integerOnly' => true, 'min' => Yii::app()->params['twitter']['posting_timeout'], 'max' => Yii::app()->params['twitter']['posting_timeout_max'], 'tooSmall' => Yii::t('twitterModule.accounts', '_timeout_is_small', array('{time}' => Yii::app()->params['twitter']['posting_timeout'])), 'tooBig' => Yii::t('twitterModule.accounts', '_timeout_is_big', array('{time}' => Yii::app()->params['twitter']['posting_timeout_max']))],
+            ['_timeout', 'numerical', 'integerOnly' => true, 'min' => 15, 'max' => 1440, 'tooSmall' => Yii::t('twitterModule.accounts', '_timeout_is_small', array('{time}' => 15)), 'tooBig' => Yii::t('twitterModule.accounts', '_timeout_is_big', array('{time}' => 1440))],
 
             ['words', 'filterWords'],
             ['subject', 'validateSubject']
