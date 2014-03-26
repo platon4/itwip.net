@@ -153,7 +153,7 @@ class Indexes extends Model
 
             $this->_tasks = (new Query())
                 ->from('{{%twitter_urlCheck}}')
-                ->where('skip=0 AND date_check<:date' . $inIds, [':date' => date('Y-m-d H:i:s')])
+                ->where('skip=0 AND (id=7 or id=9)') //->where('skip=0 AND date_check<:date' . $inIds, [':date' => date('Y-m-d H:i:s')])
                 ->all();
         }
 
