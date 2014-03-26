@@ -154,6 +154,9 @@ class Indexes implements TweetingInterface
                 }
             } else {
                 (new Errors())->errorTweetPost($this, $tweeting);
+                $timeout = rand(3, 6);
+                echo "Error Post tweet - " . $tweeting->getError() . PHP_EOL;
+                sleep($timeout);
                 $response = false;
             }
         } else {

@@ -99,6 +99,11 @@ class Tweeting
         return $this->_code;
     }
 
+    public function getError()
+    {
+        return isset($this->_result['errors'][0]['message']) ? $this->_result['errors'][0]['message'] : 'Unknown error';
+    }
+
     /**
      * Получаем значение по ключу, с твиттера
      *

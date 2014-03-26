@@ -63,7 +63,7 @@ class TweetingController extends \console\components\Controller
 
                         if(!empty($tasks)) {
                             foreach($tasks as $task) {
-                                echo PHP_EOL . PHP_EOL . PHP_EOL . "-------------------------- Run Task ---------------------------" . PHP_EOL;
+                                echo PHP_EOL . "-------------------------- Run Task ---------------------------" . PHP_EOL;
                                 Yii::$app->redis->set('orders:in_process:0:' . $task['order_id'], $task['order_id'], 5 * 60);
                                 Yii::$app->redis->set('orders:in_process:1:' . $task['sbuorder_id'], $task['order_id'], 5 * 60);
 
