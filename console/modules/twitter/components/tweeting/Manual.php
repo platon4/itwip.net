@@ -125,28 +125,31 @@ class Manual implements TweetingInterface
                         echo "post Tweet manual: set tweet timeout" . PHP_EOL;
                     }
 
-                    if($this->getUrl() !== null) {
-                        echo "post Tweet manual: set domen timeout" . PHP_EOL;
-                        $domen = Url::getDomen($this->getUrl());
-
-                        Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, rand(180, (15 * 60)));
-                    }
-
-                    return true;
+                    $response = true;
                 } else {
                     (new Errors())->errorTweetPost($this, $tweeting);
-                    return false;
+                    $response = false;
                 }
             } else {
                 (new Errors())->errorTweetPost($this, $tweeting);
                 $timeout = rand(3, 6);
                 echo "Error Post tweet, run timeout " . $timeout . " sec." . PHP_EOL;
                 sleep($timeout);
-                return false;
+                $response = false;
             }
         } else {
             (new Errors())->accountNotFound($this);
+            $response = false;
         }
+
+        if($this->getUrl() !== null) {
+            echo "post Tweet manual: set domen timeout" . PHP_EOL;
+            $domen = Url::getDomen($this->getUrl());
+
+            Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, rand(180, (15 * 60)));
+        }
+
+        return $response;
     }
 
     /**
@@ -223,13 +226,10 @@ class Manual implements TweetingInterface
     {
         echo "Run validator TweetTimeOut: tweet hash" . md5($this->get('tweet')) . PHP_EOL;
 
-        if($timeout = Yii::$app->redis->get('console:twitter:tweeting:exclude:tweet:' . md5($this->get('tweet')))) {
-            echo "validator TweetTimeOut: true" . PHP_EOL;
+        if($timeout = Yii::$app->redis->get('console:twitter:tweeting:exclude:tweet:' . md5($this->get('tweet'))))
             return false;
-        } else {
-            echo "validator TweetTimeOut: false" . PHP_EOL;
+        else
             return true;
-        }
     }
 
     /**

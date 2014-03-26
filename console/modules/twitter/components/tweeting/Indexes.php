@@ -147,22 +147,25 @@ class Indexes implements TweetingInterface
                     echo "post Tweet manual: set account timeout" . PHP_EOL;
                     Yii::$app->redis->set('twitter:twitting:timeout:accounts:' . $this->getAccount('id'), $this->getAccount('id'), $this->getAccount('_timeout') * 60);
 
-                    $domen = Url::getDomen($this->getUrl());
-                    echo "post Tweet manual: set domen timeout" . PHP_EOL;
-                    Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, rand(180, (15 * 60)));
-
-                    return true;
+                    $response = true;
                 } else {
                     (new Errors())->errorTweetPost($this, $tweeting);
-                    return false;
+                    $response = false;
                 }
             } else {
                 (new Errors())->errorTweetPost($this, $tweeting);
-                return false;
+                $response = false;
             }
         } else {
             (new Errors())->accountNotFound($this);
+            $response = false;
         }
+
+        $domen = Url::getDomen($this->getUrl());
+        echo "post Tweet manual: set domen timeout" . PHP_EOL;
+        Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, rand(180, (15 * 60)));
+
+        return $response;
     }
 
     /**
