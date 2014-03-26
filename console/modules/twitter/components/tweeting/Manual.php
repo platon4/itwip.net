@@ -95,7 +95,7 @@ class Manual implements TweetingInterface
      */
     protected function postTweet()
     {
-        echo "Run post Tweet manual" . PHP_EOL;
+        echo "Run post Tweet manual tweet: " . $this->getTweet() . PHP_EOL;
 
         if($this->getAccount('id') !== false) {
             $tweeting = new Tweeting();
@@ -126,7 +126,7 @@ class Manual implements TweetingInterface
                     }
 
                     if($this->getUrl() !== null) {
-                        echo "post Tweet manual: set url timeout" . PHP_EOL;
+                        echo "post Tweet manual: set domen timeout" . PHP_EOL;
                         $domen = Url::getDomen($this->getUrl());
 
                         Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, rand(180, (15 * 60)));
@@ -240,7 +240,7 @@ class Manual implements TweetingInterface
     {
         $domen = Url::getDomen($this->getUrl());
 
-        echo "Run validator DomenTimeOut: domen " . $domen;
+        echo "Run validator DomenTimeOut: domen " . $domen . PHP_EOL;
 
         if($timeout = Yii::$app->redis->get('console:twitter:tweeting:exclude:domen:' . md5($domen))) {
             echo "validator DomenTimeOut: false" . PHP_EOL;

@@ -123,6 +123,8 @@ class Indexes implements TweetingInterface
      */
     protected function postTweet()
     {
+        echo "Run post Tweet indexes tweet: " . $this->getTweet() . PHP_EOL;
+
         if($this->getAccount('id') !== false) {
             $tweeting = new Tweeting();
 
@@ -138,12 +140,15 @@ class Indexes implements TweetingInterface
 
             /** Успешное размещение */
             if($tweeting->getCode() == 200) {
+                echo "post Tweet indexes success" . PHP_EOL;
                 $this->_str_id = $tweeting->getStrId();
 
                 if($this->_str_id > 0) {
+                    echo "post Tweet manual: set account timeout" . PHP_EOL;
                     Yii::$app->redis->set('twitter:twitting:timeout:accounts:' . $this->getAccount('id'), $this->getAccount('id'), $this->getAccount('_timeout') * 60);
 
                     $domen = Url::getDomen($this->getUrl());
+                    echo "post Tweet manual: set domen timeout" . PHP_EOL;
                     Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, rand(180, (15 * 60)));
 
                     return true;
