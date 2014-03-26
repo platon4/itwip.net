@@ -61,7 +61,7 @@ class Errors
 
         $pay_type = $model->get('payment_type') == 0 ? 'purse' : 'bonus';
 
-        Operation::returnMoney($this->get('adv_amount'), $model->getOwner(), $pay_type, 'errorPostTweet', $model->get('order_id'), $model->get('sbuorder_id'));
+        Operation::returnMoney($model->get('adv_amount'), $model->getOwner(), $pay_type, 'errorPostTweet', $model->get('order_id'), $model->get('sbuorder_id'));
 
         if($model->get('orderType') == 'indexes' || $model->get('orderType') == 'manual') {
             $status = '4';
