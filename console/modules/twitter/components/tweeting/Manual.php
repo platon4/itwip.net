@@ -42,8 +42,6 @@ class Manual implements TweetingInterface
     {
         $command = Yii::$app->db->createCommand();
 
-        echo "Post Order " . $this->get('order_id') . " - Account: " . $this->getAccount('id') . ' - App: ' . Apps::get($this->getAccount('app'), 'id') . ' - Tweet: ' . $this->getParams('tweet') . PHP_EOL;
-
         if($this->postTweet() === true) {
             try {
                 $t = Yii::$app->db->beginTransaction();
@@ -112,8 +110,6 @@ class Manual implements TweetingInterface
             ])
                 ->send($this->getTweet());
 
-            Logger::error($tweeting->getResult(), ['acc' => $this->getAccount('id')], 'daemons/tweeting/logs', 'post');
-
             /** Успешное размещение */
             if($tweeting->getCode() == 200) {
                 echo "post Tweet manual success" . PHP_EOL;
@@ -121,16 +117,16 @@ class Manual implements TweetingInterface
 
                 if($this->_str_id > 0) {
                     Yii::$app->redis->set('twitter:twitting:timeout:accounts:' . $this->getAccount('id'), $this->getAccount('id'), $this->getAccount('_timeout') * 60);
-                    echo "post Tweet manual: set account timeout" . PHP_EOL;
+                    echo "post Tweet manual: set account timeout" . PHP_EOL.PHP_EOL;
 
                     if($this->get('tweet') !== null || $this->get('tweet') != '') {
                         $tweet_hash = md5($this->get('tweet'));
                         Yii::$app->redis->set('console:twitter:tweeting:exclude:tweet:' . $tweet_hash, $tweet_hash, rand(60, (5 * 60)));
-                        echo "post Tweet manual: set tweet timeout" . PHP_EOL;
+                        echo "post Tweet manual: set tweet timeout" . PHP_EOL . PHP_EOL;
                     }
 
                     if($this->getUrl() !== null) {
-                        echo "post Tweet manual: set url timeout" . PHP_EOL;
+                        echo "post Tweet manual: set url timeout" . PHP_EOL . PHP_EOL;
                         $domen = Url::getDomen($this->getUrl());
 
                         Yii::$app->redis->set('console:twitter:tweeting:exclude:domen:' . md5($domen), $domen, rand(60, (5 * 60)));
@@ -143,6 +139,9 @@ class Manual implements TweetingInterface
                 }
             } else {
                 (new Errors())->errorTweetPost($this, $tweeting);
+                $timeout = rand(3, 6);
+                echo "Error Post tweet, run timeout " . $timeout . " sec." . PHP_EOL . PHP_EOL;
+                sleep($timeout);
                 return false;
             }
         } else {
