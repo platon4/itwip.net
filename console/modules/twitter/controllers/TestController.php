@@ -28,6 +28,11 @@ class TestController extends Controller
         }
     }
 
+    public function actionDomenBan($d)
+    {
+        Yii::$app->redis->hSet('twitter:filters:domain', $d, ' ');
+    }
+
     public function actionClearCache()
     {
         Yii::$app->redis->delete('twitterAccounts');

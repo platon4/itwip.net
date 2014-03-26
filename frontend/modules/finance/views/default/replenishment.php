@@ -80,7 +80,7 @@
                         <div class="text"><?php echo Yii::t('financeModule.index','_promo_code_info'); ?></div>
                     </div>
                     <div id="block_1">
-<?php echo Yii::t('financeModule.index','_enter_the_code'); ?> <input id="_promoCode" type="text" name="_promoCode" value="" />
+                        <?php echo Yii::t('financeModule.index','_enter_the_code'); ?> <input id="_promoCode" type="text" name="_promoCode" value="" />
                         <div id="promoMessage"></div>
                     </div>
                     <div class="block_bottom">
