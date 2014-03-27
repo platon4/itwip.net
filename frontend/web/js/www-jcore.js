@@ -183,18 +183,20 @@ function _radioBox(_e)
     $i.change();
     return false;
 }
+
 Dialog = {
-    open: function(title, options)
-    {
+    open: function (title, options) {
         this.close();
         var params = $.extend(
-                {
-                    buttons: [{text: _close, click: function() {
-                                $(this).dialog("close");
-                            }, class: "button"}],
-                    content: '',
-                    closeText: 'X'
-                }, options);
+            {
+                buttons: [
+                    {text: _close, click: function () {
+                        $(this).dialog("close");
+                    }, class: "button"}
+                ],
+                content: '',
+                closeText: 'X'
+            }, options);
 
         $('#_dialog-message').remove();
         $('body').append('<div id="_dialog-message" title="' + title + '" style="display: none;"><div class="ui-dialog-content-text">' + params.content + '</div></div>');
@@ -204,35 +206,29 @@ Dialog = {
             modal: true,
             buttons: params.buttons,
             closeText: params.closeText,
-            position: {               // Ensure the titlebar is always visible
-                using: function( pos ) {
-                    $(this).css("top", 250);
-                    $(this).css("left", 'auto');
-                }
-            }
+            position: "center"
         });
     },
-    close: function()
-    {
+    close: function () {
         $('#_dialog-message').dialog('close');
         $('#_dialog-message').remove();
     },
-    confirm: function(message, title, callback)
-    {
+    confirm: function (message, title, callback) {
         this.open(title, {
             content: message,
             buttons: [
-                {text: btn_yes, click: function() {
-                        $(this).dialog("close");
-                        callback();
-                    }, class: "button btn_blue"},
-                {text: btn_no, click: function() {
-                        $(this).dialog("close");
-                    }, class: "button"}
+                {text: btn_yes, click: function () {
+                    $(this).dialog("close");
+                    callback();
+                }, class: "button btn_blue"},
+                {text: btn_no, click: function () {
+                    $(this).dialog("close");
+                }, class: "button"}
             ]
         });
     }
 }
+
 function dinamicSize()
 {
     $('#menu_left_l').css('height', ($('body').height() - $('#footer').height() - 87));
