@@ -204,6 +204,7 @@ Dialog = {
         $("#_dialog-message").dialog({
             resizable: false,
             modal: true,
+            width: "auto",
             buttons: params.buttons,
             closeText: params.closeText,
             position: "center"
