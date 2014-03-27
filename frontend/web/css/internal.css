@@ -146,26 +146,26 @@
 #block_2 .acconts_list .view { padding-right: 9px; padding-left: 9px; width: 20px; width: 20px; }
 
 
-#dialog-message #block_1 { display: table; width: 100%;}
-#dialog-message #block_1_1 { display: table-cell ; vertical-align: top; width: 50%; padding: 0px; }
-#dialog-message #block_1_1 #block_1_1_1 { display: table-cell; position: relative; vertical-align: top; width: 80px; height: 80px; overflow: hidden;}
-#dialog-message #block_1_1 #block_1_1_1 img { width: 80px; }
-#dialog-message #block_1_1 #block_1_1_2 { display: table-cell; vertical-align: top; padding: 0px 5px 0px 15px; }
-#dialog-message #block_1_1 #block_1_1_2 .name { color:#505050; font-size: 18px; margin-bottom: 6px; }
-#dialog-message #block_1_1 #block_1_1_2 .login { color:#ADADAD; font-size:11px; padding: 2px 0px; }
-#dialog-message #block_1_1 #block_1_1_2 .langue { color:#ADADAD; font-size:11px; padding: 2px 0px;}
-#dialog-message #block_1_1 #block_1_1_2 .date { color:#ADADAD; font-size:11px; padding: 2px 0px 0px;}
-#dialog-message #block_1_1 #block_1_1_3 {display: table; width: 100%; padding-top: 10px;}
-#dialog-message #block_1_1 #block_1_1_3 #tweets, #dialog-message #block_1_1 #block_1_1_3 #following, #dialog-message #block_1_1 #block_1_1_3 #followers { display: table-cell; text-align: center; background: #F0F0F0; padding: 5px 5px;}
-#dialog-message #block_1_1 #block_1_1_3 #no { display: table-cell; width:10px; }
-#dialog-message #block_1_1 #block_1_1_3 #tweets h3, #dialog-message #block_1_1 #block_1_1_3 #following h3, #dialog-message #block_1_1 #block_1_1_3 #followers h3 { display: block; text-align: center; font-weight: normal; font-size: 15px; color: #3B85AD; text-shadow: 0 1px 1px #FFFFFF;}
-#dialog-message #block_1_1 #block_1_1_3 .following { color:#ADADAD; font-size:12px; }
-#dialog-message #block_1_1 #block_1_1_3 .followers { color:#ADADAD; font-size:12px; }
+#_dialog-message #block_1 { display: table; width: 100%;}
+#_dialog-message #block_1_1 { display: table-cell ; vertical-align: top; width: 50%; padding: 0px; }
+#_dialog-message #block_1_1 #block_1_1_1 { display: table-cell; position: relative; vertical-align: top; width: 80px; height: 80px; overflow: hidden;}
+#_dialog-message #block_1_1 #block_1_1_1 img { width: 80px; }
+#_dialog-message #block_1_1 #block_1_1_2 { display: table-cell; vertical-align: top; padding: 0px 5px 0px 15px; }
+#_dialog-message #block_1_1 #block_1_1_2 .name { color:#505050; font-size: 18px; margin-bottom: 6px; }
+#_dialog-message #block_1_1 #block_1_1_2 .login { color:#ADADAD; font-size:11px; padding: 2px 0px; }
+#_dialog-message #block_1_1 #block_1_1_2 .langue { color:#ADADAD; font-size:11px; padding: 2px 0px;}
+#_dialog-message #block_1_1 #block_1_1_2 .date { color:#ADADAD; font-size:11px; padding: 2px 0px 0px;}
+#_dialog-message #block_1_1 #block_1_1_3 {display: table; width: 100%; padding-top: 10px;}
+#_dialog-message #block_1_1 #block_1_1_3 #tweets, #_dialog-message #block_1_1 #block_1_1_3 #following, #_dialog-message #block_1_1 #block_1_1_3 #followers { display: table-cell; text-align: center; background: #F0F0F0; padding: 5px 5px;}
+#_dialog-message #block_1_1 #block_1_1_3 #no { display: table-cell; width:10px; }
+#_dialog-message #block_1_1 #block_1_1_3 #tweets h3, #_dialog-message #block_1_1 #block_1_1_3 #following h3, #_dialog-message #block_1_1 #block_1_1_3 #followers h3 { display: block; text-align: center; font-weight: normal; font-size: 15px; color: #3B85AD; text-shadow: 0 1px 1px #FFFFFF;}
+#_dialog-message #block_1_1 #block_1_1_3 .following { color:#ADADAD; font-size:12px; }
+#_dialog-message #block_1_1 #block_1_1_3 .followers { color:#ADADAD; font-size:12px; }
 
-#dialog-message #block_1_2_2 { width: 260px; display: table-cell; position: relative; vertical-align: top; padding-left: 5px;}
-#dialog-message #block_1_2_2 span.block { color: #ADADAD; font-size: 11px; padding: 2px 0 0; }
+#_dialog-message #block_1_2_2 { width: 260px; display: table-cell; position: relative; vertical-align: top; padding-left: 5px;}
+#_dialog-message #block_1_2_2 span.block { color: #ADADAD; font-size: 11px; padding: 2px 0 0; }
 
-#dialog-message #block_1_2 { border-left: 1px solid #E1E1E1; border-right: 1px solid #FFFFFF; display: table-cell; }
+#_dialog-message #block_1_2 { border-left: 1px solid #E1E1E1; border-right: 1px solid #FFFFFF; display: table-cell; }
 
 
 
