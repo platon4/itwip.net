@@ -9,7 +9,7 @@ return [
 	'basePath' => dirname(__DIR__),
     //'preload' => ['underconstruct'],
 	'name' => 'iTwip',
-	'homeUrl' => 'https://itwip.net/',
+	'homeUrl' => 'http://itwip.net/',
 	'sourceLanguage' => 'en_US',
 	'language' => 'ru',
 	'charset' => 'UTF-8',

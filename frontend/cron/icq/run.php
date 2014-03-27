@@ -1,2 +1,3 @@
 <?php
-    exec('nohup php /var/www/itwip.net/application/cron/icq/bot.php >> /var/www/itwip.net/application/cron/icq/icq.log &');
+$path = __DIR__;
+exec("nohup php $path/bot.php >> $path/icq.log &");

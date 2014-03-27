@@ -195,7 +195,7 @@ while(1) {
         $messages = array();
 
         while($file = readdir($fdir)) {
-            if($file != '.' and $file != '..' and $file != '.htaccess') {
+            if($file != '.' && $file != '..' && $file != '.htaccess' && $file != '.gitignore') {
                 $mdata = @file_get_contents(dirname(__FILE__) . '/messages/' . $file);
 
                 if(trim($mdata) != '') {
