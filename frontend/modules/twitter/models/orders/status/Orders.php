@@ -48,7 +48,7 @@ class Orders extends \FormModel
             $orders = $db->createCommand("SELECT o.*,
                                                 (SELECT COUNT(*) FROM {{twitter_ordersPerform}} WHERE order_hash=o.order_hash AND IF(o.type_order='manual', status>1, status>0)) as completed_taks,
                                                 (SELECT COUNT(*) FROM {{twitter_ordersPerform}}  WHERE order_hash=o.order_hash) as all_taks,
-                                                (SELECT SUM(return_amount) FROM {{twitter_ordersPerform}} WHERE order_hash=o.order_hash AND status=3) as amount_use,
+                                                (SELECT SUM(return_amount) FROM {{twitter_ordersPerform}} WHERE order_hash=o.order_hash AND IF(o.type_order='manual', status=3, status=2)) as amount_use,
                                                 (SELECT SUM(return_amount) FROM {{twitter_ordersPerform}} WHERE order_hash=o.order_hash) as return_amount FROM {{twitter_orders}} o WHERE o.owner_id=:owner ORDER BY id DESC LIMIT " . $this->getPages()->getOffset() . ", " . $this->getPages()->getLimit())->queryAll(true, [':owner' => Yii::app()->user->id]);
 
             foreach($orders as $order) {
