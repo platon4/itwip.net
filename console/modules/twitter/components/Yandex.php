@@ -16,9 +16,18 @@ class Yandex extends \common\components\Yandex
         $this->query('url:' . $url)->request();
 
         $count = $this->total();
+        $this->yandexFliush();
 
         Logger::log($this->error . " Count " . $count . "  " . $this->_code . "  " . urldecode($url), 'daemons/indexes-yandex');
 
-        return $count > 0 ? true : false;
+        return $count && $this->_code != 15 > 0 ? true : false;
+    }
+
+    protected function yandexFliush()
+    {
+        $this->response;
+        $this->wordstat = array();
+        $this->results = array();
+        $this->total = null;
     }
 } 
