@@ -17,7 +17,7 @@ class Yandex extends \common\components\Yandex
 
         $count = $this->total();
 
-        Logger::log($this->error . " Count " . $count . "  " . $this->_code . "  " . urlencode($url), 'daemons/yandex');
+        Logger::log($this->error . " Count " . $count . "  " . $this->_code . "  " . urldecode($url), 'daemons/indexes-yandex');
 
         return $count > 0 ? true : false;
     }

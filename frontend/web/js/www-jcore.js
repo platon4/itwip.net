@@ -206,8 +206,7 @@ Dialog = {
             modal: true,
             width: "auto",
             buttons: params.buttons,
-            closeText: params.closeText,
-            position: "center"
+            closeText: params.closeText
         });
     },
     close: function () {
