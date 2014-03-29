@@ -7,19 +7,10 @@ use yii\db\Query;
 
 class TwitterController extends \console\components\Controller
 {
-    protected $command;
-    protected $query;
-
     protected $run = [
-        'removeoldroster'       => 1440,
+        'removeOldRoster'       => 1440,
         'updatebwAccountsStats' => 1440
     ];
-
-    public function init()
-    {
-        $this->command = Yii::$app->db->createCommand();
-        $this->query = new Query();
-    }
 
     public function actionIndex()
     {
@@ -41,16 +32,16 @@ class TwitterController extends \console\components\Controller
 
     public function setInterval($method, $interval)
     {
-        Yii::$app->redis->set('console:cleaner:twitter:' . $method, true);
-        Yii::$app->redis->expire('console:cleaner:twitter:' . $method, $interval * 60);
+        Yii::$app->redis->set('console:cleaner:twitter:' . $method, '1', $interval * 60);
     }
 
     /*
      * Удаляем старые списки созданых твитов
      */
-    public function removeoldroster()
+    public function removeOldRoster()
     {
-        $this->command->delete('{{%twitter_tweetsRoster}}', '_date<=:date', [':date' => date('Y-m-d', time() - 86400)])->execute();
+        $command = Yii::$app->db->createCommand();
+        $command->delete('{{%twitter_tweetsRoster}}', '_date<=:date', [':date' => date('Y-m-d', time() - 86400)])->execute();
     }
 
     /*
@@ -58,12 +49,19 @@ class TwitterController extends \console\components\Controller
      */
     public function updatebwAccountsStats()
     {
-        $rows = $this->query->select('id, screen_name, (SELECT COUNT(*) FROM {{%twitter_bwList}} WHERE tw_id=a.id AND _type=1) as wcount, (SELECT COUNT(*) FROM {{%twitter_bwList}} WHERE tw_id=a.id AND _type=0) as bcount')->from('{{%tw_accounts}} a')->all();
+        $command = Yii::$app->db->createCommand();
+        $query = new Query();
+
+        $rows = $query
+            ->select('id, screen_name, (SELECT COUNT(*) FROM {{%twitter_bwList}} WHERE tw_id=a.id AND _type=1) as wcount, (SELECT COUNT(*) FROM {{%twitter_bwList}} WHERE tw_id=a.id AND _type=0) as bcount')
+            ->from('{{%tw_accounts}} a')
+            ->all();
+
         $i = 0;
 
         foreach($rows as $row) {
             $i++;
-            $this->command->update('{{%tw_accounts}}', ['whitelisted' => $row['wcount'], 'blacklisted' => $row['bcount']], 'id=:id', [':id' => $row['id']])->execute();
+            $command->update('{{%tw_accounts}}', ['whitelisted' => $row['wcount'], 'blacklisted' => $row['bcount']], 'id=:id', [':id' => $row['id']])->execute();
             echo $i . ". Account: " . $row['screen_name'] . "\n";
         }
     }
