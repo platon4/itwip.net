@@ -4,9 +4,7 @@ $this->metaDescription=Yii::t('main','_indexUser_Description');
 ?>
 <div class="content_right_v">
     <div class="content_right_l">
-        <?php $this->widget('application.widgets.Messages'); ?>
-
-        <div style="width: 100%; margin-top: 20px;" class="block big_news">
+        <div style="width: 100%;" class="block big_news">
 	        <div class="block_title"><div class="block_title_inset"><i style="color:#CC6300" class="fa fa-fire"></i> <h5 style="color:#CC6300">Важные новости сервиса</h5></div></div>
             <div class="block_content">
                 <ul class="list_big_news">
@@ -31,9 +29,20 @@ $this->metaDescription=Yii::t('main','_indexUser_Description');
                 </ul>
             </div>
         </div>
+
+        <div class="block news_block"  style="width: 100%; margin-top: 20px;">
+            <div class="block_title"><div class="block_title_inset"><i class="fa fa-bullhorn"></i> <h5>Последние новости из сообщества</h5></div></div>
+            <div class="block_content"  style="padding: 10px 0px;">
+              <?php if($this->beginCache('widget.lastTopicsMain', array('duration'=>3600))) { ?>
+                 <?php $this->widget('application.widgets.lastAdminTopics'); ?>
+              <?php $this->endCache(); } ?>
+            </div>
+        </div>
     </div>
     <div class="content_right_r">
-        <div class="block online_support_block" style="width: 100%; margin: 0px 0px 20px;">
+        <?php $this->widget('application.widgets.Messages'); ?>
+        
+        <div class="block online_support_block" style="width: 100%; margin: 20px 0px 20px;">
             <div class="block_title"><div class="block_title_inset"><i class="fa fa-lightbulb-o"></i> <h5>Поддержка пользователей</h5></div></div>
             <div class="block_content">
                             <div class="block_2">
@@ -46,13 +55,6 @@ $this->metaDescription=Yii::t('main','_indexUser_Description');
 
             </div>
         </div>
-        <div class="block news_block" style="width: 100%;">
-            <div class="block_title"><div class="block_title_inset"><i class="fa fa-bullhorn"></i> <h5>Последние новости из сообщества</h5></div></div>
-            <div class="block_content"  style="padding: 10px 0px;">
-              <?php if($this->beginCache('widget.lastTopicsMain', array('duration'=>3600))) { ?>
-                 <?php $this->widget('application.widgets.lastAdminTopics'); ?>
-              <?php $this->endCache(); } ?>
-            </div>
-        </div>
+
     </div>
 </div>
