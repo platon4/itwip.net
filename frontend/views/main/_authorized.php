@@ -12,7 +12,7 @@ $this->metaDescription=Yii::t('main','_indexUser_Description');
                 <ul class="list_big_news">
                     <li class="tops"><span class="line"></span>
                       <div class="more_news">
-                          <div><span class="date">30.03.2014</span><span class="title">Время зарабатывать! 50% дохода по партнёрской программе навсегда!</span></div>
+                          <div><span class="date">30.03.2014</span><span class="title">Время зарабатывать! 51% дохода по партнёрской программе навсегда!</span></div>
                           <div class="text">&laquo;Не слышали о парнёрской программе нашего сервиса? Теперь самое время узнать об этом, ведь теперь можно быть в первывх рядах и зарабатывать не плохие деньги! Более подробно мы написали об этом в статье - <a href="http://community.itwip.net/novosti-servisa/hotite-nachat-zarabatyvat-yeto-legche-ch.html" target="_blank">читать</a>&raquo;</div>
                       </div>
                     </li>
@@ -36,13 +36,14 @@ $this->metaDescription=Yii::t('main','_indexUser_Description');
         <div class="block online_support_block" style="width: 100%; margin: 0px 0px 20px;">
             <div class="block_title"><div class="block_title_inset"><i class="fa fa-lightbulb-o"></i> <h5>Поддержка пользователей</h5></div></div>
             <div class="block_content">
-                <div class="block_1">
-                    <p class="shadow" style="margin-bottom: 10px;">Задайте интересущий Вас вопрос!</p>
-                    <button class="button btn_blue" onclick="window.location.href = '/support';">Создать запрос</button> <button class="button" onclick="window.location.href = 'http://community.itwip.net/faq';">Спросить в сообществе</button>
-                </div>
-                <div class="block_2">
+                            <div class="block_2">
                     <div class="online_support_img"></div>
                 </div>
+                <div class="block_1">
+                    <button class="button" onclick="window.location.href = 'http://community.itwip.net/faq';" style="width: 280px;">Спросить в сообществе у пользователей</button><br>
+                    <button class="button btn_blue" onclick="window.location.href = '/support';" style="margin-top: 10px;width: 280px;">Написать запрос в поддержку сервиса</button>
+                </div>
+
             </div>
         </div>
         <div class="block news_block" style="width: 100%;">

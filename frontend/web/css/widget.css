@@ -25,8 +25,8 @@
 
 /*========== Онлайн-поддержка ==========*/
 .online_support_block { min-width: 340px; }
-.online_support_block .block_1 { display:table-cell; vertical-align: top; width:100%; padding: 15px;}
-.online_support_block .block_2 { display:table-cell; vertical-align: bottom;padding: 10px 20px 0px 0px;}
+.online_support_block .block_1 { display:table-cell; vertical-align: top; width:100%; padding: 15px; }
+.online_support_block .block_2 { display:table-cell; vertical-align: bottom; padding: 10px 20px 0px;}
 .online_support_block .block_2 .online_support_img { position:relative; bottom: -3px; background-image: url(/i/widgets/online_support.png);background-repeat: no-repeat; width: 60px; height:81px;  }
 
 /*========== Последние новости из сообщества ==========*/
