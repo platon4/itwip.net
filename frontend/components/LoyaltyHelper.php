@@ -4,18 +4,18 @@ class LoyaltyHelper {
 
     static protected $loyalt       =null;
     static protected $referral_data=array(
-        0=>array(5,'0-99'),
-        1=>array(7,'100-199'),
-        2=>array(9,'200-299'),
-        3=>array(11,'300-399'),
-        4=>array(13,'400-499'),
-        5=>array(15,'500-599'),
-        6=>array(17,'600-699'),
-        7=>array(19,'700-799'),
-        8=>array(21,'800-899'),
-        9=>array(23,'900-999'),
-        10=>array(24,'1500'),
-        11=>array(25,'2500'),
+        0=>array(40,'0-99'),
+        1=>array(41,'100-199'),
+        2=>array(42,'200-299'),
+        3=>array(43,'300-399'),
+        4=>array(44,'400-499'),
+        5=>array(45,'500-599'),
+        6=>array(46,'600-699'),
+        7=>array(47,'700-799'),
+        8=>array(48,'800-899'),
+        9=>array(49,'900-999'),
+        10=>array(50,'1500'),
+        11=>array(51,'2500'),
     );
     static protected $finance_data =array(
         0=>array(15,0),
