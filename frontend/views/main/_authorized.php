@@ -49,7 +49,7 @@ $this->metaDescription=Yii::t('main','_indexUser_Description');
                     <div class="online_support_img"></div>
                 </div>
                 <div class="block_1">
-                    <button class="button" onclick="window.location.href = 'http://community.itwip.net/faq';" style="width: 280px;">Спросить в сообществе у пользователей</button><br>
+                    <button class="button" onclick="window.location.href = 'http://community.itwip.net/faq/sendquest.html';" style="width: 280px;">Спросить в сообществе у пользователей</button><br>
                     <button class="button btn_blue" onclick="window.location.href = '/support';" style="margin-top: 10px;width: 280px;">Написать запрос в поддержку сервиса</button>
                 </div>
 
