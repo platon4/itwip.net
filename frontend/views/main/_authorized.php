@@ -17,7 +17,7 @@ $this->metaDescription=Yii::t('main','_indexUser_Description');
                     <li><span class="line"></span>
                       <div class="more_news">
                           <div><span class="date">25.03.2014</span><span class="title">В версии сервиса 1.1.0 появились новые возможности для рекламодателя.</span></div>
-                          <div class="text">&laquo;В разделе размещения твитов Вы можете встретить новые функции:<br><b>Временной таргетинг</b> - теперь Вы сами выбираете когда будут размещены твиты, и с каким интервалом. Больше контроля, больше возможностей.<br><b>Быстрая индексация с гарантией</b> - хотите проиндексировать страницы? Но надоело платить за воздух, нет проблем платите только за проиндексированные страниц.<a href="http://community.itwip.net/novosti-servisa/bystraja-indeksacija-stranic-saita-s-gar.html">Описание</a> &raquo;</div>
+                          <div class="text">&laquo;В разделе размещения твитов Вы можете встретить новые функции:<br><b>Временной таргетинг</b> - теперь Вы сами выбираете когда будут размещены твиты, и с каким интервалом. Больше контроля, больше возможностей.<br><b>Быстрая индексация с гарантией</b> - хотите проиндексировать страницы? Но надоело платить за воздух, нет проблем платите только за проиндексированные страницы. <a href="http://community.itwip.net/novosti-servisa/bystraja-indeksacija-stranic-saita-s-gar.html">Описание</a> &raquo;</div>
                       </div>
                     </li>
                     <li style="padding-bottom: 10px;"><span class="line"></span>
@@ -41,7 +41,7 @@ $this->metaDescription=Yii::t('main','_indexUser_Description');
     </div>
     <div class="content_right_r">
         <?php $this->widget('application.widgets.Messages'); ?>
-        
+
         <div class="block online_support_block" style="width: 100%; margin: 20px 0px 20px;">
             <div class="block_title"><div class="block_title_inset"><i class="fa fa-lightbulb-o"></i> <h5>Поддержка пользователей</h5></div></div>
             <div class="block_content">
