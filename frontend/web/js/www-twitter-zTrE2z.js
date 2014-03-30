@@ -1425,7 +1425,7 @@ var Twitter = {
                     }
                 },
                 get: function () {
-                    Dialog.open('Список сслок', {content: '<div id="_urlsList"></div>'});
+                    Dialog.open('Список ссылок', {content: '<div id="_urlsList"></div>'});
 
                     _ajax({
                         url: "/twitter/tweets/ajax/getFastUrls?_id=" + _tid,
