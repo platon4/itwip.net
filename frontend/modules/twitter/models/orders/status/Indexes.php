@@ -20,11 +20,10 @@ class Indexes extends \FormModel
     ];
 
     protected $times = [
+        3 => 86400,
         5  => 43200,
         10 => 32400,
-        20 => 21600,
-        40 => 10800,
-        65 => 3600,
+        20 => 21600
     ];
 
     protected $_count;

@@ -13,17 +13,16 @@ class Fast extends \FormModel
     public $_time;
     public $_tid;
     public $dropdown = [
+        3  => ['txt' => '24 часов, цена: 3 руб.', 'price' => 3, 'time' => 24],
         5  => ['txt' => '12 часов, цена: 5 руб.', 'price' => 5, 'time' => 12],
         10 => ['txt' => '9 часов, цена: 10 руб.', 'price' => 10, 'time' => 9],
         20 => ['txt' => '6 часов, цена: 20 руб.', 'price' => 20, 'time' => 6],
-        40 => ['txt' => '3 часа, цена: 40 руб.', 'price' => 40, 'time' => 3],
-        65 => ['txt' => '1 час, цена: 65 руб.', 'price' => 65, 'time' => 1],
     ];
 
     public $urlsExclude = [];
     public $pay = 'now';
     protected $uCount;
-    protected $prices = [1 => 65, 3 => 40, 6 => 20, 9 => 10, 12 => 5];
+    protected $prices = [6 => 20, 9 => 10, 12 => 5, 24 => 3];
     protected $orderID = 0;
     protected $sum;
     protected $count = 0;
@@ -180,12 +179,12 @@ class Fast extends \FormModel
              */
             $db->createCommand("INSERT INTO {{twitter_orders}} (owner_id,type_order,order_hash,create_date,status,payment_type,_params) VALUES (:owner,:type_order,:order_hash,:create_date,:status,0,:_params)")
                 ->execute([
-                    ':owner'         => Yii::app()->user->id,
-                    ':type_order'    => 'indexes',
-                    ':order_hash'    => $this->_tid,
-                    ':create_date'   => date('Y-m-d H:i:s'),
-                    ':status'        => $this->pay,
-                    ':_params'       => json_encode(['time' => $this->_time])
+                    ':owner'       => Yii::app()->user->id,
+                    ':type_order'  => 'indexes',
+                    ':order_hash'  => $this->_tid,
+                    ':create_date' => date('Y-m-d H:i:s'),
+                    ':status'      => $this->pay,
+                    ':_params'     => json_encode(['time' => $this->_time])
                 ]);
 
             $order_id = $db->lastInsertId;
