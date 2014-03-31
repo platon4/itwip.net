@@ -25,12 +25,28 @@
 
 /*========== Онлайн-поддержка ==========*/
 .online_support_block { min-width: 340px; }
-.online_support_block .block_1 { display:table-cell; vertical-align: top; width:100%; padding: 15px;}
-.online_support_block .block_2 { display:table-cell; vertical-align: bottom;padding: 10px 20px 0px 0px;}
+.online_support_block .block_1 { display:table-cell; vertical-align: top; width:100%; padding: 15px; }
+.online_support_block .block_2 { display:table-cell; vertical-align: bottom; padding: 10px 20px 0px;}
 .online_support_block .block_2 .online_support_img { position:relative; bottom: -3px; background-image: url(/i/widgets/online_support.png);background-repeat: no-repeat; width: 60px; height:81px;  }
 
-/*========== Последние новости сервиса ==========*/
+/*========== Последние новости из сообщества ==========*/
 .news_block {  }
 .news_block ul.list_news { list-style: none; }
 .news_block ul.list_news li { padding: 3px 0px 3px 15px; }
 .news_block ul.list_news li .date { position: relative; font-size: 11px; display: inline-block; color:  #ADADAD; width: 60px; padding-right: 10px; text-shadow: 0 1px 1px #FFFFFF; text-align: right;}
+
+
+/*========== Важные новости сервиса ==========*/
+.big_news {  }
+.big_news .list_big_news { list-style: none; margin-left: 13px;}
+.big_news .list_big_news li { border-left: 2px solid #CFCFCF; position: relative; padding-top: 10px;}
+.big_news .list_big_news li.tops { border-left: 2px solid #CC6300;}
+.big_news .list_big_news li .line { position: absolute; width: 20px; height: 11px; border-bottom: 2px solid #CFCFCF }
+.big_news .list_big_news li.tops .line { border-bottom: 2px solid #CC6300 }
+.big_news .list_big_news li .more_news { margin-left: 23px; }
+.big_news .list_big_news li .more_news .date { color: #ADADAD; font-size: 11px; text-shadow: 0 1px 1px #FFFFFF; }
+.big_news .list_big_news li.tops .more_news .date { color: #CC6300; font-size: 11px; text-shadow: 0 1px 1px #FFFFFF; }
+.big_news .list_big_news li .more_news .title { color: #474747; font-size: 15px; text-shadow: 0 1px 1px #FFFFFF; padding-left: 10px;}
+.big_news .list_big_news li.tops .more_news .title { color: #CC6300; font-size: 15px; text-shadow: 0 1px 1px #FFFFFF; padding-left: 10px;}
+.big_news .list_big_news li .more_news .text { padding: 0px 75px 0px 80px; color: #ADADAD; font-size: 12px;}
+.big_news .list_big_news li .more_news .text a { color: #ADADAD; }
