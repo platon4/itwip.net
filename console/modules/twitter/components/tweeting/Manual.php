@@ -76,6 +76,12 @@ class Manual implements TweetingInterface
                 $t->rollBack();
             }
         }
+
+        $interval = $this->getParams('targeting');
+
+        if(isset($interval['interval']) && $interval['interval'] > 0) {
+            Yii::$app->redis->set('console:twitter:tweeting:exclude:id:' . $this->get('order_id'), $this->get('order_id'), $interval['interval'] * 60);
+        }
     }
 
     /**

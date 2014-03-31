@@ -88,6 +88,7 @@
 				</td>
 				<td class="param input">
 					<select name="Order[data][interval]" class="hasInterval">
+                        <option value="10">10 <?php echo Yii::t('twitterModule.tweets', '_interval_min'); ?></option>
 						<option value="30">30 <?php echo Yii::t('twitterModule.tweets', '_interval_min'); ?></option>
 						<option value="40">40 <?php echo Yii::t('twitterModule.tweets', '_interval_min'); ?></option>
 						<option value="50">50 <?php echo Yii::t('twitterModule.tweets', '_interval_min'); ?></option>

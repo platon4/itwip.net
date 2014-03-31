@@ -182,7 +182,7 @@ class Manual extends \FormModel
             ['sDate', 'date', 'format' => 'dd.MM.yyyy'],
             ['t', 'TargetingValidate', 'on' => 'order'],
             ['pay', 'in', 'range' => ['now', 'later'], 'message' => 'Выбранный вами способ оплаты не поддерживается', 'on' => 'order'],
-            ['interval', 'numerical', 'min' => 30, 'max' => 1440, 'tooSmall' => 'Интервал слишком маленьки', 'tooBig' => 'Интервал слишком большой', 'on' => 'order'],
+            ['interval', 'numerical', 'min' => 10, 'max' => 1440, 'tooSmall' => 'Интервал слишком маленьки', 'tooBig' => 'Интервал слишком большой', 'on' => 'order'],
             ['accounts', 'AccountsValidate', 'on' => 'order'],
             ['accounts', 'orderValidate', 'on' => 'order']
         ];
