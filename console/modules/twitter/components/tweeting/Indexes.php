@@ -26,11 +26,10 @@ class Indexes implements TweetingInterface
      * @var array
      */
     public $times = [
+        3  => 24,
         5  => 12,
         10 => 9,
         20 => 6,
-        40 => 3,
-        65 => 1,
     ];
 
     /**
