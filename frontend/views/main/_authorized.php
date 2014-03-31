@@ -40,6 +40,15 @@ $this->metaDescription=Yii::t('main','_indexUser_Description');
         </div>
     </div>
     <div class="content_right_r">
+        <div class="block online_support_block" style="width: 100%; margin: 0px 0px 20px;">
+            <div class="block_title"><div class="block_title_inset"><i class="fa fa-thumbs-up"></i> <h5>Делитесь партнёрской ссылкой в социальных сетях</h5></div></div>
+            <div class="block_content">
+              <div style="padding: 15px 15px 0px;font-size: 11px;">В кнопки уже встроена Ваша партнёрская ссылка, поделитесь ей с друзьми ведь это дополнительный пассивный доход по партнёрской программе, не упускайте шанс забрать у сервиса 50% денег !</div>
+              <div class="share42init" data-url="http://itwip.ru/{ref}" data-title="Сервис рекламы в социальных сетях, и их монетизации." data-image="/i/index/logo.png" data-zero-counter="0" style="padding: 15px 0px 15px 15px;"></div>
+              <script type="text/javascript" src="/js/share42.js"></script>
+            </div>
+        </div>
+
         <?php $this->widget('application.widgets.Messages'); ?>
 
         <div class="block online_support_block" style="width: 100%; margin: 20px 0px 20px;">
@@ -55,6 +64,5 @@ $this->metaDescription=Yii::t('main','_indexUser_Description');
 
             </div>
         </div>
-
     </div>
 </div>
