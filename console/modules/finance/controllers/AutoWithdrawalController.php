@@ -86,7 +86,7 @@ class AutoWithdrawalController extends \console\components\Controller
                                     ->one();
 
                                 if($reff !== false && $reff['status'] == 1) {
-                                    $reffAmount = Money::amount($pay['_commission'], 'reffera', $loyalty['id']);
+                                    $reffAmount = Money::amount($pay['_commission'], 'refferal', $loyalty['id']);
 
                                     Yii::$app->db->createCommand("UPDATE {{%accounts}} SET money_amount=money_amount+:amount WHERE id=:id", [
                                         ':id'     => $loyalty['id'],
