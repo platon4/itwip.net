@@ -13,7 +13,9 @@ class AutoWithdrawalController extends \console\components\Controller
 {
     public function actionPay()
     {
-        require(dirname(__DIR__) . '/libraries/wmx/_header.php');
+        $this->writeln('AutoPay init');
+
+        //require(dirname(__DIR__) . '/libraries/wmx/_header.php');
         $command = Yii::$app->db->createCommand();
 
         $pays = (new Query())
@@ -21,13 +23,17 @@ class AutoWithdrawalController extends \console\components\Controller
             ->from('{{%money_withdrawal}} w')
             ->innerJoin('{{%accounts}} a', 'w.owner_id=a.id')
             ->where('w._status=1 AND owner_id=2')
+            ->limit(1)
             ->all();
 
         foreach($pays as $pay) {
+            $this->writeln('Order id ' . $pay['id'] . ' start process.');
             $code = 0;
             $status = 3;
 
             if($settings = unserialize($pay['_settings'])) {
+                $this->writeln('Settings init success');
+
                 if(is_array($settings) AND isset($settings['purse']) AND trim($settings['purse']) != '') {
                     $res = $wmxi->X2(
                         $pay['id'],
@@ -48,7 +54,10 @@ class AutoWithdrawalController extends \console\components\Controller
                         $code = $res->ErrorCode();
                     }
 
+                    $this->writeln('Response code from webmoney ' . $res->ErrorCode());
+
                     try {
+                        $this->writeln('Response code from webmoney ' . $res->ErrorCode());
                         $t = Yii::$app->db->beginTransaction();
 
                         $rowCount = $command->update('{{%money_withdrawal}}', ['_status' => $status, '_date_execute' => date('Y-m-d H:i:s'), '_code' => $code], ['id' => $pay['id']])->execute();
@@ -57,8 +66,9 @@ class AutoWithdrawalController extends \console\components\Controller
                             $command->delete('{{%money_blocking}}', ['_type' => '1', '_id' => $pay['id']])->execute();
 
                         if($code === 200) {
+
                             /** Реферальная система*/
-                            $refs_logs = array();
+                            $refs_logs = [];
 
                             $loyalty = (new Query())
                                 ->select('parent_referral as id,in_balance,loyalty_finance')
@@ -100,11 +110,12 @@ class AutoWithdrawalController extends \console\components\Controller
                             /** Записаваем транзакцию в логи */
                             Logger::error('Success pay', array_merge($pay, ['code' => $code]), 'finance/pays', 'autoPay');
                         } else {
-                            Logger::error('Error pay', array_merge($pay, ['code' => $code]), 'finance/errors', 'autoPayResponse');
+                            Logger::error('Error pay 1', array_merge($pay, ['code' => $code]), 'finance/errors', 'autoPayResponse');
                         }
+
                         $t->commit();
                     } catch(Exception $e) {
-                        Logger::error('Error pay', array_merge($pay, ['code' => $code]), 'finance/errors', 'autoPayResponse');
+                        Logger::error($e, array_merge($pay, ['code' => $code]), 'finance/errors', 'autoPayResponse');
                         $t->rollBack();
                     }
                 } else {
