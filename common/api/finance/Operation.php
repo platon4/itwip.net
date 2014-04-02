@@ -181,7 +181,7 @@ class Operation
     /*
      * Запись денежной операций в логи
      */
-    private static function log($amount, $user_id, $moneyType, $type, $is_blocked, $for, $operationData = 0, $notice = '', $transfer = 0)
+    public static function log($amount, $user_id, $moneyType, $type, $is_blocked, $for, $operationData = 0, $notice = '', $transfer = 0)
     {
         $command = Yii::$app->db->createCommand();
         $columns = [
