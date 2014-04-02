@@ -128,4 +128,9 @@ class AutoWithdrawalController extends \console\components\Controller
             sleep(rand(3, 6));
         }
     }
+
+    public function writeln($msg)
+    {
+        echo $msg . PHP_EOL;
+    }
 } 
