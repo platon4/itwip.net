@@ -23,7 +23,7 @@ class AutoWithdrawalController extends \console\components\Controller
             ->from('{{%money_withdrawal}} w')
             ->innerJoin('{{%accounts}} a', 'w.owner_id=a.id')
             ->where('w._status=1')
-            ->limit(10)
+            ->limit(1)
             ->all();
 
         foreach($pays as $pay) {
