@@ -60,10 +60,14 @@ class AutoWithdrawalController extends \console\components\Controller
                         $this->writeln('Response code from webmoney ' . $res->ErrorCode());
                         $t = Yii::$app->db->beginTransaction();
 
-                        $rowCount = $command->update('{{%money_withdrawal}}', ['_status' => $status, '_date_execute' => date('Y-m-d H:i:s'), '_code' => $code], ['id' => $pay['id']])->execute();
+                        $rowCount = $command->update('{{%money_withdrawal}}', ['_status' => $status, '_date_execute' => date('Y-m-d H:i:s'), '_code' => $code], ['id' => $pay['id']])
+                            ->execute();
+
+                        $this->writeln('Response code from webmoney ' . $res->ErrorCode());
 
                         if($rowCount)
-                            $command->delete('{{%money_blocking}}', ['_type' => '1', '_id' => $pay['id']])->execute();
+                            $command->delete('{{%money_blocking}}', ['_type' => '1', '_id' => $pay['id']])
+                                ->execute();
 
                         if($code === 200) {
 
@@ -86,13 +90,13 @@ class AutoWithdrawalController extends \console\components\Controller
                                 if($reff !== false && $reff['status'] == 1) {
                                     $reffAmount = Money::amount($pay['_commission'], 'reffera', $loyalty['id']);
 
-                                    Yii::$app->db->createCommand("UPDATE {{accounts}} SET money_amount=money_amount+:amount WHERE id=:id", [
+                                    Yii::$app->db->createCommand("UPDATE {{%accounts}} SET money_amount=money_amount+:amount WHERE id=:id", [
                                         ':id'     => $loyalty['id'],
                                         ':amount' => $reffAmount,
                                     ])
                                         ->execute();
 
-                                    Yii::$app->db->createCommand("UPDATE {{loyalty}} SET out_balance=out_balance+:money, brought_user=brought_user+:income WHERE owner_id=:id", [
+                                    Yii::$app->db->createCommand("UPDATE {{%loyalty}} SET out_balance=out_balance+:money, brought_user=brought_user+:income WHERE owner_id=:id", [
                                         ':id'     => $pay['owner_id'],
                                         ':money'  => $pay['_out'],
                                         ':income' => $reffAmount
