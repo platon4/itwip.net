@@ -22,8 +22,8 @@ class AutoWithdrawalController extends \console\components\Controller
             ->select('w.*,a.email,a._settings')
             ->from('{{%money_withdrawal}} w')
             ->innerJoin('{{%accounts}} a', 'w.owner_id=a.id')
-            ->where('w._status=1 AND owner_id=2')
-            ->limit(1)
+            ->where('w._status=1')
+            ->limit(10)
             ->all();
 
         foreach($pays as $pay) {
@@ -127,7 +127,7 @@ class AutoWithdrawalController extends \console\components\Controller
                 Logger::error('Error unserialize settings', $pay, 'finance/errors', 'autoPay');
             }
 
-            sleep(rand(3, 6));
+            sleep(3);
         }
     }
 
