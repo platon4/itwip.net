@@ -15,7 +15,7 @@ class AutoWithdrawalController extends \console\components\Controller
     {
         $this->writeln('AutoPay init');
 
-        //require(dirname(__DIR__) . '/libraries/wmx/_header.php');
+        require(dirname(__DIR__) . '/libraries/wmx/_header.php');
         $command = Yii::$app->db->createCommand();
 
         $pays = (new Query())
