@@ -57,13 +57,11 @@ class AutoWithdrawalController extends \console\components\Controller
                     $this->writeln('Response code from webmoney ' . $res->ErrorCode());
 
                     try {
-                        $this->writeln('Response code from webmoney ' . $res->ErrorCode());
+                        $this->writeln('Init transaction');
                         $t = Yii::$app->db->beginTransaction();
 
                         $rowCount = $command->update('{{%money_withdrawal}}', ['_status' => $status, '_date_execute' => date('Y-m-d H:i:s'), '_code' => $code], ['id' => $pay['id']])
                             ->execute();
-
-                        $this->writeln('Response code from webmoney ' . $res->ErrorCode());
 
                         if($rowCount)
                             $command->delete('{{%money_blocking}}', ['_type' => '1', '_id' => $pay['id']])
