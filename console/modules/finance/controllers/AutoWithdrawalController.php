@@ -60,17 +60,10 @@ class AutoWithdrawalController extends \console\components\Controller
                         $this->writeln('Init transaction');
                         $t = Yii::$app->db->beginTransaction();
 
-                        $rowCount = $command->update('{{%money_withdrawal}}', ['_status' => $status, '_date_execute' => date('Y-m-d H:i:s'), '_code' => $code], ['id' => $pay['id']])
-                            ->execute();
-
-                        if($rowCount)
-                            $command->delete('{{%money_blocking}}', ['_type' => '1', '_id' => $pay['id']])
-                                ->execute();
+                        $this->updatePayOrder($pay, $status, $code);
 
                         if($code === 200) {
-
                             /** Реферальная система*/
-                            $refs_logs = [];
 
                             $loyalty = (new Query())
                                 ->select('parent_referral as id,in_balance,loyalty_finance')
@@ -117,10 +110,21 @@ class AutoWithdrawalController extends \console\components\Controller
 
                         $t->commit();
                     } catch(Exception $e) {
-                        Logger::error($e, array_merge($pay, ['code' => $code]), 'finance/errors', 'autoPayResponse');
                         $t->rollBack();
+                        Logger::error($e, array_merge($pay, ['code' => $code]), 'finance/errors', 'autoPayResponse');
                     }
                 } else {
+                    try {
+                        $t = Yii::$app->db->beginTransaction();
+
+                        $this->updatePayOrder($pay, $status, $code);
+                        $t->commit();
+
+                    } catch(Exception $e) {
+                        $t->rollBack();
+                        Logger::error($e, array_merge($pay, ['code' => $code]), 'finance/errors', 'autoPayResponseNotPurse');
+                    }
+
                     Logger::error('Error not set purse', $pay, 'finance/errors', 'autoPay');
                 }
             } else {
@@ -129,6 +133,17 @@ class AutoWithdrawalController extends \console\components\Controller
 
             sleep(3);
         }
+    }
+
+    public function updatePayOrder($pay, $status, $code)
+    {
+        $command = Yii::$app->db->createCommand();
+        $rowCount = $command->update('{{%money_withdrawal}}', ['_status' => $status, '_date_execute' => date('Y-m-d H:i:s'), '_code' => $code], ['id' => $pay['id']])
+            ->execute();
+
+        if($rowCount)
+            $command->delete('{{%money_blocking}}', ['_type' => '1', '_id' => $pay['id']])
+                ->execute();
     }
 
     public function writeln($msg)
