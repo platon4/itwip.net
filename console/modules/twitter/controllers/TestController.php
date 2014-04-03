@@ -15,16 +15,10 @@ class TestController extends Controller
 {
     public function actionIndex()
     {
-        die();
-        $tasks = (new Query())->from('{{%twitter_tweeting}}')->all();
+        $accounts = (new Query())->from('{{%tw_accounts_settings}}')->where("_price='0.00'")->all();
 
-        foreach($tasks as $task) {
-            $dparams = json_decode($task['params'], true);
-
-            $bloger_amount = $dparams['amount'];
-            $adv_amount = $dparams['return_amount'];
-
-            Yii::$app->db->createCommand()->update('{{%twitter_tweeting}}', ['bloger_amount' => $bloger_amount, 'adv_amount' => $adv_amount], ['id' => $task['id']])->execute();
+        foreach($accounts as $account) {
+            Yii::$app->db->createCommand("UPDATE {{%tw_accounts_settings}} SET _price=1 WHERE tid=:id", [':id' => $account['tid']])->execute();
         }
     }
 
