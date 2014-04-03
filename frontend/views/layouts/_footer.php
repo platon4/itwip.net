@@ -63,7 +63,17 @@
             <!-- begin WebMoney Transfer : accept label -->
             <a  style="margin-left: 5px;margin-top: -10px;" href="http://www.megastock.ru/" target="_blank"><img src="/i/elements/acc_blue_on_white_ru.png" alt="www.megastock.ru" border="0"></a>
             <!-- end WebMoney Transfer : accept label -->
-            <!-- Yandex.Metrika counter --><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter23221156 = new Ya.Metrika({id:23221156, accurateTrackBounce:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/23221156" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+            <!--Openstat-->
+            <span id="openstat2361609"></span>
+              <script type="text/javascript">
+              var openstat = { counter: 2361609, next: openstat, track_links: "all" };
+              (function(d, t, p) {
+              var j = d.createElement(t); j.async = true; j.type = "text/javascript";
+              j.src = ("https:" == p ? "https:" : "http:") + "//openstat.net/cnt.js";
+              var s = d.getElementsByTagName(t)[0]; s.parentNode.insertBefore(j, s);
+              })(document, "script", document.location.protocol);
+              </script>
+            <!--/Openstat-->
             </span>
         </span>
 	</div>
