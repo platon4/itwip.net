@@ -65,4 +65,9 @@ class TwitterController extends \console\components\Controller
             echo $i . ". Account: " . $row['screen_name'] . "\n";
         }
     }
+
+    public function actionClearCache()
+    {
+        Yii::$app->redis->delete(['twitterAccounts']);
+    }
 }
