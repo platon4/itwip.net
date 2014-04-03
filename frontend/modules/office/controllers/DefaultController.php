@@ -75,7 +75,7 @@ class DefaultController extends Controller
         $domens = Yii::app()->redis->hGetAll('twitter:filters:domain');
 
         foreach($domens as $domen => $reason) {
-            echo $domen . '- ' . $reason . "<br>";
+            echo $domen . ' - ' . $reason . "<br>";
         }
     }
 }
