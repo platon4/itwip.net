@@ -72,6 +72,10 @@ class Manual extends Model
                         $t->rollBack();
                     }
                 }
+
+                $sec = rand(1, 5);
+                echo 'Timeout ' . $sec . PHP_EOL;
+                sleep($sec);
             }
         } else {
             echo "Not tasks\n";
