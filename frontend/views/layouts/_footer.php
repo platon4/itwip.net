@@ -1,4 +1,4 @@
-<div id="footer">
+<div id="footer" style="position: relative;">
  <div class="center">
    <div id="footer_block_1">
 	 <div id="footer_block_1_1" class="footer_menu">
@@ -15,7 +15,8 @@
 	   <h5><?php echo Yii::t('main', '_footer_m_h_1'); ?></h5>
 		 <ul>
 		   <li><a href="http://community.itwip.net" target="_blank"><?php echo Yii::t('main', '_footer_m_community'); ?></a></li>
-		 </ul>
+           <li style="padding-left: 0px; padding-top: 40px;"><a style="color: rgb(255, 255, 255); text-decoration: none; font-size: 24px; font-family: Arial; text-shadow: 0px 0px 8px rgb(255, 255, 255); border-bottom: medium none; padding-left: 0px;" href="http://studev.ru/"><span style="color:#FF6C00">S</span>D</a> <sup style="top: -10px;"><a style="border-bottom: none; font-size: 10px; text-shadow: 0px 0px 8px rgb(255, 255, 255);" href="http://studev.ru/">создание сайта</a></sup></li>
+        </ul>
 	 </div>
 	 <div id="footer_block_1_3" class="footer_menu">
 	 <?php if($this->beginCache('widget.lastTopics', array('duration'=>3600))) { ?>
@@ -57,23 +58,12 @@
 		<span class="ver">
             <span style="position:relative; top: 16px;padding-right: 5px;">Версия 1.1.0</span>
             <span style="float:right">
-            <!-- begin WebMoney Transfer : attestation label -->
-            <a  style=" margin-top: -10px;" href="https://passport.webmoney.ru/asp/certview.asp?wmid=412128443746" target="_blank"><img src="/i/elements/v_blue_on_white_ru.png" alt="Здесь находится аттестат нашего WM идентификатора 412128443746" border="0" /></a>
-            <!-- end WebMoney Transfer : attestation label -->
-            <!-- begin WebMoney Transfer : accept label -->
-            <a  style="margin-left: 5px;margin-top: -10px;" href="http://www.megastock.ru/" target="_blank"><img src="/i/elements/acc_blue_on_white_ru.png" alt="www.megastock.ru" border="0"></a>
-            <!-- end WebMoney Transfer : accept label -->
-            <!--Openstat-->
-            <span id="openstat2361609"></span>
-              <script type="text/javascript">
-              var openstat = { counter: 2361609, next: openstat, track_links: "all" };
-              (function(d, t, p) {
-              var j = d.createElement(t); j.async = true; j.type = "text/javascript";
-              j.src = ("https:" == p ? "https:" : "http:") + "//openstat.net/cnt.js";
-              var s = d.getElementsByTagName(t)[0]; s.parentNode.insertBefore(j, s);
-              })(document, "script", document.location.protocol);
-              </script>
-            <!--/Openstat-->
+              <!-- begin WebMoney Transfer : attestation label -->
+              <a  style=" margin-top: -10px;" href="https://passport.webmoney.ru/asp/certview.asp?wmid=412128443746" target="_blank"><img src="/i/elements/v_blue_on_white_ru.png" alt="Здесь находится аттестат нашего WM идентификатора 412128443746" border="0" /></a>
+              <!-- end WebMoney Transfer : attestation label -->
+              <!-- begin WebMoney Transfer : accept label -->
+              <a  style="margin-left: 5px;margin-top: -10px;" href="http://www.megastock.ru/" target="_blank"><img src="/i/elements/acc_blue_on_white_ru.png" alt="www.megastock.ru" border="0"></a>
+              <!-- end WebMoney Transfer : accept label -->
             </span>
         </span>
 	</div>
