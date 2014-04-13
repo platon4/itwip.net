@@ -55,7 +55,7 @@ class Manual extends Model
                             Logger::log($row, 'check-tweet', 'success-check-tweet');
                         } else {
                             Operation::cancelTransfer($row['tweet_cost'], $row['bloger_id'], $pay_type, 'tweetCheckUnsuccessfully', $row['tweet_id'], $row['screen_name']);
-                            Operation::returnMoney($row['return_amount'], $row['adv_id'], $pay_type, 'bloggerDeletedTweet', $order_id, $order_id);
+                            Operation::returnMoney($row['return_amount'], $row['adv_id'], $pay_type, 'bloggerDeletedTweet', $order_id, $row['screen_name']);
 
                             $command->update('{{%twitter_tweets}}', ['status' => '2'], ['id' => $row['id']])->execute();
 
