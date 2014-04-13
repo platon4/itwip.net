@@ -141,8 +141,7 @@ class Operation
         self::moneyLockUpdate($amount, $operationID, $user_id);
         self::moneyLockUpdate($return_amount, $order_id, $adv_id);
 
-        Yii::$app->db->createCommand('UPDATE {{%accounts}} SET ' . $columns . ' WHERE id=:id')
-            ->bindValues([':id' => $user_id])
+        Yii::$app->db->createCommand('UPDATE {{%accounts}} SET ' . $columns . ' WHERE id=:id', [':id' => $user_id])
             ->execute();
 
         self::log($amount, $user_id, $moneyType, 0, 0, self::accrued(0, $accrued), $operationID, $notice, 2);
