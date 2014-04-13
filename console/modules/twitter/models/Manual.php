@@ -101,7 +101,7 @@ class Manual extends Model
                 ->leftJoin('{{%tw_accounts}} a', 't.tw_account=a.id')
                 ->where(['and', 't.status=0', 't.date<:date'], [':date' => date("Y-m-d H:i:s", time() - (3 * 86400))])
                 ->orderBy(['t.date' => SORT_ASC])
-                ->limit(1)
+                ->limit(10)
                 ->all();
         }
 
