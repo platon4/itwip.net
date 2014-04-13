@@ -100,15 +100,14 @@ class Operation
         $is_blocked = 0;
 
         if(intval($operationData)) {
-            Yii::$app->db->createCommand("INSERT INTO {{%money_blocking}} (owner_id,amount,_date,_for,_id,_money_type) VALUES (:owner_id,:amount,:_date,:_for,:_id,:_money_type)")
-                ->bindValues([
-                    ':owner_id'    => $user_id,
-                    ':amount'      => $amount,
-                    ':_date'       => date("Y-m-d H:i:s"),
-                    ':_for'        => $accrued,
-                    ':_id'         => $operationData,
-                    ':_money_type' => $moneyType
-                ])
+            Yii::$app->db->createCommand("INSERT INTO {{%money_blocking}} (owner_id,amount,_date,_for,_id,_money_type) VALUES (:owner_id,:amount,:_date,:_for,:_id,:_money_type)", [
+                ':owner_id'    => $user_id,
+                ':amount'      => $amount,
+                ':_date'       => date("Y-m-d H:i:s"),
+                ':_for'        => $accrued,
+                ':_id'         => $operationData,
+                ':_money_type' => $moneyType
+            ])
                 ->execute();
 
             $is_blocked = 1;
@@ -120,7 +119,7 @@ class Operation
         }
 
         if(count($upd))
-            Yii::$app->db->createCommand("UPDATE {{%accounts}} SET " . implode(", ", $upd) . " WHERE id=:id")->bindValues([':id' => $user_id])->execute();
+            Yii::$app->db->createCommand("UPDATE {{%accounts}} SET " . implode(", ", $upd) . " WHERE id=:id", [':id' => $user_id])->execute();
 
         if($moneyLog)
             self::log($amount, $user_id, $moneyType, 0, $is_blocked, $accrued, $operationData, $notice);
@@ -161,7 +160,7 @@ class Operation
 
         self::moneyLockUpdate($amount, $operationID, $user_id);
 
-        Yii::$app->db->createCommand('UPDATE {{%accounts}} SET ' . $columns . ' WHERE id=:id')->bindValues([':id' => $user_id])->execute();
+        Yii::$app->db->createCommand('UPDATE {{%accounts}} SET ' . $columns . ' WHERE id=:id', [':id' => $user_id])->execute();
 
         self::log($amount, $user_id, $moneyType, 2, 0, $accrued, $operationID, $operationNotice, 2);
     }
@@ -214,8 +213,7 @@ class Operation
 
             if($_b !== false) {
                 if(($_b['amount'] - $amount) > 0)
-                    Yii::$app->db->createCommand('UPDATE {{%money_blocking}} SET amount=amount-:money WHERE id=:id')
-                        ->bindValues([':id' => $_b['id'], ':money' => $amount])
+                    Yii::$app->db->createCommand('UPDATE {{%money_blocking}} SET amount=amount-:money WHERE id=:id', [':id' => $_b['id'], ':money' => $amount])
                         ->execute();
                 else
                     $command->delete('{{%money_blocking}}', 'id=:id', [':id' => $_b['id']])->execute();
